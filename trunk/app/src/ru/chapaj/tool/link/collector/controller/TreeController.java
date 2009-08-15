@@ -20,6 +20,8 @@ import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import model.tree.TreeSnapshot;
+
 import ru.chapaj.tool.link.collector.App;
 import ru.chapaj.tool.link.collector.AppUtil;
 import ru.chapaj.tool.link.collector.command.OpenLinkByDefault;
@@ -27,7 +29,6 @@ import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.model.Dir;
 import ru.chapaj.tool.link.collector.model.Link;
 import ru.chapaj.tool.link.collector.model.NodeMeta;
-import ru.chapaj.tool.link.collector.model.TreeSnapshot;
 import ru.chapaj.tool.link.collector.ui.AppFrame;
 import ru.chapaj.tool.link.collector.ui.dialog.GetValueDialog;
 import ru.chapaj.tool.link.collector.ui.dialog.NewDirDialog;

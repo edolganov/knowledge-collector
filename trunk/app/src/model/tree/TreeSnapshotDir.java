@@ -1,4 +1,4 @@
-package ru.chapaj.tool.link.collector.model;
+package model.tree;
 
 import java.util.ArrayList;
 

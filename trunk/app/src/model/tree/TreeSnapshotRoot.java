@@ -1,34 +1,19 @@
-package ru.chapaj.tool.link.collector.model;
+package model.tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import model.tree.TreeSnapshot;
-import model.tree.TreeSnapshotDir;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-
-@XStreamAlias("container")
-public class DataContainer {
+@XStreamAlias("tree-snapshot-root")
+public class TreeSnapshotRoot {
 	
-	Dir root;
+	private TreeSnapshot lastTreeState;
 	
-	TreeSnapshot lastTreeState;
+	private List<TreeSnapshot> snapshots;
 	
-	List<TreeSnapshot> snapshots;
+	private List<TreeSnapshotDir> snaphotDirs;
 	
-	List<TreeSnapshotDir> snaphotDirs;
-	
-
-	public Dir getRoot() {
-		return root;
-	}
-
-	public void setRoot(Dir root) {
-		this.root = root;
-	}
-
 	public TreeSnapshot getLastTreeState() {
 		return lastTreeState;
 	}

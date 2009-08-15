@@ -9,9 +9,10 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import model.tree.TreeSnapshot;
+import model.tree.TreeSnapshotDir;
+
 import ru.chapaj.tool.link.collector.model.DataContainer;
-import ru.chapaj.tool.link.collector.model.TreeSnapshot;
-import ru.chapaj.tool.link.collector.model.TreeSnapshotDir;
 import ru.chapaj.tool.link.collector.ui.AppFrame;
 import ru.chapaj.tool.link.collector.ui.dialog.GetValueDialog;
 import ru.chapaj.tool.link.collector.ui.dialog.SimpleConfirmDialog;
