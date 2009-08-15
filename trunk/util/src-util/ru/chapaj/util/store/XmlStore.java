@@ -12,12 +12,11 @@ public abstract class XmlStore<T> {
 	
 	private ObjectToXMLConverter<T> converter;
 	
-	public XmlStore(Class<T> clazz) {
-		converter = new ObjectToXMLConverter<T>(clazz);
+	
+	public XmlStore() {
+		converter = new ObjectToXMLConverter<T>(false);
 		config(converter);
 	}
-
-	protected abstract void config(ObjectToXMLConverter<T> converter);
 	
 	
 	public void saveFile(File file, T data, boolean saveOldFile) throws IOException{
@@ -72,5 +71,8 @@ public abstract class XmlStore<T> {
   			input.close();
   		}
 	}
+
+
+	protected abstract void config(ObjectToXMLConverter<T> converter);
 
 }

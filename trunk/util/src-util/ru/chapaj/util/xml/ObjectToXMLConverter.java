@@ -1,7 +1,7 @@
 package ru.chapaj.util.xml;
 
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.Annotations;
+//import com.thoughtworks.xstream.annotations.Annotations;
 
 /**
  * Фасад для конвертора объекта в xml и обратно
@@ -14,8 +14,13 @@ public class ObjectToXMLConverter<T> {
 
     private XStream xstream;
 
-    public ObjectToXMLConverter() {
+    public ObjectToXMLConverter(boolean autodetectAnnotations) {
         xstream = new XStream();
+        xstream.autodetectAnnotations(autodetectAnnotations);
+    }
+    
+    public ObjectToXMLConverter() {
+        this(true);
     }
     
     public ObjectToXMLConverter(Class<T> clazz){
@@ -39,7 +44,8 @@ public class ObjectToXMLConverter<T> {
      * @param clazz класс объекта (совпадает с классом шаблона T)
      */
     public void configureAliases(Class<?>... clazz) {
-        Annotations.configureAliases(xstream, clazz);
+        //Annotations.configureAliases(xstream, clazz);
+        xstream.processAnnotations(clazz);
     }
 
 
