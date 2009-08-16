@@ -15,7 +15,7 @@ public class PropertyTextAreaPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public JLabel label = null;
 	private JScrollPane jScrollPane = null;
-	private JTextArea textArea = null;
+	public JTextArea textArea = null;
 	/**
 	 * This is the default constructor
 	 */

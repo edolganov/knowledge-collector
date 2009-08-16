@@ -3,10 +3,9 @@ package ru.dolganov.tool.knowledge.collector.tree;
 import java.awt.Component;
 import java.util.LinkedList;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JTree;
-import javax.swing.plaf.metal.MetalIconFactory;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
@@ -15,6 +14,7 @@ import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Note;
+import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
@@ -28,7 +28,7 @@ public class TreeController extends Controller<MainWindow>{
 	
 	@Override
 	public void init(MainWindow ui) {
-		tree = ui.jTree;
+		tree = ui.tree;
 		tree.init(ExtendTree.createTreeModel(null), true, new TreeCellRender(), SelectModel.SINGLE);
 		treeRoot = tree.getRootNode();
 			
@@ -74,9 +74,9 @@ public class TreeController extends Controller<MainWindow>{
 
 class TreeCellRender extends DefaultTreeCellRenderer {
 	
-	ImageIcon dir = new ImageIcon(this.getClass().getResource("/images/kc/tree/dir.png"));
-    ImageIcon netLink = new ImageIcon(this.getClass().getResource("/images/kc/tree/netLink.png"));
-    ImageIcon note = new ImageIcon(this.getClass().getResource("/images/kc/tree/note.png"));
+	ImageIcon dir = IconHelper.get("/images/kc/tree/dir.png");
+    ImageIcon netLink = IconHelper.get("/images/kc/tree/netLink.png");
+    ImageIcon note = IconHelper.get("/images/kc/tree/note.png");
     //Icon otherIcon = MetalIconFactory.getTreeLeafIcon();
 	
 	@Override
@@ -101,6 +101,7 @@ class TreeCellRender extends DefaultTreeCellRenderer {
 		else {
 			setIcon(getLeafIcon());
 		}
+		add(new JButton("test"));
 		return this;
 		
 	}

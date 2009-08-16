@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.dao.DefaultDAOImpl;
+import ru.dolganov.tool.knowledge.collector.info.InfoController;
 import ru.dolganov.tool.knowledge.collector.main.MainController;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.TreeController;
@@ -46,6 +47,7 @@ public class App {
 	private void initControllers() {
 		preInit(new MainController()).init(ui);
 		preInit(new TreeController()).init(ui);
+		preInit(new InfoController()).init(ui);
 		
 		//new RegController().init(ui.regPanel);
 		//new TreeController().init(ui.treePanel);

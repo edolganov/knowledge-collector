@@ -19,6 +19,9 @@ import ru.chapaj.util.swing.tree.ExtendTree;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 public class MainWindow extends JDialog {
 
@@ -30,15 +33,22 @@ public class MainWindow extends JDialog {
 	private JButton jButton1 = null;
 	private JPanel jPanel2 = null;
 	private JScrollPane jScrollPane = null;
-	public ExtendTree jTree = null;
-	private JPanel jPanel3 = null;
-	private JTabbedPane jTabbedPane = null;
-	private JPanel jPanel4 = null;
-	private JPanel jPanel5 = null;
-	private JScrollPane jScrollPane1 = null;
-	private JTree jTree1 = null;
+	public ExtendTree tree = null;
 	public JButton saveB = null;
-
+	public JButton dirB = null;
+	public JButton linkB = null;
+	public JButton noteB = null;
+	private JPanel jPanel31 = null;
+	private JTabbedPane jTabbedPane1 = null;
+	private JPanel jPanel41 = null;
+	private JScrollPane jScrollPane11 = null;
+	private JTree jTree11 = null;
+	private JPanel jPanel51 = null;
+	private JButton jButton2 = null;
+	private JButton jButton3 = null;
+	private JButton jButton4 = null;
+	private JButton jButton5 = null;
+	public JPanel infoPanel = null;
 	/**
 	 * @param owner
 	 */
@@ -53,7 +63,7 @@ public class MainWindow extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(847, 523);
+		this.setSize(945, 523);
 		this.setContentPane(getJContentPane());
 	}
 
@@ -70,6 +80,8 @@ public class MainWindow extends JDialog {
 			jContentPane.add(getJPanel(), null);
 			//jContentPane.add(treePanel);
 			jContentPane.add(getJPanel1(), null);
+			jContentPane.add(getJPanel31(), null);
+			jContentPane.add(getInfoPanel(), null);
 		}
 		return jContentPane;
 	}
@@ -83,10 +95,13 @@ public class MainWindow extends JDialog {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new Rectangle(2, 1, 834, 29));
+			jPanel.setBounds(new Rectangle(187, 1, 749, 29));
 			jPanel.add(getJButton(), null);
 			jPanel.add(getJButton1(), null);
 			jPanel.add(getJButton2(), null);
+			jPanel.add(getDirB(), null);
+			jPanel.add(getJButton22(), null);
+			jPanel.add(getNoteB(), null);
 		}
 		return jPanel;
 	}
@@ -100,9 +115,8 @@ public class MainWindow extends JDialog {
 		if (jPanel1 == null) {
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(null);
-			jPanel1.setBounds(new Rectangle(2, 31, 834, 461));
+			jPanel1.setBounds(new Rectangle(187, 33, 475, 461));
 			jPanel1.add(getJPanel2(), null);
-			jPanel1.add(getJPanel3(), null);
 		}
 		return jPanel1;
 	}
@@ -115,8 +129,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setBounds(new Rectangle(784, 6, 42, 19));
-			jButton.setText("e");
+			jButton.setBounds(new Rectangle(683, 6, 61, 19));
+			jButton.setText("exit");
 		}
 		return jButton;
 	}
@@ -129,8 +143,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(736, 6, 42, 19));
-			jButton1.setText("h");
+			jButton1.setBounds(new Rectangle(617, 6, 62, 19));
+			jButton1.setText("hide");
 		}
 		return jButton1;
 	}
@@ -146,7 +160,7 @@ public class MainWindow extends JDialog {
 			gridLayout.setRows(1);
 			jPanel2 = new JPanel();
 			jPanel2.setLayout(gridLayout);
-			jPanel2.setBounds(new Rectangle(3, 4, 646, 453));
+			jPanel2.setBounds(new Rectangle(2, 1, 468, 457));
 			jPanel2.add(getJScrollPane(), null);
 		}
 		return jPanel2;
@@ -171,91 +185,10 @@ public class MainWindow extends JDialog {
 	 * @return javax.swing.JTree	
 	 */
 	private JTree getJTree() {
-		if (jTree == null) {
-			jTree = new ExtendTree();
+		if (tree == null) {
+			tree = new ExtendTree();
 		}
-		return jTree;
-	}
-
-	/**
-	 * This method initializes jPanel3	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel3() {
-		if (jPanel3 == null) {
-			jPanel3 = new JPanel();
-			jPanel3.setLayout(new BorderLayout());
-			jPanel3.setBounds(new Rectangle(652, 4, 179, 453));
-			jPanel3.add(getJTabbedPane(), BorderLayout.CENTER);
-		}
-		return jPanel3;
-	}
-
-	/**
-	 * This method initializes jTabbedPane	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
-	 */
-	private JTabbedPane getJTabbedPane() {
-		if (jTabbedPane == null) {
-			jTabbedPane = new JTabbedPane();
-			jTabbedPane.addTab("snapshot", null, getJPanel4(), null);
-			jTabbedPane.addTab("search", null, getJPanel5(), null);
-		}
-		return jTabbedPane;
-	}
-
-	/**
-	 * This method initializes jPanel4	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel4() {
-		if (jPanel4 == null) {
-			jPanel4 = new JPanel();
-			jPanel4.setLayout(new BorderLayout());
-			jPanel4.add(getJScrollPane1(), BorderLayout.CENTER);
-		}
-		return jPanel4;
-	}
-
-	/**
-	 * This method initializes jPanel5	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel5() {
-		if (jPanel5 == null) {
-			jPanel5 = new JPanel();
-			jPanel5.setLayout(null);
-		}
-		return jPanel5;
-	}
-
-	/**
-	 * This method initializes jScrollPane1	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPane1() {
-		if (jScrollPane1 == null) {
-			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setViewportView(getJTree1());
-		}
-		return jScrollPane1;
-	}
-
-	/**
-	 * This method initializes jTree1	
-	 * 	
-	 * @return javax.swing.JTree	
-	 */
-	private JTree getJTree1() {
-		if (jTree1 == null) {
-			jTree1 = new JTree();
-		}
-		return jTree1;
+		return tree;
 	}
 
 	/**
@@ -266,10 +199,206 @@ public class MainWindow extends JDialog {
 	private JButton getJButton2() {
 		if (saveB == null) {
 			saveB = new JButton();
-			saveB.setBounds(new Rectangle(4, 6, 42, 19));
-			saveB.setText("s");
+			saveB.setBounds(new Rectangle(547, 6, 64, 19));
+			saveB.setFont(new Font("Dialog", Font.PLAIN, 12));
+			saveB.setText("save");
 		}
 		return saveB;
+	}
+
+	/**
+	 * This method initializes dirB	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getDirB() {
+		if (dirB == null) {
+			dirB = new JButton();
+			dirB.setBounds(new Rectangle(3, 6, 32, 19));
+			dirB.setText("");
+			dirB.setFont(new Font("Dialog", Font.PLAIN, 12));
+		}
+		return dirB;
+	}
+
+	/**
+	 * This method initializes jButton2	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton22() {
+		if (linkB == null) {
+			linkB = new JButton();
+			linkB.setBounds(new Rectangle(37, 6, 32, 19));
+			linkB.setFont(new Font("Dialog", Font.PLAIN, 12));
+			linkB.setText("");
+		}
+		return linkB;
+	}
+
+	/**
+	 * This method initializes noteB	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getNoteB() {
+		if (noteB == null) {
+			noteB = new JButton();
+			noteB.setBounds(new Rectangle(71, 6, 32, 19));
+		}
+		return noteB;
+	}
+
+	/**
+	 * This method initializes jPanel31	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel31() {
+		if (jPanel31 == null) {
+			jPanel31 = new JPanel();
+			jPanel31.setLayout(new BorderLayout());
+			jPanel31.setBounds(new Rectangle(3, 3, 180, 489));
+			jPanel31.add(getJTabbedPane1(), java.awt.BorderLayout.CENTER);
+		}
+		return jPanel31;
+	}
+
+	/**
+	 * This method initializes jTabbedPane1	
+	 * 	
+	 * @return javax.swing.JTabbedPane	
+	 */
+	private JTabbedPane getJTabbedPane1() {
+		if (jTabbedPane1 == null) {
+			jTabbedPane1 = new JTabbedPane();
+			jTabbedPane1.addTab("snapshot", null, getJPanel41(), null);
+			jTabbedPane1.addTab("search", null, getJPanel51(), null);
+		}
+		return jTabbedPane1;
+	}
+
+	/**
+	 * This method initializes jPanel41	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel41() {
+		if (jPanel41 == null) {
+			jPanel41 = new JPanel();
+			jPanel41.setLayout(null);
+			jPanel41.add(getJScrollPane11(), null);
+			jPanel41.add(getJButton23(), null);
+			jPanel41.add(getJButton3(), null);
+			jPanel41.add(getJButton4(), null);
+			jPanel41.add(getJButton5(), null);
+		}
+		return jPanel41;
+	}
+
+	/**
+	 * This method initializes jScrollPane11	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane11() {
+		if (jScrollPane11 == null) {
+			jScrollPane11 = new JScrollPane();
+			jScrollPane11.setBounds(new Rectangle(0, 30, 175, 431));
+			jScrollPane11.setViewportView(getJTree11());
+		}
+		return jScrollPane11;
+	}
+
+	/**
+	 * This method initializes jTree11	
+	 * 	
+	 * @return javax.swing.JTree	
+	 */
+	private JTree getJTree11() {
+		if (jTree11 == null) {
+			jTree11 = new JTree();
+		}
+		return jTree11;
+	}
+
+	/**
+	 * This method initializes jPanel51	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel51() {
+		if (jPanel51 == null) {
+			jPanel51 = new JPanel();
+			jPanel51.setLayout(null);
+		}
+		return jPanel51;
+	}
+
+	/**
+	 * This method initializes jButton2	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton23() {
+		if (jButton2 == null) {
+			jButton2 = new JButton();
+			jButton2.setBounds(new Rectangle(4, 5, 32, 17));
+		}
+		return jButton2;
+	}
+
+	/**
+	 * This method initializes jButton3	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton3() {
+		if (jButton3 == null) {
+			jButton3 = new JButton();
+			jButton3.setBounds(new Rectangle(40, 5, 32, 17));
+		}
+		return jButton3;
+	}
+
+	/**
+	 * This method initializes jButton4	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton4() {
+		if (jButton4 == null) {
+			jButton4 = new JButton();
+			jButton4.setBounds(new Rectangle(76, 5, 32, 17));
+		}
+		return jButton4;
+	}
+
+	/**
+	 * This method initializes jButton5	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton5() {
+		if (jButton5 == null) {
+			jButton5 = new JButton();
+			jButton5.setBounds(new Rectangle(111, 5, 32, 17));
+		}
+		return jButton5;
+	}
+
+	/**
+	 * This method initializes infoPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getInfoPanel() {
+		if (infoPanel == null) {
+			infoPanel = new JPanel();
+			infoPanel.setLayout(null);
+			infoPanel.setBounds(new Rectangle(662, 33, 272, 459));
+		}
+		return infoPanel;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

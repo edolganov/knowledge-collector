@@ -3,6 +3,7 @@ package ru.dolganov.tool.knowledge.collector.main;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import ru.chapaj.util.swing.IconHelper;
 import ru.dolganov.tool.knowledge.collector.Controller;
 
 public class MainController extends Controller<MainWindow> {
@@ -18,6 +19,9 @@ public class MainController extends Controller<MainWindow> {
 			
 		});
 		
+		ui.dirB.setIcon(IconHelper.get("/images/kc/app/dir.png"));
+		ui.linkB.setIcon(IconHelper.get("/images/kc/app/netLink.png"));
+		ui.noteB.setIcon(IconHelper.get("/images/kc/app/note.png"));
 	}
 	
 	
