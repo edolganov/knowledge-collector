@@ -6,4 +6,6 @@ public interface DAO {
 	
 	Root getRoot();
 
+	void flushMeta();
+
 }

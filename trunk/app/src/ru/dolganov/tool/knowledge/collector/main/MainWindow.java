@@ -15,6 +15,11 @@ import java.awt.GridBagConstraints;
 import javax.swing.JTree;
 import javax.swing.JTabbedPane;
 
+import ru.chapaj.util.swing.tree.ExtendTree;
+
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
 public class MainWindow extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -25,13 +30,14 @@ public class MainWindow extends JDialog {
 	private JButton jButton1 = null;
 	private JPanel jPanel2 = null;
 	private JScrollPane jScrollPane = null;
-	private JTree jTree = null;
+	public ExtendTree jTree = null;
 	private JPanel jPanel3 = null;
 	private JTabbedPane jTabbedPane = null;
 	private JPanel jPanel4 = null;
 	private JPanel jPanel5 = null;
 	private JScrollPane jScrollPane1 = null;
 	private JTree jTree1 = null;
+	public JButton saveB = null;
 
 	/**
 	 * @param owner
@@ -80,6 +86,7 @@ public class MainWindow extends JDialog {
 			jPanel.setBounds(new Rectangle(2, 1, 834, 29));
 			jPanel.add(getJButton(), null);
 			jPanel.add(getJButton1(), null);
+			jPanel.add(getJButton2(), null);
 		}
 		return jPanel;
 	}
@@ -135,16 +142,12 @@ public class MainWindow extends JDialog {
 	 */
 	private JPanel getJPanel2() {
 		if (jPanel2 == null) {
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.fill = GridBagConstraints.BOTH;
-			gridBagConstraints.gridy = 0;
-			gridBagConstraints.weightx = 1.0;
-			gridBagConstraints.weighty = 1.0;
-			gridBagConstraints.gridx = 0;
+			GridLayout gridLayout = new GridLayout();
+			gridLayout.setRows(1);
 			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
+			jPanel2.setLayout(gridLayout);
 			jPanel2.setBounds(new Rectangle(3, 4, 646, 453));
-			jPanel2.add(getJScrollPane(), gridBagConstraints);
+			jPanel2.add(getJScrollPane(), null);
 		}
 		return jPanel2;
 	}
@@ -169,7 +172,7 @@ public class MainWindow extends JDialog {
 	 */
 	private JTree getJTree() {
 		if (jTree == null) {
-			jTree = new JTree();
+			jTree = new ExtendTree();
 		}
 		return jTree;
 	}
@@ -253,6 +256,20 @@ public class MainWindow extends JDialog {
 			jTree1 = new JTree();
 		}
 		return jTree1;
+	}
+
+	/**
+	 * This method initializes jButton2	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButton2() {
+		if (saveB == null) {
+			saveB = new JButton();
+			saveB.setBounds(new Rectangle(4, 6, 42, 19));
+			saveB.setText("s");
+		}
+		return saveB;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

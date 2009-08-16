@@ -3,7 +3,11 @@ package ru.dolganov.tool.knowledge.collector;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import ru.dolganov.tool.knowledge.collector.dao.DAO;
+import ru.dolganov.tool.knowledge.collector.dao.DefaultDAOImpl;
+import ru.dolganov.tool.knowledge.collector.main.MainController;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
+import ru.dolganov.tool.knowledge.collector.tree.TreeController;
 
 public class App {
 	
@@ -15,12 +19,18 @@ public class App {
 	}
 	
 	MainWindow ui;
+	DAO dao;
+
+	public DAO getDao() {
+		return dao;
+	}
 
 	public MainWindow getUI() {
 		return ui;
 	}
 
 	public void init() {
+		dao = new DefaultDAOImpl("./know/data.xml");
 		initUI();
 		initControllers();
 		
@@ -34,8 +44,16 @@ public class App {
 	}
 
 	private void initControllers() {
+		preInit(new MainController()).init(ui);
+		preInit(new TreeController()).init(ui);
+		
 		//new RegController().init(ui.regPanel);
 		//new TreeController().init(ui.treePanel);
+	}
+	
+	private <T> Controller<T> preInit(Controller<T> con){
+		con.setDao(dao);
+		return con;
 	}
 
 	private void initUI() {

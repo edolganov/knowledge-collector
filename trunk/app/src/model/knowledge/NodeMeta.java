@@ -10,7 +10,7 @@ public abstract class NodeMeta {
 	protected String name;
 	protected String description;
 	protected ArrayList<Tag> tags;
-	protected long createDate;
+	protected Long createDate;
 	
 	
 	public NodeMeta() {
@@ -58,11 +58,11 @@ public abstract class NodeMeta {
 		return name;
 	}
 
-	public long getCreateDate() {
+	public Long getCreateDate() {
 		return createDate;
 	}
 
-	public void setCreateDate(long createDate) {
+	public void setCreateDate(Long createDate) {
 		this.createDate = createDate;
 	}
 	

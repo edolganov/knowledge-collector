@@ -11,6 +11,7 @@ public class Root {
 	private TreeSnapshotRoot treeSnapshots;
 
 	public TreeSnapshotRoot getTreeSnapshots() {
+		if(treeSnapshots == null) treeSnapshots = new TreeSnapshotRoot();
 		return treeSnapshots;
 	}
 

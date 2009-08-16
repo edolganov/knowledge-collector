@@ -1,5 +1,7 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
+import java.io.File;
+
 import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
 import model.knowledge.Dir;
@@ -8,6 +10,7 @@ import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.Note;
 import model.knowledge.Root;
+import model.knowledge.TreeLink;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
@@ -27,16 +30,65 @@ public class DefaultDAOImpl implements DAO {
 					Image.class,
 					TreeSnapshotDir.class,
 					TreeSnapshotRoot.class,
-					TreeSnapshot.class
+					TreeSnapshot.class,
+					TreeLink.class
 					);
 			
 		}
 		
 	};
 
+	File metaFile;
+	Root metaRoot;
+	
+	
+	
+	
+	public DefaultDAOImpl(String filePath) {
+		metaFile = new File(filePath);
+		if(!metaFile.exists()){
+			metaRoot = new Root();
+			Dir dir = new Dir();
+			dir.setName("root");
+			metaRoot.setRoot(dir);
+		}
+		else {
+			try {
+				metaRoot = metaStore.loadFile(metaFile);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("can't load data from store",e);
+			}
+		}
+		importLC();
+	}
+
+
+
+
+	private void importLC() {
+		//ImportLinkCollectorData.fill("./import.xml", metaRoot);
+		
+	}
+
+
+
+
 	@Override
 	public Root getRoot() {
-		return null;
+		return metaRoot;
+	}
+
+
+
+
+	@Override
+	public void flushMeta() {
+		try {
+			metaStore.saveFile(metaFile, metaRoot, true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }
