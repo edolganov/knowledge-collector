@@ -40,8 +40,8 @@ public class ObjectToXMLConverter<T> {
      * если объект содержит анотации из пакета
      * <b>com.thoughtworks.xstream.annotations</b>,
      * то перед работой необходимо явно их сконфигурировать
-     *
-     * @param clazz класс объекта (совпадает с классом шаблона T)
+     * 
+     * без этого будет ошибка при первом считывании (т.к. xtream не знает во что преобразовать объект - его еще нет в кеше xtream)
      */
     public void configureAliases(Class<?>... clazz) {
         //Annotations.configureAliases(xstream, clazz);

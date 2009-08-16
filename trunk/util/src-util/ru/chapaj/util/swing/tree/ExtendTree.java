@@ -3,10 +3,12 @@ package ru.chapaj.util.swing.tree;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import ru.chapaj.util.swing.KeyUpDownAdapter;
@@ -26,6 +28,8 @@ public class ExtendTree extends DNDTree {
 		void onNodeMoveUpRequest();
 		
 		void onNodeMoveDownRequest();
+		
+		void onNodeSelect(DefaultMutableTreeNode node);
 		
 	}
 	
@@ -48,6 +52,11 @@ public class ExtendTree extends DNDTree {
 		@Override
 		public void afterDrop(DefaultMutableTreeNode tagretNode,
 				DefaultMutableTreeNode draggedNode) {
+			
+		}
+
+		@Override
+		public void onNodeSelect(DefaultMutableTreeNode node) {
 			
 		}
 		
@@ -125,6 +134,18 @@ public class ExtendTree extends DNDTree {
 		});
 		
 		setDNDListener(listener);
+		
+		addTreeSelectionListener(new TreeSelectionListener(){
+
+			@Override
+			public void valueChanged(TreeSelectionEvent e) {
+				TreePath path = e.getNewLeadSelectionPath();
+				if(path == null) listener.onNodeSelect(null);
+				else listener.onNodeSelect((DefaultMutableTreeNode)path.getLastPathComponent());
+				
+			}
+			
+		});
 	}
 	
 	public boolean moveNode(DefaultMutableTreeNode tagretNode, DefaultMutableTreeNode draggedNode,Class<?> validParentClass){
@@ -190,6 +211,20 @@ public class ExtendTree extends DNDTree {
 
 	public DefaultMutableTreeNode getRootNode() {
 		return (DefaultMutableTreeNode)treeModel.getRoot();
+	}
+
+	public void removeAllChildren() {
+		getRootNode().removeAllChildren();
+		
+	}
+
+	public void setRoot(DefaultMutableTreeNode root) {
+		getExtendModel().setRoot(root);
+		
+	}
+
+	public ExtendDefaultTreeModel model() {
+		return getExtendModel();
 	}
 
 

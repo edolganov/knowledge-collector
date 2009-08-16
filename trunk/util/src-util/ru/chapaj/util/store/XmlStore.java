@@ -72,7 +72,6 @@ public abstract class XmlStore<T> {
   		}
 	}
 
-
 	protected abstract void config(ObjectToXMLConverter<T> converter);
 
 }

@@ -108,6 +108,7 @@ public class DNDTree extends JTree implements DropTargetListener,DragSourceListe
 		selnode=null;
 		dropnode=null;
 		Object selected =getSelectionPath();
+		if(selected == null) return;
 		TreePath treepath=(TreePath)selected;
 		selnode=(DefaultMutableTreeNode)treepath.getLastPathComponent();
 		if ( selected != null ){
