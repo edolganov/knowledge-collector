@@ -87,7 +87,13 @@ public class InfoController extends Controller<MainWindow>{
 	protected void show(DefaultMutableTreeNode node) {
 		hide();
 		curNode = node;
-		NodeMeta ob = (NodeMeta)node.getUserObject();
+		Object uo = node.getUserObject();
+		if(! (uo instanceof NodeMeta)){
+			hide();
+			return;
+		}
+		
+		NodeMeta ob = (NodeMeta)uo;
 		if(ob instanceof Dir){
 			ui.infoPanel.add(basicInfo);
 			basicInfo.name.setText(ob.getName());

@@ -35,7 +35,7 @@ import ru.chapaj.tool.link.collector.ui.dialog.NewDirDialog;
 import ru.chapaj.tool.link.collector.ui.dialog.NewLinkDialog;
 import ru.chapaj.tool.link.collector.ui.dialog.SimpleConfirmDialog;
 import ru.chapaj.util.log.Log;
-import ru.chapaj.util.swing.KeyUpDownAdapter;
+import ru.chapaj.util.swing.listener.KeyUpDownAdapter;
 import ru.chapaj.util.swing.tree.DNDTree.DNDListener;
 
 public class TreeController extends Controller<AppFrame> {

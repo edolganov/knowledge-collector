@@ -26,7 +26,6 @@ public class NewDirDialog extends AbstractDialog {
 		App.getDefault().setStopGlobalKeys(true);
 		Dir out = null;
 		final NewDirDialog dialog = new NewDirDialog(App.getDefault().getUI());
-		dialog.pack();
 		dialog.setVisible(true);
 		if(dialog.confirmedAction){
 			String text = dialog.name.getText();

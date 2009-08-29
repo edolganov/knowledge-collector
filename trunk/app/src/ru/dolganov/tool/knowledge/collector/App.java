@@ -55,6 +55,7 @@ public class App {
 	
 	private <T> Controller<T> preInit(Controller<T> con){
 		con.setDao(dao);
+		con.setMainUI(ui);
 		return con;
 	}
 

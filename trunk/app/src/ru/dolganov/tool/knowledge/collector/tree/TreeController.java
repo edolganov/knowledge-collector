@@ -1,39 +1,55 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
-import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 
-import model.knowledge.Dir;
-import model.knowledge.LocalLink;
-import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
-import model.knowledge.Note;
-import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
+import ru.dolganov.tool.knowledge.collector.dialog.NewDirDialog;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
+import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
+import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
+import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellRender;
 
-public class TreeController extends Controller<MainWindow>{
+public class TreeController extends Controller<MainWindow> implements HasCellConst{
 
 	ExtendTree tree;
 	DefaultMutableTreeNode treeRoot;
 	
 	
 	@Override
-	public void init(MainWindow ui) {
+	public void init(final MainWindow ui) {
 		tree = ui.tree;
-		tree.init(ExtendTree.createTreeModel(null), true, new TreeCellRender(), SelectModel.SINGLE);
+		tree.init(ExtendTree.createTreeModel(null), true, new MainCellRender(), SelectModel.SINGLE);
 		treeRoot = tree.getRootNode();
 		treeRoot.setUserObject("root");
 		tree.setRootVisible(false);
+		
+		tree.setCellEditor(new MainCellEditor());
+		tree.setEditable(true);
+		
+		ui.dirB.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				NewDirDialog newDir = new NewDirDialog();
+				newDir.init(mainUI);
+				newDir.setVisible(true);
+				System.out.println("done!");
+				newDir.remove();
+			}
+			
+		});
+		
+		
+		
+		
 		fillTree();
 	}
 
@@ -56,6 +72,7 @@ public class TreeController extends Controller<MainWindow>{
 		q.addLast(new QS(dao.getRoot().getNodes(),treeRoot));
 		while(!q.isEmpty()){
 			QS s = q.removeFirst();
+			s.node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
 			for(NodeMeta meta : s.list){
 				DefaultMutableTreeNode chNode = new DefaultMutableTreeNode(meta);
 				s.node.add(chNode);
@@ -71,39 +88,4 @@ public class TreeController extends Controller<MainWindow>{
 	}
 
 	
-}
-
-class TreeCellRender extends DefaultTreeCellRenderer {
-	
-	ImageIcon dir = IconHelper.get("/images/kc/tree/dir.png");
-    ImageIcon netLink = IconHelper.get("/images/kc/tree/netLink.png");
-    ImageIcon note = IconHelper.get("/images/kc/tree/note.png");
-    //Icon otherIcon = MetalIconFactory.getTreeLeafIcon();
-	
-	@Override
-	public Component getTreeCellRendererComponent(JTree tree, Object value,
-			boolean sel, boolean expanded, boolean leaf, int row,
-			boolean hasFocus) {
-		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
-				row, hasFocus);
-		Object obj = ((DefaultMutableTreeNode)value).getUserObject();
-		if(obj instanceof Dir){
-			setIcon(dir);
-		}
-		else if(obj instanceof Note){
-			setIcon(note);
-		}
-		else if(obj instanceof NetworkLink){
-			setIcon(netLink);
-		}
-		else if(obj instanceof LocalLink){
-			setIcon(netLink);
-		}
-		else {
-			setIcon(getLeafIcon());
-		}
-		add(new JButton("test"));
-		return this;
-		
-	}
 }
