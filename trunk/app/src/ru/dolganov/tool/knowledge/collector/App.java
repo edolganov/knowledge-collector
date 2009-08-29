@@ -31,7 +31,7 @@ public class App {
 	}
 
 	public void init() {
-		dao = new DefaultDAOImpl("./know/data.xml");
+		dao = new DefaultDAOImpl("./know");
 		initUI();
 		initControllers();
 		

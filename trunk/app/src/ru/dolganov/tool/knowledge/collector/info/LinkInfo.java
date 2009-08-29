@@ -30,7 +30,7 @@ public class LinkInfo extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(null);
-		this.setBounds(new Rectangle(0, 0, 272, 459));
+		this.setBounds(new Rectangle(0, 0, 332, 459));
 		this.add(getJPanel(), null);
 		this.add(getJPanel2(), null);
 		this.add(getJButton(), null);
@@ -45,7 +45,7 @@ public class LinkInfo extends JPanel {
 	public JPanel getJPanel() {
 		if (name == null) {
 			name = new PropertyTextPanel();
-			name.setBounds(new Rectangle(3, 5, 269, 35));
+			name.setBounds(new Rectangle(3, 5, 326, 35));
 			name.setText("");
 		}
 		return name;
@@ -59,7 +59,7 @@ public class LinkInfo extends JPanel {
 	public JPanel getJPanel2() {
 		if (description == null) {
 			description = new PropertyTextAreaPanel();
-			description.setBounds(new Rectangle(3, 93, 269, 152));
+			description.setBounds(new Rectangle(3, 93, 326, 152));
 		}
 		return description;
 	}
@@ -72,7 +72,7 @@ public class LinkInfo extends JPanel {
 	public JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setBounds(new Rectangle(184, 252, 88, 26));
+			jButton.setBounds(new Rectangle(241, 252, 88, 26));
 			jButton.setText("Update");
 		}
 		return jButton;
@@ -86,7 +86,7 @@ public class LinkInfo extends JPanel {
 	private PropertyTextPanel getUrl() {
 		if (url == null) {
 			url = new PropertyTextPanel();
-			url.setBounds(new Rectangle(3, 47, 269, 35));
+			url.setBounds(new Rectangle(3, 47, 326, 35));
 			url.setText("");
 		}
 		return url;

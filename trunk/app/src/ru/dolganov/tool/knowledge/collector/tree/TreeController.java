@@ -2,6 +2,7 @@ package ru.dolganov.tool.knowledge.collector.tree;
 
 import java.awt.Component;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -31,38 +32,38 @@ public class TreeController extends Controller<MainWindow>{
 		tree = ui.tree;
 		tree.init(ExtendTree.createTreeModel(null), true, new TreeCellRender(), SelectModel.SINGLE);
 		treeRoot = tree.getRootNode();
-			
+		treeRoot.setUserObject("root");
+		tree.setRootVisible(false);
 		fillTree();
 	}
 
 
 	static class QS {
-		Dir dir;
+		List<NodeMeta> list;
 		DefaultMutableTreeNode node;
-		public QS(Dir dir, DefaultMutableTreeNode node) {
+		public QS(List<NodeMeta> list, DefaultMutableTreeNode node) {
 			super();
-			this.dir = dir;
+			this.list = list;
 			this.node = node;
 		}
 	}
+	
 	private void fillTree() {
 		treeRoot.removeAllChildren();
-		Dir root = dao.getRoot().getRoot();
-		treeRoot.setUserObject(root);
+		long time = System.currentTimeMillis();
 		
 		LinkedList<QS> q = new LinkedList<QS>();
-		q.addLast(new QS(root,treeRoot));
+		q.addLast(new QS(dao.getRoot().getNodes(),treeRoot));
 		while(!q.isEmpty()){
 			QS s = q.removeFirst();
-			for(NodeMeta meta : s.dir.getNodes()){
+			for(NodeMeta meta : s.list){
 				DefaultMutableTreeNode chNode = new DefaultMutableTreeNode(meta);
 				s.node.add(chNode);
-				if (meta instanceof Dir) {
-					q.addLast(new QS((Dir) meta,chNode));
-				}
+				q.addLast(new QS(dao.getChildren(meta),chNode));
 			}
-			
 		}
+		System.out.println("tree filled after "
+				+ ((System.currentTimeMillis() - time) / 1000.) + " sec");
 		
 		tree.expandPath(treeRoot);
 		tree.updateUI();

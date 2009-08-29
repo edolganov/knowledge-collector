@@ -2,9 +2,12 @@ package model.knowledge;
 
 import java.util.ArrayList;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import model.knowledge.role.Parent;
 import ru.chapaj.util.UuidGenerator;
 
-public abstract class NodeMeta {
+public abstract class NodeMeta implements Parent{
 	
 	protected String uuid;
 	protected String name;
@@ -12,10 +15,22 @@ public abstract class NodeMeta {
 	protected ArrayList<Tag> tags;
 	protected Long createDate;
 	
-	
+	@XStreamOmitField
+	private Root parent;
+
+	public Root getParent() {
+		return parent;
+	}
+
+	public void setParent(Root parent) {
+		this.parent = parent;
+	}
+
+
 	public NodeMeta() {
 		super();
 	}
+
 
 	public String getName() {
 		return name;

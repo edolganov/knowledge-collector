@@ -1,13 +1,36 @@
 package model.knowledge;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.knowledge.role.Parent;
 import model.tree.TreeSnapshotRoot;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 
 @XStreamAlias("container")
-public class Root {
+public class Root implements Parent {
 	
-	private Dir root;
+	// [15.08.2009] jenua.dolganov: все дети лежат в перемешку
+	List<NodeMeta> nodes;
+	
+	@XStreamOmitField
+	private String dirPath;
+	
+
+	public List<NodeMeta> getNodes() {
+		if(nodes == null) nodes = new ArrayList<NodeMeta>();
+		return nodes;
+	}
+
+	public void setNodes(ArrayList<NodeMeta> nodes) {
+		this.nodes = nodes;
+	}
+	
+	
 	private TreeSnapshotRoot treeSnapshots;
 
 	public TreeSnapshotRoot getTreeSnapshots() {
@@ -19,12 +42,12 @@ public class Root {
 		this.treeSnapshots = treeSnapshots;
 	}
 
-	public Dir getRoot() {
-		return root;
+	public String getDirPath() {
+		return dirPath;
 	}
 
-	public void setRoot(Dir root) {
-		this.root = root;
+	public void setDirPath(String dirPath) {
+		this.dirPath = dirPath;
 	}
 
 }

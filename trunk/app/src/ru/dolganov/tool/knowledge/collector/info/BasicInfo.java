@@ -29,7 +29,7 @@ public class BasicInfo extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(null);
-		this.setBounds(new Rectangle(0, 0, 272, 459));
+		this.setBounds(new Rectangle(0, 0, 332, 459));
 		this.add(getJPanel(), null);
 		this.add(getJPanel2(), null);
 		this.add(getJButton(), null);
@@ -43,7 +43,7 @@ public class BasicInfo extends JPanel {
 	public JPanel getJPanel() {
 		if (name == null) {
 			name = new PropertyTextPanel();
-			name.setBounds(new Rectangle(3, 5, 269, 35));
+			name.setBounds(new Rectangle(3, 5, 327, 35));
 			name.setText("");
 		}
 		return name;
@@ -57,7 +57,7 @@ public class BasicInfo extends JPanel {
 	public JPanel getJPanel2() {
 		if (description == null) {
 			description = new PropertyTextAreaPanel();
-			description.setBounds(new Rectangle(3, 46, 269, 152));
+			description.setBounds(new Rectangle(3, 46, 327, 152));
 		}
 		return description;
 	}
@@ -70,7 +70,7 @@ public class BasicInfo extends JPanel {
 	public JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setBounds(new Rectangle(184, 205, 88, 26));
+			jButton.setBounds(new Rectangle(242, 203, 88, 26));
 			jButton.setText("Update");
 		}
 		return jButton;

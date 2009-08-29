@@ -12,34 +12,34 @@ import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Note;
-import model.knowledge.Root;
+import model.knowledge.role.Parent;
 
 public class ImportLinkCollectorData {
 	
 	static class QS {
-		Dir dir;
+		Parent parent;
 		ru.chapaj.tool.link.collector.model.Dir lcDir;
-		public QS(Dir dir, ru.chapaj.tool.link.collector.model.Dir lcDir) {
+		public QS(Parent parent, ru.chapaj.tool.link.collector.model.Dir lcDir) {
 			super();
-			this.dir = dir;
+			this.parent = parent;
 			this.lcDir = lcDir;
 		}
 	}
 	
-	public static void fill(String lcFilePath, Root root){
+	public static void fill(String lcFilePath, DAO dao){
 		try {
 			DataContainer dc = new DataContainerStore().loadFile(new File(lcFilePath));
 			
 			//tree
 			LinkedList<QS> q = new LinkedList<QS>();
-			q.add(new QS(root.getRoot(),dc.getRoot()));
+			q.add(new QS(dao.getRoot(),dc.getRoot()));
 			while(!q.isEmpty()){
 				QS qs = q.removeFirst();
 				ArrayList<ru.chapaj.tool.link.collector.model.Dir> dirs = qs.lcDir.getSubDir();
 				if(dirs != null){
 					for(ru.chapaj.tool.link.collector.model.Dir lcDir : dirs){
 						Dir dir = convertDir(lcDir);
-						qs.dir.getNodes().add(dir);
+						dao.addChild(qs.parent, dir);
 						q.addLast(new QS(dir,lcDir));
 						
 					}
@@ -48,7 +48,7 @@ public class ImportLinkCollectorData {
 				ArrayList<Link> links = qs.lcDir.getLinks();
 				if(links != null){
 					for(Link link : links){
-						qs.dir.getNodes().add(convertLink(link));
+						dao.addChild(qs.parent, convertLink(link));
 					}
 				}
 			}
