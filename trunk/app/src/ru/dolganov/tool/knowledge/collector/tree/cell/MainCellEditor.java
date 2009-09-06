@@ -4,13 +4,11 @@ import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.EventObject;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.UIManager;
@@ -22,18 +20,22 @@ import javax.swing.tree.TreePath;
 public class MainCellEditor implements TreeCellEditor, HasCellConst {
 	
 	NodeButtonsPanel nodeButtons = new NodeButtonsPanel();
-	boolean firstClick;
+	/**
+	 * устрение бага с тем, что при клике на ту же кнопку в другой ноде дерева,
+	 * происходит потеря фокуса с нее и потеря клика.
+	 * 
+	 * С помощью этого флага явно вызываем первый клик на нужной кнопке.
+	 */
+	boolean isFirstClick;
 	
 	public MainCellEditor() {
 		nodeButtons.setBackground(UIManager.getColor("Tree.textBackground"));
 		
+		
 		nodeButtons.dirB.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if(firstClick) {
-					
-				}
-				System.out.println("----dirB!--mouseEntered");
+				mayBeNeedClick(nodeButtons.dirB);
 			}
 		});
 		nodeButtons.dirB.addActionListener(new ActionListener(){
@@ -49,7 +51,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 		nodeButtons.linkB.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				System.out.println("----linkB!--mouseEntered");
+				mayBeNeedClick(nodeButtons.linkB);
 			}
 		});
 		nodeButtons.linkB.addActionListener(new ActionListener(){
@@ -60,17 +62,11 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 			}
 			
 		});
-		nodeButtons.linkB.addFocusListener(new FocusAdapter(){
-			@Override
-			public void focusGained(FocusEvent e) {
-				System.out.println("----linkB!--focusGained");
-			}
-		});
 		
 		nodeButtons.noteB.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				System.out.println("----noteB!--mouseEntered");
+				mayBeNeedClick(nodeButtons.noteB);
 			}
 		});
 		nodeButtons.noteB.addActionListener(new ActionListener(){
@@ -83,11 +79,19 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 		});
 	}
 
+	protected void mayBeNeedClick(JButton button) {
+		if(isFirstClick) {
+			button.requestFocus();
+			button.doClick();
+			isFirstClick = false;
+		}
+	}
+
 	@Override
 	public Component getTreeCellEditorComponent(JTree tree, Object value,
 			boolean isSelected, boolean expanded, boolean leaf, int row) {
 		Object obj = ((DefaultMutableTreeNode)value).getUserObject();
-		firstClick = false;
+		isFirstClick = true;
 		if(Cell.BUTTONS == obj){
 			return nodeButtons;
 		}
@@ -96,19 +100,19 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 	@Override
 	public void addCellEditorListener(CellEditorListener l) {
-		System.out.println("addCellEditorListener");
+		//System.out.println("addCellEditorListener");
 		
 	}
 
 	@Override
 	public void cancelCellEditing() {
-		System.out.println("cancelCellEditing");
+		//System.out.println("cancelCellEditing");
 		
 	}
 
 	@Override
 	public Object getCellEditorValue() {
-		System.out.println("getCellEditorValue");
+		//System.out.println("getCellEditorValue");
 		return null;
 	}
 
@@ -119,7 +123,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 	@Override
 	public void removeCellEditorListener(CellEditorListener l) {
-		System.out.println("removeCellEditorListener");
+		//System.out.println("removeCellEditorListener");
 		
 	}
 
@@ -130,7 +134,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 	@Override
 	public boolean stopCellEditing() {
-		System.out.println("stopCellEditing");
+		//System.out.println("stopCellEditing");
 		return false;
 	}
 	
