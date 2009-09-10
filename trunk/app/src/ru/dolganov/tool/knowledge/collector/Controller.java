@@ -18,8 +18,9 @@ public abstract class Controller<T> extends GenericController<T> {
 		controllers.put(this.getClass().getName(), this);
 	}
 	
-	public <N> Controller<?> get(Class<N> clazz){
-		return controllers.get(clazz.getName());
+	@SuppressWarnings("unchecked")
+	public static <N extends Controller<?>> N get(Class<N> clazz){
+		return (N)controllers.get(clazz.getName());
 	}
 
 	public void setDao(DAO dao) {

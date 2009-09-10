@@ -1,7 +1,5 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +9,6 @@ import model.knowledge.NodeMeta;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
-import ru.dolganov.tool.knowledge.collector.dialog.NewDirDialog;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
@@ -34,18 +31,9 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		tree.setCellEditor(new MainCellEditor());
 		tree.setEditable(true);
 		
-		ui.dirB.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				NewDirDialog newDir = new NewDirDialog();
-				newDir.init(mainUI);
-				newDir.setVisible(true);
-				System.out.println("done!");
-				newDir.remove();
-			}
-			
-		});
+		ui.dirB.setEnabled(false);
+		ui.linkB.setEnabled(false);
+		ui.noteB.setEnabled(false);
 		
 		
 		
@@ -85,6 +73,21 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		tree.expandPath(treeRoot);
 		tree.updateUI();
 		
+	}
+	
+	public void addNode(NodeMeta node){
+		if(node == null) return;
+		DefaultMutableTreeNode currentNode = tree.getCurrentNode();
+		if(currentNode == null) return;
+		
+		Object userObject = currentNode.getUserObject();
+		if(userObject == null) return;
+		
+		if(Cell.BUTTONS == userObject){
+			NodeMeta parent = tree.getParentObject(currentNode, NodeMeta.class);
+			if(parent == null) return;
+			dao.addChild(parent, node);
+		}
 	}
 
 	

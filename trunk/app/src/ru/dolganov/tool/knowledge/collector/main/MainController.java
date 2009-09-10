@@ -19,6 +19,8 @@ public class MainController extends Controller<MainWindow> {
 			
 		});
 		
+		ui.saveB.setEnabled(false);
+		
 		ui.dirB.setIcon(IconHelper.get("/images/kc/app/dir.png"));
 		ui.linkB.setIcon(IconHelper.get("/images/kc/app/netLink.png"));
 		ui.noteB.setIcon(IconHelper.get("/images/kc/app/note.png"));

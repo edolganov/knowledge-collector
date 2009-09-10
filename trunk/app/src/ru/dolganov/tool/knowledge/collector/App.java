@@ -29,6 +29,10 @@ public class App {
 	public MainWindow getUI() {
 		return ui;
 	}
+	
+	public <N extends Controller<?>> N getController(Class<N> clazz){
+		return Controller.get(clazz);
+	}
 
 	public void init() {
 		dao = new DefaultDAOImpl("./know");

@@ -2,8 +2,6 @@ package ru.dolganov.tool.knowledge.collector.tree.cell;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
@@ -37,27 +35,17 @@ public class MainCellRender implements TreeCellRenderer, HasCellConst {
 
 class NodeButtons implements TreeCellRenderer {
 
-	NodeButtonsPanel renderer;
+	NodeButtonsPanelExtend renderer;
 	DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
 	Color backgroundSelectionColor;
 	Color backgroundNonSelectionColor;
 
 	public NodeButtons() {
-		renderer = new NodeButtonsPanel();
+		renderer = new NodeButtonsPanelExtend();
 		backgroundSelectionColor = defaultRenderer
 				.getBackgroundSelectionColor();
 		backgroundNonSelectionColor = defaultRenderer
 				.getBackgroundNonSelectionColor();
-		renderer.setBackground(backgroundNonSelectionColor);
-		renderer.dirB.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("push");
-				
-			}
-			
-		});
 	}
 
 	@Override

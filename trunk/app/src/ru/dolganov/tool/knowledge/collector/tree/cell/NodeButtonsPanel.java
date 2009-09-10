@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import java.awt.Rectangle;
+import java.awt.Point;
 
 public class NodeButtonsPanel extends JPanel {
 
@@ -27,7 +28,7 @@ public class NodeButtonsPanel extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(103, 18);
+		this.setSize(113, 18);
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(126, 18));
 		this.add(getDirB(), null);
@@ -43,7 +44,8 @@ public class NodeButtonsPanel extends JPanel {
 	private JButton getDirB() {
 		if (dirB == null) {
 			dirB = new JButton();
-			dirB.setBounds(new Rectangle(4, 1, 31, 16));
+			dirB.setLocation(new Point(4, 1));
+			dirB.setSize(new Dimension(16, 16));
 		}
 		return dirB;
 	}
@@ -56,7 +58,8 @@ public class NodeButtonsPanel extends JPanel {
 	private JButton getNoteB() {
 		if (noteB == null) {
 			noteB = new JButton();
-			noteB.setBounds(new Rectangle(37, 1, 31, 16));
+			noteB.setLocation(new Point(42, 1));
+			noteB.setSize(new Dimension(16, 16));
 		}
 		return noteB;
 	}
@@ -69,7 +72,8 @@ public class NodeButtonsPanel extends JPanel {
 	private JButton getLinkB() {
 		if (linkB == null) {
 			linkB = new JButton();
-			linkB.setBounds(new Rectangle(69, 1, 31, 16));
+			linkB.setLocation(new Point(23, 1));
+			linkB.setSize(new Dimension(16, 16));
 		}
 		return linkB;
 	}

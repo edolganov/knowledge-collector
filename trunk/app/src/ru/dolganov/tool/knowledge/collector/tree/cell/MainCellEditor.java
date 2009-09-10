@@ -1,5 +1,6 @@
 package ru.dolganov.tool.knowledge.collector.tree.cell;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,15 +12,18 @@ import java.util.EventObject;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTree;
-import javax.swing.UIManager;
 import javax.swing.event.CellEditorListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+import ru.dolganov.tool.knowledge.collector.App;
+import ru.dolganov.tool.knowledge.collector.tree.TreeController;
+import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
+
 public class MainCellEditor implements TreeCellEditor, HasCellConst {
 	
-	NodeButtonsPanel nodeButtons = new NodeButtonsPanel();
+	NodeButtonsPanelExtend nodeButtons = new NodeButtonsPanelExtend();
 	/**
 	 * устрение бага с тем, что при клике на ту же кнопку в другой ноде дерева,
 	 * происходит потеря фокуса с нее и потеря клика.
@@ -29,8 +33,6 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 	boolean isFirstClick;
 	
 	public MainCellEditor() {
-		nodeButtons.setBackground(UIManager.getColor("Tree.textBackground"));
-		
 		
 		nodeButtons.dirB.addMouseListener(new MouseAdapter(){
 			@Override
@@ -42,7 +44,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("----dirB!");
+				App.getDefault().getController(TreeController.class).addNode(DialogOps.newDir());
 			}
 			
 		});

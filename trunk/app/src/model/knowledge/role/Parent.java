@@ -1,7 +1,7 @@
 package model.knowledge.role;
 
 /**
- * Родитель, способный иметь детей
+ * Объект, способный иметь детей
  * @author jenua.dolganov
  *
  */

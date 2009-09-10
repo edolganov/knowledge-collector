@@ -1,4 +1,4 @@
-package ru.dolganov.tool.knowledge.collector.dialog;
+package ru.dolganov.tool.knowledge.collector.tree.dialog;
 
 import javax.swing.JPanel;
 import java.awt.Frame;
@@ -17,8 +17,8 @@ public class NewDirDialog extends ExtendDialog {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
-	private PropertyTextPanel namePanel = null;
-	private JButton ok = null;
+	public PropertyTextPanel namePanel = null;
+	public JButton ok = null;
 
 	/**
 	 * @param owner
