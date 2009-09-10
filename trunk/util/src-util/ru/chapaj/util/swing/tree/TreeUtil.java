@@ -21,7 +21,8 @@ public class TreeUtil {
 		if(node == null) return null;
 		Object ob = node.getUserObject();
 		if(ob == null) return null;
-		if(!ob.getClass().equals(clazz) && !ob.getClass().isInstance(clazz)){
+		Class<?> objectClass = ob.getClass();
+		if(!clazz.isAssignableFrom(objectClass)){
 			return null;
 		}
 		else return (T) ob;

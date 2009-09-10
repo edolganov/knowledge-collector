@@ -6,12 +6,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import ru.chapaj.util.swing.KeyUpDownAdapter;
+import ru.chapaj.util.swing.listener.KeyUpDownAdapter;
 
 public class ExtendTree extends DNDTree {
 
@@ -78,7 +78,7 @@ public class ExtendTree extends DNDTree {
 		return (ExtendDefaultTreeModel)super.getModel();
 	}
 	
-	public void init(ExtendDefaultTreeModel model,boolean setRootVisible,DefaultTreeCellRenderer cellRender,SelectModel selectModel){
+	public void init(ExtendDefaultTreeModel model,boolean setRootVisible,TreeCellRenderer cellRender,SelectModel selectModel){
 		if(model != null)setModel(model);
 		setRootVisible(setRootVisible);
 		if(cellRender != null)setCellRenderer(cellRender);

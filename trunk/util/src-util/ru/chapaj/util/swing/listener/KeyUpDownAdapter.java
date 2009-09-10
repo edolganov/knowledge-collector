@@ -1,4 +1,4 @@
-package ru.chapaj.util.swing;
+package ru.chapaj.util.swing.listener;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
