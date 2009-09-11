@@ -3,7 +3,6 @@ package ru.dolganov.tool.knowledge.collector.dao;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ru.chapaj.util.store.XmlStore;
@@ -49,7 +48,7 @@ public class DefaultDAOImpl implements DAO {
 	};
 	
 	String rootFileName = "data.xml";
-	RootCache rootCache = new RootCache();
+	NodeMetaObjectsCacheImpl cache = new NodeMetaObjectsCacheImpl();
 	
 	PersistTimer persistTimer = new PersistTimer(new TimeoutListener(){
 
@@ -59,6 +58,8 @@ public class DefaultDAOImpl implements DAO {
 		}
 		
 	},2000);
+	
+	ArrayList<DAOListener> listeners = new ArrayList<DAOListener>();
 	
 	
 	String dirPath;
@@ -113,19 +114,34 @@ public class DefaultDAOImpl implements DAO {
 	public void addChild(Parent parent, NodeMeta child) {
 		try {
 			Root root = null;
+			NodeMeta meta = null;
 			if (parent instanceof Root) {
 				root = (Root) parent;
 			}
 			else if (parent instanceof NodeMeta) {
-				NodeMeta meta = (NodeMeta) parent;
+				meta = (NodeMeta) parent;
 				root = getRoot(meta,true);
 			}
 			root.getNodes().add(child);
 			child.setParent(root);
+			
+			if(meta != null) for(DAOListener l : listeners) l.onAdded(meta,child);
+			
 			saveRequest(root);
-		} catch (RuntimeException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public NodeMetaObjectsCache getCache() {
+		return cache;
+	}
+	
+	
+	@Override
+	public void addListener(DAOListener listener) {
+		listeners.add(listener);
 	}
 	
 
@@ -142,7 +158,7 @@ public class DefaultDAOImpl implements DAO {
 	
 
 	private Root getDirRoot(String dirPath,boolean createIfNotExist){
-		Root root = rootCache.get(dirPath);
+		Root root = cache.getRoot(dirPath);
 		if(root != null) return root;
 
 		String filePath = rootFilePath(dirPath);
@@ -163,7 +179,7 @@ public class DefaultDAOImpl implements DAO {
 			}
 		}
 		root.setDirPath(dirPath);
-		rootCache.put(dirPath, root);
+		cache.putRoot(dirPath, root);
 		return root;
 	}
 	
@@ -176,7 +192,7 @@ public class DefaultDAOImpl implements DAO {
 		new Thread(){
 			@Override
 			public void run() {
-				Root root = rootCache.get(dirPath);
+				Root root = cache.getRoot(dirPath);
 				if(root != null){
 					try {
 						synchronized (mkDirLock) {
@@ -203,5 +219,11 @@ public class DefaultDAOImpl implements DAO {
 	private String rootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
+
+
+
+
+
+
 
 }

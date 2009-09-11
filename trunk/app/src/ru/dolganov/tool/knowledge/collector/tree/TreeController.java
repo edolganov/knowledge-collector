@@ -9,6 +9,7 @@ import model.knowledge.NodeMeta;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
+import ru.dolganov.tool.knowledge.collector.dao.DAOListener;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
@@ -16,6 +17,7 @@ import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellRender;
 
 public class TreeController extends Controller<MainWindow> implements HasCellConst{
 
+	private static final String TREE_NODE = "tree-node";
 	ExtendTree tree;
 	DefaultMutableTreeNode treeRoot;
 	
@@ -35,7 +37,15 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		ui.linkB.setEnabled(false);
 		ui.noteB.setEnabled(false);
 		
-		
+		dao.addListener(new DAOListener(){
+
+			@Override
+			public void onAdded(NodeMeta parent, NodeMeta child) {
+				DefaultMutableTreeNode treeNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
+				tree.addChild(treeNode, createTreeNode(child));
+			}
+			
+		});
 		
 		
 		fillTree();
@@ -62,7 +72,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			QS s = q.removeFirst();
 			s.node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
 			for(NodeMeta meta : s.list){
-				DefaultMutableTreeNode chNode = new DefaultMutableTreeNode(meta);
+				DefaultMutableTreeNode chNode = createTreeNode(meta);
 				s.node.add(chNode);
 				q.addLast(new QS(dao.getChildren(meta),chNode));
 			}
@@ -73,6 +83,12 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		tree.expandPath(treeRoot);
 		tree.updateUI();
 		
+	}
+
+	private DefaultMutableTreeNode createTreeNode(NodeMeta meta) {
+		DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(meta);
+		dao.getCache().put(meta,TREE_NODE, treeNode);
+		return treeNode;
 	}
 	
 	public void addNode(NodeMeta node){

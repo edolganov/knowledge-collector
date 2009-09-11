@@ -7,6 +7,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import model.knowledge.Root;
 
+/**
+ * Используем один глобальный класс кешей
+ * @author jenua.dolganov
+ *
+ */
+@Deprecated
 public class RootCache {
 	
 	Map<String, Root> map = new HashMap<String, Root>();
