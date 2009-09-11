@@ -172,8 +172,13 @@ public class ExtendTree extends DNDTree {
 		return TreeUtil.addChild(this, parent, userObject);
 	}
 	
+	
 	public DefaultMutableTreeNode addChild(DefaultMutableTreeNode parent, Object userObject, Class<?> downRank) {
 		return TreeUtil.addChild(this, parent, userObject, downRank);
+	}
+	
+	public DefaultMutableTreeNode addChild(DefaultMutableTreeNode parent, DefaultMutableTreeNode child) {
+		return addChild(parent, child, null);
 	}
 	
 	public DefaultMutableTreeNode addChild(DefaultMutableTreeNode parent, DefaultMutableTreeNode child, Class<?> downRank) {
