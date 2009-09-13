@@ -3,6 +3,8 @@ package ru.chapaj.util.swing.tree;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -78,12 +80,44 @@ public class ExtendTree extends DNDTree {
 		return (ExtendDefaultTreeModel)super.getModel();
 	}
 	
-	public void init(ExtendDefaultTreeModel model,boolean setRootVisible,TreeCellRenderer cellRender,SelectModel selectModel){
+	public void init(ExtendDefaultTreeModel model,
+			boolean setRootVisible,
+			TreeCellRenderer cellRender,
+			SelectModel selectModel){
+		init(model, setRootVisible, cellRender, selectModel, null);
+	}
+	
+	public void init(ExtendDefaultTreeModel model,
+			boolean setRootVisible,
+			TreeCellRenderer cellRender,
+			SelectModel selectModel,
+			final JPopupMenu menu){
 		if(model != null)setModel(model);
 		setRootVisible(setRootVisible);
 		if(cellRender != null)setCellRenderer(cellRender);
 		if(selectModel != null){
 			if(SelectModel.SINGLE == selectModel) getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		}
+		if(menu != null){
+			
+			addMouseListener(new MouseAdapter(){
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					if ( e.isPopupTrigger()) {
+						int x = e.getX();
+						int y = e.getY();
+						int selRow = getRowForLocation(x, y);
+						if (selRow>=0) {
+							TreePath selPath = getPathForLocation(x, y);
+							if(selPath != null) {
+								setSelectionPath(selPath);
+								menu.show( (JComponent)e.getSource(),x , y );
+							}
+						}
+					}
+				}
+			});
 		}
 	}
 	
