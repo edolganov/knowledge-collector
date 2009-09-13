@@ -59,7 +59,7 @@ public class DefaultDAOImpl implements DAO {
 		
 	},2000);
 	
-	ArrayList<DAOListener> listeners = new ArrayList<DAOListener>();
+	ArrayList<DAOEventListener> listeners = new ArrayList<DAOEventListener>();
 	
 	
 	String dirPath;
@@ -125,7 +125,7 @@ public class DefaultDAOImpl implements DAO {
 			root.getNodes().add(child);
 			child.setParent(root);
 			
-			if(meta != null) for(DAOListener l : listeners) l.onAdded(meta,child);
+			if(meta != null) for(DAOEventListener l : listeners) l.onAdded(meta,child);
 			
 			saveRequest(root);
 		} catch (Exception e) {
@@ -140,9 +140,27 @@ public class DefaultDAOImpl implements DAO {
 	
 	
 	@Override
-	public void addListener(DAOListener listener) {
+	public void addListener(DAOEventListener listener) {
 		listeners.add(listener);
 	}
+	
+	
+	@Override
+	public void delete(NodeMeta node) {
+		try {
+			Root root = node.getParent();
+			root.getNodes().remove(node);
+			
+			for(DAOEventListener l : listeners) l.onDeleted(node);
+			
+			cache.remove(node);
+			saveRequest(root);
+			
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 
 	//****************************************************************
@@ -179,7 +197,7 @@ public class DefaultDAOImpl implements DAO {
 			}
 		}
 		root.setDirPath(dirPath);
-		cache.putRoot(dirPath, root);
+		cache.putRoot(root);
 		return root;
 	}
 	
@@ -219,6 +237,8 @@ public class DefaultDAOImpl implements DAO {
 	private String rootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
+
+
 
 
 

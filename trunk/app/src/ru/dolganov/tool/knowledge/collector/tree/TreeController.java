@@ -9,7 +9,7 @@ import model.knowledge.NodeMeta;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
-import ru.dolganov.tool.knowledge.collector.dao.DAOListener;
+import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
@@ -25,7 +25,15 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	@Override
 	public void init(final MainWindow ui) {
 		tree = ui.tree;
-		tree.init(ExtendTree.createTreeModel(null), true, new MainCellRender(), SelectModel.SINGLE);
+		tree.init(
+				ExtendTree.createTreeModel(null), 
+				true, 
+				new MainCellRender(), 
+				SelectModel.SINGLE,
+				new TreeMenu(tree));
+		
+
+		
 		treeRoot = tree.getRootNode();
 		treeRoot.setUserObject("root");
 		tree.setRootVisible(false);
@@ -37,12 +45,18 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		ui.linkB.setEnabled(false);
 		ui.noteB.setEnabled(false);
 		
-		dao.addListener(new DAOListener(){
+		dao.addListener(new DAOEventAdapter(){
 
 			@Override
 			public void onAdded(NodeMeta parent, NodeMeta child) {
 				DefaultMutableTreeNode treeNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
 				tree.addChild(treeNode, createTreeNode(child));
+			}
+			
+			@Override
+			public void onDeleted(NodeMeta node) {
+				DefaultMutableTreeNode treeNode = dao.getCache().get(node, TREE_NODE, DefaultMutableTreeNode.class);
+				tree.model().removeNodeFromParent(treeNode);
 			}
 			
 		});
@@ -104,6 +118,17 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			if(parent == null) return;
 			dao.addChild(parent, node);
 		}
+	}
+
+	public void deleteCurrentNode() {
+		Object ob = tree.getCurrentObject();
+		if(ob == null) return;
+		
+		if (ob instanceof NodeMeta) {
+			NodeMeta node = (NodeMeta) ob;
+			dao.delete(node);
+		}
+		
 	}
 
 	

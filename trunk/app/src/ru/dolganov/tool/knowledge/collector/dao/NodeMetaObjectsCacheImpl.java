@@ -1,7 +1,6 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -20,7 +19,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	ReadWriteLock lock = new ReentrantReadWriteLock();
 	
 	HashMap<String, HashMap<String, Object>> objectsMap = new HashMap<String, HashMap<String, Object>>();
-	Map<String, Root> rootsMap = new HashMap<String, Root>();
+	HashMap<String, Root> rootsMap = new HashMap<String, Root>();
 
 	
 	
@@ -35,10 +34,10 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 
 	}
 	
-	public void putRoot(String path, Root root){
+	public void putRoot(Root root){
 		lock.writeLock().lock();
 		try {
-			rootsMap.put(path, root);
+			rootsMap.put(root.getDirPath(), root);
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -59,13 +58,17 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	}
 	
 	private HashMap<String, Object> getNodeObjects(NodeMeta node) {
-		String uuid = node.getUuid();
-		HashMap<String, Object> out = objectsMap.get(uuid);
+		String key = getNodeKey(node);
+		HashMap<String, Object> out = objectsMap.get(key);
 		if(out == null){
 			out = new HashMap<String, Object>();
-			objectsMap.put(uuid, out);
+			objectsMap.put(key, out);
 		}
 		return out;
+	}
+
+	private String getNodeKey(NodeMeta node) {
+		return node.getUuid();
 	}
 	
 	
@@ -75,6 +78,15 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 			return rootsMap.get(path);
 		} finally {
 			lock.readLock().unlock();
+		}
+	}
+
+	public void remove(NodeMeta node) {
+		lock.writeLock().lock();
+		try {
+			objectsMap.remove(getNodeKey(node));
+		} finally {
+			lock.writeLock().unlock();
 		}
 	}
 	

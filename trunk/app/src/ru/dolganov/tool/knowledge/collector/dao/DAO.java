@@ -18,6 +18,8 @@ public interface DAO {
 	
 	NodeMetaObjectsCache getCache();
 	
-	void addListener(DAOListener listener);
+	void addListener(DAOEventListener listener);
+
+	void delete(NodeMeta node);
 
 }
