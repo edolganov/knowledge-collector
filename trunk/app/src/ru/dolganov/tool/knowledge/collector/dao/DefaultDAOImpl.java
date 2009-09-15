@@ -1,8 +1,10 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.chapaj.util.store.XmlStore;
@@ -24,6 +26,8 @@ import model.tree.TreeSnapshotRoot;
 
 public class DefaultDAOImpl implements DAO {
 	
+	private static final String DEL_PREFFIX = "#del#";
+
 	XmlStore<Root> metaStore = new XmlStore<Root>(){
 
 		@Override
@@ -54,7 +58,7 @@ public class DefaultDAOImpl implements DAO {
 
 		@Override
 		public void onTimeout(String dirPath) {
-			saveData(dirPath);
+			newSaveThread(dirPath);
 		}
 		
 	},2000);
@@ -179,7 +183,7 @@ public class DefaultDAOImpl implements DAO {
 		Root root = cache.getRoot(dirPath);
 		if(root != null) return root;
 
-		String filePath = rootFilePath(dirPath);
+		String filePath = getRootFilePath(dirPath);
 		File metaFile = new File(filePath);
 		if(!metaFile.exists()){
 			if(!createIfNotExist) return null;
@@ -205,36 +209,111 @@ public class DefaultDAOImpl implements DAO {
 		persistTimer.start(root.getDirPath());
 	}
 	
-	private final Object mkDirLock = new Object();
-	private void saveData(final String dirPath){
+
+	private void newSaveThread(final String dirPath){
 		new Thread(){
 			@Override
 			public void run() {
-				Root root = cache.getRoot(dirPath);
-				if(root != null){
-					try {
-						synchronized (mkDirLock) {
-							new File(dirPath).mkdirs();
-						}
-						String filePath = rootFilePath(root.getDirPath());
-						System.out.println("saving " + filePath);
-						metaStore.saveFile(new File(filePath),root, true);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				save(dirPath);
 			}
 		}.start();
 	}
+	
+	//private final Object mkDirLock = new Object();
+	private final Object saveOneLock = new Object();
+	private void save(final String dirPath){
+		synchronized (saveOneLock) {
+			Root root = cache.getRoot(dirPath);
+			if(root != null){
+				try {
+//					synchronized (mkDirLock) {
+//						new File(dirPath).mkdirs();
+//					}
+					
+					//save data.xml
+					File dirFile = new File(dirPath);
+					dirFile.mkdirs();
+					String filePath = getRootFilePath(dirPath);
+					System.out.println("saving " + filePath);
+					metaStore.saveFile(new File(filePath),root, true);
+					
+					//sync child folder
+					String[] list = dirFile.list(new FilenameFilter(){
+
+						@Override
+						public boolean accept(File dir, String name) {
+							if(rootFileName.equals(name)) return false;
+							if(name.startsWith(DEL_PREFFIX)) return false;
+							return true;
+						}
+						
+					});
+					ArrayList<String> fileNames = new ArrayList<String>();
+					for(String fn : list)fileNames.add(fn);
+					
+					List<NodeMeta> nodes = root.getNodes();
+					for(NodeMeta child : nodes){
+						String fileName = child.getName();
+						if (child instanceof Dir) {
+							String folderPath = getFilePath(dirPath, fileName);
+							boolean folderExist = false;
+							for (int i = 0; i < fileNames.size(); i++) {
+								String name = fileNames.get(i);
+								if(name.equals(fileName) && new File(folderPath).isDirectory()){
+									folderExist = true;
+									fileNames.remove(i);
+								}
+							}
+							if(!folderExist){
+								new File(folderPath).mkdir();
+							}
+						}
+						else {
+							//TODO sync notes folders
+						}
+					}
+					//delete invalid folders
+					for(String name : fileNames){
+						String folderPath = getFilePath(dirPath, name);
+						File file = new File(folderPath);
+						if(file.isDirectory()){
+							String newName = generateDeleteFileName(name);
+							file.renameTo(new File(getFilePath(dirPath, newName)));
+						}
+					}
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
+	private String generateDeleteFileName(String name) {
+		StringBuilder sb = new StringBuilder().append(DEL_PREFFIX).append(name).append('-').append(System.currentTimeMillis());
+		return sb.toString();
+	}
 
 	private Root getRoot(NodeMeta meta,boolean createIfNotExist) {
-		String parentDirPath = meta.getParent().getDirPath();
-		String dirName = meta.getName();
-		String path = new StringBuilder().append(parentDirPath).append('/').append(dirName).toString();
+		String path = getDirPath(meta);
 		return getDirRoot(path,createIfNotExist);
 	}
+
+
+	private String getDirPath(NodeMeta meta) {
+		String parentDirPath = meta.getParent().getDirPath();
+		String dirName = meta.getName();
+		return getFilePath(parentDirPath, dirName);
+	}
+
+
+	private String getFilePath(String parentDirPath, String dirName) {
+		String path = new StringBuilder().append(parentDirPath).append('/').append(dirName).toString();
+		return path;
+	}
 	
-	private String rootFilePath(String dirPath){
+	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
 
