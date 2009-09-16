@@ -15,6 +15,8 @@ import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventListener;
 import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
 import ru.dolganov.tool.knowledge.collector.dao.fs.PersistTimer.TimeoutListener;
+import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.DirKeeper;
+import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.TextKeeper;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 import model.knowledge.Dir;
 import model.knowledge.Image;
@@ -33,8 +35,6 @@ import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
 
 public class FSDAOImpl implements DAO, HasNodeMetaParams {
-	
-	private static final String DEL_PREFFIX = "#del#";
 
 	XmlStore<Root> metaStore = new XmlStore<Root>(){
 
@@ -73,6 +73,9 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	},2000);
 	
 	ArrayList<DAOEventListener> listeners = new ArrayList<DAOEventListener>();
+	
+	DirKeeper dirKeeper = new DirKeeper();
+	TextKeeper textKeeper = new TextKeeper();
 	
 	
 	String dirPath;
@@ -141,7 +144,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			
 			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
 			if(meta != null) {
-				if(meta instanceof Dir){
+				if(child instanceof Dir){
 					saveOps.put(SaveOps.dirFlag, null);
 					saveOps.put(SaveOps.create, new Object[]{child});
 				}
@@ -319,10 +322,10 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 					if(saveOps != null){
 						System.out.println("do save ops");
 						if(saveOps.containsKey(SaveOps.dirFlag)){
-							saveDir(dirFile,saveOps);
+							dirKeeper.manage(dirFile, saveOps);
 						}
 						else if(saveOps.containsKey(SaveOps.textFlag)){
-							saveText(dirFile,saveOps);
+							textKeeper.manage(dirFile, saveOps);
 						}
 					}
 					
@@ -334,47 +337,6 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 
 
-	private void saveText(File dirFile, Map<SaveOps, Object[]> saveOps) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	private void saveDir(File dirFile, Map<SaveOps, Object[]> saveOps) {
-		if(saveOps.containsKey(SaveOps.create)){
-			NodeMeta node = (NodeMeta)saveOps.get(SaveOps.create)[0];
-			String dirName = node.getName();
-			String folderPath = getFilePath(dirFile.getPath(), dirName);
-			new File(folderPath).mkdir();
-		}
-		else if(saveOps.containsKey(SaveOps.delete)){
-			NodeMeta node = (NodeMeta)saveOps.get(SaveOps.delete)[0];
-			String dirName = node.getName();
-			String folderPath = getFilePath(dirFile.getPath(), dirName);
-			File file = new File(folderPath);
-			if(file.isDirectory()){
-				String newName = generateDeleteFileName(dirName);
-				file.renameTo(new File(getFilePath(dirFile.getPath(), newName)));
-			}
-		}
-		else if(saveOps.containsKey(SaveOps.rename)){
-			Object[] objects = saveOps.get(SaveOps.rename);
-			NodeMeta node = (NodeMeta)objects[0];
-			String newDirName = node.getName();
-			String oldDirName = (String)objects[1];
-			String parentPath = dirFile.getPath();
-			String folderPath = getFilePath(parentPath, oldDirName);
-			File file = new File(folderPath);
-			file.renameTo(new File(getFilePath(parentPath,newDirName)));
-		}
-	}
-
-
-	private String generateDeleteFileName(String name) {
-		StringBuilder sb = new StringBuilder().append(DEL_PREFFIX).append(name).append('-').append(System.currentTimeMillis());
-		return sb.toString();
-	}
-
 	private Root getRoot(NodeMeta meta,boolean createIfNotExist) {
 		String path = getDirPath(meta);
 		return getDirRoot(path,createIfNotExist);
@@ -384,14 +346,11 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	private String getDirPath(NodeMeta meta) {
 		String parentDirPath = meta.getParent().getDirPath();
 		String dirName = meta.getName();
-		return getFilePath(parentDirPath, dirName);
+		return DAOUtil.getFilePath(parentDirPath, dirName);
 	}
 
 
-	private String getFilePath(String parentDirPath, String dirName) {
-		String path = new StringBuilder().append(parentDirPath).append('/').append(dirName).toString();
-		return path;
-	}
+
 	
 	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;

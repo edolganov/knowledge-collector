@@ -65,9 +65,11 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		linkInfo.description.label.setText("description");
 		linkInfo.url.label.setText("url");
 		initArea(linkInfo.description);
+		linkInfo.jButton.addActionListener(actionListener);
 		
 		noteInfo.name.label.setText("name");
 		noteInfo.description.label.setText("text");
+		noteInfo.jButton.addActionListener(actionListener);
 		
 	}
 	
