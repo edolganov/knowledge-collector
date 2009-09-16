@@ -1,4 +1,4 @@
-package ru.chapaj.util.list;
+package ru.chapaj.util.collection;
 
 import java.util.List;
 
