@@ -8,4 +8,6 @@ public interface DAOEventListener {
 
 	void onDeleted(NodeMeta node);
 
+	void onUpdated(NodeMeta node);
+
 }

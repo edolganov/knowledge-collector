@@ -4,7 +4,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
-import ru.dolganov.tool.knowledge.collector.dao.DefaultDAOImpl;
+import ru.dolganov.tool.knowledge.collector.dao.fs.FSDAOImpl;
 import ru.dolganov.tool.knowledge.collector.info.InfoController;
 import ru.dolganov.tool.knowledge.collector.main.MainController;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
@@ -35,7 +35,7 @@ public class App {
 	}
 
 	public void init() {
-		dao = new DefaultDAOImpl("./know");
+		dao = new FSDAOImpl("./know");
 		initUI();
 		initControllers();
 		

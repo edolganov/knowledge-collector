@@ -16,7 +16,7 @@ import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.ui.AppFrame;
 import ru.chapaj.tool.link.collector.ui.dialog.GetValueDialog;
 import ru.chapaj.tool.link.collector.ui.dialog.SimpleConfirmDialog;
-import ru.chapaj.util.list.ListUtil;
+import ru.chapaj.util.collection.ListUtil;
 import ru.chapaj.util.log.Log;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;

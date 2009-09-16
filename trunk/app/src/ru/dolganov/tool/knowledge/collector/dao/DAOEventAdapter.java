@@ -12,5 +12,10 @@ public abstract class DAOEventAdapter implements DAOEventListener {
 	public void onDeleted(NodeMeta node) {
 
 	}
+	
+	@Override
+	public void onUpdated(NodeMeta node) {
+		
+	}
 
 }

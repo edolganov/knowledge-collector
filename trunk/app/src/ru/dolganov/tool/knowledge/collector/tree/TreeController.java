@@ -2,6 +2,7 @@ package ru.dolganov.tool.knowledge.collector.tree;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -121,14 +122,29 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	}
 
 	public void deleteCurrentNode() {
+		NodeMeta node = getCurMeta();
+		if(node == null) return;
+		dao.delete(node);
+	}
+
+	public void updateCurrentNode(Map<String, String> params) {
+		NodeMeta node = getCurMeta();
+		if(node == null) return;
+		dao.update(node,params);
+	}
+	
+	
+	
+	
+	private NodeMeta getCurMeta(){
 		Object ob = tree.getCurrentObject();
-		if(ob == null) return;
+		if(ob == null) return null;
 		
 		if (ob instanceof NodeMeta) {
-			NodeMeta node = (NodeMeta) ob;
-			dao.delete(node);
+			return (NodeMeta) ob;
 		}
 		
+		return null;
 	}
 
 	

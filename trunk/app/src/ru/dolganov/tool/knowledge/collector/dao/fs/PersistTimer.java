@@ -1,6 +1,7 @@
-package ru.dolganov.tool.knowledge.collector.dao;
+package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,23 +18,25 @@ public class PersistTimer {
 		
 		String key;
 		PersistTimer owner;
+		Map<SaveOps, Object[]> saveOps;
 
 
 
-		public TimerInfo(String key, PersistTimer owner) {
+		public TimerInfo(String key, PersistTimer owner,Map<SaveOps, Object[]> saveOps) {
 			super();
 			this.key = key;
 			this.owner = owner;
+			this.saveOps = saveOps;
 		}
 
 		@Override
 		public void run() {
-			owner.timeOut(key);
+			owner.timeOut(key,saveOps);
 		}
 	}
 	
 	public static interface TimeoutListener {
-		void onTimeout(String key);
+		void onTimeout(String key,Map<SaveOps, Object[]> saveOps);
 	}
 	
 	private Object lock = new Object();
@@ -47,20 +50,20 @@ public class PersistTimer {
 		this.delay = delay;
 	}
 	
-	public void start(String key){
+	public void start(String key, Map<SaveOps, Object[]> saveOps){
 		synchronized (lock) {
 			TimerInfo info = requests.remove(key);
 			if(info != null) info.cancel();
 			
-			info = new TimerInfo(key,this);
+			info = new TimerInfo(key,this,saveOps);
 			requests.put(key, info);
 			timer.schedule(info, delay);
 		}
 	}
 	
-	private void timeOut(String key){
+	private void timeOut(String key,Map<SaveOps, Object[]> saveOps){
 		synchronized (lock) {
-			timeoutListener.onTimeout(key);
+			timeoutListener.onTimeout(key,saveOps);
 		}
 	}
 	

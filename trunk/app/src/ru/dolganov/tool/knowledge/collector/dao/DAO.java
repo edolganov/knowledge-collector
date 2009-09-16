@@ -1,6 +1,7 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import model.knowledge.NodeMeta;
 import model.knowledge.Root;
@@ -21,5 +22,9 @@ public interface DAO {
 	void addListener(DAOEventListener listener);
 
 	void delete(NodeMeta node);
+
+	void update(NodeMeta node, Map<String, String> params);
+
+	Map<String,Object> getExternalData(NodeMeta ob);
 
 }

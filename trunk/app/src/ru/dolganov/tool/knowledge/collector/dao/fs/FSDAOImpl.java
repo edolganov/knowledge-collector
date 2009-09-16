@@ -1,30 +1,38 @@
-package ru.dolganov.tool.knowledge.collector.dao;
+package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
-import ru.dolganov.tool.knowledge.collector.dao.PersistTimer.TimeoutListener;
+import ru.dolganov.tool.knowledge.collector.dao.DAO;
+import ru.dolganov.tool.knowledge.collector.dao.DAOEventListener;
+import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
+import ru.dolganov.tool.knowledge.collector.dao.fs.PersistTimer.TimeoutListener;
+import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 import model.knowledge.Dir;
 import model.knowledge.Image;
+import model.knowledge.Link;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Note;
 import model.knowledge.Root;
 import model.knowledge.Tag;
+import model.knowledge.TextData;
 import model.knowledge.TreeLink;
 import model.knowledge.role.Parent;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
 
-public class DefaultDAOImpl implements DAO {
+public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	
 	private static final String DEL_PREFFIX = "#del#";
 
@@ -54,11 +62,12 @@ public class DefaultDAOImpl implements DAO {
 	String rootFileName = "data.xml";
 	NodeMetaObjectsCacheImpl cache = new NodeMetaObjectsCacheImpl();
 	
+	
 	PersistTimer persistTimer = new PersistTimer(new TimeoutListener(){
 
 		@Override
-		public void onTimeout(String dirPath) {
-			newSaveThread(dirPath);
+		public void onTimeout(String dirPath,Map<SaveOps, Object[]> saveOps) {
+			newSaveThread(dirPath,saveOps);
 		}
 		
 	},2000);
@@ -68,7 +77,7 @@ public class DefaultDAOImpl implements DAO {
 	
 	String dirPath;
 	
-	public DefaultDAOImpl(String dirPath) {
+	public FSDAOImpl(String dirPath) {
 		this.dirPath = dirPath;
 		getDirRoot(dirPath,true);
 		importLC();
@@ -119,6 +128,7 @@ public class DefaultDAOImpl implements DAO {
 		try {
 			Root root = null;
 			NodeMeta meta = null;
+			
 			if (parent instanceof Root) {
 				root = (Root) parent;
 			}
@@ -129,9 +139,16 @@ public class DefaultDAOImpl implements DAO {
 			root.getNodes().add(child);
 			child.setParent(root);
 			
-			if(meta != null) for(DAOEventListener l : listeners) l.onAdded(meta,child);
+			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+			if(meta != null) {
+				if(meta instanceof Dir){
+					saveOps.put(SaveOps.dirFlag, null);
+					saveOps.put(SaveOps.create, new Object[]{child});
+				}
+				for(DAOEventListener l : listeners) l.onAdded(meta,child);
+			}
 			
-			saveRequest(root);
+			saveRequest(root,saveOps);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -155,14 +172,75 @@ public class DefaultDAOImpl implements DAO {
 			Root root = node.getParent();
 			root.getNodes().remove(node);
 			
+			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+			if(node instanceof Dir){
+				saveOps.put(SaveOps.dirFlag, null);
+				saveOps.put(SaveOps.delete, new Object[]{node});
+			}
+			else if(node instanceof TextData){
+				saveOps.put(SaveOps.textFlag, null);
+				saveOps.put(SaveOps.delete, new Object[]{node});
+			}
+			
 			for(DAOEventListener l : listeners) l.onDeleted(node);
 			
 			cache.remove(node);
-			saveRequest(root);
+			saveRequest(root,saveOps);
 			
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@Override
+	public void update(NodeMeta node, Map<String, String> params) {
+		try {
+			String name = params.get(Params.name.toString());
+			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+			if(name == null) return;
+			
+			boolean isNewName = false;
+			String oldName = node.getName();
+			if(!oldName.equals(name)){
+				node.setName(name);
+				isNewName = true;
+			}
+			
+			if (node instanceof Dir) {
+				saveOps.put(SaveOps.dirFlag, null);
+				Dir dir = (Dir) node;
+				dir.setDescription(params.get(Params.description.toString()));
+				if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
+			}
+			else if(node instanceof Link){
+				Link link = (Link) node;
+				link.setUrl(params.get(Params.url.toString()));
+				link.setDescription(params.get(Params.description.toString()));
+			}
+			else if(node instanceof TextData){
+				saveOps.put(SaveOps.textFlag, null);
+				String text = params.get(Params.text.toString());
+				cache.getTextCache().put(node.getUuid(), text);
+				saveOps.put(SaveOps.update, new Object[]{node,text});
+				if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
+			}
+			
+			for(DAOEventListener l : listeners) l.onUpdated(node);
+			
+			saveRequest(node.getParent(),saveOps);
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	HashMap<String, Object> emptyExternalData = new HashMap<String, Object>(0);
+	@Override
+	public Map<String, Object> getExternalData(NodeMeta ob) {
+		
+		return emptyExternalData;
 	}
 
 	
@@ -205,23 +283,23 @@ public class DefaultDAOImpl implements DAO {
 		return root;
 	}
 	
-	private void saveRequest(Root root) {
-		persistTimer.start(root.getDirPath());
+	private void saveRequest(Root root, Map<SaveOps, Object[]> saveOps) {
+		persistTimer.start(root.getDirPath(),saveOps);
 	}
 	
 
-	private void newSaveThread(final String dirPath){
+	private void newSaveThread(final String dirPath, final Map<SaveOps, Object[]> saveOps){
 		new Thread(){
 			@Override
 			public void run() {
-				save(dirPath);
+				save(dirPath,saveOps);
 			}
 		}.start();
 	}
 	
 	//private final Object mkDirLock = new Object();
 	private final Object saveOneLock = new Object();
-	private void save(final String dirPath){
+	private void save(final String dirPath, Map<SaveOps, Object[]> saveOps){
 		synchronized (saveOneLock) {
 			Root root = cache.getRoot(dirPath);
 			if(root != null){
@@ -237,48 +315,14 @@ public class DefaultDAOImpl implements DAO {
 					System.out.println("saving " + filePath);
 					metaStore.saveFile(new File(filePath),root, true);
 					
-					//sync child folder
-					String[] list = dirFile.list(new FilenameFilter(){
-
-						@Override
-						public boolean accept(File dir, String name) {
-							if(rootFileName.equals(name)) return false;
-							if(name.startsWith(DEL_PREFFIX)) return false;
-							return true;
+					//do save ops
+					if(saveOps != null){
+						System.out.println("do save ops");
+						if(saveOps.containsKey(SaveOps.dirFlag)){
+							saveDir(dirFile,saveOps);
 						}
-						
-					});
-					ArrayList<String> fileNames = new ArrayList<String>();
-					for(String fn : list)fileNames.add(fn);
-					
-					List<NodeMeta> nodes = root.getNodes();
-					for(NodeMeta child : nodes){
-						String fileName = child.getName();
-						if (child instanceof Dir) {
-							String folderPath = getFilePath(dirPath, fileName);
-							boolean folderExist = false;
-							for (int i = 0; i < fileNames.size(); i++) {
-								String name = fileNames.get(i);
-								if(name.equals(fileName) && new File(folderPath).isDirectory()){
-									folderExist = true;
-									fileNames.remove(i);
-								}
-							}
-							if(!folderExist){
-								new File(folderPath).mkdir();
-							}
-						}
-						else {
-							//TODO sync notes folders
-						}
-					}
-					//delete invalid folders
-					for(String name : fileNames){
-						String folderPath = getFilePath(dirPath, name);
-						File file = new File(folderPath);
-						if(file.isDirectory()){
-							String newName = generateDeleteFileName(name);
-							file.renameTo(new File(getFilePath(dirPath, newName)));
+						else if(saveOps.containsKey(SaveOps.textFlag)){
+							saveText(dirFile,saveOps);
 						}
 					}
 					
@@ -286,6 +330,42 @@ public class DefaultDAOImpl implements DAO {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+
+	private void saveText(File dirFile, Map<SaveOps, Object[]> saveOps) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	private void saveDir(File dirFile, Map<SaveOps, Object[]> saveOps) {
+		if(saveOps.containsKey(SaveOps.create)){
+			NodeMeta node = (NodeMeta)saveOps.get(SaveOps.create)[0];
+			String dirName = node.getName();
+			String folderPath = getFilePath(dirFile.getPath(), dirName);
+			new File(folderPath).mkdir();
+		}
+		else if(saveOps.containsKey(SaveOps.delete)){
+			NodeMeta node = (NodeMeta)saveOps.get(SaveOps.delete)[0];
+			String dirName = node.getName();
+			String folderPath = getFilePath(dirFile.getPath(), dirName);
+			File file = new File(folderPath);
+			if(file.isDirectory()){
+				String newName = generateDeleteFileName(dirName);
+				file.renameTo(new File(getFilePath(dirFile.getPath(), newName)));
+			}
+		}
+		else if(saveOps.containsKey(SaveOps.rename)){
+			Object[] objects = saveOps.get(SaveOps.rename);
+			NodeMeta node = (NodeMeta)objects[0];
+			String newDirName = node.getName();
+			String oldDirName = (String)objects[1];
+			String parentPath = dirFile.getPath();
+			String folderPath = getFilePath(parentPath, oldDirName);
+			File file = new File(folderPath);
+			file.renameTo(new File(getFilePath(parentPath,newDirName)));
 		}
 	}
 
@@ -316,6 +396,12 @@ public class DefaultDAOImpl implements DAO {
 	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
+
+
+
+
+
+
 
 
 

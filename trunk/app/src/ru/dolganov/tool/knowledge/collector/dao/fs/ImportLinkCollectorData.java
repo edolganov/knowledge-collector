@@ -1,4 +1,4 @@
-package ru.dolganov.tool.knowledge.collector.dao;
+package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.model.Link;
 import ru.chapaj.tool.link.collector.store.file.DataContainerStore;
+import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.model.LinkOps;
 import model.knowledge.Dir;
 import model.knowledge.LocalLink;
