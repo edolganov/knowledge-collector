@@ -60,6 +60,13 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 				tree.model().removeNodeFromParent(treeNode);
 			}
 			
+			@Override
+			public void onUpdated(NodeMeta node) {
+				DefaultMutableTreeNode treeNode = dao.getCache().get(node, TREE_NODE, DefaultMutableTreeNode.class);
+				treeNode.setUserObject(node);
+				tree.model().reload(treeNode);
+			}
+			
 		});
 		
 		

@@ -157,7 +157,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 			curMode = Mode.text;
 			ui.infoPanel.add(noteInfo);
 			noteInfo.name.setText(ob.getName());
-			noteInfo.description.setText((String)dao.getExternalData(ob).get(Params.text));
+			noteInfo.description.setText((String)dao.getExternalData(ob).get(Params.text.toString()));
 		}
 
 		

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import ru.chapaj.util.collection.SyncHashMap;
 import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
 
 import model.knowledge.NodeMeta;
@@ -23,7 +22,6 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	
 	HashMap<String, HashMap<String, Object>> objectsMap = new HashMap<String, HashMap<String, Object>>();
 	HashMap<String, Root> rootsMap = new HashMap<String, Root>();
-	SyncHashMap<String, String> textCache = new SyncHashMap<String, String>();
 
 	
 	
@@ -92,10 +90,6 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		} finally {
 			lock.writeLock().unlock();
 		}
-	}
-
-	public SyncHashMap<String, String> getTextCache() {
-		return textCache;
 	}
 	
 

@@ -223,10 +223,9 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			}
 			else if(node instanceof TextData){
 				saveOps.put(SaveOps.textFlag, null);
-				String text = params.get(Params.text.toString());
-				cache.getTextCache().put(node.getUuid(), text);
-				saveOps.put(SaveOps.update, new Object[]{node,text});
+				saveOps.put(SaveOps.update, new Object[]{node,params.get(Params.text.toString())});
 				if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
+				textKeeper.beforeUpdate(node,params);
 			}
 			
 			for(DAOEventListener l : listeners) l.onUpdated(node);
@@ -242,7 +241,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	HashMap<String, Object> emptyExternalData = new HashMap<String, Object>(0);
 	@Override
 	public Map<String, Object> getExternalData(NodeMeta ob) {
-		
+		if(ob instanceof TextData) return textKeeper.getExternalData(ob);
 		return emptyExternalData;
 	}
 
