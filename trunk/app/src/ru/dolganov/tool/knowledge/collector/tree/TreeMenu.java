@@ -9,7 +9,7 @@ import javax.swing.JPopupMenu;
 
 import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
-import ru.dolganov.tool.knowledge.collector.actions.DeleteCurrentTreeElementAction;
+import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 
 public class TreeMenu extends JPopupMenu implements HasCellConst {
@@ -25,7 +25,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new DeleteCurrentTreeElementAction();
+				Actions.deleteCurrentTreeNode();
 			}
 			
 		});

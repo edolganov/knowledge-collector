@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.model.Link;
 import ru.chapaj.tool.link.collector.store.file.DataContainerStore;
+import ru.dolganov.tool.knowledge.collector.model.LinkOps;
 import model.knowledge.Dir;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
@@ -67,11 +68,11 @@ public class ImportLinkCollectorData {
 	private static NodeMeta convertLink(Link ob) {
 		NodeMeta meta = null;
 		String url = ob.getUrl();
-		if(url.startsWith("http")||url.startsWith("www")){
+		if(LinkOps.isInetLink(url)){
 			meta = new NetworkLink();
 			((model.knowledge.Link)meta).setUrl(ob.getUrl());
 		}
-		else if(url.indexOf(':')==1){
+		else if(LinkOps.isLocalLink(url)){
 			meta = new LocalLink();
 			((model.knowledge.Link)meta).setUrl(ob.getUrl());
 		}

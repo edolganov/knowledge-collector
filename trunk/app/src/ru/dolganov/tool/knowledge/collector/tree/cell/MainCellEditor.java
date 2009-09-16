@@ -1,6 +1,5 @@
 package ru.dolganov.tool.knowledge.collector.tree.cell;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -17,8 +16,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
-import ru.dolganov.tool.knowledge.collector.App;
-import ru.dolganov.tool.knowledge.collector.tree.TreeController;
+import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
 
 public class MainCellEditor implements TreeCellEditor, HasCellConst {
@@ -44,7 +42,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				App.getDefault().getController(TreeController.class).addNode(DialogOps.newDir());
+				Actions.addTreeNode(DialogOps.newDir());
 			}
 			
 		});
@@ -60,7 +58,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("----linkB!");
+				Actions.addTreeNode(DialogOps.newLink());
 			}
 			
 		});
@@ -75,7 +73,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("----noteB!");
+				Actions.addTreeNode(DialogOps.newText());
 			}
 			
 		});
