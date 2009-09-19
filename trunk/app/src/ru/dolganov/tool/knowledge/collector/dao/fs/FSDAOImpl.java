@@ -1,11 +1,9 @@
 package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -127,7 +125,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 
 	@Override
-	public void addChild(Parent parent, NodeMeta child) {
+	public boolean addChild(Parent parent, NodeMeta child) {
 		try {
 			Root root = null;
 			NodeMeta meta = null;
@@ -138,6 +136,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			else if (parent instanceof NodeMeta) {
 				meta = (NodeMeta) parent;
 				root = getRoot(meta,true);
+				if(root == null) return false;
 			}
 			root.getNodes().add(child);
 			child.setParent(root);
@@ -152,8 +151,10 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			}
 			
 			saveRequest(root,saveOps);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 	
@@ -338,14 +339,23 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 	private Root getRoot(NodeMeta meta,boolean createIfNotExist) {
 		String path = getDirPath(meta);
+		if(path == null) return null;
 		return getDirRoot(path,createIfNotExist);
 	}
 
 
 	private String getDirPath(NodeMeta meta) {
 		String parentDirPath = meta.getParent().getDirPath();
-		String dirName = meta.getName();
-		return DAOUtil.getFilePath(parentDirPath, dirName);
+		String dirName = null;
+		if(meta instanceof Dir){
+			dirName = dirKeeper.getDirPath(meta);
+		}
+		else if(meta instanceof TextData){
+			dirName = textKeeper.getDirPath(meta);
+		}
+		
+		if(dirName == null) return null;
+		return DU.getFilePath(parentDirPath, dirName);
 	}
 
 

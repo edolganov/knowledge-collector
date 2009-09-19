@@ -15,7 +15,7 @@ public interface DAO {
 
 	List<NodeMeta> getChildren(Parent parent);
 	
-	void addChild(Parent parent, NodeMeta child);
+	boolean addChild(Parent parent, NodeMeta child);
 	
 	NodeMetaObjectsCache getCache();
 	
