@@ -2,21 +2,24 @@ package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.model.Link;
 import ru.chapaj.tool.link.collector.store.file.DataContainerStore;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
+import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 import ru.dolganov.tool.knowledge.collector.model.LinkOps;
 import model.knowledge.Dir;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Note;
+import model.knowledge.TextData;
 import model.knowledge.role.Parent;
 
-public class ImportLinkCollectorData {
+public class ImportLinkCollectorData implements HasNodeMetaParams{
 	
 	static class QS {
 		Parent parent;
@@ -50,7 +53,13 @@ public class ImportLinkCollectorData {
 				ArrayList<Link> links = qs.lcDir.getLinks();
 				if(links != null){
 					for(Link link : links){
-						dao.addChild(qs.parent, convertLink(link));
+						NodeMeta node = convertLink(link);
+						HashMap<String, String> params = null;
+						if(node instanceof TextData){
+							params = new HashMap<String, String>(1);
+							params.put(Params.text.toString(), link.getDescription());
+						}
+						dao.addChild(qs.parent, node,params);
 					}
 				}
 			}
@@ -72,15 +81,16 @@ public class ImportLinkCollectorData {
 		if(LinkOps.isInetLink(url)){
 			meta = new NetworkLink();
 			((model.knowledge.Link)meta).setUrl(ob.getUrl());
+			meta.setDescription(ob.getDescription());
 		}
 		else if(LinkOps.isLocalLink(url)){
 			meta = new LocalLink();
 			((model.knowledge.Link)meta).setUrl(ob.getUrl());
+			meta.setDescription(ob.getDescription());
 		}
 		else meta = new Note();
 		
 		meta.setCreateDate(System.currentTimeMillis());
-		meta.setDescription(ob.getDescription());
 		meta.setName(ob.getName());
 		meta.setUuid(ob.getUuid());
 		

@@ -3,7 +3,7 @@ package ru.dolganov.tool.knowledge.collector.dao.fs;
 import java.util.Arrays;
 
 /**
- * <b>D</b>AO<b>U</b>tils
+ * <b>D</b>AO <b>U</b>tils
  * @author jenua.dolganov
  *
  */

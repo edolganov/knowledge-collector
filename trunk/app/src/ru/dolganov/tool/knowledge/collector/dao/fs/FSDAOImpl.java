@@ -64,8 +64,8 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	PersistTimer persistTimer = new PersistTimer(new TimeoutListener(){
 
 		@Override
-		public void onTimeout(String dirPath,Map<SaveOps, Object[]> saveOps) {
-			newSaveThread(dirPath,saveOps);
+		public void onTimeout(String dirPath,Map<SaveOps, Object[]> saveOps,List<Map<SaveOps,Object[]>> oldSaveOps) {
+			newSaveThread(dirPath,saveOps,oldSaveOps);
 		}
 		
 	},2000);
@@ -126,6 +126,10 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 	@Override
 	public boolean addChild(Parent parent, NodeMeta child) {
+		return addChild(parent, child, null);
+	}
+	
+	public boolean addChild(Parent parent, NodeMeta child,Map<String, String> params){
 		try {
 			Root root = null;
 			NodeMeta meta = null;
@@ -141,11 +145,18 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			root.getNodes().add(child);
 			child.setParent(root);
 			
-			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+			Map<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+			
 			if(meta != null) {
+				if(params == null) params = new HashMap<String, String>(0);
 				if(child instanceof Dir){
 					saveOps.put(SaveOps.dirFlag, null);
 					saveOps.put(SaveOps.create, new Object[]{child});
+				}
+				else if(child instanceof TextData){
+					saveOps.put(SaveOps.textFlag, null);
+					saveOps.put(SaveOps.update, new Object[]{child,params.get(Params.text.toString())});
+					
 				}
 				for(DAOEventListener l : listeners) l.onAdded(meta,child);
 			}
@@ -200,6 +211,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	@Override
 	public void update(NodeMeta node, Map<String, String> params) {
 		try {
+			//name of the node
 			String name = params.get(Params.name.toString());
 			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
 			if(name == null) return;
@@ -291,18 +303,18 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 
-	private void newSaveThread(final String dirPath, final Map<SaveOps, Object[]> saveOps){
+	private void newSaveThread(final String dirPath, final Map<SaveOps, Object[]> saveOps,final List<Map<SaveOps,Object[]>> oldSaveOps){
 		new Thread(){
 			@Override
 			public void run() {
-				save(dirPath,saveOps);
+				save(dirPath,saveOps,oldSaveOps);
 			}
 		}.start();
 	}
 	
 	//private final Object mkDirLock = new Object();
 	private final Object saveOneLock = new Object();
-	private void save(final String dirPath, Map<SaveOps, Object[]> saveOps){
+	private void save(final String dirPath, Map<SaveOps, Object[]> saveOps,List<Map<SaveOps,Object[]>> oldSaveOps){
 		synchronized (saveOneLock) {
 			Root root = cache.getRoot(dirPath);
 			if(root != null){
@@ -319,20 +331,39 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 					metaStore.saveFile(new File(filePath),root, true);
 					
 					//do save ops
-					if(saveOps != null){
-						System.out.println("do save ops");
-						if(saveOps.containsKey(SaveOps.dirFlag)){
-							dirKeeper.manage(dirFile, saveOps);
-						}
-						else if(saveOps.containsKey(SaveOps.textFlag)){
-							textKeeper.manage(dirFile, saveOps);
-						}
+					System.out.println("do save ops");
+					//old
+					if(oldSaveOps != null){
+						for(Map<SaveOps,Object[]> ops : oldSaveOps) doSaveOps(ops, dirFile);
 					}
+					//current
+					doSaveOps(saveOps, dirFile);
+					System.out.println("done");
 					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+
+
+	private void doSaveOps(Map<SaveOps, Object[]> saveOps, File dirFile) {
+		if(saveOps != null){
+			//test log
+			for(SaveOps op : saveOps.keySet()){
+				Object[] obs = saveOps.get(op);
+				StringBuilder sb = new StringBuilder();
+				if(obs != null) for(Object ob : obs) sb.append(ob).append(' ');
+				System.out.println(op + ": " + sb.toString());
+			}
+			if(saveOps.containsKey(SaveOps.dirFlag)){
+				dirKeeper.manage(dirFile, saveOps);
+			}
+			else if(saveOps.containsKey(SaveOps.textFlag)){
+				textKeeper.manage(dirFile, saveOps);
+			}
+
 		}
 	}
 

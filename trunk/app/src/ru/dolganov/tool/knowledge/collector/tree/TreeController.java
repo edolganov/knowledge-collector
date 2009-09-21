@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import model.knowledge.Dir;
 import model.knowledge.NodeMeta;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
@@ -92,10 +93,14 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		q.addLast(new QS(dao.getRoot().getNodes(),treeRoot));
 		while(!q.isEmpty()){
 			QS s = q.removeFirst();
-			s.node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
+			DefaultMutableTreeNode node = s.node;
+			Object ob = node.getUserObject();
+			if(ob instanceof Dir){
+				node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
+			}
 			for(NodeMeta meta : s.list){
 				DefaultMutableTreeNode chNode = createTreeNode(meta);
-				s.node.add(chNode);
+				node.add(chNode);
 				q.addLast(new QS(dao.getChildren(meta),chNode));
 			}
 		}

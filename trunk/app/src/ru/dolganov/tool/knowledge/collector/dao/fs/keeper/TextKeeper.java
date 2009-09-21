@@ -74,14 +74,16 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 				tempFile = new File(tempFilePath);
 				oldFile.renameTo(tempFile);
 			}
-			File file = new File(filePath);
-			try {
-				FileOutputStream fos = new FileOutputStream(file);
-				fos.write(text.getBytes("UTF-8"));
-				fos.flush();
-				fos.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			if(!Check.isEmpty(text)){
+				File file = new File(filePath);
+				try {
+					FileOutputStream fos = new FileOutputStream(file);
+					fos.write(text.getBytes("UTF-8"));
+					fos.flush();
+					fos.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			if(tempFile != null) tempFile.delete();
 			

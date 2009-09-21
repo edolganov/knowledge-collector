@@ -17,6 +17,8 @@ public interface DAO {
 	
 	boolean addChild(Parent parent, NodeMeta child);
 	
+	boolean addChild(Parent parent, NodeMeta child,Map<String, String> params);
+	
 	NodeMetaObjectsCache getCache();
 	
 	void addListener(DAOEventListener listener);
