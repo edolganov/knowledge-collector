@@ -70,6 +70,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		noteInfo.name.label.setText("name");
 		noteInfo.description.label.setText("text");
 		noteInfo.jButton.addActionListener(actionListener);
+		initArea(noteInfo.description);
 		
 	}
 	
@@ -158,6 +159,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 			ui.infoPanel.add(noteInfo);
 			noteInfo.name.setText(ob.getName());
 			noteInfo.description.setText((String)dao.getExternalData(ob).get(Params.text.toString()));
+			checkEmptyArea(noteInfo.description);
 		}
 
 		

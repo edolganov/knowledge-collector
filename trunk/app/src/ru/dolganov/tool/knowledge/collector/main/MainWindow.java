@@ -49,6 +49,7 @@ public class MainWindow extends JDialog {
 	private JButton jButton4 = null;
 	private JButton jButton5 = null;
 	public JPanel infoPanel = null;
+	public JTextField path = null;
 	/**
 	 * @param owner
 	 */
@@ -82,6 +83,7 @@ public class MainWindow extends JDialog {
 			jContentPane.add(getJPanel1(), null);
 			jContentPane.add(getJPanel31(), null);
 			jContentPane.add(getInfoPanel(), null);
+			jContentPane.add(getPath(), null);
 		}
 		return jContentPane;
 	}
@@ -117,7 +119,7 @@ public class MainWindow extends JDialog {
 			gridLayout1.setRows(1);
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(gridLayout1);
-			jPanel1.setBounds(new Rectangle(182, 33, 497, 461));
+			jPanel1.setBounds(new Rectangle(182, 50, 497, 444));
 			jPanel1.add(getJPanel2(), null);
 		}
 		return jPanel1;
@@ -400,6 +402,19 @@ public class MainWindow extends JDialog {
 			infoPanel.setBounds(new Rectangle(682, 33, 332, 459));
 		}
 		return infoPanel;
+	}
+
+	/**
+	 * This method initializes path	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getPath() {
+		if (path == null) {
+			path = new JTextField();
+			path.setBounds(new Rectangle(182, 30, 497, 19));
+		}
+		return path;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

@@ -1,10 +1,15 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JTextField;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import model.knowledge.Dir;
 import model.knowledge.NodeMeta;
@@ -21,12 +26,20 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 
 	private static final String TREE_NODE = "tree-node";
 	ExtendTree tree;
+	JTextField path;
+	
 	DefaultMutableTreeNode treeRoot;
+//	DefaultMutableTreeNode lastDirNode;
+//	DefaultMutableTreeNode buttons = new DefaultMutableTreeNode(Cell.BUTTONS);
 	
 	
 	@Override
 	public void init(final MainWindow ui) {
 		tree = ui.tree;
+		path = ui.path;
+		path.setEditable(false);
+		//path.setBackground(Color.WHITE);
+		
 		tree.init(
 				ExtendTree.createTreeModel(null), 
 				true, 
@@ -42,6 +55,37 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		
 		tree.setCellEditor(new MainCellEditor());
 		tree.setEditable(true);
+		
+		tree.addTreeNodeListener(new ExtendTree.TreeNodeAdapter(){
+			
+			@Override
+			public void onNodeSelect(DefaultMutableTreeNode node) {
+				setPathInfo(node);
+//				if(buttons == node) {
+//					//select next node
+//					return;
+//				}
+//				
+//				if(node == null) return;
+//				Object ob = node.getUserObject();
+//				if(ob == null) return;
+//				
+//				if(ob instanceof Dir && tree.isExpanded(node)){
+//					if(lastDirNode != null){
+//						DefaultMutableTreeNode child = (DefaultMutableTreeNode)lastDirNode.getChildAt(0);
+//						if(buttons == child){
+//							tree.model().removeNodeFromParent(child);
+//						}
+//						lastDirNode = null;
+//					}
+//					
+//					node.insert(buttons, 0);
+//					tree.model().reload(node);
+//					lastDirNode = node;
+//				}
+			}
+			
+		});
 		
 		ui.dirB.setEnabled(false);
 		ui.linkB.setEnabled(false);
@@ -75,6 +119,36 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	}
 
 
+	protected void setPathInfo(DefaultMutableTreeNode node) {
+		StringBuilder sb = new StringBuilder();
+		if(node != null){
+			TreeNode[] path = node.getPath();
+			if(path.length > 2){
+				if(path.length == 3){
+					Object ob = ((DefaultMutableTreeNode)path[1]).getUserObject();
+					if(ob instanceof Dir){
+						sb.append('/').append(path[2].toString());
+					}
+				}
+				else {
+					int last = path.length - 1;
+					for (int i = 2; i < last ; i++) {
+						sb.append('/').append(path[i].toString());
+					}
+					Object ob = ((DefaultMutableTreeNode)path[last]).getUserObject();
+					if(ob instanceof Dir){
+						sb.append('/').append(path[last].toString());
+					}
+				}
+			}
+		}
+		String pathString = sb.toString();
+		path.setText(pathString);
+		//path.setCaretPosition(pathString.length()-1);
+		
+	}
+
+
 	static class QS {
 		List<NodeMeta> list;
 		DefaultMutableTreeNode node;
@@ -95,9 +169,9 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			QS s = q.removeFirst();
 			DefaultMutableTreeNode node = s.node;
 			Object ob = node.getUserObject();
-			if(ob instanceof Dir){
-				node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
-			}
+//			if(ob instanceof Dir){
+//				node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
+//			}
 			for(NodeMeta meta : s.list){
 				DefaultMutableTreeNode chNode = createTreeNode(meta);
 				node.add(chNode);
