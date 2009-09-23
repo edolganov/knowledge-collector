@@ -20,7 +20,7 @@ import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 import ru.chapaj.tool.link.collector.ui.component.PropertyTextAreaPanel;
 import ru.chapaj.util.Check;
-import ru.chapaj.util.swing.tree.ExtendTree.TreeNodeAdapter;
+import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 
 public class InfoController extends Controller<MainWindow> implements HasNodeMetaParams{
 	static enum Mode {

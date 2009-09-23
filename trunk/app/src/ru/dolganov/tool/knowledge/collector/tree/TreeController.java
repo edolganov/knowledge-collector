@@ -1,19 +1,17 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
-import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JTextField;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import model.knowledge.Dir;
 import model.knowledge.NodeMeta;
 import ru.chapaj.util.swing.tree.ExtendTree;
+import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
@@ -56,7 +54,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		tree.setCellEditor(new MainCellEditor());
 		tree.setEditable(true);
 		
-		tree.addTreeNodeListener(new ExtendTree.TreeNodeAdapter(){
+		tree.addTreeNodeListener(new TreeNodeAdapter(){
 			
 			@Override
 			public void onNodeSelect(DefaultMutableTreeNode node) {
@@ -86,10 +84,6 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			}
 			
 		});
-		
-		ui.dirB.setEnabled(false);
-		ui.linkB.setEnabled(false);
-		ui.noteB.setEnabled(false);
 		
 		dao.addListener(new DAOEventAdapter(){
 
@@ -135,16 +129,13 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 					for (int i = 2; i < last ; i++) {
 						sb.append('/').append(path[i].toString());
 					}
-					Object ob = ((DefaultMutableTreeNode)path[last]).getUserObject();
-					if(ob instanceof Dir){
-						sb.append('/').append(path[last].toString());
-					}
+					sb.append('/').append(path[last].toString());
 				}
 			}
 		}
 		String pathString = sb.toString();
 		path.setText(pathString);
-		//path.setCaretPosition(pathString.length()-1);
+		path.setCaretPosition(0);
 		
 	}
 
@@ -204,6 +195,9 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			NodeMeta parent = tree.getParentObject(currentNode, NodeMeta.class);
 			if(parent == null) return;
 			dao.addChild(parent, node);
+		}
+		else if (userObject instanceof NodeMeta) {
+			dao.addChild((NodeMeta)userObject, node);
 		}
 	}
 

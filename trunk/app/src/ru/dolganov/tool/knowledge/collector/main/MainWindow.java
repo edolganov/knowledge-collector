@@ -64,7 +64,7 @@ public class MainWindow extends JDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setBounds(new Rectangle(0, 0, 1024, 523));
+		this.setBounds(new Rectangle(0, 0, 1024, 541));
 		this.setContentPane(getJContentPane());
 	}
 
@@ -119,7 +119,7 @@ public class MainWindow extends JDialog {
 			gridLayout1.setRows(1);
 			jPanel1 = new JPanel();
 			jPanel1.setLayout(gridLayout1);
-			jPanel1.setBounds(new Rectangle(182, 50, 497, 444));
+			jPanel1.setBounds(new Rectangle(182, 33, 497, 459));
 			jPanel1.add(getJPanel2(), null);
 		}
 		return jPanel1;
@@ -412,7 +412,7 @@ public class MainWindow extends JDialog {
 	private JTextField getPath() {
 		if (path == null) {
 			path = new JTextField();
-			path.setBounds(new Rectangle(182, 30, 497, 19));
+			path.setBounds(new Rectangle(4, 494, 1010, 19));
 		}
 		return path;
 	}

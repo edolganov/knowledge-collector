@@ -19,8 +19,8 @@ import ru.chapaj.tool.link.collector.ui.dialog.SimpleConfirmDialog;
 import ru.chapaj.util.collection.ListUtil;
 import ru.chapaj.util.log.Log;
 import ru.chapaj.util.swing.tree.ExtendTree;
+import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
-import ru.chapaj.util.swing.tree.ExtendTree.TreeNodeAdapter;
 
 public class SnapshotListController extends Controller<AppFrame> {
 	
