@@ -23,47 +23,6 @@ public class ExtendTree extends DNDTree {
 		SINGLE
 	}
 	
-	public static interface TreeNodeListener extends DNDListener {
-		
-		void onDoubleClick(DefaultMutableTreeNode node);
-		
-		void onNodeMoveUpRequest();
-		
-		void onNodeMoveDownRequest();
-		
-		void onNodeSelect(DefaultMutableTreeNode node);
-		
-	}
-	
-	public static class TreeNodeAdapter implements TreeNodeListener {
-
-		@Override
-		public void onDoubleClick(DefaultMutableTreeNode node) {
-		}
-
-		@Override
-		public void onNodeMoveDownRequest() {
-			
-		}
-
-		@Override
-		public void onNodeMoveUpRequest() {
-			
-		}
-
-		@Override
-		public void afterDrop(DefaultMutableTreeNode tagretNode,
-				DefaultMutableTreeNode draggedNode) {
-			
-		}
-
-		@Override
-		public void onNodeSelect(DefaultMutableTreeNode node) {
-			
-		}
-		
-	}
-
 	public ExtendTree() {
 		super();
 	}
