@@ -183,49 +183,41 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		return treeNode;
 	}
 	
-	public void addNode(NodeMeta node){
-		if(node == null) return;
-		DefaultMutableTreeNode currentNode = tree.getCurrentNode();
-		if(currentNode == null) return;
-		
-		Object userObject = currentNode.getUserObject();
-		if(userObject == null) return;
-		
-		if(Cell.BUTTONS == userObject){
-			NodeMeta parent = tree.getParentObject(currentNode, NodeMeta.class);
-			if(parent == null) return;
-			dao.addChild(parent, node);
-		}
-		else if (userObject instanceof NodeMeta) {
-			dao.addChild((NodeMeta)userObject, node);
-		}
-	}
-
-	public void deleteCurrentNode() {
-		NodeMeta node = getCurMeta();
-		if(node == null) return;
-		dao.delete(node);
-	}
-
-	public void updateCurrentNode(Map<String, String> params) {
-		NodeMeta node = getCurMeta();
-		if(node == null) return;
-		dao.update(node,params);
-	}
-	
-	
-	
-	
-	private NodeMeta getCurMeta(){
-		Object ob = tree.getCurrentObject();
-		if(ob == null) return null;
-		
-		if (ob instanceof NodeMeta) {
-			return (NodeMeta) ob;
-		}
-		
-		return null;
-	}
-
-	
 }
+
+
+
+//public void deleteCurrentNode() {
+//NodeMeta node = getCurMeta();
+//if(node == null) return;
+//dao.delete(node);
+//}
+//
+//public void updateCurrentNode(Map<String, String> params) {
+//NodeMeta node = getCurMeta();
+//if(node == null) return;
+//dao.update(node,params);
+//}
+
+///**
+//* пришел к пониманию что {@link Actions} лучше для этого подходят
+//* @param node
+//*/
+//@Deprecated
+//public void addNode(NodeMeta node){
+//if(node == null) return;
+//DefaultMutableTreeNode currentNode = tree.getCurrentNode();
+//if(currentNode == null) return;
+//
+//Object userObject = currentNode.getUserObject();
+//if(userObject == null) return;
+//
+//if(Cell.BUTTONS == userObject){
+//	NodeMeta parent = tree.getParentObject(currentNode, NodeMeta.class);
+//	if(parent == null) return;
+//	dao.addChild(parent, node);
+//}
+//else if (userObject instanceof NodeMeta) {
+//	dao.addChild((NodeMeta)userObject, node);
+//}
+//}
