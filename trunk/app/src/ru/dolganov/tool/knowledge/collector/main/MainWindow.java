@@ -42,7 +42,7 @@ public class MainWindow extends JDialog {
 	private JTabbedPane jTabbedPane1 = null;
 	private JPanel jPanel41 = null;
 	private JScrollPane jScrollPane11 = null;
-	private JTree jTree11 = null;
+	public ExtendTree snapTree = null;
 	private JPanel jPanel51 = null;
 	private JButton jButton2 = null;
 	private JButton jButton3 = null;
@@ -319,10 +319,10 @@ public class MainWindow extends JDialog {
 	 * @return javax.swing.JTree	
 	 */
 	private JTree getJTree11() {
-		if (jTree11 == null) {
-			jTree11 = new JTree();
+		if (snapTree == null) {
+			snapTree = new ExtendTree();
 		}
-		return jTree11;
+		return snapTree;
 	}
 
 	/**
