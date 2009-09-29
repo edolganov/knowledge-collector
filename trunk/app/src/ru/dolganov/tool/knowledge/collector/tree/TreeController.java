@@ -108,7 +108,6 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			
 		});
 		
-		
 		fillTree();
 	}
 
