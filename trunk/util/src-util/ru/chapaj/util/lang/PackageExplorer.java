@@ -52,13 +52,14 @@ public class PackageExplorer {
 		while(!dirs.isEmpty()) {
 			File directory = dirs.removeFirst();
 			String dirPath = directory.getAbsolutePath();
-			int index = dirPath.lastIndexOf(pckgname);
+			String packagePath = dirPath.replace('/','.').replace('\\', '.');
+			int index = packagePath.lastIndexOf(pckgname);
 			if(index < 0) {
-				System.out.println("bad");
+				System.out.println("bad path:"+packagePath);
 				return;
 			}
 			
-			String currentPackage =dirPath.substring(index).replace('/','.').replace('\\', '.');
+			String currentPackage =packagePath.substring(index);
 			if(currentPackage.endsWith(".")) currentPackage = currentPackage.substring(0, currentPackage.length()-1);
 			//System.out.println(currentPackage);
 	        if (directory.exists()) {
