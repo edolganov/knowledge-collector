@@ -13,6 +13,7 @@ import model.knowledge.NodeMeta;
 import model.knowledge.Root;
 import model.knowledge.TextData;
 import model.knowledge.role.Parent;
+import model.tree.TreeSnapshot;
 import ru.chapaj.util.lang.PackageExplorer;
 import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
@@ -21,6 +22,7 @@ import ru.dolganov.tool.knowledge.collector.dao.DAOEventListener;
 import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
 import ru.dolganov.tool.knowledge.collector.dao.fs.PersistTimer.TimeoutListener;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.DirKeeper;
+import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.SnapshotKeeper;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.TextKeeper;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 
@@ -79,6 +81,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	
 	DirKeeper dirKeeper = new DirKeeper();
 	TextKeeper textKeeper = new TextKeeper();
+	SnapshotKeeper snapshotKeeper = new SnapshotKeeper();
 	
 	
 	String dirPath;
@@ -263,6 +266,19 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		if(ob instanceof TextData) return textKeeper.getExternalData(ob);
 		return emptyExternalData;
 	}
+	
+	@Override
+	public void persist(Object ob, Map<String, Object> params) {
+		if(ob == null) return;
+		if(ob instanceof TreeSnapshot){
+			Root root = getRoot();
+			boolean persisted = snapshotKeeper.persist(root, (TreeSnapshot)ob, params);
+			if(persisted){
+				saveRequest(root,null);
+			}
+		}
+		
+	}
 
 	
 
@@ -270,6 +286,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	//****************************************************************
 	//****************************************************************
 	
+
 	
 	private void importLC() {
 //		System.out.println("import data from link collector...");
@@ -401,12 +418,6 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
-
-
-
-
-
-
 
 
 

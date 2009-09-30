@@ -72,6 +72,7 @@ public class App {
 							throw new IllegalStateException("unknow controller's target:"+targetClass);
 						}
 						Controller<?> c = (Controller<?>)clazz.newInstance();
+						//System.out.println("init c:" + c);
 						preInit(c).initUnsaveObject(target);
 					} catch (Exception e) {
 						e.printStackTrace();

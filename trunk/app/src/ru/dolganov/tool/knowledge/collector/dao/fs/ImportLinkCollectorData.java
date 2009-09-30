@@ -4,10 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.model.Link;
 import ru.chapaj.tool.link.collector.store.file.DataContainerStore;
+import ru.dolganov.tool.knowledge.collector.AppUtil;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 import ru.dolganov.tool.knowledge.collector.model.LinkOps;
@@ -18,6 +21,8 @@ import model.knowledge.NodeMeta;
 import model.knowledge.Note;
 import model.knowledge.TextData;
 import model.knowledge.role.Parent;
+import model.tree.TreeSnapshot;
+import model.tree.TreeSnapshotDir;
 
 public class ImportLinkCollectorData implements HasNodeMetaParams{
 	
@@ -66,6 +71,18 @@ public class ImportLinkCollectorData implements HasNodeMetaParams{
 			
 			
 			//snapshots
+			TreeSnapshot lastTreeState = dc.getLastTreeState();
+			if(lastTreeState != null) {
+				dao.persist(lastTreeState,AppUtil.map("lastTreeState", null));
+			}
+			List<TreeSnapshot> snapshots = dc.getSnapshots();
+			for(TreeSnapshot ts : snapshots) 
+					dao.persist(ts, AppUtil.map("snapshot","main"));
+			List<TreeSnapshotDir> snaphotDirs = dc.getSnaphotDirs();
+			for(TreeSnapshotDir dir : snaphotDirs){
+				for(TreeSnapshot ts : dir.getSnapshots())
+					dao.persist(ts, AppUtil.map("snapshot", dir.getName()));
+			}
 			
 			
 		} catch (Exception e) {

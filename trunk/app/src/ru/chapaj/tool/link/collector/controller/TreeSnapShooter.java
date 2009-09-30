@@ -74,6 +74,8 @@ public class TreeSnapShooter {
 	}
 	
 	public static void applaySnapshot(JTree tree,String data) throws IllegalArgumentException {
+		if(tree == null || data == null) return;
+		
 		((DefaultTreeModel)tree.getModel()).reload();
 		//парсинг даты
 		//новый формат: 0;3829873523;r233239840932;209384098324;4345435345;35345345;rrrr345435435345;r
