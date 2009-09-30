@@ -7,6 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import model.knowledge.Dir;
+import model.knowledge.Link;
+import model.knowledge.NodeMeta;
+import model.knowledge.Root;
+import model.knowledge.TextData;
+import model.knowledge.role.Parent;
+import ru.chapaj.util.lang.PackageExplorer;
 import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
@@ -16,42 +23,40 @@ import ru.dolganov.tool.knowledge.collector.dao.fs.PersistTimer.TimeoutListener;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.DirKeeper;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.TextKeeper;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
-import model.knowledge.Dir;
-import model.knowledge.Image;
-import model.knowledge.Link;
-import model.knowledge.LocalLink;
-import model.knowledge.NetworkLink;
-import model.knowledge.NodeMeta;
-import model.knowledge.Note;
-import model.knowledge.Root;
-import model.knowledge.Tag;
-import model.knowledge.TextData;
-import model.knowledge.TreeLink;
-import model.knowledge.role.Parent;
-import model.tree.TreeSnapshot;
-import model.tree.TreeSnapshotDir;
-import model.tree.TreeSnapshotRoot;
+
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 	XmlStore<Root> metaStore = new XmlStore<Root>(){
 
 		@Override
-		protected void config(ObjectToXMLConverter<Root> converter) {
-			converter.configureAliases(
-					NodeMeta.class,
-					Root.class,
-					Dir.class,
-					LocalLink.class,
-					NetworkLink.class,
-					Note.class,
-					Image.class,
-					TreeSnapshotDir.class,
-					TreeSnapshotRoot.class,
-					TreeSnapshot.class,
-					TreeLink.class,
-					Tag.class
-					);
+		protected void config(final ObjectToXMLConverter<Root> converter) {
+			PackageExplorer.find("model", new PackageExplorer.Callback(){
+
+				@Override
+				public void found(Class<?> clazz) {
+					if(clazz.getAnnotation(XStreamAlias.class) != null){
+						//System.out.println(clazz);
+						converter.configureAliases(clazz);
+					}
+				}
+				
+			});
+//			converter.configureAliases(
+//					NodeMeta.class,
+//					Root.class,
+//					Dir.class,
+//					LocalLink.class,
+//					NetworkLink.class,
+//					Note.class,
+//					Image.class,
+//					TreeSnapshotDir.class,
+//					TreeSnapshotRoot.class,
+//					TreeSnapshot.class,
+//					TreeLink.class,
+//					Tag.class
+//					);
 			
 		}
 		
@@ -130,6 +135,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	public boolean addChild(Parent parent, NodeMeta child,Map<String, String> params){
+		if(child == null) return false;
 		try {
 			Root root = null;
 			NodeMeta meta = null;

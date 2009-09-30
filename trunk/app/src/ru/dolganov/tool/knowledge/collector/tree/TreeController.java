@@ -14,12 +14,14 @@ import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
+import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellRender;
 
+@ControllerInfo(target=MainWindow.class)
 public class TreeController extends Controller<MainWindow> implements HasCellConst{
 
 	private static final String TREE_NODE = "tree-node";
