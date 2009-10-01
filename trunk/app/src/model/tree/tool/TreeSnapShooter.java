@@ -1,4 +1,4 @@
-package ru.chapaj.tool.link.collector.controller;
+package model.tree.tool;
 
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -8,7 +8,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import ru.chapaj.tool.link.collector.model.HavingUuid;
+import model.HavingUuid;
+
 
 public class TreeSnapShooter {
 	
@@ -89,16 +90,18 @@ public class TreeSnapShooter {
 		for(int i=2; i < data.length(); ++i){
 			c = data.charAt(i);
 			if(c == SEPARATOR) {
-				node = applayNextLevel(curOp.toString(),tree,curNode);
+				String op = curOp.toString();
+				node = applayNextLevel(op,tree,curNode);
 				if(node == null) {
-					node = applayNextLevelOldFormat(curOp.toString(),tree,curNode);
+					node = applayNextLevelOldFormat(op,tree,curNode);
 				}
 				if(node != null) {
 					curNode = node;
 					curOp = new StringBuilder();
 				}
 				else {
-
+					System.err.println("invalid op:" + op);
+					return;
 				}
 			}
 			else if(c == BACK_CHAR){

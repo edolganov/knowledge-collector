@@ -7,15 +7,16 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
-import ru.chapaj.tool.link.collector.controller.TreeSnapShooter;
+import model.tree.tool.TreeSnapShooter;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
+import ru.dolganov.tool.knowledge.collector.tree.TreeController;
 
-@ControllerInfo(target=MainWindow.class)
+@ControllerInfo(target=MainWindow.class,dependence=TreeController.class)
 public class SnapshotController extends Controller<MainWindow> {
 
 	

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
+import model.HavingUuid;
 import model.knowledge.role.Parent;
 import ru.chapaj.util.UuidGenerator;
 
-public abstract class NodeMeta implements Parent{
+public abstract class NodeMeta implements Parent, HavingUuid{
 	
 	protected String uuid;
 	protected String name;

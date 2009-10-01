@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
+import model.tree.tool.TreeSnapShooter;
 
 import ru.chapaj.tool.link.collector.model.DataContainer;
 import ru.chapaj.tool.link.collector.ui.AppFrame;

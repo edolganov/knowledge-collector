@@ -2,6 +2,8 @@ package ru.chapaj.tool.link.collector.model;
 
 import java.util.ArrayList;
 
+import model.HavingUuid;
+
 import ru.chapaj.util.UuidGenerator;
 
 public class NodeMeta implements HavingUuid {

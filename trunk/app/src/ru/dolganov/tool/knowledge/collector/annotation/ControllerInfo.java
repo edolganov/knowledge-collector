@@ -19,4 +19,6 @@ public @interface ControllerInfo {
 	 * цель для контроллера
 	 */
 	Class<?> target();
+	
+	Class<?> dependence() default Object.class;
 }
