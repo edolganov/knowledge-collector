@@ -20,6 +20,7 @@ public abstract class KeyUpDownAdapter extends KeyAdapter {
 			}
 			else if(! e.isConsumed() && e.getKeyCode() == KeyEvent.VK_DOWN && e.getModifiersEx() == ctrlMask){
 				moveDown();
+				//System.out.println("moveDown");
 				e.consume();
 			}
 	}

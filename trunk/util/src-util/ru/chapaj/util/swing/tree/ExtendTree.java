@@ -2,6 +2,7 @@ package ru.chapaj.util.swing.tree;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
@@ -23,16 +24,43 @@ public class ExtendTree extends DNDTree {
 		SINGLE
 	}
 	
+	LinkedList<TreeNodeListener> listeners = new LinkedList<TreeNodeListener>();
+	
 	public ExtendTree() {
 		super();
+		initAfterSuper();
+	}
+
+	private void initAfterSuper() {
+		addKeyListener(new KeyUpDownAdapter(){
+
+			@Override
+			public void moveDown() {
+				//System.out.println("listener.onNodeMoveDownRequest()");
+				for(TreeNodeListener l : listeners)
+				l.onNodeMoveDownRequest();
+				
+			}
+
+			@Override
+			public void moveUp() {
+				for(TreeNodeListener l : listeners)
+				l.onNodeMoveUpRequest();
+				
+			}
+			
+		});
+		
 	}
 
 	public ExtendTree(boolean autoUpdateModel) {
 		super(autoUpdateModel);
+		initAfterSuper();
 	}
 
 	public ExtendTree(ExtendDefaultTreeModel model, boolean autoUpdateModel) {
 		super(model, autoUpdateModel);
+		initAfterSuper();
 	}
 	
 	public ExtendDefaultTreeModel getExtendModel() {
@@ -86,6 +114,8 @@ public class ExtendTree extends DNDTree {
 	}
 	
 	public void addTreeNodeListener(final TreeNodeListener listener){
+		listeners.add(listener);
+		
 		addMouseListener(new MouseAdapter(){
 			
 			@Override
@@ -106,22 +136,6 @@ public class ExtendTree extends DNDTree {
 					if(node == null) return;
 					listener.onDoubleClick(node);
 				}
-			}
-			
-		});
-		
-		addKeyListener(new KeyUpDownAdapter(){
-
-			@Override
-			public void moveDown() {
-				listener.onNodeMoveDownRequest();
-				
-			}
-
-			@Override
-			public void moveUp() {
-				listener.onNodeMoveUpRequest();
-				
 			}
 			
 		});
