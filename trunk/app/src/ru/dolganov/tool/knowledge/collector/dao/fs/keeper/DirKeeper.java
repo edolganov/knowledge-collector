@@ -31,13 +31,22 @@ public class DirKeeper extends AbstractKeeper{
 			File file = new File(folderPath);
 			file.renameTo(new File(DU.getFilePath(parentPath,newDirName)));
 		}
+		else if(ops.containsKey(SaveOps.move)){
+			NodeMeta node = (NodeMeta)ops.get(SaveOps.move)[0];
+			String dirName = getDirName(node);
+			String oldPath = DU.getFilePath(rootFile.getPath(), dirName);
+			String newRootPath = node.getParent().getDirPath();
+			String newPath = DU.getFilePath(newRootPath, dirName);
+			System.out.println("DirKeeper: " + oldPath + " -> " + newPath);
+			new File(oldPath).renameTo(new File(newPath));
+		}
 	}
 	
 	private String getName(String name){
 		return DU.convertToValidFSName(name);
 	}
 
-	public String getDirPath(NodeMeta meta) {
+	public String getDirName(NodeMeta meta) {
 		return getName(meta.getName());
 	}
 

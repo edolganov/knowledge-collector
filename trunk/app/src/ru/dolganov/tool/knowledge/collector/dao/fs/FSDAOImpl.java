@@ -141,37 +141,47 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		if(parent == null || child == null) return false;
 		try {
 			Root root = null;
-			NodeMeta meta = null;
-			
+			NodeMeta parentNode = null;
 			if (parent instanceof Root) {
 				root = (Root) parent;
 			}
 			else if (parent instanceof NodeMeta) {
-				meta = (NodeMeta) parent;
-				root = getRoot(meta,true);
+				parentNode = (NodeMeta) parent;
+				root = getRoot(parentNode,true);
 				if(root == null) return false;
 			}
+			Root oldRoot = child.getParent();
+			if(oldRoot != null) oldRoot.getNodes().remove(child);
 			root.getNodes().add(child);
 			child.setParent(root);
 			
 			Map<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
-			
-			if(meta != null) {
+			if(parentNode != null) {
 				if(params == null) params = new HashMap<String, String>(0);
 				if(child instanceof Dir){
 					saveOps.put(SaveOps.dirFlag, null);
-					saveOps.put(SaveOps.create, new Object[]{child});
+					if(oldRoot == null)saveOps.put(SaveOps.create, new Object[]{child});
+					else saveOps.put(SaveOps.move, new Object[]{child});
 				}
 				else if(child instanceof TextData){
 					saveOps.put(SaveOps.textFlag, null);
-					saveOps.put(SaveOps.update, new Object[]{child,params.get(Params.text.toString())});
-					
+					if(oldRoot == null)saveOps.put(SaveOps.update, new Object[]{child,params.get(Params.text.toString())});
+					else saveOps.put(SaveOps.move, new Object[]{child});
 				}
-				for(DAOEventListener l : listeners) l.onAdded(meta,child);
 			}
-			
-			saveRequest(root,saveOps);
-			return true;
+			if(oldRoot == null){
+				saveRequest(root,saveOps);
+				if(parentNode != null) for(DAOEventListener l : listeners) l.onAdded(parentNode,child);
+				return true;
+			}
+			else {
+				boolean successed = save(saveOps, null, oldRoot);
+				if(successed) successed = save(null,null,root);
+				if(!successed) return false;
+				
+				if(parentNode != null) for(DAOEventListener l : listeners) l.onAdded(parentNode,child);
+				return true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -345,37 +355,41 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	//private final Object mkDirLock = new Object();
-	private final Object saveOneLock = new Object();
+	//private final Object saveOneLock = new Object();
 	private void save(final String dirPath, Map<SaveOps, Object[]> saveOps,List<Map<SaveOps,Object[]>> oldSaveOps){
-		synchronized (saveOneLock) {
-			Root root = cache.getRoot(dirPath);
-			if(root != null){
-				try {
+		Root root = cache.getRoot(dirPath);
+		if(root != null) save(saveOps,oldSaveOps, root);
+	}
+
+
+	private synchronized boolean save(Map<SaveOps, Object[]> saveOps,List<Map<SaveOps, Object[]>> oldSaveOps, Root root) {
+		String dirPath = root.getDirPath();
+		try {
 //					synchronized (mkDirLock) {
 //						new File(dirPath).mkdirs();
 //					}
-					
-					//save data.xml
-					File dirFile = new File(dirPath);
-					dirFile.mkdirs();
-					String filePath = getRootFilePath(dirPath);
-					System.out.println("saving " + filePath);
-					metaStore.saveFile(new File(filePath),root, true);
-					
-					//do save ops
-					//System.out.println("do save ops");
-					//old
-					if(oldSaveOps != null){
-						for(Map<SaveOps,Object[]> ops : oldSaveOps) doSaveOps(ops, dirFile);
-					}
-					//current
-					//doSaveOps(saveOps, dirFile);
-					//System.out.println("done");
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			
+			//save data.xml
+			File dirFile = new File(dirPath);
+			dirFile.mkdirs();
+			String filePath = getRootFilePath(dirPath);
+			System.out.println("saving " + filePath);
+			metaStore.saveFile(new File(filePath),root, true);
+			
+			//do save ops
+			//System.out.println("do save ops");
+			//old
+			if(oldSaveOps != null){
+				for(Map<SaveOps,Object[]> ops : oldSaveOps) doSaveOps(ops, dirFile);
 			}
+			//current
+			doSaveOps(saveOps, dirFile);
+			//System.out.println("done");
+			return true;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -411,10 +425,10 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		String parentDirPath = meta.getParent().getDirPath();
 		String dirName = null;
 		if(meta instanceof Dir){
-			dirName = dirKeeper.getDirPath(meta);
+			dirName = dirKeeper.getDirName(meta);
 		}
 		else if(meta instanceof TextData){
-			dirName = textKeeper.getDirPath(meta);
+			dirName = textKeeper.getDirName(meta);
 		}
 		
 		if(dirName == null) return null;

@@ -8,7 +8,8 @@ public enum SaveOps {
 	create,
 	update, 
 	rename,
-	delete
+	delete, 
+	move
 	
 	//special
 	//text-file

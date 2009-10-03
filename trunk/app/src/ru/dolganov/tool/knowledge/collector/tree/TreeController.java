@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
 import model.knowledge.NodeMeta;
@@ -92,8 +93,18 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 
 			@Override
 			public void onAdded(NodeMeta parent, NodeMeta child) {
-				DefaultMutableTreeNode treeNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
-				tree.addChild(treeNode, createTreeNode(child));
+				DefaultMutableTreeNode parentNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
+				DefaultMutableTreeNode childNode = dao.getCache().get(child, TREE_NODE, DefaultMutableTreeNode.class);
+				if(childNode != null){
+					DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode)childNode.getParent();
+					parentNode.add(childNode);
+					tree.model().reload(oldParent);
+					tree.model().reload(parentNode);
+					TreePath path = new TreePath(childNode.getPath());
+					tree.setSelectionPath(path);
+					tree.scrollPathToVisible(path);
+				}
+				else tree.addChild(parentNode, createTreeNode(child));
 				for(DAOEventListener l : listeners) l.onAdded(parent, child);
 			}
 			

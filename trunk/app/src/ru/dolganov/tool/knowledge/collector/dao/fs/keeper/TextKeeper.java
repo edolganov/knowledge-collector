@@ -44,8 +44,8 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			File file = new File(filePath);
 			if(file.exists()) file.renameTo(new File(DU.getFilePath(rootPath,newFileName)));
 			//rename dir
-			String oldDirName = getDirPath(oldName);
-			String newDirName = getDirPath(newName);
+			String oldDirName = getDirName(oldName);
+			String newDirName = getDirName(newName);
 			File dir = new File(DU.getFilePath(rootPath, oldDirName));
 			if(dir.exists()) dir.renameTo(new File(DU.getFilePath(rootPath, newDirName)));
 		}
@@ -57,7 +57,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			//delete file
 			delManager.delete(rootPath, getTextFileName(name),timeStamp);
 			//delete dir
-			delManager.delete(rootPath, getDirPath(name),timeStamp);
+			delManager.delete(rootPath, getDirName(name),timeStamp);
 		}
 		
 		if(ops.containsKey(SaveOps.update)){
@@ -89,13 +89,24 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			
 			afterUpdate(node);
 		}
+		
+		if(ops.containsKey(SaveOps.move)){
+			NodeMeta node = (NodeMeta)ops.get(SaveOps.move)[0];
+			String name = node.getName();
+			String dirName = getDirName(name);
+			String textName = getTextFileName(name);
+			String oldDirPath = DU.getFilePath(rootFile.getPath(), dirName);
+			String oldTextPath = DU.getFilePath(rootFile.getPath(), textName);
+			String newRootPath = node.getParent().getDirPath();
+			String newDirPath = DU.getFilePath(newRootPath, dirName);
+			String newTextPath = DU.getFilePath(newRootPath, textName);
+			System.out.println("TextKeeper: " + oldDirPath + " -> " + newDirPath);
+			System.out.println("TextKeeper: " + oldTextPath + " -> " + newTextPath);
+			new File(oldDirPath).renameTo(new File(newDirPath));
+			new File(oldTextPath).renameTo(new File(newTextPath));
+		}
 	}
 
-
-
-	private String getTextFileName(String name) {
-		return DU.convertToValidFSName(name)+".txt";
-	}
 
 	public Map<String, Object> getExternalData(NodeMeta node) {
 		HashMap<String, Object> out = new HashMap<String, Object>(1);
@@ -129,12 +140,16 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		return out;
 	}
 
-	public String getDirPath(NodeMeta meta) {
-		return getDirPath(meta.getName());
+	public String getDirName(NodeMeta meta) {
+		return getDirName(meta.getName());
 	}
 	
-	private String getDirPath(String name) {
+	private String getDirName(String name) {
 		return DU.SYSTEM_CHAR+"note"+DU.SYSTEM_CHAR+DU.convertToValidFSName(name);
+	}
+	
+	private String getTextFileName(String name) {
+		return DU.convertToValidFSName(name)+".txt";
 	}
 
 }
