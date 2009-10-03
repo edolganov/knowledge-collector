@@ -363,14 +363,14 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 					metaStore.saveFile(new File(filePath),root, true);
 					
 					//do save ops
-					System.out.println("do save ops");
+					//System.out.println("do save ops");
 					//old
 					if(oldSaveOps != null){
 						for(Map<SaveOps,Object[]> ops : oldSaveOps) doSaveOps(ops, dirFile);
 					}
 					//current
-					doSaveOps(saveOps, dirFile);
-					System.out.println("done");
+					//doSaveOps(saveOps, dirFile);
+					//System.out.println("done");
 					
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -383,12 +383,12 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	private void doSaveOps(Map<SaveOps, Object[]> saveOps, File dirFile) {
 		if(saveOps != null){
 			//test log
-			for(SaveOps op : saveOps.keySet()){
-				Object[] obs = saveOps.get(op);
-				StringBuilder sb = new StringBuilder();
-				if(obs != null) for(Object ob : obs) sb.append(ob).append(' ');
-				System.out.println(op + ": " + sb.toString());
-			}
+//			for(SaveOps op : saveOps.keySet()){
+//				Object[] obs = saveOps.get(op);
+//				StringBuilder sb = new StringBuilder();
+//				if(obs != null) for(Object ob : obs) sb.append(ob).append(' ');
+//				System.out.println(op + ": " + sb.toString());
+//			}
 			if(saveOps.containsKey(SaveOps.dirFlag)){
 				dirKeeper.manage(dirFile, saveOps);
 			}

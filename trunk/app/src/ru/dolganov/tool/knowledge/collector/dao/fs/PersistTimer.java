@@ -39,6 +39,7 @@ public class PersistTimer {
 			LinkedList<Map<SaveOps, Object[]>> oldSaveOps = this.oldSaveOps;
 			this.saveOps = null;
 			this.oldSaveOps = null;
+			//System.out.println("save ops count:"+(oldSaveOps.size() + 1));
 			owner.timeOut(key,saveOps,oldSaveOps);
 		}
 	}
