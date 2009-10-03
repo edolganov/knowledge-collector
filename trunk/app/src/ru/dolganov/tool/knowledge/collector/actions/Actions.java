@@ -23,7 +23,7 @@ public class Actions {
 	}
 	
 	public static void addTreeNode(NodeMeta parent, NodeMeta node) {
-		if(parent == null) return;
+		if(parent == null || node == null) return;
 		dao.addChild(parent, node);
 	}
 

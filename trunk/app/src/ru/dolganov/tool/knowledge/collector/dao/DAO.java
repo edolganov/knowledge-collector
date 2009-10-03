@@ -30,5 +30,7 @@ public interface DAO {
 	Map<String,Object> getExternalData(NodeMeta ob);
 
 	void persist(Object object, Map<String, Object> params);
+	
+	void merge(Object object, Map<String, Object> params);
 
 }

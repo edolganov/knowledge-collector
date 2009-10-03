@@ -2,7 +2,6 @@ package ru.dolganov.tool.knowledge.collector.tree;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -16,6 +15,7 @@ import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
+import ru.dolganov.tool.knowledge.collector.dao.DAOEventListener;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
@@ -29,6 +29,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	JTextField path;
 	
 	DefaultMutableTreeNode treeRoot;
+	LinkedList<DAOEventListener> listeners = new LinkedList<DAOEventListener>();
 //	DefaultMutableTreeNode lastDirNode;
 //	DefaultMutableTreeNode buttons = new DefaultMutableTreeNode(Cell.BUTTONS);
 	
@@ -93,6 +94,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			public void onAdded(NodeMeta parent, NodeMeta child) {
 				DefaultMutableTreeNode treeNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
 				tree.addChild(treeNode, createTreeNode(child));
+				for(DAOEventListener l : listeners) l.onAdded(parent, child);
 			}
 			
 			@Override
@@ -160,7 +162,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		while(!q.isEmpty()){
 			QS s = q.removeFirst();
 			DefaultMutableTreeNode node = s.node;
-			Object ob = node.getUserObject();
+//			Object ob = node.getUserObject();
 //			if(ob instanceof Dir){
 //				node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
 //			}
@@ -182,6 +184,10 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(meta);
 		dao.getCache().put(meta,TREE_NODE, treeNode);
 		return treeNode;
+	}
+	
+	public void addListener(DAOEventListener listener){
+		listeners.add(listener);
 	}
 	
 }

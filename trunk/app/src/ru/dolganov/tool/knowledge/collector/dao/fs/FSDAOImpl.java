@@ -138,7 +138,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	public boolean addChild(Parent parent, NodeMeta child,Map<String, String> params){
-		if(child == null) return false;
+		if(parent == null || child == null) return false;
 		try {
 			Root root = null;
 			NodeMeta meta = null;
@@ -276,6 +276,15 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			if(persisted){
 				saveRequest(root,null);
 			}
+		}
+		
+	}
+	
+	@Override
+	public void merge(Object ob, Map<String, Object> params) {
+		if(ob == null) return;
+		if(ob instanceof Root){
+			saveRequest((Root)ob,null);
 		}
 		
 	}
@@ -418,6 +427,9 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
+
+
+
 
 
 
