@@ -37,7 +37,7 @@ public class DirKeeper extends AbstractKeeper{
 			String oldPath = DU.getFilePath(rootFile.getPath(), dirName);
 			String newRootPath = node.getParent().getDirPath();
 			String newPath = DU.getFilePath(newRootPath, dirName);
-			System.out.println("DirKeeper: " + oldPath + " -> " + newPath);
+			//System.out.println("DirKeeper: " + oldPath + " -> " + newPath);
 			new File(oldPath).renameTo(new File(newPath));
 		}
 	}

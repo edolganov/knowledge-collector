@@ -373,7 +373,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			File dirFile = new File(dirPath);
 			dirFile.mkdirs();
 			String filePath = getRootFilePath(dirPath);
-			System.out.println("saving " + filePath);
+			//System.out.println("saving " + filePath);
 			metaStore.saveFile(new File(filePath),root, true);
 			
 			//do save ops

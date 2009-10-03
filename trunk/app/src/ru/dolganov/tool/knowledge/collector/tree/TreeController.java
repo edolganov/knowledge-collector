@@ -183,8 +183,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 				q.addLast(new QS(dao.getChildren(meta),chNode));
 			}
 		}
-		System.out.println("tree filled after "
-				+ ((System.currentTimeMillis() - time) / 1000.) + " sec");
+		//System.out.println("tree filled after "+ ((System.currentTimeMillis() - time) / 1000.) + " sec");
 		
 		tree.expandPath(treeRoot);
 		tree.updateUI();

@@ -100,8 +100,8 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			String newRootPath = node.getParent().getDirPath();
 			String newDirPath = DU.getFilePath(newRootPath, dirName);
 			String newTextPath = DU.getFilePath(newRootPath, textName);
-			System.out.println("TextKeeper: " + oldDirPath + " -> " + newDirPath);
-			System.out.println("TextKeeper: " + oldTextPath + " -> " + newTextPath);
+			//System.out.println("TextKeeper: " + oldDirPath + " -> " + newDirPath);
+			//System.out.println("TextKeeper: " + oldTextPath + " -> " + newTextPath);
 			new File(oldDirPath).renameTo(new File(newDirPath));
 			new File(oldTextPath).renameTo(new File(newTextPath));
 		}
