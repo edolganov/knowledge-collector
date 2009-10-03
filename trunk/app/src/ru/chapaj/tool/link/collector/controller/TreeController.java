@@ -86,7 +86,7 @@ public class TreeController extends Controller<AppFrame> {
 			
 		});
 		
-		ui.tree.setDNDListener(new DNDListener(){
+		ui.tree.addDNDListener(new DNDListener(){
 
 			@Override
 			public void afterDrop(DefaultMutableTreeNode tagretNode,

@@ -69,6 +69,12 @@ public class SortTreeController extends Controller<MainWindow>{
 			public void onNodeMoveUpRequest() {
 				moveNode(false);
 			}
+			
+			@Override
+			public void afterDrop(DefaultMutableTreeNode tagretNode,
+					DefaultMutableTreeNode draggedNode) {
+				//System.out.println("afterDrop");
+			}
 		});
 		
 	}
