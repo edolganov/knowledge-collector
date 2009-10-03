@@ -140,7 +140,7 @@ public class ExtendTree extends DNDTree {
 			
 		});
 		
-		setDNDListener(listener);
+		addDNDListener(listener);
 		
 		addTreeSelectionListener(new TreeSelectionListener(){
 

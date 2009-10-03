@@ -8,6 +8,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.Point;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.datatransfer.DataFlavor;
@@ -39,7 +40,7 @@ public class DNDTree extends JTree implements DropTargetListener,DragSourceListe
 	private DefaultTreeModel treemodel=null;
 	
 	private boolean autoUpdateModel;
-	private DNDListener listener;
+	private LinkedList<DNDListener> listeners = new LinkedList<DNDListener>();
 
 	/** Returns a new instance of the DNDTree for the specified TreeModel.*/
 	
@@ -107,16 +108,29 @@ public class DNDTree extends JTree implements DropTargetListener,DragSourceListe
 	public void dragGestureRecognized( DragGestureEvent event){
 		selnode=null;
 		dropnode=null;
-		Object selected =getSelectionPath();
-		if(selected == null) return;
-		TreePath treepath=(TreePath)selected;
-		selnode=(DefaultMutableTreeNode)treepath.getLastPathComponent();
-		if ( selected != null ){
-			StringSelection text = new StringSelection( selected.toString());
-			dragSource.startDrag (event, DragSource.DefaultMoveDrop, text, this);
+		Point dragOrigin = event.getDragOrigin();
+		int x = dragOrigin.x;
+		int y = dragOrigin.y;
+		int selRow = getRowForLocation(x, y);
+		if (selRow>=0) {
+			TreePath selPath = getPathForLocation(x, y);
+			if(selPath != null) {
+				setSelectionPath(selPath);
+				selnode=(DefaultMutableTreeNode)selPath.getLastPathComponent();
+				StringSelection text = new StringSelection( selPath.toString());
+				dragSource.startDrag (event, DragSource.DefaultMoveDrop, text, this);
+			}
 		}
-		else{
-		}
+//		Object selected =getSelectionPath();
+//		if(selected == null) return;
+//		TreePath treepath=(TreePath)selected;
+//		selnode=(DefaultMutableTreeNode)treepath.getLastPathComponent();
+//		if ( selected != null ){
+//			StringSelection text = new StringSelection( selected.toString());
+//			dragSource.startDrag (event, DragSource.DefaultMoveDrop, text, this);
+//		}
+//		else{
+//		}
 	}
 
 	/** Internally implemented, Do not override!.
@@ -138,8 +152,8 @@ public class DNDTree extends JTree implements DropTargetListener,DragSourceListe
 				treemodel.reload();
 			}
 			else {
-				if(listener != null) try{
-					listener.afterDrop(dropnode, selnode);
+				try{
+					for(DNDListener l : listeners) l.afterDrop(dropnode, selnode);
 				}
 				finally {
 					selnode=null;
@@ -165,8 +179,8 @@ public class DNDTree extends JTree implements DropTargetListener,DragSourceListe
 	public void dropActionChanged ( DragSourceDragEvent event){
 	}
 
-	public void setDNDListener(DNDListener listener) {
-		this.listener = listener;
+	public void addDNDListener(DNDListener listener) {
+		listeners.add(listener);
 	}
 }
 
