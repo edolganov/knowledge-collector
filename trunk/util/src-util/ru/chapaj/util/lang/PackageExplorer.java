@@ -4,8 +4,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.LinkedList;
 
-import ru.chapaj.util.swing.tree.ExtendTree;
-import ru.dolganov.tool.knowledge.collector.App;
 import sun.misc.Launcher;
 
 public class PackageExplorer {

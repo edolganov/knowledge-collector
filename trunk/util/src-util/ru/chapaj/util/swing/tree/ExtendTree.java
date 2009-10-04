@@ -234,6 +234,10 @@ public class ExtendTree extends DNDTree {
 		getExtendModel().setRoot(root);
 		
 	}
+	
+    public void setSelectionPath(DefaultMutableTreeNode node) {
+        getSelectionModel().setSelectionPath(new TreePath(node.getPath()));
+    }
 
 	public ExtendDefaultTreeModel model() {
 		return getExtendModel();
