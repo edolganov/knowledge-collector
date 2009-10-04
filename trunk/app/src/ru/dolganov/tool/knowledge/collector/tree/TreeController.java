@@ -178,7 +178,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	
 	private void fillTree() {
 		treeRoot.removeAllChildren();
-		long time = System.currentTimeMillis();
+		//long time = System.currentTimeMillis();
 		
 		LinkedList<QS> q = new LinkedList<QS>();
 		q.addLast(new QS(dao.getRoot().getNodes(),treeRoot));

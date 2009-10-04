@@ -29,8 +29,8 @@ public class MainWindow extends JDialog {
 	private JPanel jContentPane = null;
 	private JPanel jPanel = null;
 	public JPanel treePanel = null;
-	private JButton jButton = null;
-	private JButton jButton1 = null;
+	public JButton jButton = null;
+	public JButton jButton1 = null;
 	private JPanel jPanel2 = null;
 	private JScrollPane jScrollPane = null;
 	public ExtendTree tree = null;

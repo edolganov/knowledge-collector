@@ -1,5 +1,7 @@
 package ru.dolganov.tool.knowledge.collector;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -59,9 +61,25 @@ public class App {
 		initControllers();
 		
 		ui.setVisible(true);
+		ui.jButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				exit();
+			}
+			
+		});
+		ui.jButton1.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				hideIfNeed();
+			}
+			
+		});
 		ui.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				hideIfNeed();
 			}
 		});
 		
@@ -164,5 +182,18 @@ public class App {
 		ui.setTitle("Know Collector");
 //		ui.setIconImage(ImageBundle.getDefault().getAppIcon());
 		ui.setLocationByPlatform(true);
+	}
+
+	public void exit() {
+		System.exit(0);
+	}
+	
+	public void show(){
+		ui.setVisible(true);
+		ui.toFront();
+	}
+	
+	public void hideIfNeed() {
+		if(ui.isActive()) ui.setVisible(false);	
 	}
 }
