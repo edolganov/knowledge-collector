@@ -1,15 +1,11 @@
 package ru.chapaj.util.lang;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
-import sun.misc.Launcher;
 
 public class PackageExplorer {
 	
@@ -60,9 +56,9 @@ public class PackageExplorer {
 	    				if(element.endsWith(".class")){
 	    					String classPath = element.substring(0,element.length()-6);
 	    					//System.out.println(name+" "+classPath);
-	    					//org.apache.commons.httpclient.auth.MalformedChallengeException
 	    					if(classPath.startsWith(name)){
 	    						classPath = classPath.replace('/','.').replace('\\', '.');
+		    					//org.apache.commons.httpclient.auth.MalformedChallengeException
 	    						callback.found(Class.forName(classPath));
 	    					}
 	    				}
