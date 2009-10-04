@@ -19,8 +19,8 @@ import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.AppListener;
 import ru.dolganov.tool.knowledge.collector.actions.Actions;
+import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
-import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
 import sun.reflect.generics.visitor.Reifier;
 
 public class TreeMenu extends JPopupMenu implements HasCellConst {

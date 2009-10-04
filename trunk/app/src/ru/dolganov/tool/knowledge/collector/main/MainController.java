@@ -12,7 +12,7 @@ import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
-import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
+import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 
 @ControllerInfo(target=MainWindow.class)
 public class MainController extends Controller<MainWindow> {

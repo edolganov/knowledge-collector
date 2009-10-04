@@ -14,6 +14,7 @@ import model.knowledge.Root;
 import model.knowledge.TextData;
 import model.knowledge.role.Parent;
 import model.tree.TreeSnapshot;
+import model.tree.TreeSnapshotDir;
 import ru.chapaj.util.lang.PackageExplorer;
 import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
@@ -282,9 +283,22 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		if(ob == null) return;
 		if(ob instanceof TreeSnapshot){
 			Root root = getRoot();
-			boolean persisted = snapshotKeeper.persist(root, (TreeSnapshot)ob, params);
+			TreeSnapshot snapshot = (TreeSnapshot)ob;
+			boolean persisted = snapshotKeeper.persist(root, snapshot, params);
 			if(persisted){
+				TreeSnapshotDir dir = snapshotKeeper.getSnapDir(root, params);
 				saveRequest(root,null);
+				for(DAOEventListener l : listeners) l.onAdded(dir,snapshot);
+			}
+		}
+		else if (ob instanceof TreeSnapshotDir){
+			String name = ((TreeSnapshotDir)ob).getName();
+			if(name == null) return;
+			Root root = getRoot();
+			TreeSnapshotDir dir = snapshotKeeper.persist(root, name);
+			if(dir != null){
+				saveRequest(root,null);
+				for(DAOEventListener l : listeners) l.onAdded(dir);
 			}
 		}
 		
@@ -373,7 +387,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			File dirFile = new File(dirPath);
 			dirFile.mkdirs();
 			String filePath = getRootFilePath(dirPath);
-			//System.out.println("saving " + filePath);
+			System.out.println("saving " + filePath);
 			metaStore.saveFile(new File(filePath),root, true);
 			
 			//do save ops

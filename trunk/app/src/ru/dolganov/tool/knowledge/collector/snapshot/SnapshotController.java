@@ -1,5 +1,7 @@
 package ru.dolganov.tool.knowledge.collector.snapshot;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -11,8 +13,11 @@ import model.tree.tool.TreeSnapShooter;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
+import ru.dolganov.tool.knowledge.collector.AppUtil;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
+import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
+import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.TreeController;
 
@@ -64,10 +69,78 @@ public class SnapshotController extends Controller<MainWindow> {
 			
 		});
 		
-		ui.jButton2.setText("D");
+		dao.addListener(new DAOEventAdapter(){
+			@Override
+			public void onAdded(TreeSnapshotDir dir) {
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(dir, true);
+				ui.snapTree.getRootNode().add(node);
+				ui.snapTree.updateUI();
+				ui.snapTree.setSelectionPath(node);
+			}
+			
+			@Override
+			public void onAdded(TreeSnapshotDir dir, TreeSnapshot snapshot) {
+				DefaultMutableTreeNode rootNode = ui.snapTree.getRootNode();
+				DefaultMutableTreeNode dirNode = null;
+				for(int i=0;i < rootNode.getChildCount();++i){
+					DefaultMutableTreeNode c = (DefaultMutableTreeNode)rootNode.getChildAt(i);
+					if(dir.equals(c.getUserObject())) {
+						dirNode = c;
+						break;
+					}
+				}
+				if(dirNode != null){
+					DefaultMutableTreeNode node = new DefaultMutableTreeNode(snapshot, false);
+					dirNode.add(node);
+					ui.snapTree.updateUI();
+					ui.snapTree.setSelectionPath(node);
+				}
+			}
+		});
+		
+		ui.createSnapDirB.setText("D");
 		ui.jButton3.setText("S");
 		ui.jButton4.setText("U");
 		ui.jButton5.setText("d");
+		
+		ui.createSnapDirB.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String dirName = DialogOps.newObject("New snapshot dir");
+				if(dirName != null){
+					TreeSnapshotDir dir = new TreeSnapshotDir();
+					dir.setName(dirName);
+					dao.persist(dir, null);
+				}
+			}
+			
+		});
+		
+		ui.jButton3.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String name = DialogOps.newObject("New snapshot");
+				if(name != null){
+					String data = TreeSnapShooter.getSnapshot(ui.tree);
+					TreeSnapshot out = new TreeSnapshot(name,data);
+					DefaultMutableTreeNode node = ui.snapTree.getCurrentNode();
+					if(node == null || (((DefaultMutableTreeNode)node.getParent()).isRoot() && node.getUserObject() instanceof TreeSnapshot)){
+						return;
+					}
+					else {
+						Object ob = node.getUserObject();
+						if(ob instanceof TreeSnapshot){
+							node = (DefaultMutableTreeNode)node.getParent();
+							ob = node.getUserObject();
+						}
+						dao.persist(out, AppUtil.map("snapshot", ((TreeSnapshotDir)ob).getName()));
+					}
+				}
+			}
+			
+		});
 		
 		initTree();
 	}

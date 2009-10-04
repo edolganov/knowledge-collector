@@ -22,11 +22,15 @@ public class TreeSnapShooter {
 		public StepInfo(DefaultMutableTreeNode node, int index) {
 			super();
 			this.node = node;
-			try{
-				uuid = ((HavingUuid)node.getUserObject()).getUuid();
+			Object userObject = node.getUserObject();
+			if(node.isRoot() && userObject instanceof String){
+				index = 0;
+			}
+			else try{
+				uuid = ((HavingUuid)userObject).getUuid();
 			}
 			catch (Exception e) {
-				System.err.println(e.getMessage());
+				System.err.println("error for "+userObject+ ":"+e.getMessage());
 				this.index = index;
 			}
 			

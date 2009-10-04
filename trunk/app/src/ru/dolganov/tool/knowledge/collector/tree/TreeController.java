@@ -1,5 +1,7 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -122,13 +124,23 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			}
 			
 		});
+		path.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(curNode != null){
+					tree.scrollPathToVisible(new TreePath(curNode.getPath()));
+				}
+			}
+		});
 		
 		fillTree();
 	}
 
 
+	DefaultMutableTreeNode curNode;
 	protected void setPathInfo(DefaultMutableTreeNode node) {
 		StringBuilder sb = new StringBuilder();
+		curNode = node;
 		if(node != null){
 			TreeNode[] path = node.getPath();
 			if(path.length > 2){

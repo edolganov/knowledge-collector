@@ -1,4 +1,4 @@
-package ru.dolganov.tool.knowledge.collector.tree.dialog;
+package ru.dolganov.tool.knowledge.collector.dialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +13,8 @@ import ru.chapaj.util.Check;
 import ru.chapaj.util.swing.listener.KeyEnterAdapter;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.model.LinkOps;
+import ru.dolganov.tool.knowledge.collector.tree.dialog.NewDirDialog;
+import ru.dolganov.tool.knowledge.collector.tree.dialog.NewLinkDialog;
 
 public class DialogOps {
 	
@@ -146,6 +148,44 @@ public class DialogOps {
 			}
 		}
 		newText.remove();
+		return out;
+	}
+	
+	
+	
+	public static String newObject(String title){
+		String out = null;
+		
+		final NewDirDialog newDir = new NewDirDialog();
+		newDir.setTitle(title);
+		newDir.init(App.getDefault().getUI());
+		
+		newDir.ok.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				newDir.setConfirmedActionAndExit(true);
+			}
+		});
+		
+		newDir.namePanel.textField.addKeyListener(new KeyEnterAdapter(){
+
+			@Override
+			public void onEnter() {
+				newDir.setConfirmedActionAndExit(true);
+			}
+			
+		});
+		
+		newDir.setVisible(true);
+		
+		if(newDir.isConfirmedAction()){
+			String name = newDir.namePanel.textField.getText();
+			if(!Check.isEmpty(name)){
+				out = name;
+			}
+		}
+		newDir.remove();
 		return out;
 	}
 	

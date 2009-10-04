@@ -28,8 +28,29 @@ public class SnapshotKeeper extends AbstractKeeper {
 		return true;
 	}
 	
+	public TreeSnapshotDir getSnapDir(Root root,Map<String, Object> params){
+		TreeSnapshotDir out = null;
+		if(params.containsKey(SNAPSHOT)){
+			String dirName = (String)params.get(SNAPSHOT);
+			if(dirName != null){
+				out = getDir(root, dirName, false);
+			}
+		}
+		return out;
+	}
+	
+	public TreeSnapshotDir persist(Root root, String dirName){
+		TreeSnapshotDir dir = getDir(root, dirName,false);
+		if(dir != null) return null;
+		dir = create(root, dirName);
+		return dir;
+	}
 
 	private TreeSnapshotDir getDir(Root root, String dirName) {
+		return getDir(root, dirName, true);
+	}
+	
+	private TreeSnapshotDir getDir(Root root, String dirName, boolean create) {
 		TreeSnapshotDir dir = null;
 		List<TreeSnapshotDir> dirs = root.getTreeSnapshots().getSnaphotDirs();
 		for(TreeSnapshotDir d : dirs){
@@ -38,12 +59,20 @@ public class SnapshotKeeper extends AbstractKeeper {
 				break;
 			}
 		}
-		if(dir == null){
-			dir = new TreeSnapshotDir();
-			dir.setName(dirName);
-			dirs.add(dir);
+		if(dir == null && create){
+			dir = create(root, dirName);
 		}
 		return dir;
 	}
+	
+	private TreeSnapshotDir create(Root root, String dirName){
+		TreeSnapshotDir dir = new TreeSnapshotDir();
+		dir.setName(dirName);
+		List<TreeSnapshotDir> dirs = root.getTreeSnapshots().getSnaphotDirs();
+		dirs.add(dir);;
+		return dir;
+	}
+	
+	
 
 }

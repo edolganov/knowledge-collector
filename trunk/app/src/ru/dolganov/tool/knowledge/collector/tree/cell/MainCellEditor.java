@@ -17,7 +17,7 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 import ru.dolganov.tool.knowledge.collector.actions.Actions;
-import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
+import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 
 public class MainCellEditor implements TreeCellEditor, HasCellConst {
 	
