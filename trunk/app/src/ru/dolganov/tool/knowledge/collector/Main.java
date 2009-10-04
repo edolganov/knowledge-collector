@@ -1,5 +1,7 @@
 package ru.dolganov.tool.knowledge.collector;
 
+import java.io.File;
+
 import ru.chapaj.util.app.GenericMain;
 
 /**

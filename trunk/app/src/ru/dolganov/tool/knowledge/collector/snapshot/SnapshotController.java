@@ -10,6 +10,7 @@ import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
 import model.tree.tool.TreeSnapShooter;
+import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
@@ -98,10 +99,13 @@ public class SnapshotController extends Controller<MainWindow> {
 			}
 		});
 		
-		ui.createSnapDirB.setText("D");
-		ui.jButton3.setText("S");
-		ui.jButton4.setText("U");
-		ui.jButton5.setText("d");
+		ui.createSnapDirB.setText("");
+		ui.createSnapDirB.setIcon(IconHelper.get("/images/kc/snap/snapDir.png"));
+		ui.createSnapB.setText("");
+		ui.createSnapB.setIcon(IconHelper.get("/images/kc/snap/snap.png"));
+		
+		ui.jButton4.setText("");
+		ui.jButton5.setText("");
 		
 		ui.createSnapDirB.addActionListener(new ActionListener(){
 
@@ -117,7 +121,7 @@ public class SnapshotController extends Controller<MainWindow> {
 			
 		});
 		
-		ui.jButton3.addActionListener(new ActionListener(){
+		ui.createSnapB.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

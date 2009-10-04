@@ -35,6 +35,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 		@Override
 		protected void config(final ObjectToXMLConverter<Root> converter) {
+			//System.out.println("FSDAOImpl.config");
 			PackageExplorer.find("model", new PackageExplorer.Callback(){
 
 				@Override

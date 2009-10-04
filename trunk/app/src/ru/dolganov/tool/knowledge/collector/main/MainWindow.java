@@ -45,7 +45,7 @@ public class MainWindow extends JDialog {
 	public ExtendTree snapTree = null;
 	private JPanel jPanel51 = null;
 	public JButton createSnapDirB = null;
-	public JButton jButton3 = null;
+	public JButton createSnapB = null;
 	public JButton jButton4 = null;
 	public JButton jButton5 = null;
 	public JPanel infoPanel = null;
@@ -358,11 +358,11 @@ public class MainWindow extends JDialog {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getJButton3() {
-		if (jButton3 == null) {
-			jButton3 = new JButton();
-			jButton3.setBounds(new Rectangle(40, 5, 32, 19));
+		if (createSnapB == null) {
+			createSnapB = new JButton();
+			createSnapB.setBounds(new Rectangle(40, 5, 32, 19));
 		}
-		return jButton3;
+		return createSnapB;
 	}
 
 	/**
