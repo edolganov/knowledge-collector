@@ -44,6 +44,7 @@ public class ShowHideInfoController extends Controller<MainWindow> {
 			}
 			
 		});
+		showHideInfo();
 	}
 	
 	private void showHideInfo(){
