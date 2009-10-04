@@ -30,6 +30,5 @@ public abstract class Controller<T> extends GenericController<T> {
 	public void setMainUI(JDialog mainUI) {
 		this.mainUI = mainUI;
 	}
-	
 
 }

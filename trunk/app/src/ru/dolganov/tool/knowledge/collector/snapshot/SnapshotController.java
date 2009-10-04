@@ -64,6 +64,11 @@ public class SnapshotController extends Controller<MainWindow> {
 			
 		});
 		
+		ui.jButton2.setText("D");
+		ui.jButton3.setText("S");
+		ui.jButton4.setText("U");
+		ui.jButton5.setText("d");
+		
 		initTree();
 	}
 

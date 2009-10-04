@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import ru.chapaj.util.lang.ClassUtil;
 import ru.chapaj.util.lang.PackageExplorer;
@@ -30,9 +31,18 @@ public class App {
 	
 	MainWindow ui;
 	DAO dao;
+	LinkedList<AppListener> listeners = new LinkedList<AppListener>();
 
 	public DAO getDao() {
 		return dao;
+	}
+	
+	public void addListener(AppListener listener){
+		listeners.add(listener);
+	}
+	
+	public void fireAction(Object source, String action, Object... data){
+		for(AppListener l : listeners) l.onAction(source, action, data);
 	}
 
 	public MainWindow getUI() {

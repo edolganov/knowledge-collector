@@ -28,13 +28,13 @@ public class MainWindow extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JPanel jPanel = null;
-	private JPanel jPanel1 = null;
+	public JPanel treePanel = null;
 	private JButton jButton = null;
 	private JButton jButton1 = null;
 	private JPanel jPanel2 = null;
 	private JScrollPane jScrollPane = null;
 	public ExtendTree tree = null;
-	public JButton saveB = null;
+	public JButton showHideInfoB = null;
 	public JButton dirB = null;
 	public JButton linkB = null;
 	public JButton noteB = null;
@@ -44,10 +44,10 @@ public class MainWindow extends JDialog {
 	private JScrollPane jScrollPane11 = null;
 	public ExtendTree snapTree = null;
 	private JPanel jPanel51 = null;
-	private JButton jButton2 = null;
-	private JButton jButton3 = null;
-	private JButton jButton4 = null;
-	private JButton jButton5 = null;
+	public JButton jButton2 = null;
+	public JButton jButton3 = null;
+	public JButton jButton4 = null;
+	public JButton jButton5 = null;
 	public JPanel infoPanel = null;
 	public JTextField path = null;
 	/**
@@ -114,15 +114,15 @@ public class MainWindow extends JDialog {
 	 * @return javax.swing.JPanel	
 	 */
 	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
+		if (treePanel == null) {
 			GridLayout gridLayout1 = new GridLayout();
 			gridLayout1.setRows(1);
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(gridLayout1);
-			jPanel1.setBounds(new Rectangle(182, 33, 497, 459));
-			jPanel1.add(getJPanel2(), null);
+			treePanel = new JPanel();
+			treePanel.setLayout(gridLayout1);
+			treePanel.setBounds(new Rectangle(182, 33, 497, 459));
+			treePanel.add(getJPanel2(), null);
 		}
-		return jPanel1;
+		return treePanel;
 	}
 
 	/**
@@ -200,13 +200,13 @@ public class MainWindow extends JDialog {
 	 * @return javax.swing.JButton	
 	 */
 	private JButton getJButton2() {
-		if (saveB == null) {
-			saveB = new JButton();
-			saveB.setBounds(new Rectangle(630, 6, 64, 19));
-			saveB.setFont(new Font("Dialog", Font.PLAIN, 12));
-			saveB.setText("save");
+		if (showHideInfoB == null) {
+			showHideInfoB = new JButton();
+			showHideInfoB.setBounds(new Rectangle(123, 6, 32, 19));
+			showHideInfoB.setFont(new Font("Dialog", Font.PLAIN, 12));
+			showHideInfoB.setText("");
 		}
-		return saveB;
+		return showHideInfoB;
 	}
 
 	/**
@@ -346,7 +346,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton23() {
 		if (jButton2 == null) {
 			jButton2 = new JButton();
-			jButton2.setBounds(new Rectangle(4, 5, 32, 17));
+			jButton2.setLocation(new Point(4, 5));
+			jButton2.setSize(new Dimension(32, 19));
 		}
 		return jButton2;
 	}
@@ -359,7 +360,7 @@ public class MainWindow extends JDialog {
 	private JButton getJButton3() {
 		if (jButton3 == null) {
 			jButton3 = new JButton();
-			jButton3.setBounds(new Rectangle(40, 5, 32, 17));
+			jButton3.setBounds(new Rectangle(40, 5, 32, 19));
 		}
 		return jButton3;
 	}
@@ -372,7 +373,7 @@ public class MainWindow extends JDialog {
 	private JButton getJButton4() {
 		if (jButton4 == null) {
 			jButton4 = new JButton();
-			jButton4.setBounds(new Rectangle(76, 5, 32, 17));
+			jButton4.setBounds(new Rectangle(76, 5, 32, 19));
 		}
 		return jButton4;
 	}
@@ -385,7 +386,7 @@ public class MainWindow extends JDialog {
 	private JButton getJButton5() {
 		if (jButton5 == null) {
 			jButton5 = new JButton();
-			jButton5.setBounds(new Rectangle(111, 5, 32, 17));
+			jButton5.setBounds(new Rectangle(111, 5, 32, 19));
 		}
 		return jButton5;
 	}

@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,9 +16,12 @@ import model.knowledge.TextData;
 
 import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
+import ru.dolganov.tool.knowledge.collector.App;
+import ru.dolganov.tool.knowledge.collector.AppListener;
 import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.dialog.DialogOps;
+import sun.reflect.generics.visitor.Reifier;
 
 public class TreeMenu extends JPopupMenu implements HasCellConst {
 	
@@ -35,6 +39,12 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 	JMenuItem dirToParent = new JMenuItem("dir",IconHelper.get("/images/kc/tree/dir.png"));
 	JMenuItem noteToParent = new JMenuItem("note",IconHelper.get("/images/kc/tree/note.png"));
 	JMenuItem linkToParent = new JMenuItem("link",IconHelper.get("/images/kc/tree/netLink.png"));
+	
+	JMenuItem showHideInfo = new JMenuItem("");
+	ImageIcon leftIcon = IconHelper.get("/images/kc/app/left.png");
+	ImageIcon rightIcon = IconHelper.get("/images/kc/app/right.png");
+	
+	boolean showInfo = true;
 	
 	
 	public TreeMenu(ExtendTree tree_) {
@@ -115,6 +125,27 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 		parent.add(noteToParent);
 		parent.add(linkToParent);
 		
+		showHideInfo.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				App.getDefault().fireAction(this, "need-show-hide-info-action");
+			}
+			
+		});
+		App.getDefault().addListener(new AppListener(){
+
+			@Override
+			public void onAction(Object source, String action, Object... data) {
+				if("hide-info".equals(action)){
+					showInfo = false;
+				}
+				else if("show-info".equals(action)){
+					showInfo = true;
+				}
+			}
+			
+		});
 
 		
 	}
@@ -142,6 +173,15 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			parent.setEnabled(false);
 		else parent.setEnabled(true);
 		add(parent);
+		if(showInfo){
+			showHideInfo.setText("hide info panel");
+			showHideInfo.setIcon(rightIcon);
+		}
+		else {
+			showHideInfo.setText("show info panel");
+			showHideInfo.setIcon(leftIcon);
+		}
+		add(showHideInfo);
 		addSeparator();
 		add(delete);
 		
