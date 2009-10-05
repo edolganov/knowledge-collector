@@ -179,7 +179,7 @@ public class App {
 
 	private void initUI() {
 		ui = new MainWindow(null);
-		ui.setTitle("Know Collector");
+		ui.setTitle("Knowledge Collector");
 //		ui.setIconImage(ImageBundle.getDefault().getAppIcon());
 		ui.setLocationByPlatform(true);
 	}

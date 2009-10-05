@@ -232,16 +232,17 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	@Override
 	public void update(NodeMeta node, Map<String, String> params) {
 		try {
-			//name of the node
-			String name = params.get(Params.name.toString());
 			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
-			if(name == null) return;
 			
+			//name of the node
 			boolean isNewName = false;
 			String oldName = node.getName();
-			if(!oldName.equals(name)){
-				node.setName(name);
-				isNewName = true;
+			String name = params.get(Params.name.toString());
+			if(name != null) {
+				if(!oldName.equals(name)){
+					node.setName(name);
+					isNewName = true;
+				}
 			}
 			
 			if (node instanceof Dir) {

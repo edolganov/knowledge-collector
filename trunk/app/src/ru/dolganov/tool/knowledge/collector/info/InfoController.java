@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -103,17 +105,40 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 	Color empty = new Color(212,208,200);
 	Color active = Color.WHITE;
 	
+	Object timerSync = new Object();
+	boolean timerActive = false;
+	String currentBigText;
+	Timer timer = null;
+	
 	void initArea(final PropertyTextAreaPanel area){
 		area.textArea.setBackground(empty);
+
 		area.textArea.addFocusListener(new FocusAdapter(){
 			
 			@Override
 			public void focusGained(FocusEvent e) {
 				area.textArea.setBackground(active);
+				synchronized (timerSync) {
+					if(!timerActive){
+						//System.out.println("start timer");
+						currentBigText = getBigText();
+						timer = new Timer("info-controller-timer");
+						timer.schedule(new TimerTask(){
+
+							@Override
+							public void run() {
+								doTimerSaveTask();
+							}
+							
+						}, 4000, 4000);
+						timerActive = true;
+					}
+				}
 			}
 			
 			@Override
 			public void focusLost(FocusEvent e) {
+				stopSaveTimer();
 				checkEmptyArea(area);
 			}
 		});
@@ -168,8 +193,75 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 	}
 
 	protected void hide() {
+		//doTimerSaveTask(true);
+		stopSaveTimer();
 		ui.infoPanel.removeAll();
 		curMode = Mode.none;
+	}
+
+	private void stopSaveTimer() {
+		synchronized (timerSync) {
+			if(timerActive){
+				//System.out.println("stop timer");
+				timer.cancel();
+				timer = null;
+				timerActive = false;
+			}
+		}
+	}
+	
+	private String getBigText(){
+		String text = "";
+		if(Mode.dir == curMode){
+			text = basicInfo.description.getText();
+		}
+		else if(Mode.link == curMode){
+			text = linkInfo.description.getText();
+		}
+		else if(Mode.text == curMode){
+			text = noteInfo.description.getText();
+		}
+		return text;
+	}
+
+	private void doTimerSaveTask() {
+		doTimerSaveTask(false);
+	}
+	
+	//oneTime - неудачное решение - не сохраняет при переходе от ноды и потере фокуса
+	private void doTimerSaveTask(boolean oneTime) {
+		synchronized (timerSync) {
+			if(timerActive){
+				//System.out.println("start save task");
+				if(oneTime) {
+					if(timer != null){
+						timer.cancel();
+						timer = null;
+					}
+					timerActive = false;
+				}
+				if(Mode.none == curMode) return;
+				
+				String newBigText = getBigText();
+				if(!currentBigText.equals(newBigText)){
+					//System.out.println("!save text");
+					//save
+					HashMap<String, String> params = new HashMap<String, String>(2);
+					if(Mode.dir == curMode){
+						params.put(Params.description.toString(), newBigText);
+					}
+					else if(Mode.link == curMode){
+						params.put(Params.description.toString(), newBigText);
+					}
+					else if(Mode.text == curMode){
+						params.put(Params.text.toString(), newBigText);
+					}
+					currentBigText = newBigText;
+					Actions.updateCurrentTreeNode(params);
+				}
+				//else System.out.println("text not modified");
+			}
+		}
 	}
 
 }

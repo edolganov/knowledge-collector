@@ -51,7 +51,7 @@ public class IconController extends Controller<MainWindow> {
 		    defaultItem.addActionListener(exitListener);
 		    popup.add(defaultItem);
 
-		    trayIcon = new TrayIcon(appIcon, "Link Collector", popup);
+		    trayIcon = new TrayIcon(appIcon, ui.getTitle(), popup);
 
 //		    ActionListener actionListener = new ActionListener() {
 //		        public void actionPerformed(ActionEvent e) {
