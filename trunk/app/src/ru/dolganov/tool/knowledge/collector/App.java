@@ -1,5 +1,6 @@
 package ru.dolganov.tool.knowledge.collector;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -180,7 +181,7 @@ public class App {
 	private void initUI() {
 		ui = new MainWindow(null);
 		ui.setTitle("Knowledge Collector");
-//		ui.setIconImage(ImageBundle.getDefault().getAppIcon());
+		ui.setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/images/kc/app.png")));
 		ui.setLocationByPlatform(true);
 	}
 
