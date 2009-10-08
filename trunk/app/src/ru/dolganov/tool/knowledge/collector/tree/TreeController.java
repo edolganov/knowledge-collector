@@ -105,8 +105,11 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 					TreePath path = new TreePath(childNode.getPath());
 					tree.setSelectionPath(path);
 					tree.scrollPathToVisible(path);
+				} else {
+					DefaultMutableTreeNode createTreeNode = createTreeNode(child);
+					tree.addChild(parentNode, createTreeNode);
+					tree.setSelectionPath(createTreeNode);
 				}
-				else tree.addChild(parentNode, createTreeNode(child));
 				for(DAOEventListener l : listeners) l.onAdded(parent, child);
 			}
 			

@@ -29,7 +29,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		saveTextCache.remove(node.getUuid());
 	}
 	
-	public void manage(File rootFile, Map<SaveOps, Object[]> ops) {
+	public void manage(File rootFile, Map<SaveOps, Object[]> ops) throws Exception {
 		String rootPath = rootFile.getPath();
 		if(ops.containsKey(SaveOps.rename)){
 			Object[] objects = ops.get(SaveOps.rename);
@@ -42,12 +42,19 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			String filePath = DU.getFilePath(rootPath, oldFileName);
 			//rename file
 			File file = new File(filePath);
-			if(file.exists()) file.renameTo(new File(DU.getFilePath(rootPath,newFileName)));
+			if(file.exists()) {
+				if(!file.renameTo(new File(DU.getFilePath(rootPath,newFileName))))
+				throw new Exception();
+			}
 			//rename dir
 			String oldDirName = getDirName(oldName);
 			String newDirName = getDirName(newName);
 			File dir = new File(DU.getFilePath(rootPath, oldDirName));
-			if(dir.exists()) dir.renameTo(new File(DU.getFilePath(rootPath, newDirName)));
+			if(dir.exists()) {
+				if(!dir.renameTo(new File(DU.getFilePath(rootPath, newDirName))))
+					throw new Exception();
+			}
+				
 		}
 		
 		if(ops.containsKey(SaveOps.delete)){
@@ -72,20 +79,18 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			File oldFile = new File(filePath);
 			if(oldFile.exists()){
 				tempFile = new File(tempFilePath);
-				oldFile.renameTo(tempFile);
+				if(!oldFile.renameTo(tempFile))
+					throw new Exception();
 			}
 			if(!Check.isEmpty(text)){
 				File file = new File(filePath);
-				try {
-					FileOutputStream fos = new FileOutputStream(file);
-					fos.write(text.getBytes("UTF-8"));
-					fos.flush();
-					fos.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				FileOutputStream fos = new FileOutputStream(file);
+				fos.write(text.getBytes("UTF-8"));
+				fos.flush();
+				fos.close();
 			}
-			if(tempFile != null) tempFile.delete();
+			if(tempFile != null) if(!tempFile.delete())
+				throw new Exception();
 			
 			afterUpdate(node);
 		}
@@ -102,8 +107,16 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			String newTextPath = DU.getFilePath(newRootPath, textName);
 			//System.out.println("TextKeeper: " + oldDirPath + " -> " + newDirPath);
 			//System.out.println("TextKeeper: " + oldTextPath + " -> " + newTextPath);
-			new File(oldDirPath).renameTo(new File(newDirPath));
-			new File(oldTextPath).renameTo(new File(newTextPath));
+			File oldDir = new File(oldDirPath);
+			if(oldDir.exists()){
+				if(!oldDir.renameTo(new File(newDirPath)))
+					throw new Exception();
+			}
+			File oldTextFile = new File(oldTextPath);
+			if(oldTextFile.exists()){
+				if(!oldTextFile.renameTo(new File(newTextPath)))
+					throw new Exception();
+			}
 		}
 	}
 

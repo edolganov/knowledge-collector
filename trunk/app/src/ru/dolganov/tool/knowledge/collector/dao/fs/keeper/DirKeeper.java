@@ -10,12 +10,12 @@ import ru.dolganov.tool.knowledge.collector.dao.fs.SaveOps;
 public class DirKeeper extends AbstractKeeper{
 	
 	
-	public void manage(File rootFile, Map<SaveOps, Object[]> ops) {
+	public void manage(File rootFile, Map<SaveOps, Object[]> ops) throws Exception {
 		if(ops.containsKey(SaveOps.create)){
 			NodeMeta node = (NodeMeta)ops.get(SaveOps.create)[0];
 			String dirName = getName(node.getName());
 			String folderPath = DU.getFilePath(rootFile.getPath(), dirName);
-			new File(folderPath).mkdir();
+			if(!new File(folderPath).mkdir())throw new Exception();
 		}
 		else if(ops.containsKey(SaveOps.delete)){
 			NodeMeta node = (NodeMeta)ops.get(SaveOps.delete)[0];
@@ -29,7 +29,10 @@ public class DirKeeper extends AbstractKeeper{
 			String parentPath = rootFile.getPath();
 			String folderPath = DU.getFilePath(parentPath, oldDirName);
 			File file = new File(folderPath);
-			file.renameTo(new File(DU.getFilePath(parentPath,newDirName)));
+			if(file.exists()){
+				if(!file.renameTo(new File(DU.getFilePath(parentPath,newDirName))))
+					throw new Exception();
+			}
 		}
 		else if(ops.containsKey(SaveOps.move)){
 			NodeMeta node = (NodeMeta)ops.get(SaveOps.move)[0];
@@ -38,7 +41,11 @@ public class DirKeeper extends AbstractKeeper{
 			String newRootPath = node.getParent().getDirPath();
 			String newPath = DU.getFilePath(newRootPath, dirName);
 			//System.out.println("DirKeeper: " + oldPath + " -> " + newPath);
-			new File(oldPath).renameTo(new File(newPath));
+			File oldFile = new File(oldPath);
+			if(oldFile.exists()){
+				if(!oldFile.renameTo(new File(newPath)))
+					throw new Exception();
+			}
 		}
 	}
 	

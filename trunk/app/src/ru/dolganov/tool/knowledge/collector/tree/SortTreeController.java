@@ -82,12 +82,19 @@ public class SortTreeController extends Controller<MainWindow>{
 
 	private void sortNodes(NodeMeta parent, NodeMeta child) {
 		//update model
+		DefaultMutableTreeNode childInitNode = dao.getCache().get(child, "tree-node", DefaultMutableTreeNode.class);
+		TreePath childPath = new TreePath(childInitNode.getPath());
+		TreePath selectedPath = null;
+		if(ui.tree.isPathSelected(childPath)){
+			selectedPath = childPath;
+		}
 		Root root = child.getParent();
 		List<NodeMeta> nodes = root.getNodes();
 		Collections.sort(nodes, nodeComparator);
 		dao.merge(root, null);
 		//update tree
 		DefaultMutableTreeNode parentNode = dao.getCache().get(parent, "tree-node", DefaultMutableTreeNode.class);
+
 		for (int i = 0; i < nodes.size(); i++) {
 			DefaultMutableTreeNode childNode = dao.getCache().get(nodes.get(i), "tree-node", DefaultMutableTreeNode.class);
 			if(parentNode.getChildAt(i) != childNode){
@@ -96,6 +103,7 @@ public class SortTreeController extends Controller<MainWindow>{
 			}					
 		}
 		ui.tree.model().reload(parentNode);
+		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
 	}
 
 	private void moveNode(boolean down) {

@@ -69,7 +69,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	String rootFileName = "data.xml";
 	NodeMetaObjectsCacheImpl cache = new NodeMetaObjectsCacheImpl();
 	
-	
+	int timeOutDelay = 1000;
 	PersistTimer persistTimer = new PersistTimer(new TimeoutListener(){
 
 		@Override
@@ -77,7 +77,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			newSaveThread(dirPath,saveOps,oldSaveOps);
 		}
 		
-	},2000);
+	},timeOutDelay);
 	
 	ArrayList<DAOEventListener> listeners = new ArrayList<DAOEventListener>();
 	
@@ -172,7 +172,8 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 				}
 			}
 			if(oldRoot == null){
-				saveRequest(root,saveOps);
+				//saveRequest(root,saveOps);
+				if(!save(saveOps, null, root))return false;
 				if(parentNode != null) for(DAOEventListener l : listeners) l.onAdded(parentNode,child);
 				return true;
 			}
@@ -218,10 +219,11 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 				saveOps.put(SaveOps.delete, new Object[]{node});
 			}
 			
-			for(DAOEventListener l : listeners) l.onDeleted(node);
+			//saveRequest(root,saveOps);
+			if(!save(saveOps, null, root))return;
 			
+			for(DAOEventListener l : listeners) l.onDeleted(node);
 			cache.remove(node);
-			saveRequest(root,saveOps);
 			
 		} catch (RuntimeException e) {
 			e.printStackTrace();
@@ -263,9 +265,11 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 				textKeeper.beforeUpdate(node,params);
 			}
 			
+			//saveRequest(node.getParent(),saveOps);
+			if(!save(saveOps, null, node.getParent()))return;
 			for(DAOEventListener l : listeners) l.onUpdated(node);
 			
-			saveRequest(node.getParent(),saveOps);
+			
 		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
@@ -357,6 +361,12 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	private void saveRequest(Root root, Map<SaveOps, Object[]> saveOps) {
+//		StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+//		int length = stackTrace.length;
+//		if(length > 6)length=6;
+//		for (int i = 0; i < length; i++) {
+//			System.out.println(stackTrace[i]);
+//		}
 		persistTimer.start(root.getDirPath(),saveOps);
 	}
 	
@@ -388,9 +398,6 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			//save data.xml
 			File dirFile = new File(dirPath);
 			dirFile.mkdirs();
-			String filePath = getRootFilePath(dirPath);
-			System.out.println("saving " + filePath);
-			metaStore.saveFile(new File(filePath),root, true);
 			
 			//do save ops
 			//System.out.println("do save ops");
@@ -401,16 +408,20 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			//current
 			doSaveOps(saveOps, dirFile);
 			//System.out.println("done");
+			
+			String filePath = getRootFilePath(dirPath);
+			System.out.println("saving " + filePath);
+			metaStore.saveFile(new File(filePath),root, true);
 			return true;
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 
 
-	private void doSaveOps(Map<SaveOps, Object[]> saveOps, File dirFile) {
+	private void doSaveOps(Map<SaveOps, Object[]> saveOps, File dirFile) throws Exception {
 		if(saveOps != null){
 			//test log
 //			for(SaveOps op : saveOps.keySet()){

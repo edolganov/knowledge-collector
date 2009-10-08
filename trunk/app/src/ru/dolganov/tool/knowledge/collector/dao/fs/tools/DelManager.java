@@ -11,18 +11,20 @@ public class DelManager {
 	public DelManager() {
 	}
 	
-	public void delete(String parentPath,String fileName){
+	public void delete(String parentPath,String fileName) throws Exception{
 		delete(parentPath, fileName, System.currentTimeMillis());
 	}
 	
-	public void delete(String parentPath,String fileName,long timestamp){
+	public void delete(String parentPath,String fileName,long timestamp) throws Exception{
 		String delDirPath = DU.getFilePath(parentPath, DEL_DIR);
 		File delDir = new File(delDirPath);
-		delDir.mkdir();
+		if(!delDir.mkdir())throw new Exception();
 		
 		File file = new File(DU.getFilePath(parentPath, fileName));
+		if(!file.exists())return;
 		String newName = generateDeleteFileName(fileName,timestamp);
-		file.renameTo(new File(DU.getFilePath(delDirPath, newName)));
+		if(!file.renameTo(new File(DU.getFilePath(delDirPath, newName))))
+			throw new Exception();
 	}
 	
 	private String generateDeleteFileName(String name, long timestamp) {
