@@ -31,7 +31,7 @@ public class SnapshotController extends Controller<MainWindow> {
 	@Override
 	public void init(MainWindow ui_) {
 		ui = ui_;
-		ui.snapTree.init(ExtendTree.createTreeModel(null), false, new CellRender(), SelectModel.SINGLE);
+		ui.snapTree.init(ExtendTree.createTreeModel(null), false, new CellRender(), SelectModel.SINGLE, new TreeMenu(ui.snapTree));
 		ui.snapTree.addTreeNodeListener(new TreeNodeAdapter(){
 
 			@Override
@@ -145,6 +145,9 @@ public class SnapshotController extends Controller<MainWindow> {
 			}
 			
 		});
+		
+		ui.jButton4.setVisible(false);
+		ui.jButton5.setVisible(false);
 		
 		initTree();
 	}

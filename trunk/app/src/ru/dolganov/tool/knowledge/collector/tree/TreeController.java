@@ -1,10 +1,14 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -33,6 +37,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	
 	DefaultMutableTreeNode treeRoot;
 	LinkedList<DAOEventListener> listeners = new LinkedList<DAOEventListener>();
+	TreeMenu treeMenu;
 //	DefaultMutableTreeNode lastDirNode;
 //	DefaultMutableTreeNode buttons = new DefaultMutableTreeNode(Cell.BUTTONS);
 	
@@ -43,13 +48,13 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		path = ui.path;
 		path.setEditable(false);
 		//path.setBackground(Color.WHITE);
-		
+		treeMenu = new TreeMenu(tree);
 		tree.init(
 				ExtendTree.createTreeModel(null), 
 				true, 
 				new MainCellRender(), 
 				SelectModel.SINGLE,
-				new TreeMenu(tree));
+				treeMenu);
 		
 
 		
@@ -65,28 +70,6 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			@Override
 			public void onNodeSelect(DefaultMutableTreeNode node) {
 				setPathInfo(node);
-//				if(buttons == node) {
-//					//select next node
-//					return;
-//				}
-//				
-//				if(node == null) return;
-//				Object ob = node.getUserObject();
-//				if(ob == null) return;
-//				
-//				if(ob instanceof Dir && tree.isExpanded(node)){
-//					if(lastDirNode != null){
-//						DefaultMutableTreeNode child = (DefaultMutableTreeNode)lastDirNode.getChildAt(0);
-//						if(buttons == child){
-//							tree.model().removeNodeFromParent(child);
-//						}
-//						lastDirNode = null;
-//					}
-//					
-//					node.insert(buttons, 0);
-//					tree.model().reload(node);
-//					lastDirNode = node;
-//				}
 			}
 			
 		});
@@ -109,6 +92,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 					DefaultMutableTreeNode createTreeNode = createTreeNode(child);
 					tree.addChild(parentNode, createTreeNode);
 					tree.setSelectionPath(createTreeNode);
+					tree.requestFocus();
 				}
 				for(DAOEventListener l : listeners) l.onAdded(parent, child);
 			}
@@ -116,7 +100,12 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			@Override
 			public void onDeleted(NodeMeta node) {
 				DefaultMutableTreeNode treeNode = dao.getCache().get(node, TREE_NODE, DefaultMutableTreeNode.class);
+				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
 				tree.model().removeNodeFromParent(treeNode);
+				if(parent != null && !parent.isRoot()){
+					tree.setSelectionPath(parent);
+					tree.requestFocus();
+				}
 			}
 			
 			@Override
@@ -130,7 +119,10 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		path.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				DefaultMutableTreeNode curNode = tree.getCurrentNode();
 				if(curNode != null){
+					DefaultMutableTreeNode parent = (DefaultMutableTreeNode)curNode.getParent();
+					if(parent != null) tree.scrollPathToVisible(new TreePath(parent.getPath()));
 					tree.scrollPathToVisible(new TreePath(curNode.getPath()));
 				}
 			}
@@ -140,10 +132,8 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	}
 
 
-	DefaultMutableTreeNode curNode;
 	protected void setPathInfo(DefaultMutableTreeNode node) {
 		StringBuilder sb = new StringBuilder();
-		curNode = node;
 		if(node != null){
 			TreeNode[] path = node.getPath();
 			if(path.length > 2){

@@ -11,6 +11,8 @@ import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
 import model.knowledge.Link;
+import model.knowledge.LocalLink;
+import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Root;
 import model.knowledge.TextData;
@@ -41,7 +43,8 @@ public class SortTreeController extends Controller<MainWindow>{
 			int out = Integer.MAX_VALUE;
 			if(meta instanceof Dir) out = 0;
 			else if(meta instanceof TextData) out = 10;
-			else if(meta instanceof Link) out = 20;
+			else if(meta instanceof LocalLink) out = 20;
+			else if(meta instanceof NetworkLink) out = 30;
 			return out;
 		}
 		

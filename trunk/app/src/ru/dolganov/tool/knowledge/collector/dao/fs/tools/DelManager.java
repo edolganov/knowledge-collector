@@ -18,7 +18,7 @@ public class DelManager {
 	public void delete(String parentPath,String fileName,long timestamp) throws Exception{
 		String delDirPath = DU.getFilePath(parentPath, DEL_DIR);
 		File delDir = new File(delDirPath);
-		if(!delDir.mkdir())throw new Exception();
+		delDir.mkdir();
 		
 		File file = new File(DU.getFilePath(parentPath, fileName));
 		if(!file.exists())return;

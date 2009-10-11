@@ -61,6 +61,7 @@ class NodeCellRender extends DefaultTreeCellRenderer {
 	
 	ImageIcon dir = IconHelper.get("/images/kc/tree/dir.png");
     ImageIcon netLink = IconHelper.get("/images/kc/tree/netLink.png");
+    ImageIcon localLink = IconHelper.get("/images/kc/tree/localLink.png");
     ImageIcon note = IconHelper.get("/images/kc/tree/note.png");
     //Icon otherIcon = MetalIconFactory.getTreeLeafIcon();
 	
@@ -81,7 +82,7 @@ class NodeCellRender extends DefaultTreeCellRenderer {
 			setIcon(netLink);
 		}
 		else if(obj instanceof LocalLink){
-			setIcon(netLink);
+			setIcon(localLink);
 		}
 		else {
 			setIcon(getLeafIcon());
