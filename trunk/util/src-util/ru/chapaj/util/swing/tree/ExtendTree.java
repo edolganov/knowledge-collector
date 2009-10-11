@@ -1,5 +1,8 @@
 package ru.chapaj.util.swing.tree;
 
+import java.awt.Rectangle;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -99,8 +102,32 @@ public class ExtendTree extends DNDTree {
 							TreePath selPath = getPathForLocation(x, y);
 							if(selPath != null) {
 								setSelectionPath(selPath);
-								menu.show( (JComponent)e.getSource(),x , y );
+								int row = getRowForPath(selPath);
+								Rectangle rec = getRowBounds(row);
+								//показываем меню в удобном месте - либо в конце ноды, либо на растоянии right
+								int right = 100;
+								int x_ = rec.x+rec.width > rec.x + right ? rec.x + right : rec.x + rec.width;
+								menu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
+								//menu.show( (JComponent)e.getSource(),x , y );
 							}
+						}
+					}
+				}
+			});
+			
+			addKeyListener(new KeyAdapter(){
+				@Override
+				public void keyPressed(KeyEvent e) {
+					int keyCode = e.getKeyCode();
+					//menu call
+					if(keyCode == 525){
+						DefaultMutableTreeNode currentNode = getCurrentNode();
+						if(currentNode != null){
+							int row = getRowForPath(new TreePath(currentNode.getPath()));
+							Rectangle rec = getRowBounds(row);
+							int right = 100;
+							int x_ = rec.x+rec.width > rec.x + right ? rec.x + right : rec.x + rec.width;
+							menu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
 						}
 					}
 				}

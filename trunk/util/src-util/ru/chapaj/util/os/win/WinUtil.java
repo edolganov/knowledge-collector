@@ -18,7 +18,7 @@ public class WinUtil {
 			
 			String file = filePath.substring(path.length()+1);
 			
-			ProcessWrapper.exec("cmd /c start \" \" /D\""+path+"\" \""+file+"\"");
+			ProcessWrapper.exec("cmd /c start \""+filePath+"\" /D\""+path+"\" \""+file+"\"");
 			return true;
 		}
 		catch (Exception e) {
