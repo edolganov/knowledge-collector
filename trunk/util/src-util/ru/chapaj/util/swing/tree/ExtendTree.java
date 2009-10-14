@@ -17,6 +17,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import ru.chapaj.util.lang.ClassUtil;
 import ru.chapaj.util.swing.listener.KeyUpDownAdapter;
 
 public class ExtendTree extends DNDTree {
@@ -28,6 +29,7 @@ public class ExtendTree extends DNDTree {
 	}
 	
 	LinkedList<TreeNodeListener> listeners = new LinkedList<TreeNodeListener>();
+	boolean isEnabledDefaultMoveOperations = false;
 	
 	public ExtendTree() {
 		super();
@@ -182,6 +184,85 @@ public class ExtendTree extends DNDTree {
 		});
 	}
 	
+	
+	public synchronized void enableDefaultMoveOperations(final MoveNodeListener listener){
+		if(!isEnabledDefaultMoveOperations){
+			isEnabledDefaultMoveOperations = true;
+			addTreeNodeListener(new TreeNodeAdapter(){
+				@Override
+				public void onNodeMoveDownRequest() {
+					moveNode(true,listener);
+				}
+				
+				public void onNodeMoveUpRequest() {
+					moveNode(false,listener);
+				}
+			});
+		}
+	}
+	
+	private void moveNode(boolean down, MoveNodeListener listener) {
+		DefaultMutableTreeNode node = getCurrentNode();
+		if(node == null) return;
+		Object userObject = node.getUserObject();
+		if(userObject == null) return;
+		
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		if(parent == null || parent.getChildCount() == 1) return;
+		
+		int childCount = parent.getChildCount();
+
+		int oldIndex = parent.getIndex(node);
+		int minIndex = oldIndex;
+
+		Class<?> validClass = userObject.getClass();
+		for(int i = oldIndex -1 ; i > -1; i--){
+			minIndex = i;
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)parent.getChildAt(i);
+			Object ob = child.getUserObject();
+			if(ob == null || !ClassUtil.isValid(ob.getClass(), validClass)){
+				++minIndex;
+				break;
+			}
+		}
+		int maxIndex = oldIndex;
+		for(int i = oldIndex +1 ; i < childCount; i++){
+			maxIndex = i;
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode)parent.getChildAt(i);
+			Object ob = child.getUserObject();
+			if(ob == null || !ClassUtil.isValid(ob.getClass(), validClass)){
+				--maxIndex;
+				break;
+			}
+		}
+		if(minIndex == maxIndex) return;
+		int newIndex = 0;
+		if(down) newIndex = oldIndex + 1;
+		else newIndex = oldIndex - 1;
+		if(newIndex > maxIndex) newIndex = minIndex;
+		if(newIndex < minIndex) newIndex = maxIndex;
+		//System.out.println("oldIndex:"+oldIndex + " newIndex:" + newIndex);
+		//update model
+		if(listener.onNodeMoveRequest(newIndex)){
+			//update tree
+			ExtendDefaultTreeModel model = model();
+			model.removeNodeFromParent(node);
+			model.insertNodeInto(node, parent, newIndex);
+			TreePath treePath = new TreePath(node.getPath());
+			setSelectionPath(treePath);
+		}
+	}
+	
+	public void moveNode(DefaultMutableTreeNode childNode, DefaultMutableTreeNode parentNode){
+		DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode)childNode.getParent();
+		parentNode.add(childNode);
+		model().reload(oldParent);
+		model().reload(parentNode);
+		TreePath path = new TreePath(childNode.getPath());
+		setSelectionPath(path);
+		scrollPathToVisible(path);
+	}
+	
 	public boolean moveNode(DefaultMutableTreeNode tagretNode, DefaultMutableTreeNode draggedNode,Class<?> validParentClass){
 		return TreeUtil.moveNode(this, tagretNode, draggedNode, validParentClass);
 	}
@@ -234,6 +315,10 @@ public class ExtendTree extends DNDTree {
 
 	public <T> T getParentObject(DefaultMutableTreeNode node, Class<T> clazz) {
 		return TreeUtil.getParentObject(node, clazz);
+	}
+	
+	public <T> T getParentObject(Class<T> clazz) {
+		return getParentObject(getCurrentNode(), clazz);
 	}
 
 	public void moveDownCurrentNode() {
