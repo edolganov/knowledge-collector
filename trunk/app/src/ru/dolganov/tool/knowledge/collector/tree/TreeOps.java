@@ -1,4 +1,4 @@
-package ru.dolganov.tool.knowledge.collector.actions;
+package ru.dolganov.tool.knowledge.collector.tree;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
 
-public class Actions {
+public class TreeOps {
 	
 	static ExtendTree tree = App.getDefault().getUI().tree;
 	static DAO dao = App.getDefault().getDao();

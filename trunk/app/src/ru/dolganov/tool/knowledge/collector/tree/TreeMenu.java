@@ -18,7 +18,6 @@ import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.AppListener;
-import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import sun.reflect.generics.visitor.Reifier;
@@ -55,7 +54,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Actions.deleteCurrentTreeNode();
+				TreeOps.deleteCurrentTreeNode();
 			}
 			
 		});
@@ -64,7 +63,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Actions.addTreeNode(DialogOps.newDir());
+				TreeOps.addTreeNode(DialogOps.newDir());
 			}
 			
 		});
@@ -73,7 +72,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Actions.addTreeNode(DialogOps.newText());
+				TreeOps.addTreeNode(DialogOps.newText());
 			}
 			
 		});
@@ -82,7 +81,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Actions.addTreeNode(DialogOps.newLink());
+				TreeOps.addTreeNode(DialogOps.newLink());
 			}
 			
 		});
@@ -96,7 +95,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				Actions.addTreeNode(parent,DialogOps.newDir());
+				TreeOps.addTreeNode(parent,DialogOps.newDir());
 			}
 			
 		});
@@ -106,7 +105,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				Actions.addTreeNode(parent,DialogOps.newText());
+				TreeOps.addTreeNode(parent,DialogOps.newText());
 			}
 			
 		});
@@ -116,7 +115,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				Actions.addTreeNode(parent,DialogOps.newLink());
+				TreeOps.addTreeNode(parent,DialogOps.newLink());
 			}
 			
 		});

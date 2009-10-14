@@ -20,10 +20,10 @@ import model.knowledge.NodeMeta;
 import model.knowledge.TextData;
 
 import ru.dolganov.tool.knowledge.collector.Controller;
-import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
+import ru.dolganov.tool.knowledge.collector.tree.TreeOps;
 import ru.chapaj.tool.link.collector.ui.component.PropertyTextAreaPanel;
 import ru.chapaj.util.Check;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
@@ -104,7 +104,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		}
 		else return;
 		
-		Actions.updateCurrentTreeNode(params);
+		TreeOps.updateCurrentTreeNode(params);
 		
 		
 	}
@@ -286,7 +286,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 						params.put(Params.text.toString(), newBigText);
 					}
 					currentBigText = newBigText;
-					Actions.updateCurrentTreeNode(params);
+					TreeOps.updateCurrentTreeNode(params);
 				}
 				//else System.out.println("text not modified");
 			}

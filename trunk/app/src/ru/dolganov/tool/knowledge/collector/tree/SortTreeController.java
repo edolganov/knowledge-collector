@@ -18,7 +18,6 @@ import ru.chapaj.util.lang.ClassUtil;
 import ru.chapaj.util.swing.tree.ExtendDefaultTreeModel;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.dolganov.tool.knowledge.collector.Controller;
-import ru.dolganov.tool.knowledge.collector.actions.Actions;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
@@ -74,7 +73,7 @@ public class SortTreeController extends Controller<MainWindow>{
 			@Override
 			public void afterDrop(DefaultMutableTreeNode tagretNode,
 					DefaultMutableTreeNode draggedNode) {
-				Actions.move(tagretNode,draggedNode);
+				TreeOps.move(tagretNode,draggedNode);
 			}
 		});
 		
