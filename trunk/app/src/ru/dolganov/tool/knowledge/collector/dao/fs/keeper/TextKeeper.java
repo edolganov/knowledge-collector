@@ -11,7 +11,10 @@ import ru.chapaj.util.Check;
 import ru.chapaj.util.collection.SyncHashMap;
 import ru.chapaj.util.file.FileUtil;
 import ru.dolganov.tool.knowledge.collector.dao.fs.DU;
+import ru.dolganov.tool.knowledge.collector.dao.fs.NodeMetaObjectsCacheImpl;
 import ru.dolganov.tool.knowledge.collector.dao.fs.SaveOps;
+import ru.dolganov.tool.knowledge.collector.dao.fs.exception.DeleteException;
+import ru.dolganov.tool.knowledge.collector.dao.fs.exception.RenameException;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
 
 public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
@@ -20,6 +23,12 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 	//
 	//List<String> mainTextCache = new SyncListWrapper<String>(new ArrayList<String>(10));
 	
+	
+	
+	public TextKeeper(NodeMetaObjectsCacheImpl cache) {
+		super(cache);
+	}
+
 	public void beforeUpdate(NodeMeta node, Map<String, String> params){
 		String text = params.get(Params.text.toString());
 		saveTextCache.put(node.getUuid(), text);
@@ -43,16 +52,20 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			//rename file
 			File file = new File(filePath);
 			if(file.exists()) {
-				if(!file.renameTo(new File(DU.getFilePath(rootPath,newFileName))))
-				throw new Exception();
+				String newPath = DU.getFilePath(rootPath,newFileName);
+				if(!file.renameTo(new File(newPath)))
+				throw new RenameException(filePath);
 			}
 			//rename dir
 			String oldDirName = getDirName(oldName);
 			String newDirName = getDirName(newName);
-			File dir = new File(DU.getFilePath(rootPath, oldDirName));
+			String oldDirPath = DU.getFilePath(rootPath, oldDirName);
+			File dir = new File(oldDirPath);
 			if(dir.exists()) {
-				if(!dir.renameTo(new File(DU.getFilePath(rootPath, newDirName))))
-					throw new Exception();
+				String newPath = DU.getFilePath(rootPath, newDirName);
+				if(!dir.renameTo(new File(newPath)))
+					throw new RenameException(dir.getPath());
+				cache.renameAllRoots(oldDirPath, newPath);
 			}
 				
 		}
@@ -64,7 +77,10 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			//delete file
 			delManager.delete(rootPath, getTextFileName(name),timeStamp);
 			//delete dir
-			delManager.delete(rootPath, getDirName(name),timeStamp);
+			String dirName = getDirName(name);
+			delManager.delete(rootPath, dirName,timeStamp);
+			String dirPath = node.getParent().getDirPath();
+			cache.deleteAllRoots(DU.getFilePath(dirPath, dirName));
 		}
 		
 		if(ops.containsKey(SaveOps.update)){
@@ -80,7 +96,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			if(oldFile.exists()){
 				tempFile = new File(tempFilePath);
 				if(!oldFile.renameTo(tempFile))
-					throw new Exception();
+					throw new RenameException(filePath);
 			}
 			if(!Check.isEmpty(text)){
 				File file = new File(filePath);
@@ -90,7 +106,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 				fos.close();
 			}
 			if(tempFile != null) if(!tempFile.delete())
-				throw new Exception();
+				throw new DeleteException(tempFile.getPath());
 			
 			afterUpdate(node);
 		}
@@ -107,15 +123,16 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 			String newTextPath = DU.getFilePath(newRootPath, textName);
 			//System.out.println("TextKeeper: " + oldDirPath + " -> " + newDirPath);
 			//System.out.println("TextKeeper: " + oldTextPath + " -> " + newTextPath);
-			File oldDir = new File(oldDirPath);
-			if(oldDir.exists()){
-				if(!oldDir.renameTo(new File(newDirPath)))
-					throw new Exception();
-			}
 			File oldTextFile = new File(oldTextPath);
 			if(oldTextFile.exists()){
 				if(!oldTextFile.renameTo(new File(newTextPath)))
-					throw new Exception();
+					throw new RenameException(oldTextPath);
+			}
+			File oldDir = new File(oldDirPath);
+			if(oldDir.exists()){
+				if(!oldDir.renameTo(new File(newDirPath)))
+					throw new RenameException(oldDirPath);
+				cache.renameAllRoots(oldDirPath, newDirPath);
 			}
 		}
 	}

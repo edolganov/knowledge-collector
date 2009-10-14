@@ -1,7 +1,8 @@
 package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,15 +82,17 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	
 	ArrayList<DAOEventListener> listeners = new ArrayList<DAOEventListener>();
 	
-	DirKeeper dirKeeper = new DirKeeper();
-	TextKeeper textKeeper = new TextKeeper();
-	SnapshotKeeper snapshotKeeper = new SnapshotKeeper();
+	DirKeeper dirKeeper = new DirKeeper(cache);
+	TextKeeper textKeeper = new TextKeeper(cache);
+	SnapshotKeeper snapshotKeeper = new SnapshotKeeper(cache);
 	
 	
 	String dirPath;
 	
 	public FSDAOImpl(String dirPath) {
+		dirPath= dirPath.replace('\\', '/');
 		this.dirPath = dirPath;
+		
 		getDirRoot(dirPath,true);
 		importLC();
 		
@@ -415,7 +418,17 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			return true;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				File file = new File(dirPath+"/`error`"+System.currentTimeMillis());
+				file.createNewFile();
+				FileOutputStream fos = new FileOutputStream(file);
+				e.printStackTrace(new PrintStream(fos));
+				fos.flush();
+				fos.close();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
 			return false;
 		}
 	}

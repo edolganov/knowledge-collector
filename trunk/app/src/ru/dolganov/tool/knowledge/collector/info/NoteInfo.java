@@ -13,6 +13,7 @@ public class NoteInfo extends JPanel {
 	public PropertyTextPanel name = null;
 	public PropertyTextAreaPanel description = null;
 	public JButton jButton = null;
+	public JButton wrapB = null;
 
 	/**
 	 * This is the default constructor
@@ -33,6 +34,7 @@ public class NoteInfo extends JPanel {
 		this.add(getJPanel(), null);
 		this.add(getJPanel2(), null);
 		this.add(getJButton(), null);
+		this.add(getWrapB(), null);
 	}
 
 	/**
@@ -71,9 +73,23 @@ public class NoteInfo extends JPanel {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setBounds(new Rectangle(242, 425, 88, 26));
-			jButton.setText("Update");
+			jButton.setText("update");
 		}
 		return jButton;
+	}
+
+	/**
+	 * This method initializes wrapB	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getWrapB() {
+		if (wrapB == null) {
+			wrapB = new JButton();
+			wrapB.setBounds(new Rectangle(3, 425, 70, 26));
+			wrapB.setText("wrap");
+		}
+		return wrapB;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

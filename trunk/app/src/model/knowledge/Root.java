@@ -16,6 +16,7 @@ public class Root implements Parent {
 	// [15.08.2009] jenua.dolganov: все дети лежат в перемешку
 	List<NodeMeta> nodes;
 	
+	//protected String uuid;
 	@XStreamOmitField
 	private String dirPath;
 	
@@ -40,6 +41,17 @@ public class Root implements Parent {
 	public void setTreeSnapshots(TreeSnapshotRoot treeSnapshots) {
 		this.treeSnapshots = treeSnapshots;
 	}
+	
+//	public String getUuid() {
+//		if(uuid == null) {
+//			uuid = UuidGenerator.simpleUuid();
+//		}
+//		return uuid;
+//	}
+
+//	public void setUuid(String uuid) {
+//		this.uuid = uuid;
+//	}
 
 	public String getDirPath() {
 		return dirPath;

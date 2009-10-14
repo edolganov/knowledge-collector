@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import ru.chapaj.tool.link.collector.ui.component.PropertyTextAreaPanel;
 import ru.chapaj.tool.link.collector.ui.component.PropertyTextPanel;
 import javax.swing.JButton;
+import java.awt.Dimension;
 
 public class LinkInfo extends JPanel {
 
@@ -14,6 +15,7 @@ public class LinkInfo extends JPanel {
 	public PropertyTextAreaPanel description = null;
 	public JButton jButton = null;
 	public PropertyTextPanel url = null;
+	public JButton wrapB = null;
 
 	/**
 	 * This is the default constructor
@@ -35,6 +37,7 @@ public class LinkInfo extends JPanel {
 		this.add(getJPanel2(), null);
 		this.add(getJButton(), null);
 		this.add(getUrl(), null);
+		this.add(getWrapB(), null);
 	}
 
 	/**
@@ -73,7 +76,8 @@ public class LinkInfo extends JPanel {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setBounds(new Rectangle(241, 252, 88, 26));
-			jButton.setText("Update");
+			jButton.setPreferredSize(new Dimension(70, 26));
+			jButton.setText("update");
 		}
 		return jButton;
 	}
@@ -90,6 +94,21 @@ public class LinkInfo extends JPanel {
 			url.setText("");
 		}
 		return url;
+	}
+
+	/**
+	 * This method initializes wrapB	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getWrapB() {
+		if (wrapB == null) {
+			wrapB = new JButton();
+			wrapB.setBounds(new Rectangle(3, 252, 75, 26));
+			wrapB.setPreferredSize(new Dimension(70, 26));
+			wrapB.setText("wrap");
+		}
+		return wrapB;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

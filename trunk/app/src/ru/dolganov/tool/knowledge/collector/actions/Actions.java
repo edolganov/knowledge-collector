@@ -8,8 +8,10 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
+import model.knowledge.Link;
 import model.knowledge.NodeMeta;
 import model.knowledge.TextData;
+import ru.chapaj.util.Check;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
@@ -31,6 +33,17 @@ public class Actions {
 	
 	public static void addTreeNode(NodeMeta parent, NodeMeta node) {
 		if(parent == null || node == null) return;
+		if(node instanceof Link){
+			Link l = (Link) node;
+			String name = l.getName();
+			String url = l.getUrl();
+			if(Check.isEmpty(name)){
+				l.setName(url);
+			}
+			else if(Check.isEmpty(url)){
+				l.setUrl(name);
+			}
+		}
 		dao.addChild(parent, node);
 	}
 

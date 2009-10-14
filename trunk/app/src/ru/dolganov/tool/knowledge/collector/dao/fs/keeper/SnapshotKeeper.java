@@ -3,6 +3,8 @@ package ru.dolganov.tool.knowledge.collector.dao.fs.keeper;
 import java.util.List;
 import java.util.Map;
 
+import ru.dolganov.tool.knowledge.collector.dao.fs.NodeMetaObjectsCacheImpl;
+
 import model.knowledge.Root;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
@@ -11,7 +13,13 @@ public class SnapshotKeeper extends AbstractKeeper {
 	
 	private static final String LAST_TREE_STATE = "lastTreeState";
 	private static final String SNAPSHOT = "snapshot";
+	
+	
 
+
+	public SnapshotKeeper(NodeMetaObjectsCacheImpl cache) {
+		super(cache);
+	}
 
 	public boolean persist(Root root, TreeSnapshot treeSnapshot, Map<String, Object> params){
 		if(params == null) return false;

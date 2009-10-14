@@ -1,6 +1,8 @@
 package ru.dolganov.tool.knowledge.collector.dao.fs;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -22,6 +24,17 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	
 	HashMap<String, HashMap<String, Object>> objectsMap = new HashMap<String, HashMap<String, Object>>();
 	HashMap<String, Root> rootsMap = new HashMap<String, Root>();
+	
+	// [14.10.2009] jenua.dolganov: более корректная модель для кеширования рутов 
+	// строим дерево из рутов, храня название их папки (или весь путь для корневого рута)
+	// при удалении, перемещении, переименовании не нужно пробегать весь кеш - достаточно
+	// только исправить один элемент
+	static class RootCache {
+		Root root;
+		List<Root> chidren = new LinkedList<Root>();
+		Root parent;
+		String dirName;
+	}
 
 	
 	
@@ -90,6 +103,59 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		} finally {
 			lock.writeLock().unlock();
 		}
+	}
+
+	/**
+	 * Не очень красивое (полный перебор), но простое решение обновления кеша
+	 * @param pathPattern
+	 */
+	public void deleteAllRoots(String pathPattern) {
+		lock.writeLock().lock();
+		try {
+			pathPattern = pathPattern.replace('\\', '/');
+			LinkedList<String> keys = new LinkedList<String>();
+			for(String key : rootsMap.keySet())
+				if(key.startsWith(pathPattern))keys.add(key);
+			for(String key : keys){
+				Root root = rootsMap.remove(key);
+				for(NodeMeta node : root.getNodes()){
+					objectsMap.remove(getNodeKey(node));
+				}
+			}
+			
+		} finally {
+			lock.writeLock().unlock();
+		}
+		
+	}
+	
+	/**
+	 * Не очень красивое (полный перебор), но простое решение обновления кеша
+	 * @param pathPattern
+	 */
+	public void renameAllRoots(String oldPathPattern, String newPathPattern) {
+		lock.writeLock().lock();
+		try {
+			oldPathPattern = oldPathPattern.replace('\\', '/');
+			newPathPattern = newPathPattern.replace('\\', '/');
+			int oldPatternLenth = oldPathPattern.length();
+			LinkedList<String> keys = new LinkedList<String>();
+			for(String key : rootsMap.keySet())
+				if(key.startsWith(oldPathPattern))keys.add(key);
+			for(String key : keys){
+				Root root = rootsMap.remove(key);
+				String dirPath = root.getDirPath();
+				String newPath = newPathPattern;
+				String part = dirPath.substring(oldPatternLenth);
+				if(part.length() > 0) newPath = newPath + part;
+				root.setDirPath(newPath);
+				rootsMap.put(root.getDirPath(), root);
+			}
+		} finally {
+			lock.writeLock().unlock();
+		}
+		
+		
 	}
 	
 

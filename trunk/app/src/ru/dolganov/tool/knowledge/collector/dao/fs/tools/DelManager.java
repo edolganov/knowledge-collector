@@ -3,6 +3,7 @@ package ru.dolganov.tool.knowledge.collector.dao.fs.tools;
 import java.io.File;
 
 import ru.dolganov.tool.knowledge.collector.dao.fs.DU;
+import ru.dolganov.tool.knowledge.collector.dao.fs.exception.RenameException;
 
 public class DelManager {
 	
@@ -24,7 +25,7 @@ public class DelManager {
 		if(!file.exists())return;
 		String newName = generateDeleteFileName(fileName,timestamp);
 		if(!file.renameTo(new File(DU.getFilePath(delDirPath, newName))))
-			throw new Exception();
+			throw new RenameException(file.getPath());
 	}
 	
 	private String generateDeleteFileName(String name, long timestamp) {

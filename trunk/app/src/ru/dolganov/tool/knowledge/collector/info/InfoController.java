@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.knowledge.Dir;
@@ -55,6 +58,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		basicInfo.name.label.setText("name");
 		basicInfo.description.label.setText("description");
 		initArea(basicInfo.description);
+		initWrap(basicInfo.description.textArea,basicInfo.wrapB);
 		ActionListener actionListener = new  ActionListener(){
 
 			@Override
@@ -69,13 +73,14 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		linkInfo.description.label.setText("description");
 		linkInfo.url.label.setText("url");
 		initArea(linkInfo.description);
+		initWrap(linkInfo.description.textArea,linkInfo.wrapB);
 		linkInfo.jButton.addActionListener(actionListener);
 		
 		noteInfo.name.label.setText("name");
 		noteInfo.description.label.setText("text");
 		noteInfo.jButton.addActionListener(actionListener);
 		initArea(noteInfo.description);
-		
+		initWrap(noteInfo.description.textArea,noteInfo.wrapB);
 	}
 	
 	protected void update() {
@@ -87,9 +92,11 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 			params.put(Params.description.toString(), basicInfo.description.getText());
 		}
 		else if(Mode.link == curMode){
-			params.put(Params.name.toString(), linkInfo.name.getText());
+			String name = linkInfo.name.getText();
+			String url = linkInfo.url.getText();
+			params.put(Params.name.toString(), name);
 			params.put(Params.description.toString(), linkInfo.description.getText());
-			params.put(Params.url.toString(), linkInfo.url.getText());
+			params.put(Params.url.toString(), url);
 		}
 		else if(Mode.text == curMode){
 			params.put(Params.name.toString(), noteInfo.name.getText());
@@ -151,6 +158,28 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		else {
 			area.textArea.setBackground(empty);
 		}
+	}
+	
+	
+	private void initWrap(final JTextArea text, final JButton b){
+		text.setLineWrap(true);
+		b.setText("unwrap");
+		b.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean lineWrap = text.getLineWrap();
+				if(lineWrap){
+					b.setText("wrap");
+					text.setLineWrap(false);
+				}
+				else {
+					b.setText("unwrap");
+					text.setLineWrap(true);
+				}
+			}
+			
+		});
 	}
 	
 
