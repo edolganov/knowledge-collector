@@ -27,12 +27,14 @@ public class SnapshotController extends Controller<MainWindow> {
 
 	
 	MainWindow ui;
+	ExtendTree tree;
 	
 	@Override
 	public void init(MainWindow ui_) {
 		ui = ui_;
-		ui.snapTree.init(ExtendTree.createTreeModel(null), false, new CellRender(), SelectModel.SINGLE, new TreeMenu(ui.snapTree));
-		ui.snapTree.addTreeNodeListener(new TreeNodeAdapter(){
+		tree = ui.snapTree;
+		tree.init(ExtendTree.createTreeModel(null), false, new CellRender(), SelectModel.SINGLE, new TreeMenu(tree,this));
+		tree.addTreeNodeListener(new TreeNodeAdapter(){
 
 			@Override
 			public void onDoubleClick(DefaultMutableTreeNode node) {
@@ -45,7 +47,7 @@ public class SnapshotController extends Controller<MainWindow> {
 				}
 				else if(ob instanceof TreeSnapshotDir){
 					TreeSnapshotDir dir = (TreeSnapshotDir) ob;
-					if(ui.snapTree.isExpanded(node)){
+					if(tree.isExpanded(node)){
 						dir.setOpened(true);
 					}
 					else dir.setOpened(false);
@@ -74,28 +76,36 @@ public class SnapshotController extends Controller<MainWindow> {
 			@Override
 			public void onAdded(TreeSnapshotDir dir) {
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode(dir, true);
-				ui.snapTree.getRootNode().add(node);
-				ui.snapTree.updateUI();
-				ui.snapTree.setSelectionPath(node);
+				tree.getRootNode().add(node);
+				tree.updateUI();
+				tree.setSelectionPath(node);
 			}
 			
 			@Override
 			public void onAdded(TreeSnapshotDir dir, TreeSnapshot snapshot) {
-				DefaultMutableTreeNode rootNode = ui.snapTree.getRootNode();
-				DefaultMutableTreeNode dirNode = null;
-				for(int i=0;i < rootNode.getChildCount();++i){
-					DefaultMutableTreeNode c = (DefaultMutableTreeNode)rootNode.getChildAt(i);
-					if(dir.equals(c.getUserObject())) {
-						dirNode = c;
-						break;
-					}
-				}
+				DefaultMutableTreeNode dirNode = findDirNode(dir);
 				if(dirNode != null){
 					DefaultMutableTreeNode node = new DefaultMutableTreeNode(snapshot, false);
 					dirNode.add(node);
-					ui.snapTree.updateUI();
-					ui.snapTree.setSelectionPath(node);
+					tree.updateUI();
+					tree.setSelectionPath(node);
 				}
+			}
+			
+			@Override
+			public void onDeleted(TreeSnapshot snapshot) {
+				DefaultMutableTreeNode node = tree.getCurrentNode();
+				if(node == null || snapshot != node.getUserObject()) return;
+				tree.model().removeNodeFromParent(node);
+				tree.updateUI();
+			}
+			
+			@Override
+			public void onDeleted(TreeSnapshotDir snapshot) {
+				DefaultMutableTreeNode node = tree.getCurrentNode();
+				if(node == null || snapshot != node.getUserObject()) return;
+				tree.model().removeNodeFromParent(node);
+				tree.updateUI();
 			}
 		});
 		
@@ -115,7 +125,7 @@ public class SnapshotController extends Controller<MainWindow> {
 				if(dirName != null){
 					TreeSnapshotDir dir = new TreeSnapshotDir();
 					dir.setName(dirName);
-					dao.persist(dir, null);
+					dao.add(dir);
 				}
 			}
 			
@@ -129,7 +139,7 @@ public class SnapshotController extends Controller<MainWindow> {
 				if(name != null){
 					String data = TreeSnapShooter.getSnapshot(ui.tree);
 					TreeSnapshot out = new TreeSnapshot(name,data);
-					DefaultMutableTreeNode node = ui.snapTree.getCurrentNode();
+					DefaultMutableTreeNode node = tree.getCurrentNode();
 					if(node == null || (((DefaultMutableTreeNode)node.getParent()).isRoot() && node.getUserObject() instanceof TreeSnapshot)){
 						return;
 					}
@@ -139,7 +149,7 @@ public class SnapshotController extends Controller<MainWindow> {
 							node = (DefaultMutableTreeNode)node.getParent();
 							ob = node.getUserObject();
 						}
-						dao.persist(out, AppUtil.map("snapshot", ((TreeSnapshotDir)ob).getName()));
+						dao.add(out, AppUtil.map("snapshot", ((TreeSnapshotDir)ob).getName()));
 					}
 				}
 			}
@@ -153,7 +163,7 @@ public class SnapshotController extends Controller<MainWindow> {
 	}
 
 	private void initTree() {
-		DefaultMutableTreeNode treeRoot = ui.snapTree.getRootNode();
+		DefaultMutableTreeNode treeRoot = tree.getRootNode();
 		treeRoot.removeAllChildren();
 		TreeSnapshotRoot treeSnapshots = dao.getRoot().getTreeSnapshots();
 		if(treeSnapshots == null) return;
@@ -167,12 +177,12 @@ public class SnapshotController extends Controller<MainWindow> {
 				dir.add(new DefaultMutableTreeNode(ts,false));
 			}
 			if(d.isOpened()){
-				ui.snapTree.expandPath(dir);
+				tree.expandPath(dir);
 			}
 		}
 		
-		ui.snapTree.expandPath(treeRoot);
-		ui.snapTree.updateUI();
+		tree.expandPath(treeRoot);
+		tree.updateUI();
 		applaySnapshot(treeSnapshots.getLastTreeState());
 		
 	}
@@ -180,6 +190,41 @@ public class SnapshotController extends Controller<MainWindow> {
 	private void applaySnapshot(TreeSnapshot ts){
 		if(ts == null) return;
 		TreeSnapShooter.applaySnapshot(ui.tree, ts.getData());
+	}
+
+	public void deleteCurrentElement() {
+		Object ob = tree.getCurrentObject();
+		if(ob == null) return;
+		if(ob instanceof TreeSnapshot) {
+			TreeSnapshotDir dir = tree.getParentObject(tree.getCurrentNode(), TreeSnapshotDir.class);
+			if(dir != null) dao.delete(dir, (TreeSnapshot)ob);
+		}
+		else if(ob instanceof TreeSnapshotDir){
+			dao.delete((TreeSnapshotDir)ob);
+		}
+		
+	}
+	
+	private DefaultMutableTreeNode findDirNode(TreeSnapshotDir dir) {
+		DefaultMutableTreeNode rootNode = tree.getRootNode();
+		DefaultMutableTreeNode dirNode = null;
+		for(int i=0;i < rootNode.getChildCount();++i){
+			DefaultMutableTreeNode c = (DefaultMutableTreeNode)rootNode.getChildAt(i);
+			if(dir.equals(c.getUserObject())) {
+				dirNode = c;
+				break;
+			}
+		}
+		return dirNode;
+	}
+
+	public void resnapCurrentSnapshot() {
+		TreeSnapshot snap = tree.getCurrentObject(TreeSnapshot.class);
+		if(snap != null){
+			String data = TreeSnapShooter.getSnapshot(ui.tree);
+			if(data != null)snap.setData(data);
+			dao.update(snap);
+		}
 	}
 	
 	

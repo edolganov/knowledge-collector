@@ -6,13 +6,14 @@ import java.util.Map;
 import model.knowledge.NodeMeta;
 import model.knowledge.Root;
 import model.knowledge.role.Parent;
+import model.tree.TreeSnapshot;
+import model.tree.TreeSnapshotDir;
 
 public interface DAO {
 	
 	Root getRoot();
 
-	void flushMeta();
-
+	//NodeMeta
 	List<NodeMeta> getChildren(Parent parent);
 	
 	boolean addChild(Parent parent, NodeMeta child);
@@ -29,8 +30,19 @@ public interface DAO {
 
 	Map<String,Object> getExternalData(NodeMeta ob);
 
-	void persist(Object object, Map<String, Object> params);
+	void merge(Root object);
 	
-	void merge(Object object, Map<String, Object> params);
+	
+	
+	//Snaps
+	void add(TreeSnapshot object, Map<String, Object> params);
+	
+	void add(TreeSnapshotDir object);
+
+	void delete(TreeSnapshotDir parent, TreeSnapshot node);
+
+	void delete(TreeSnapshotDir ob);
+
+	void update(TreeSnapshot snap);
 
 }

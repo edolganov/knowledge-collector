@@ -22,17 +22,27 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem rename = new JMenuItem("rename");
 	
 	boolean showInfo = true;
+	SnapshotController owner;
 	
-	
-	public TreeMenu(ExtendTree tree_) {
+	public TreeMenu(ExtendTree tree_, SnapshotController snapshotController) {
 		super();
 		tree = tree_;
+		owner = snapshotController;
 		
 		delete.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Actions.deleteCurrentTreeNode();
+				owner.deleteCurrentElement();
+			}
+			
+		});
+		
+		resnap.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				owner.resnapCurrentSnapshot();
 			}
 			
 		});

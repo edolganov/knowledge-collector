@@ -4,7 +4,7 @@ import model.knowledge.NodeMeta;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 
-public abstract class DAOEventAdapter implements DAOEventListener {
+public class DAOEventAdapter implements DAOEventListener {
 
 	@Override
 	public void onAdded(NodeMeta parent, NodeMeta child) {
@@ -24,6 +24,14 @@ public abstract class DAOEventAdapter implements DAOEventListener {
 	
 	@Override
 	public void onAdded(TreeSnapshotDir dir, TreeSnapshot snapshot) {
+	}
+	
+	@Override
+	public void onDeleted(TreeSnapshot snapshot) {
+	}
+	
+	@Override
+	public void onDeleted(TreeSnapshotDir snapshot) {
 	}
 
 }

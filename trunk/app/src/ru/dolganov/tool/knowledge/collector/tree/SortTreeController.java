@@ -5,12 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
-import model.knowledge.Link;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
@@ -94,7 +91,7 @@ public class SortTreeController extends Controller<MainWindow>{
 		Root root = child.getParent();
 		List<NodeMeta> nodes = root.getNodes();
 		Collections.sort(nodes, nodeComparator);
-		dao.merge(root, null);
+		dao.merge(root);
 		//update tree
 		DefaultMutableTreeNode parentNode = dao.getCache().get(parent, "tree-node", DefaultMutableTreeNode.class);
 
@@ -148,7 +145,7 @@ public class SortTreeController extends Controller<MainWindow>{
 		//System.out.println("oldIndex:"+oldIndex + " newIndex:" + newIndex);
 		//update model
 		ListUtil.move(nodes, meta, newIndex);
-		dao.merge(root, null);
+		dao.merge(root);
 		//update tree
 		ExtendDefaultTreeModel model = ui.tree.model();
 		model.removeNodeFromParent(node);

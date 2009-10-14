@@ -73,15 +73,15 @@ public class ImportLinkCollectorData implements HasNodeMetaParams{
 			//snapshots
 			TreeSnapshot lastTreeState = dc.getLastTreeState();
 			if(lastTreeState != null) {
-				dao.persist(lastTreeState,AppUtil.map("lastTreeState", null));
+				dao.add(lastTreeState,AppUtil.map("lastTreeState", null));
 			}
 			List<TreeSnapshot> snapshots = dc.getSnapshots();
 			for(TreeSnapshot ts : snapshots) 
-					dao.persist(ts, AppUtil.map("snapshot","main"));
+					dao.add(ts, AppUtil.map("snapshot","main"));
 			List<TreeSnapshotDir> snaphotDirs = dc.getSnaphotDirs();
 			for(TreeSnapshotDir dir : snaphotDirs){
 				for(TreeSnapshot ts : dir.getSnapshots())
-					dao.persist(ts, AppUtil.map("snapshot", dir.getName()));
+					dao.add(ts, AppUtil.map("snapshot", dir.getName()));
 			}
 			
 			

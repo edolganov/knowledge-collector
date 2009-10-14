@@ -3,9 +3,7 @@ package ru.dolganov.tool.knowledge.collector.actions;
 import java.util.Map;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
 import model.knowledge.Link;

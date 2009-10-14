@@ -15,5 +15,9 @@ public interface DAOEventListener {
 	void onAdded(TreeSnapshotDir dir);
 
 	void onAdded(TreeSnapshotDir dir, TreeSnapshot snapshot);
+	
+	void onDeleted(TreeSnapshot snapshot);
+	
+	void onDeleted(TreeSnapshotDir snapshot);
 
 }

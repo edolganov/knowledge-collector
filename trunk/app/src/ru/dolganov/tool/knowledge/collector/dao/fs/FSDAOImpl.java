@@ -108,19 +108,6 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 
 
 	@Override
-	public void flushMeta() {
-		try {
-			//metaStore.saveFile(metaFile, metaRoot, true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-
-
-
-
-	@Override
 	public List<NodeMeta> getChildren(Parent parent) {
 		if(parent instanceof Root){
 			return ((Root)parent).getNodes();
@@ -229,8 +216,22 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			cache.remove(node);
 			
 		} catch (RuntimeException e) {
-			e.printStackTrace();
+			flushToFile(e);
 		}
+	}
+	
+	@Override
+	public void delete(TreeSnapshotDir parent, TreeSnapshot node){
+		parent.getSnapshots().remove(node);
+		if(save(null, null, getRoot()))
+			for(DAOEventListener l : listeners) l.onDeleted(node);
+	}
+	
+	public void delete(TreeSnapshotDir dir){
+		Root root = getRoot();
+		root.getTreeSnapshots().getSnaphotDirs().remove(dir);
+		if(save(null, null, root))
+			for(DAOEventListener l : listeners) l.onDeleted(dir);
 	}
 	
 	
@@ -288,38 +289,36 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	@Override
-	public void persist(Object ob, Map<String, Object> params) {
+	public void add(TreeSnapshot ob, Map<String, Object> params) {
 		if(ob == null) return;
-		if(ob instanceof TreeSnapshot){
-			Root root = getRoot();
-			TreeSnapshot snapshot = (TreeSnapshot)ob;
-			boolean persisted = snapshotKeeper.persist(root, snapshot, params);
-			if(persisted){
-				TreeSnapshotDir dir = snapshotKeeper.getSnapDir(root, params);
-				saveRequest(root,null);
-				for(DAOEventListener l : listeners) l.onAdded(dir,snapshot);
-			}
+		Root root = getRoot();
+		TreeSnapshot snapshot = (TreeSnapshot)ob;
+		boolean persisted = snapshotKeeper.persist(root, snapshot, params);
+		if(persisted){
+			TreeSnapshotDir dir = snapshotKeeper.getSnapDir(root, params);
+			saveRequest(root,null);
+			for(DAOEventListener l : listeners) l.onAdded(dir,snapshot);
 		}
-		else if (ob instanceof TreeSnapshotDir){
-			String name = ((TreeSnapshotDir)ob).getName();
-			if(name == null) return;
-			Root root = getRoot();
-			TreeSnapshotDir dir = snapshotKeeper.persist(root, name);
-			if(dir != null){
-				saveRequest(root,null);
-				for(DAOEventListener l : listeners) l.onAdded(dir);
-			}
+	}
+	
+	@Override
+	public void add(TreeSnapshotDir ob) {
+		if(ob == null) return;
+		String name = ob.getName();
+		if(name == null) return;
+		Root root = getRoot();
+		TreeSnapshotDir dir = snapshotKeeper.persist(root, name);
+		if(dir != null){
+			saveRequest(root,null);
+			for(DAOEventListener l : listeners) l.onAdded(dir);
 		}
 		
 	}
 	
 	@Override
-	public void merge(Object ob, Map<String, Object> params) {
+	public void merge(Root ob) {
 		if(ob == null) return;
-		if(ob instanceof Root){
-			saveRequest((Root)ob,null);
-		}
-		
+		saveRequest(ob,null);
 	}
 
 	
@@ -418,17 +417,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 			return true;
 			
 		} catch (Exception e) {
-			try {
-				File file = new File(dirPath+"/`error`"+System.currentTimeMillis());
-				file.createNewFile();
-				FileOutputStream fos = new FileOutputStream(file);
-				e.printStackTrace(new PrintStream(fos));
-				fos.flush();
-				fos.close();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-
+			flushToFile(e);
 			return false;
 		}
 	}
@@ -481,8 +470,26 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	private String getRootFilePath(String dirPath){
 		return dirPath+'/'+rootFileName;
 	}
+	
+
+	private void flushToFile(Exception e) {
+		try {
+			File file = new File(this.dirPath+"/`error`"+System.currentTimeMillis());
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			e.printStackTrace(new PrintStream(fos));
+			fos.flush();
+			fos.close();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
 
 
+	@Override
+	public void update(TreeSnapshot snap) {
+		save(null, null, getRoot());
+	}
 
 
 
