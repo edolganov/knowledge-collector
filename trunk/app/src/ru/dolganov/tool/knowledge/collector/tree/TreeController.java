@@ -1,14 +1,10 @@
 package ru.dolganov.tool.knowledge.collector.tree;
 
-import java.awt.Rectangle;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JComponent;
 import javax.swing.JTextField;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -81,13 +77,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 				DefaultMutableTreeNode parentNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
 				DefaultMutableTreeNode childNode = dao.getCache().get(child, TREE_NODE, DefaultMutableTreeNode.class);
 				if(childNode != null){
-					DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode)childNode.getParent();
-					parentNode.add(childNode);
-					tree.model().reload(oldParent);
-					tree.model().reload(parentNode);
-					TreePath path = new TreePath(childNode.getPath());
-					tree.setSelectionPath(path);
-					tree.scrollPathToVisible(path);
+					tree.moveNode(childNode, parentNode);
 				} else {
 					DefaultMutableTreeNode createTreeNode = createTreeNode(child);
 					tree.addChild(parentNode, createTreeNode);

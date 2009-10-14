@@ -6,12 +6,15 @@ import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import model.knowledge.Root;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 import model.tree.TreeSnapshotRoot;
 import model.tree.tool.TreeSnapShooter;
+import ru.chapaj.util.collection.ListUtil;
 import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
+import ru.chapaj.util.swing.tree.MoveNodeListener;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
 import ru.dolganov.tool.knowledge.collector.AppUtil;
@@ -55,19 +58,61 @@ public class SnapshotController extends Controller<MainWindow> {
 			}
 			
 			@Override
-			public void onNodeMoveDownRequest() {
-				//actionMoveDown();
-			}
-			
-			@Override
-			public void onNodeMoveUpRequest() {
-				//actionMoveUp();
-			}
-			
-			@Override
 			public void afterDrop(DefaultMutableTreeNode tagretNode,
 					DefaultMutableTreeNode draggedNode) {
-				//actionAfterDrop(tagretNode, draggedNode);
+				Object ob = draggedNode.getUserObject();
+				if(! (ob instanceof TreeSnapshot)) return;
+				TreeSnapshot snap = (TreeSnapshot) ob;
+				
+				Object oldDirOb = ((DefaultMutableTreeNode)draggedNode.getParent()).getUserObject();
+				if(!(oldDirOb instanceof TreeSnapshotDir)) return;
+				TreeSnapshotDir oldDir = (TreeSnapshotDir) oldDirOb;
+				
+				
+				Object tOb = tagretNode.getUserObject();
+				TreeSnapshotDir dir = null;
+				if(tOb instanceof TreeSnapshotDir){
+					dir = (TreeSnapshotDir)tOb;
+				}
+				else {
+					tOb = ((DefaultMutableTreeNode)tagretNode.getParent()).getUserObject();
+					if(tOb instanceof TreeSnapshotDir) {
+						dir = (TreeSnapshotDir)tOb;
+						tagretNode = (DefaultMutableTreeNode)tagretNode.getParent();
+					}
+				}
+				if(dir == null) return;
+				
+				dir.getSnapshots().add(snap);
+				oldDir.getSnapshots().remove(snap);
+				dao.merge(dao.getRoot());
+				tree.moveNode(draggedNode, tagretNode);
+				
+			}
+			
+		});
+		
+		tree.enableDefaultMoveOperations(new MoveNodeListener(){
+
+			@Override
+			public boolean onNodeMoveRequest(int newIndex) {
+				Object ob = tree.getCurrentObject();
+				if(ob == null) return false;
+				
+				if(ob instanceof TreeSnapshot){
+					TreeSnapshotDir dir = tree.getParentObject(TreeSnapshotDir.class);
+					ListUtil.move(dir.getSnapshots(), (TreeSnapshot)ob, newIndex);
+					Root root = dao.getRoot();
+					dao.merge(root);
+					return true;
+				}
+				else if(ob instanceof TreeSnapshotDir){
+					Root root = dao.getRoot();
+					ListUtil.move(root.getTreeSnapshots().getSnaphotDirs(),(TreeSnapshotDir)ob,newIndex);
+					dao.merge(root);
+					return true;
+				}
+				return false;
 			}
 			
 		});
