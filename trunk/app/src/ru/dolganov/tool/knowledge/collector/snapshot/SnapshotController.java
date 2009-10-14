@@ -17,6 +17,8 @@ import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.MoveNodeListener;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
+import ru.dolganov.tool.knowledge.collector.App;
+import ru.dolganov.tool.knowledge.collector.AppListener;
 import ru.dolganov.tool.knowledge.collector.AppUtil;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
@@ -152,6 +154,22 @@ public class SnapshotController extends Controller<MainWindow> {
 				tree.model().removeNodeFromParent(node);
 				tree.updateUI();
 			}
+		});
+		
+		App.getDefault().addListener(new AppListener(){
+
+			@Override
+			public void onAction(Object source, String action, Object... data_) {
+				if("exit".equals(action)){
+					String data = TreeSnapShooter.getSnapshot(ui.tree);
+					if(data != null){
+						Root root = dao.getRoot();
+						root.getTreeSnapshots().getLastTreeState().setData(data);
+						dao.merge(root,true);
+					}
+				}
+			}
+			
 		});
 		
 		ui.createSnapDirB.setText("");

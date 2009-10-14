@@ -320,6 +320,11 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		if(ob == null) return;
 		saveRequest(ob,null);
 	}
+	
+	@Override
+	public void merge(Root root, boolean immediately) {
+		save(null, null, root);
+	}
 
 	
 

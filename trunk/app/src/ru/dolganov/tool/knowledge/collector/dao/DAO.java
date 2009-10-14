@@ -32,6 +32,7 @@ public interface DAO {
 
 	void merge(Root object);
 	
+	void merge(Root root, boolean immediately);
 	
 	
 	//Snaps
@@ -44,5 +45,7 @@ public interface DAO {
 	void delete(TreeSnapshotDir ob);
 
 	void update(TreeSnapshot snap);
+
+
 
 }

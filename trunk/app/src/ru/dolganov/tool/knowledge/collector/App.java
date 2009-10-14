@@ -186,6 +186,7 @@ public class App {
 	}
 
 	public void exit() {
+		fireAction(this, "exit");
 		System.exit(0);
 	}
 	
