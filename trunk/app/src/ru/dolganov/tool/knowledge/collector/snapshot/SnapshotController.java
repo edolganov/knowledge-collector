@@ -164,7 +164,12 @@ public class SnapshotController extends Controller<MainWindow> {
 					String data = TreeSnapShooter.getSnapshot(ui.tree);
 					if(data != null){
 						Root root = dao.getRoot();
-						root.getTreeSnapshots().getLastTreeState().setData(data);
+						TreeSnapshot lastTreeState = root.getTreeSnapshots().getLastTreeState();
+						if(lastTreeState == null) {
+							lastTreeState = new TreeSnapshot("last-snap",data);
+							root.getTreeSnapshots().setLastTreeState(lastTreeState);
+						}
+						else lastTreeState.setData(data);
 						dao.merge(root,true);
 					}
 				}
