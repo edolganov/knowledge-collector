@@ -7,12 +7,8 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import model.knowledge.Dir;
-import model.knowledge.LocalLink;
-import model.knowledge.NetworkLink;
 import model.knowledge.NodeMeta;
 import model.knowledge.Root;
-import model.knowledge.TextData;
 import ru.chapaj.util.collection.ListUtil;
 import ru.chapaj.util.lang.ClassUtil;
 import ru.chapaj.util.swing.tree.ExtendDefaultTreeModel;
@@ -21,6 +17,7 @@ import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
+import ru.dolganov.tool.knowledge.collector.model.CompareUtil;
 
 @ControllerInfo(target=MainWindow.class, dependence=TreeController.class)
 public class SortTreeController extends Controller<MainWindow>{
@@ -30,18 +27,7 @@ public class SortTreeController extends Controller<MainWindow>{
 
 		@Override 
 		public int compare(NodeMeta a,NodeMeta b){
-			int na = index(a);
-			int nb = index(b);
-			return (na<nb ? -1 : (na==nb ? 0 : 1));
-		}
-		
-		private int index(NodeMeta meta){
-			int out = Integer.MAX_VALUE;
-			if(meta instanceof Dir) out = 0;
-			else if(meta instanceof TextData) out = 10;
-			else if(meta instanceof LocalLink) out = 20;
-			else if(meta instanceof NetworkLink) out = 30;
-			return out;
+			return CompareUtil.compare(CompareUtil.index(a), CompareUtil.index(b));
 		}
 		
 	};

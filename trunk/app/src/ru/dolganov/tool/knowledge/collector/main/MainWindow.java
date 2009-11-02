@@ -22,6 +22,7 @@ import java.awt.GridLayout;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.JList;
 
 public class MainWindow extends JDialog {
 
@@ -50,6 +51,9 @@ public class MainWindow extends JDialog {
 	public JButton jButton5 = null;
 	public JPanel infoPanel = null;
 	public JTextField path = null;
+	public JTextField searchF = null;
+	private JScrollPane jScrollPane1 = null;
+	public JList searchList = null;
 	/**
 	 * @param owner
 	 */
@@ -334,6 +338,8 @@ public class MainWindow extends JDialog {
 		if (jPanel51 == null) {
 			jPanel51 = new JPanel();
 			jPanel51.setLayout(null);
+			jPanel51.add(getSearchF(), null);
+			jPanel51.add(getJScrollPane1(), null);
 		}
 		return jPanel51;
 	}
@@ -416,6 +422,45 @@ public class MainWindow extends JDialog {
 			path.setBounds(new Rectangle(4, 494, 1010, 19));
 		}
 		return path;
+	}
+
+	/**
+	 * This method initializes searchF	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getSearchF() {
+		if (searchF == null) {
+			searchF = new JTextField();
+			searchF.setBounds(new Rectangle(4, 2, 165, 19));
+		}
+		return searchF;
+	}
+
+	/**
+	 * This method initializes jScrollPane1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane1() {
+		if (jScrollPane1 == null) {
+			jScrollPane1 = new JScrollPane();
+			jScrollPane1.setBounds(new Rectangle(4, 25, 165, 432));
+			jScrollPane1.setViewportView(getSearchList());
+		}
+		return jScrollPane1;
+	}
+
+	/**
+	 * This method initializes searchList	
+	 * 	
+	 * @return javax.swing.JList	
+	 */
+	private JList getSearchList() {
+		if (searchList == null) {
+			searchList = new JList();
+		}
+		return searchList;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
