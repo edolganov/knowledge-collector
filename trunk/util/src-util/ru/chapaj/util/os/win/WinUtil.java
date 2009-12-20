@@ -19,12 +19,11 @@ public class WinUtil {
 			String params = null;
 			boolean allDone = false;
 			//may be path="e:\my doc" -param1
-			int quote=filePath.indexOf('\"');
-			if(quote != -1){
+			if('\"' == filePath.charAt(0)){
 				int unquote=filePath.lastIndexOf('\"');
 				if(unquote != -1){
 					String fullPath = filePath;
-					filePath = fullPath.substring(quote+1, unquote);
+					filePath = fullPath.substring(1, unquote);
 					params = fullPath.substring(unquote+1);
 					
 					//clean path
