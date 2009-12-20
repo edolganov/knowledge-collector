@@ -4,6 +4,7 @@ import ru.chapaj.util.os.ProcessWrapper;
 
 public class WinUtil {
 	
+	//test
 //	public static void main(String[] args) {
 //		//openFile("\"E:\\chapaj\\programs\\_developing\\eclipse-3.5\\eclipse.exe\" -data 'E:\\chapaj\\work\\projects'");
 //		//openFile("\"E:\\chapaj\\programs\\_developing\\eclipse-3.5\\eclip se.exe\" -data 'E:\\chapaj\\work\\projects'");
@@ -13,11 +14,11 @@ public class WinUtil {
 	
 	public static boolean openFile(String filePath){
 		try{
-			//may be path="e:\my doc" -param1
 			String path = null;
 			String file = null;
 			String params = null;
 			boolean allDone = false;
+			//may be path="e:\my doc" -param1
 			int quote=filePath.indexOf('\"');
 			if(quote != -1){
 				int unquote=filePath.lastIndexOf('\"');
