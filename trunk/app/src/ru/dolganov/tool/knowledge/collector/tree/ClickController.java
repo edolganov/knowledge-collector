@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import model.knowledge.Link;
 import model.knowledge.NodeMeta;
 
@@ -24,6 +26,8 @@ import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 
 @ControllerInfo(target=MainWindow.class,dependence=TreeController.class)
 public class ClickController extends Controller<MainWindow> implements ClipboardOwner{
+	
+	DefaultMutableTreeNode movedNode;
 
 	@Override
 	public void init(final MainWindow ui) {
@@ -49,11 +53,32 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyCode() == KeyEvent.VK_C && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK){
 					//System.out.println("ctrl+c");
+					movedNode = null;
 					NodeMeta meta = ui.tree.getCurrentObject(NodeMeta.class);
 					if(meta != null && meta.getName() != null){
 						Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					    clipboard.setContents( new StringSelection(meta.getName()), ClickController.this );
 					}
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_X && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK){
+					//System.out.println("ctrl+x");
+					DefaultMutableTreeNode currentNode = ui.tree.getCurrentNode();
+					if(currentNode != null) movedNode = currentNode;
+					
+					NodeMeta meta = ui.tree.getCurrentObject(NodeMeta.class);
+					if(meta != null && meta.getName() != null){
+						Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					    clipboard.setContents( new StringSelection(meta.getName()), ClickController.this );
+					}
+					
+				}
+				else if (e.getKeyCode() == KeyEvent.VK_V && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK){
+					//System.out.println("ctrl+v");
+					DefaultMutableTreeNode currentNode = ui.tree.getCurrentNode();
+					if(currentNode != null && movedNode != null){
+						TreeOps.move(currentNode, movedNode);
+					}
+					
 				}
 				else if(e.getKeyChar() == KeyEvent.VK_ENTER){
 					
