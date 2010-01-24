@@ -100,7 +100,7 @@ public class ExtendTree extends DNDTree {
 						int x = e.getX();
 						int y = e.getY();
 						int selRow = getRowForLocation(x, y);
-						if (selRow>=0) {
+						if (selRow > -1) {
 							TreePath selPath = getPathForLocation(x, y);
 							if(selPath != null) {
 								setSelectionPath(selPath);

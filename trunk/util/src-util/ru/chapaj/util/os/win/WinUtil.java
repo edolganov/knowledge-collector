@@ -1,5 +1,6 @@
 package ru.chapaj.util.os.win;
 
+import ru.chapaj.util.Check;
 import ru.chapaj.util.os.ProcessWrapper;
 
 public class WinUtil {
@@ -14,6 +15,7 @@ public class WinUtil {
 	
 	public static boolean openFile(String filePath){
 		try{
+			filePath = filePath.trim();
 			String path = null;
 			String file = null;
 			String params = null;
@@ -58,7 +60,7 @@ public class WinUtil {
 			}
 			
 			String executeExpression = "cmd /c start \""+filePath+"\" /D \""+path+"\" \""+file+"\"";
-			if(params != null){
+			if(!Check.isEmpty(params)){
 				if(' ' != params.charAt(0)) params = ' '+params;
 				executeExpression += params;
 			}

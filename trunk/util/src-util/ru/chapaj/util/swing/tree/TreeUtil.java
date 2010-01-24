@@ -192,6 +192,12 @@ public class TreeUtil {
 	public static boolean isExpanded(JTree tree, DefaultMutableTreeNode node) {
 		return tree.isExpanded(new TreePath(node.getPath()));
 	}
+	
+	public static boolean isOnSelectedElement(JTree tree, int x, int y){
+		TreePath selPath = tree.getPathForLocation(x, y);
+		if(selPath == null) return false;
+		return true;
+	}
 
 
 

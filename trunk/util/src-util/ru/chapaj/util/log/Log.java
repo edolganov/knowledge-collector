@@ -78,4 +78,13 @@ public class Log {
 		return preffix+": "+msg;
 	}
 
+	public void error(Throwable e) {
+		StackTraceElement[] stackTrace = e.getStackTrace();
+		if(stackTrace != null){
+			//TODO ...
+		}
+		e.printStackTrace();
+		//error(e.getMessage());
+	}
+
 }
