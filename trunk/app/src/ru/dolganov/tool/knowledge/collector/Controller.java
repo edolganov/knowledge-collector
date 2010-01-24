@@ -30,5 +30,9 @@ public abstract class Controller<T> extends GenericController<T> {
 	public void setMainUI(JDialog mainUI) {
 		this.mainUI = mainUI;
 	}
+	
+	public void fireAction(String action, Object... data){
+		App.getDefault().fireAction(this, action, data);
+	}
 
 }

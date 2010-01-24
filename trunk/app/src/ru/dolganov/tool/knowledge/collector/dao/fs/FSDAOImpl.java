@@ -131,6 +131,9 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	
 	public boolean addChild(Parent parent, NodeMeta child,Map<String, String> params){
 		if(parent == null || child == null) return false;
+		new DAOCheck(this).checkNoExist(parent,child);
+		
+		
 		try {
 			Root root = null;
 			NodeMeta parentNode = null;
@@ -237,46 +240,44 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	
 	@Override
 	public void update(NodeMeta node, Map<String, String> params) {
-		try {
-			HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+		HashMap<SaveOps, Object[]> saveOps = new HashMap<SaveOps, Object[]>();
+		
+		//name of the node
+		boolean isNewName = false;
+		String oldName = node.getName();
+		String name = params.get(Params.name.toString());
+		if(name != null) {
 			
-			//name of the node
-			boolean isNewName = false;
-			String oldName = node.getName();
-			String name = params.get(Params.name.toString());
-			if(name != null) {
-				if(!oldName.equals(name)){
-					node.setName(name);
-					isNewName = true;
-				}
+			if(!oldName.equals(name)){
+				new DAOCheck(this).checkNoExist(node.getParent(), name, node.getClass());
+				node.setName(name);
+				isNewName = true;
 			}
-			
-			if (node instanceof Dir) {
-				saveOps.put(SaveOps.dirFlag, null);
-				Dir dir = (Dir) node;
-				dir.setDescription(params.get(Params.description.toString()));
-				if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
-			}
-			else if(node instanceof Link){
-				Link link = (Link) node;
-				link.setUrl(params.get(Params.url.toString()));
-				link.setDescription(params.get(Params.description.toString()));
-			}
-			else if(node instanceof TextData){
-				saveOps.put(SaveOps.textFlag, null);
-				saveOps.put(SaveOps.update, new Object[]{node,params.get(Params.text.toString())});
-				if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
-				textKeeper.beforeUpdate(node,params);
-			}
-			
-			//saveRequest(node.getParent(),saveOps);
-			if(!save(saveOps, null, node.getParent()))return;
-			for(DAOEventListener l : listeners) l.onUpdated(node);
-			
-			
-		} catch (RuntimeException e) {
-			e.printStackTrace();
 		}
+		
+		
+		
+		if (node instanceof Dir) {
+			saveOps.put(SaveOps.dirFlag, null);
+			Dir dir = (Dir) node;
+			dir.setDescription(params.get(Params.description.toString()));
+			if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
+		}
+		else if(node instanceof Link){
+			Link link = (Link) node;
+			link.setUrl(params.get(Params.url.toString()));
+			link.setDescription(params.get(Params.description.toString()));
+		}
+		else if(node instanceof TextData){
+			saveOps.put(SaveOps.textFlag, null);
+			saveOps.put(SaveOps.update, new Object[]{node,params.get(Params.text.toString())});
+			if(isNewName) saveOps.put(SaveOps.rename, new Object[]{node,oldName});
+			textKeeper.beforeUpdate(node,params);
+		}
+		
+		//saveRequest(node.getParent(),saveOps);
+		if(!save(saveOps, null, node.getParent()))return;
+		for(DAOEventListener l : listeners) l.onUpdated(node);
 		
 	}
 
@@ -448,7 +449,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 
 
-	private Root getRoot(NodeMeta meta,boolean createIfNotExist) {
+	public Root getRoot(NodeMeta meta,boolean createIfNotExist) {
 		String path = getDirPath(meta);
 		if(path == null) return null;
 		return getDirRoot(path,createIfNotExist);

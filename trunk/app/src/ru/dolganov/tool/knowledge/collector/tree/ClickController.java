@@ -9,12 +9,15 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import model.knowledge.Link;
 import model.knowledge.NodeMeta;
 
 import ru.chapaj.util.os.BareBonesBrowserLaunch;
 import ru.chapaj.util.os.win.WinUtil;
+import ru.chapaj.util.swing.tree.TreeUtil;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
@@ -32,22 +35,9 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//System.out.println(e.getClickCount());
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 2 && TreeUtil.isOnSelectedElement(ui.tree, e.getX(), e.getY())) {
 					//handle double click. 
-					NodeMeta node = ui.tree.getCurrentObject(NodeMeta.class);
-					if(node instanceof Link){
-						try{
-							String query = ((Link)node).getUrl();
-							//it's url
-							if(query.startsWith("http") || query.startsWith("www")){
-								BareBonesBrowserLaunch.openURL(query);
-							}
-							//it's local path
-							else WinUtil.openFile(query);
-						}catch (Exception ex) {
-							ex.printStackTrace();
-						}
-					}
+					doClickAction(ui);
 				}
 			}
 			
@@ -65,9 +55,45 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 					    clipboard.setContents( new StringSelection(meta.getName()), ClickController.this );
 					}
 				}
+				else if(e.getKeyChar() == KeyEvent.VK_ENTER){
+					
+					if(e.getModifiersEx() == KeyEvent.SHIFT_DOWN_MASK){
+						//on top - on
+						fireAction("show-on-top", true);
+						//after time sec - off
+						final Timer timer = new Timer(true);
+						timer.schedule(new TimerTask() {
+							
+							@Override
+							public void run() {
+								fireAction("show-on-top", false);
+								timer.cancel();
+							}
+						}, 2000);
+					}
+					
+					doClickAction(ui);
+				}
 			}
 		});
 		
+	}
+	
+	private void doClickAction(final MainWindow ui) {
+		NodeMeta node = ui.tree.getCurrentObject(NodeMeta.class);
+		if(node instanceof Link){
+			try{
+				String query = ((Link)node).getUrl();
+				//it's url
+				if(query.startsWith("http") || query.startsWith("www")){
+					BareBonesBrowserLaunch.openURL(query);
+				}
+				//it's local path
+				else WinUtil.openFile(query);
+			}catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import ru.chapaj.util.Check;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
+import ru.dolganov.tool.knowledge.collector.ui.ExceptionHandler;
 
 public class TreeOps {
 	
@@ -42,13 +43,22 @@ public class TreeOps {
 				l.setUrl(name);
 			}
 		}
-		dao.addChild(parent, node);
+		try{
+			dao.addChild(parent, node);
+		}
+		catch (Exception e) {
+			ExceptionHandler.handle(e);
+		}
 	}
 
 	public static void updateCurrentTreeNode(Map<String, String> params) {
 		NodeMeta node = getCurMeta();
 		if(node == null) return;
-		dao.update(node,params);
+		try {
+			dao.update(node,params);
+		} catch (Exception e) {
+			ExceptionHandler.handle(e);
+		}
 	}
 	
 	

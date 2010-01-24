@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,19 +14,13 @@ import ru.chapaj.util.lang.PackageExplorer;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.dao.fs.FSDAOImpl;
-import ru.dolganov.tool.knowledge.collector.info.InfoController;
-import ru.dolganov.tool.knowledge.collector.main.MainController;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
-import ru.dolganov.tool.knowledge.collector.snapshot.SnapshotController;
-import ru.dolganov.tool.knowledge.collector.tree.TreeController;
-import sun.misc.Launcher;
 
 public class App {
 	
-	private static App def;
+	private static final App def = new App();
 	
 	public static App getDefault(){
-		if(def == null) def = new App();
 		return def;
 	}
 	
