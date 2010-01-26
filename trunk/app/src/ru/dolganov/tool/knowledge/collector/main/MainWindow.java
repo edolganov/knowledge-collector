@@ -23,6 +23,8 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import javax.swing.BoxLayout;
+import java.awt.CardLayout;
 
 public class MainWindow extends JDialog {
 
@@ -39,7 +41,6 @@ public class MainWindow extends JDialog {
 	public JButton dirB = null;
 	public JButton linkB = null;
 	public JButton noteB = null;
-	private JPanel jPanel31 = null;
 	private JTabbedPane jTabbedPane1 = null;
 	private JPanel jPanel41 = null;
 	private JScrollPane jScrollPane11 = null;
@@ -54,6 +55,11 @@ public class MainWindow extends JDialog {
 	public JTextField searchF = null;
 	private JScrollPane jScrollPane1 = null;
 	public JList searchList = null;
+	private JPanel downPanel = null;
+	private JPanel upPanel = null;
+	private JPanel leftPanel = null;
+	private JPanel rigthPanel = null;
+	private JPanel buttons = null;
 	/**
 	 * @param owner
 	 */
@@ -69,6 +75,7 @@ public class MainWindow extends JDialog {
 	 */
 	private void initialize() {
 		this.setBounds(new Rectangle(0, 0, 1024, 541));
+		this.setMinimumSize(new Dimension(1024, 541));
 		this.setContentPane(getJContentPane());
 	}
 
@@ -80,14 +87,10 @@ public class MainWindow extends JDialog {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel();
-			jContentPane.setLayout(null);
+			jContentPane.setLayout(new BorderLayout());
 			//jContentPane.add(regPanel);
-			jContentPane.add(getJPanel(), null);
-			//jContentPane.add(treePanel);
-			jContentPane.add(getJPanel1(), null);
-			jContentPane.add(getJPanel31(), null);
-			jContentPane.add(getInfoPanel(), null);
-			jContentPane.add(getPath(), null);
+			jContentPane.add(getDownPanel(), BorderLayout.SOUTH);
+			jContentPane.add(getUpPanel(), BorderLayout.CENTER);
 		}
 		return jContentPane;
 	}
@@ -101,7 +104,7 @@ public class MainWindow extends JDialog {
 		if (jPanel == null) {
 			jPanel = new JPanel();
 			jPanel.setLayout(null);
-			jPanel.setBounds(new Rectangle(181, 1, 836, 29));
+			jPanel.setPreferredSize(new Dimension(1, 29));
 			jPanel.add(getJButton(), null);
 			jPanel.add(getJButton1(), null);
 			jPanel.add(getJButton2(), null);
@@ -123,7 +126,6 @@ public class MainWindow extends JDialog {
 			gridLayout1.setRows(1);
 			treePanel = new JPanel();
 			treePanel.setLayout(gridLayout1);
-			treePanel.setBounds(new Rectangle(182, 33, 497, 459));
 			treePanel.add(getJPanel2(), null);
 		}
 		return treePanel;
@@ -257,21 +259,6 @@ public class MainWindow extends JDialog {
 	}
 
 	/**
-	 * This method initializes jPanel31	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel31() {
-		if (jPanel31 == null) {
-			jPanel31 = new JPanel();
-			jPanel31.setLayout(new BorderLayout());
-			jPanel31.setBounds(new Rectangle(3, 3, 176, 489));
-			jPanel31.add(getJTabbedPane1(), java.awt.BorderLayout.CENTER);
-		}
-		return jPanel31;
-	}
-
-	/**
 	 * This method initializes jTabbedPane1	
 	 * 	
 	 * @return javax.swing.JTabbedPane	
@@ -279,6 +266,7 @@ public class MainWindow extends JDialog {
 	private JTabbedPane getJTabbedPane1() {
 		if (jTabbedPane1 == null) {
 			jTabbedPane1 = new JTabbedPane();
+			jTabbedPane1.setPreferredSize(new Dimension(176, 48));
 			jTabbedPane1.addTab("snapshot", null, getJPanel41(), null);
 			jTabbedPane1.addTab("search", null, getJPanel51(), null);
 		}
@@ -293,12 +281,9 @@ public class MainWindow extends JDialog {
 	private JPanel getJPanel41() {
 		if (jPanel41 == null) {
 			jPanel41 = new JPanel();
-			jPanel41.setLayout(null);
-			jPanel41.add(getJScrollPane11(), null);
-			jPanel41.add(getJButton23(), null);
-			jPanel41.add(getJButton3(), null);
-			jPanel41.add(getJButton4(), null);
-			jPanel41.add(getJButton5(), null);
+			jPanel41.setLayout(new BorderLayout());
+			jPanel41.add(getJScrollPane11(), BorderLayout.CENTER);
+			jPanel41.add(getButtons(), BorderLayout.NORTH);
 		}
 		return jPanel41;
 	}
@@ -311,7 +296,6 @@ public class MainWindow extends JDialog {
 	private JScrollPane getJScrollPane11() {
 		if (jScrollPane11 == null) {
 			jScrollPane11 = new JScrollPane();
-			jScrollPane11.setBounds(new Rectangle(0, 30, 175, 431));
 			jScrollPane11.setViewportView(getJTree11());
 		}
 		return jScrollPane11;
@@ -352,7 +336,7 @@ public class MainWindow extends JDialog {
 	private JButton getJButton23() {
 		if (createSnapDirB == null) {
 			createSnapDirB = new JButton();
-			createSnapDirB.setLocation(new Point(4, 5));
+			createSnapDirB.setLocation(new Point(9, 3));
 			createSnapDirB.setSize(new Dimension(32, 19));
 		}
 		return createSnapDirB;
@@ -366,7 +350,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton3() {
 		if (createSnapB == null) {
 			createSnapB = new JButton();
-			createSnapB.setBounds(new Rectangle(40, 5, 32, 19));
+			createSnapB.setLocation(new Point(45, 3));
+			createSnapB.setSize(new Dimension(32, 19));
 		}
 		return createSnapB;
 	}
@@ -379,7 +364,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton4() {
 		if (jButton4 == null) {
 			jButton4 = new JButton();
-			jButton4.setBounds(new Rectangle(76, 5, 32, 19));
+			jButton4.setLocation(new Point(87, 3));
+			jButton4.setSize(new Dimension(32, 19));
 		}
 		return jButton4;
 	}
@@ -392,7 +378,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton5() {
 		if (jButton5 == null) {
 			jButton5 = new JButton();
-			jButton5.setBounds(new Rectangle(111, 5, 32, 19));
+			jButton5.setLocation(new Point(121, 3));
+			jButton5.setSize(new Dimension(32, 19));
 		}
 		return jButton5;
 	}
@@ -406,7 +393,7 @@ public class MainWindow extends JDialog {
 		if (infoPanel == null) {
 			infoPanel = new JPanel();
 			infoPanel.setLayout(null);
-			infoPanel.setBounds(new Rectangle(682, 33, 332, 459));
+			infoPanel.setPreferredSize(new Dimension(332, 100));
 		}
 		return infoPanel;
 	}
@@ -419,7 +406,7 @@ public class MainWindow extends JDialog {
 	private JTextField getPath() {
 		if (path == null) {
 			path = new JTextField();
-			path.setBounds(new Rectangle(4, 494, 1010, 19));
+			path.setPreferredSize(new Dimension(4, 19));
 		}
 		return path;
 	}
@@ -461,6 +448,99 @@ public class MainWindow extends JDialog {
 			searchList = new JList();
 		}
 		return searchList;
+	}
+
+	/**
+	 * This method initializes downPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getDownPanel() {
+		if (downPanel == null) {
+			downPanel = new JPanel();
+			downPanel.setLayout(new BorderLayout());
+			downPanel.setName("downPanel");
+			downPanel.add(getPath(), BorderLayout.NORTH);
+		}
+		return downPanel;
+	}
+
+	/**
+	 * This method initializes upPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getUpPanel() {
+		if (upPanel == null) {
+			upPanel = new JPanel();
+			upPanel.setLayout(new BorderLayout());
+			upPanel.setName("upPanel");
+			upPanel.add(getLeftPanel(), BorderLayout.WEST);
+			upPanel.add(getRigthPanel(), BorderLayout.CENTER);
+		}
+		return upPanel;
+	}
+
+	/**
+	 * This method initializes leftPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getLeftPanel() {
+		if (leftPanel == null) {
+			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+			gridBagConstraints4.fill = GridBagConstraints.BOTH;
+			gridBagConstraints4.weighty = 1.0;
+			gridBagConstraints4.weightx = 1.0;
+			leftPanel = new JPanel();
+			leftPanel.setLayout(new GridBagLayout());
+			leftPanel.setPreferredSize(new Dimension(180, 48));
+			leftPanel.add(getJTabbedPane1(), gridBagConstraints4);
+		}
+		return leftPanel;
+	}
+
+	/**
+	 * This method initializes rigthPanel	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getRigthPanel() {
+		if (rigthPanel == null) {
+			GridBagConstraints gridBagConstraints = new GridBagConstraints();
+			gridBagConstraints.gridx = -1;
+			gridBagConstraints.gridy = -1;
+			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
+			gridBagConstraints3.gridx = -1;
+			gridBagConstraints3.gridy = -1;
+			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
+			gridBagConstraints1.gridx = -1;
+			gridBagConstraints1.gridy = -1;
+			rigthPanel = new JPanel();
+			rigthPanel.setLayout(new BorderLayout());
+			rigthPanel.add(getInfoPanel(), BorderLayout.EAST);
+			rigthPanel.add(getJPanel1(), BorderLayout.CENTER);
+			rigthPanel.add(getJPanel(), BorderLayout.NORTH);
+		}
+		return rigthPanel;
+	}
+
+	/**
+	 * This method initializes buttons	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getButtons() {
+		if (buttons == null) {
+			buttons = new JPanel();
+			buttons.setLayout(null);
+			buttons.setPreferredSize(new Dimension(136, 25));
+			buttons.add(getJButton23(), null);
+			buttons.add(getJButton3(), null);
+			buttons.add(getJButton4(), null);
+			buttons.add(getJButton5(), null);
+		}
+		return buttons;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
