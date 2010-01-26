@@ -86,9 +86,11 @@ public class MainWindow extends JDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			BorderLayout borderLayout = new BorderLayout();
+			borderLayout.setHgap(2);
+			borderLayout.setVgap(2);
 			jContentPane = new JPanel();
-			jContentPane.setLayout(new BorderLayout());
-			//jContentPane.add(regPanel);
+			jContentPane.setLayout(borderLayout);
 			jContentPane.add(getDownPanel(), BorderLayout.SOUTH);
 			jContentPane.add(getUpPanel(), BorderLayout.CENTER);
 		}
@@ -472,8 +474,10 @@ public class MainWindow extends JDialog {
 	 */
 	private JPanel getUpPanel() {
 		if (upPanel == null) {
+			BorderLayout borderLayout1 = new BorderLayout();
+			borderLayout1.setHgap(4);
 			upPanel = new JPanel();
-			upPanel.setLayout(new BorderLayout());
+			upPanel.setLayout(borderLayout1);
 			upPanel.setName("upPanel");
 			upPanel.add(getLeftPanel(), BorderLayout.WEST);
 			upPanel.add(getRigthPanel(), BorderLayout.CENTER);
