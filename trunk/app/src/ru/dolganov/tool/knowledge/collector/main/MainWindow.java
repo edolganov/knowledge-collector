@@ -60,6 +60,11 @@ public class MainWindow extends JDialog {
 	private JPanel leftPanel = null;
 	private JPanel rigthPanel = null;
 	private JPanel buttons = null;
+	private JPanel sDown = null;
+	private JPanel sDownDown = null;
+	private JPanel bLeftButtons = null;
+	private JPanel bRightButtons = null;
+	public JButton fullStandart = null;
 	/**
 	 * @param owner
 	 */
@@ -105,14 +110,10 @@ public class MainWindow extends JDialog {
 	private JPanel getJPanel() {
 		if (jPanel == null) {
 			jPanel = new JPanel();
-			jPanel.setLayout(null);
+			jPanel.setLayout(new BorderLayout());
 			jPanel.setPreferredSize(new Dimension(1, 29));
-			jPanel.add(getJButton(), null);
-			jPanel.add(getJButton1(), null);
-			jPanel.add(getJButton2(), null);
-			jPanel.add(getDirB(), null);
-			jPanel.add(getJButton22(), null);
-			jPanel.add(getNoteB(), null);
+			jPanel.add(getBLeftButtons(), BorderLayout.WEST);
+			jPanel.add(getBRightButtons(), BorderLayout.EAST);
 		}
 		return jPanel;
 	}
@@ -141,8 +142,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton() {
 		if (jButton == null) {
 			jButton = new JButton();
-			jButton.setBounds(new Rectangle(766, 6, 61, 19));
 			jButton.setText("exit");
+			jButton.setBounds(new Rectangle(147, 7, 58, 17));
 		}
 		return jButton;
 	}
@@ -155,8 +156,8 @@ public class MainWindow extends JDialog {
 	private JButton getJButton1() {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
-			jButton1.setBounds(new Rectangle(700, 6, 62, 19));
 			jButton1.setText("hide");
+			jButton1.setBounds(new Rectangle(85, 7, 58, 17));
 		}
 		return jButton1;
 	}
@@ -210,8 +211,9 @@ public class MainWindow extends JDialog {
 	private JButton getJButton2() {
 		if (showHideInfoB == null) {
 			showHideInfoB = new JButton();
-			showHideInfoB.setBounds(new Rectangle(123, 6, 32, 19));
 			showHideInfoB.setFont(new Font("Dialog", Font.PLAIN, 12));
+			showHideInfoB.setBounds(new Rectangle(133, 4, 36, 20));
+			showHideInfoB.setPreferredSize(new Dimension(32, 19));
 			showHideInfoB.setText("");
 		}
 		return showHideInfoB;
@@ -225,8 +227,9 @@ public class MainWindow extends JDialog {
 	private JButton getDirB() {
 		if (dirB == null) {
 			dirB = new JButton();
-			dirB.setBounds(new Rectangle(3, 6, 32, 19));
 			dirB.setText("");
+			dirB.setLocation(new Point(4, 4));
+			dirB.setSize(new Dimension(32, 19));
 			dirB.setFont(new Font("Dialog", Font.PLAIN, 12));
 		}
 		return dirB;
@@ -240,8 +243,9 @@ public class MainWindow extends JDialog {
 	private JButton getJButton22() {
 		if (linkB == null) {
 			linkB = new JButton();
-			linkB.setBounds(new Rectangle(37, 6, 32, 19));
 			linkB.setFont(new Font("Dialog", Font.PLAIN, 12));
+			linkB.setLocation(new Point(40, 4));
+			linkB.setSize(new Dimension(32, 19));
 			linkB.setText("");
 		}
 		return linkB;
@@ -255,7 +259,8 @@ public class MainWindow extends JDialog {
 	private JButton getNoteB() {
 		if (noteB == null) {
 			noteB = new JButton();
-			noteB.setBounds(new Rectangle(71, 6, 32, 19));
+			noteB.setLocation(new Point(77, 4));
+			noteB.setSize(new Dimension(32, 19));
 		}
 		return noteB;
 	}
@@ -323,9 +328,9 @@ public class MainWindow extends JDialog {
 	private JPanel getJPanel51() {
 		if (jPanel51 == null) {
 			jPanel51 = new JPanel();
-			jPanel51.setLayout(null);
-			jPanel51.add(getSearchF(), null);
-			jPanel51.add(getJScrollPane1(), null);
+			jPanel51.setLayout(new BorderLayout());
+			jPanel51.add(getSDown(), BorderLayout.NORTH);
+			jPanel51.add(getSDownDown(), BorderLayout.CENTER);
 		}
 		return jPanel51;
 	}
@@ -421,7 +426,7 @@ public class MainWindow extends JDialog {
 	private JTextField getSearchF() {
 		if (searchF == null) {
 			searchF = new JTextField();
-			searchF.setBounds(new Rectangle(4, 2, 165, 19));
+			searchF.setBounds(new Rectangle(3, 4, 170, 20));
 		}
 		return searchF;
 	}
@@ -434,7 +439,6 @@ public class MainWindow extends JDialog {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(4, 25, 165, 432));
 			jScrollPane1.setViewportView(getSearchList());
 		}
 		return jScrollPane1;
@@ -545,6 +549,88 @@ public class MainWindow extends JDialog {
 			buttons.add(getJButton5(), null);
 		}
 		return buttons;
+	}
+
+	/**
+	 * This method initializes sDown	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getSDown() {
+		if (sDown == null) {
+			sDown = new JPanel();
+			sDown.setLayout(null);
+			sDown.setPreferredSize(new Dimension(1, 27));
+			sDown.add(getSearchF(), null);
+		}
+		return sDown;
+	}
+
+	/**
+	 * This method initializes sDownDown	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getSDownDown() {
+		if (sDownDown == null) {
+			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+			gridBagConstraints5.fill = GridBagConstraints.BOTH;
+			gridBagConstraints5.weighty = 1.0;
+			gridBagConstraints5.weightx = 1.0;
+			sDownDown = new JPanel();
+			sDownDown.setLayout(new GridBagLayout());
+			sDownDown.add(getJScrollPane1(), gridBagConstraints5);
+		}
+		return sDownDown;
+	}
+
+	/**
+	 * This method initializes bLeftButtons	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getBLeftButtons() {
+		if (bLeftButtons == null) {
+			bLeftButtons = new JPanel();
+			bLeftButtons.setLayout(null);
+			bLeftButtons.setPreferredSize(new Dimension(300, 26));
+			bLeftButtons.add(getJButton2(), null);
+			bLeftButtons.add(getDirB(), null);
+			bLeftButtons.add(getNoteB(), null);
+			bLeftButtons.add(getJButton22(), null);
+		}
+		return bLeftButtons;
+	}
+
+	/**
+	 * This method initializes bRightButtons	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getBRightButtons() {
+		if (bRightButtons == null) {
+			bRightButtons = new JPanel();
+			bRightButtons.setLayout(null);
+			bRightButtons.setPreferredSize(new Dimension(211, 30));
+			bRightButtons.add(getJButton(), null);
+			bRightButtons.add(getJButton1(), null);
+			bRightButtons.add(getFullStandart(), null);
+		}
+		return bRightButtons;
+	}
+
+	/**
+	 * This method initializes fullStandart	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getFullStandart() {
+		if (fullStandart == null) {
+			fullStandart = new JButton();
+			fullStandart.setBounds(new Rectangle(14, 7, 58, 17));
+			fullStandart.setText("full src");
+		}
+		return fullStandart;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
