@@ -6,6 +6,9 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+
+import ru.chapaj.util.swing.IconHelper;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
 
@@ -23,10 +26,14 @@ public class WindowScreenController extends Controller<MainWindow> {
 	@Override
 	public void init(final MainWindow ui_) {
 		
+		setPic(ui_.fullStandart);
+		
 		ui_.fullStandart.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				
 
 				if(!fullScreen){
 					Dimension oldSize = ui_.getSize();
@@ -57,10 +64,6 @@ public class WindowScreenController extends Controller<MainWindow> {
 					Dimension minimumSize = ui_.getMinimumSize();
 					ui_.setBounds(0, 0, Math.max(width, minimumSize.width), Math.max(height, minimumSize.height));
 					
-
-					
-					
-					
 					fullScreen = true;
 				}
 				else{
@@ -70,8 +73,16 @@ public class WindowScreenController extends Controller<MainWindow> {
 					fullScreen = false;
 				}
 				
+				setPic(ui_.fullStandart);
+				
 			}
 		});
+		
+	}
+
+	private void setPic(JButton fullStandart) {
+		if(!fullScreen) fullStandart.setIcon(IconHelper.get("/images/kc/app/maximize.png"));
+		else fullStandart.setIcon(IconHelper.get("/images/kc/app/minimize.png"));
 		
 	}
 	

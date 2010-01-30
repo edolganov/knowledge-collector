@@ -143,7 +143,7 @@ public class MainWindow extends JDialog {
 		if (jButton == null) {
 			jButton = new JButton();
 			jButton.setText("exit");
-			jButton.setBounds(new Rectangle(147, 7, 58, 17));
+			jButton.setBounds(new Rectangle(147, 6, 58, 17));
 		}
 		return jButton;
 	}
@@ -157,7 +157,7 @@ public class MainWindow extends JDialog {
 		if (jButton1 == null) {
 			jButton1 = new JButton();
 			jButton1.setText("hide");
-			jButton1.setBounds(new Rectangle(85, 7, 58, 17));
+			jButton1.setBounds(new Rectangle(85, 6, 58, 17));
 		}
 		return jButton1;
 	}
@@ -627,8 +627,10 @@ public class MainWindow extends JDialog {
 	private JButton getFullStandart() {
 		if (fullStandart == null) {
 			fullStandart = new JButton();
-			fullStandart.setBounds(new Rectangle(14, 7, 58, 17));
-			fullStandart.setText("full src");
+			fullStandart.setPreferredSize(new Dimension(32, 19));
+			fullStandart.setLocation(new Point(40, 4));
+			fullStandart.setSize(new Dimension(36, 20));
+			fullStandart.setText("");
 		}
 		return fullStandart;
 	}
