@@ -7,6 +7,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import ru.chapaj.util.lang.ClassUtil;
@@ -52,6 +54,7 @@ public class App {
 		dao = new FSDAOImpl("./know");
 		initUI();
 		initControllers();
+		callAfterAllControllers();
 		
 		ui.setVisible(true);
 		ui.jButton.addActionListener(new ActionListener(){
@@ -75,6 +78,13 @@ public class App {
 				hideIfNeed();
 			}
 		});
+		
+	}
+
+	private void callAfterAllControllers() {
+		for (Controller<?> c : afterAllInitSet) {
+			c.afterAllInit();
+		}
 		
 	}
 
@@ -157,11 +167,13 @@ public class App {
 		}
 	}
 	private HashMap<String, ArrayList<CE>> queue = new HashMap<String, ArrayList<CE>>();
+	private HashSet<Controller<?>> afterAllInitSet = new HashSet<Controller<?>>();
 	private void initController(Class<?> clazz, Object target)
 			throws InstantiationException, IllegalAccessException {
 		Controller<?> c = (Controller<?>) clazz.newInstance();
 		// System.out.println("init c:" + c);
 		preInit(c).initUnsaveObject(target);
+		afterAllInitSet.add(c);
 	}
 	
 	private <T> Controller<T> preInit(Controller<T> con){

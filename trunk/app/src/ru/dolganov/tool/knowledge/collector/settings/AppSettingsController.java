@@ -17,7 +17,6 @@ import ru.dolganov.tool.knowledge.collector.ui.ExceptionHandler;
 public class AppSettingsController extends Controller<MainWindow> {
 
 	
-	MainWindow ui;
 	ExtendTree tree;
 	SettingsMap settings;
 	
@@ -36,7 +35,6 @@ public class AppSettingsController extends Controller<MainWindow> {
 	
 	@Override
 	public void init(MainWindow ui_) {
-		ui = ui_;
 		App.getDefault().addListener(new AppListener(){
 
 			@Override
@@ -48,8 +46,11 @@ public class AppSettingsController extends Controller<MainWindow> {
 			
 		});
 		
+	}
+	
+	@Override
+	public void afterAllInit() {
 		load();
-		
 	}
 	
 	private void load() {
@@ -61,7 +62,8 @@ public class AppSettingsController extends Controller<MainWindow> {
 			settings = store.loadFile(file);
 			
 			if(settings != null){
-				loadPosition();
+				fireAction("load-settings", settings);
+				//loadPosition();
 			}
 			
 			
@@ -95,7 +97,8 @@ public class AppSettingsController extends Controller<MainWindow> {
 			}
 			settings.map().put("cur-system", magicFileName);
 			
-			savePosition();
+			fireAction("save-settings", settings);
+			//savePosition();
 			
 			store.saveFile(file, settings, false);
 			
@@ -105,29 +108,6 @@ public class AppSettingsController extends Controller<MainWindow> {
 		
 	}
 	
-	private void loadPosition() {
-		try {
-			String width = settings.map().get("ui-width");
-			String height = settings.map().get("ui-height");
-			String x = settings.map().get("ui-x");
-			String y = settings.map().get("ui-y");
-			ui.setBounds(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(width), Integer.parseInt(height));
-		} catch (Exception e) {
-			ExceptionHandler.handle(e);
-		}
-	}
-
-	private void savePosition() {
-		try {
-			settings.map().put("ui-width",""+ui.getWidth());
-			settings.map().put("ui-height",""+ui.getHeight());
-			settings.map().put("ui-x",""+ui.getX());
-			settings.map().put("ui-y",""+ui.getY());
-		} catch (Exception e) {
-			ExceptionHandler.handle(e);
-		}
-		
-	}
 
 	
 	

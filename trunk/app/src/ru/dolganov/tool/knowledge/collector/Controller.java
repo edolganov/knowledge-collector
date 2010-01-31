@@ -34,5 +34,9 @@ public abstract class Controller<T> extends GenericController<T> {
 	public void fireAction(String action, Object... data){
 		App.getDefault().fireAction(this, action, data);
 	}
+	
+	public void addListener(AppListener listener){
+		App.getDefault().addListener(listener);
+	}
 
 }
