@@ -16,6 +16,7 @@ import javax.swing.JTree;
 import javax.swing.JTabbedPane;
 
 import ru.chapaj.util.swing.tree.ExtendTree;
+import ru.chapaj.util.swing.ui.JTextFieldExt;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -412,7 +413,7 @@ public class MainWindow extends JDialog {
 	 */
 	private JTextField getPath() {
 		if (path == null) {
-			path = new JTextField();
+			path = new JTextFieldExt();
 			path.setPreferredSize(new Dimension(4, 19));
 		}
 		return path;
@@ -425,7 +426,7 @@ public class MainWindow extends JDialog {
 	 */
 	private JTextField getSearchF() {
 		if (searchF == null) {
-			searchF = new JTextField();
+			searchF = new JTextFieldExt();
 			searchF.setBounds(new Rectangle(3, 4, 170, 20));
 		}
 		return searchF;

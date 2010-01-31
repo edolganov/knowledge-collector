@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
+
+import ru.chapaj.util.swing.ui.JTextFieldExt;
+
 import java.awt.Font;
 
 public class PropertyTextPanel extends JPanel {
@@ -64,7 +67,7 @@ public class PropertyTextPanel extends JPanel {
 	 */
 	private JTextField getTextField() {
 		if (textField == null) {
-			textField = new JTextField(20);
+			textField = new JTextFieldExt(20);
 		}
 		return textField;
 	}

@@ -10,6 +10,8 @@ import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import ru.chapaj.util.swing.ui.JTextAreaExt;
+
 public class PropertyTextAreaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -89,7 +91,7 @@ public class PropertyTextAreaPanel extends JPanel {
 	 */
 	private JTextArea getTextArea() {
 		if (textArea == null) {
-			textArea = new JTextArea();
+			textArea = new JTextAreaExt();
 			textArea.setFont(new Font("Dialog", Font.PLAIN, 12));
 		}
 		return textArea;
