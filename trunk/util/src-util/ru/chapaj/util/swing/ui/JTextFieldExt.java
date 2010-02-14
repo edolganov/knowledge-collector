@@ -4,6 +4,7 @@ import javax.swing.JTextField;
 import javax.swing.text.Document;
 
 import ru.chapaj.util.swing.menu.MenuUtil;
+import ru.chapaj.util.swing.ui.text.TextComponentUtil;
 
 public class JTextFieldExt extends JTextField {
 
@@ -37,6 +38,7 @@ public class JTextFieldExt extends JTextField {
 
 	private void init() {
 		MenuUtil.initCopyPastMenu(this);
+		TextComponentUtil.undoRedoInit(this);
 	}
 	
 	
