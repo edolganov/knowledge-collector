@@ -5,13 +5,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.knowledge.Dir;
@@ -57,6 +62,9 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		
 		basicInfo.name.label.setText("name");
 		basicInfo.description.label.setText("description");
+		initSaveOpByButton(basicInfo.name.textField);
+		initSaveOpByButton(basicInfo.description.textArea);
+		
 		initArea(basicInfo.description);
 		initWrap(basicInfo.description.textArea,basicInfo.wrapB);
 		ActionListener actionListener = new  ActionListener(){
@@ -72,17 +80,42 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		linkInfo.name.label.setText("name");
 		linkInfo.description.label.setText("description");
 		linkInfo.url.label.setText("url");
+		initSaveOpByButton(linkInfo.name.textField);
+		initSaveOpByButton(linkInfo.description.textArea);
+		initSaveOpByButton(linkInfo.url.textField);
+		
 		initArea(linkInfo.description);
 		initWrap(linkInfo.description.textArea,linkInfo.wrapB);
 		linkInfo.jButton.addActionListener(actionListener);
 		
 		noteInfo.name.label.setText("name");
 		noteInfo.description.label.setText("text");
+		initSaveOpByButton(noteInfo.name.textField);
+		initSaveOpByButton(noteInfo.description.textArea);
+		
 		noteInfo.jButton.addActionListener(actionListener);
 		initArea(noteInfo.description);
 		initWrap(noteInfo.description.textArea,noteInfo.wrapB);
 	}
 	
+	KeyStroke keyStroke = KeyStroke.getKeyStroke("control S");
+	
+	private void initSaveOpByButton(JTextComponent textField) {
+		textField.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(! e.isConsumed() && e.getKeyCode() == KeyEvent.VK_S && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK){
+					//System.out.println("save!");
+					update();
+					e.consume();
+				}
+			}
+			
+		});
+		
+	}
+
 	protected void update() {
 		if(Mode.none == curMode) return;
 		
