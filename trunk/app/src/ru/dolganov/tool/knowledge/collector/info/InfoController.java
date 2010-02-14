@@ -125,27 +125,29 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 			@Override
 			public void focusGained(FocusEvent e) {
 				area.textArea.setBackground(active);
-				synchronized (timerSync) {
-					if(!timerActive){
-						//System.out.println("start timer");
-						currentBigText = getBigText();
-						timer = new Timer("info-controller-timer");
-						timer.schedule(new TimerTask(){
-
-							@Override
-							public void run() {
-								doTimerSaveTask();
-							}
-							
-						}, 4000, 4000);
-						timerActive = true;
-					}
-				}
+				//не делаем автосохранения текста
+//				synchronized (timerSync) {
+//					if(!timerActive){
+//						//System.out.println("start timer");
+//						currentBigText = getBigText();
+//						timer = new Timer("info-controller-timer");
+//						timer.schedule(new TimerTask(){
+//
+//							@Override
+//							public void run() {
+//								doTimerSaveTask();
+//							}
+//							
+//						}, 4000, 4000);
+//						timerActive = true;
+//					}
+//				}
 			}
 			
 			@Override
 			public void focusLost(FocusEvent e) {
-				stopSaveTimer();
+				//не делаем автосохранения текста
+				//stopSaveTimer();
 				checkEmptyArea(area);
 			}
 		});
@@ -223,11 +225,12 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 
 	protected void hide() {
 		//doTimerSaveTask(true);
-		stopSaveTimer();
+		//stopSaveTimer();
 		ui.infoPanel.removeAll();
 		curMode = Mode.none;
 	}
 
+	@SuppressWarnings("unused")
 	private void stopSaveTimer() {
 		synchronized (timerSync) {
 			if(timerActive){
@@ -253,6 +256,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		return text;
 	}
 
+	@SuppressWarnings("unused")
 	private void doTimerSaveTask() {
 		doTimerSaveTask(false);
 	}
