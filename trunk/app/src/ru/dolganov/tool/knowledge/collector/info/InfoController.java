@@ -198,6 +198,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 	
 	private void initWrap(final JTextArea text, final JButton b){
 		text.setLineWrap(true);
+		text.setWrapStyleWord(true);
 		b.setText("unwrap");
 		b.addActionListener(new ActionListener(){
 
@@ -207,10 +208,12 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 				if(lineWrap){
 					b.setText("wrap");
 					text.setLineWrap(false);
+					text.setWrapStyleWord(false);
 				}
 				else {
 					b.setText("unwrap");
 					text.setLineWrap(true);
+					text.setWrapStyleWord(true);
 				}
 			}
 			
