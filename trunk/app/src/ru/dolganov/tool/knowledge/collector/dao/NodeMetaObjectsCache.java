@@ -1,6 +1,6 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 
 /**
  * Глобальный кеш объектов
@@ -15,7 +15,7 @@ public interface NodeMetaObjectsCache {
 	 * @param key
 	 * @param object
 	 */
-	void put(NodeMeta node, String key, Object object);
+	void put(RootElement node, String key, Object object);
 
 	/**
 	 * получить объект по ключу для данной ноды
@@ -25,6 +25,6 @@ public interface NodeMetaObjectsCache {
 	 * @param clazz
 	 * @return
 	 */
-	<T> T get(NodeMeta node, String key, Class<T> clazz);
+	<T> T get(RootElement node, String key, Class<T> clazz);
 
 }

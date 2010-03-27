@@ -4,16 +4,16 @@ import ru.chapaj.util.lang.ClassUtil;
 import model.knowledge.Dir;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 import model.knowledge.TextData;
 
 public class CompareUtil {
 	
-	public static int index(NodeMeta meta){
+	public static int index(RootElement meta){
 		return index(meta.getClass());
 	}
 	
-	public static int index(Class<? extends NodeMeta> candidat){
+	public static int index(Class<? extends RootElement> candidat){
 		int out = Integer.MAX_VALUE;
 		if(ClassUtil.isValid(candidat, Dir.class)) out = 0;
 		else if(ClassUtil.isValid(candidat, TextData.class)) out = 10;

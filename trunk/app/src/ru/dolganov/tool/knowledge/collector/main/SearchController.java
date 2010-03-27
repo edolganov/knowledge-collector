@@ -19,7 +19,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import model.knowledge.Link;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 
 import ru.chapaj.tool.link.collector.AppUtil;
 import ru.chapaj.util.Check;
@@ -96,11 +96,11 @@ public class SearchController extends Controller<MainWindow> {
 			Step s = queque.removeFirst();
 			DefaultMutableTreeNode node = s.node;
 			Object obj = node.getUserObject();
-			if(obj instanceof NodeMeta){
-				NodeMeta l = (NodeMeta) obj;
+			if(obj instanceof Node){
+				Node l = (Node) obj;
 
 				if(isFounded(l, query)){
-					Class<? extends NodeMeta> clazz = l.getClass();
+					Class<? extends Node> clazz = l.getClass();
 					ArrayList<DefaultMutableTreeNode> list = map.get(clazz);
 					if(list == null){
 						list = new ArrayList<DefaultMutableTreeNode>();
@@ -122,7 +122,7 @@ public class SearchController extends Controller<MainWindow> {
 			@SuppressWarnings("unchecked")
 			@Override
 			public int compare(Class<?> o1, Class<?> o2) {
-				return CompareUtil.compare(CompareUtil.index((Class<? extends NodeMeta>)o1), CompareUtil.index((Class<? extends NodeMeta>)o2));
+				return CompareUtil.compare(CompareUtil.index((Class<? extends Node>)o1), CompareUtil.index((Class<? extends Node>)o2));
 			}
 			
 		});
@@ -130,7 +130,7 @@ public class SearchController extends Controller<MainWindow> {
 		listModel.clear();
 		for(Class<?> key : keys){
 			ArrayList<DefaultMutableTreeNode> list = map.get(key);
-			listModel.addElement("--------   "+DecoratorUtil.name((Class<? extends NodeMeta>)key)+" ("+list.size()+")");
+			listModel.addElement("--------   "+DecoratorUtil.name((Class<? extends Node>)key)+" ("+list.size()+")");
 			for(DefaultMutableTreeNode n : list){
 				listModel.addElement(n);
 			}
@@ -142,7 +142,7 @@ public class SearchController extends Controller<MainWindow> {
 		}
 	}
 	
-	boolean isFounded(NodeMeta meta, String query){
+	boolean isFounded(Node meta, String query){
 		if(meta == null) return false;
 		if(contains(meta.getName(), query)) return true;
 		if(contains(meta.getDescription(), query)) return true;

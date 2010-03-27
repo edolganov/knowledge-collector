@@ -21,14 +21,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.knowledge.Dir;
 import model.knowledge.Link;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 import model.knowledge.TextData;
 
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
+import ru.dolganov.tool.knowledge.collector.command.UpdateCurrentTreeNode;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.model.HasNodeMetaParams;
-import ru.dolganov.tool.knowledge.collector.tree.TreeOps;
 import ru.chapaj.tool.link.collector.ui.component.PropertyTextAreaPanel;
 import ru.chapaj.util.Check;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
@@ -137,7 +138,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 		}
 		else return;
 		
-		TreeOps.updateCurrentTreeNode(params);
+		CommandService.invoke(new UpdateCurrentTreeNode(params));
 		
 		
 	}
@@ -226,12 +227,12 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 	protected void show(DefaultMutableTreeNode node) {
 		hide();
 		Object uo = node.getUserObject();
-		if(! (uo instanceof NodeMeta)){
+		if(! (uo instanceof Node)){
 			hide();
 			return;
 		}
 		
-		NodeMeta ob = (NodeMeta)uo;
+		Node ob = (Node)uo;
 		if(ob instanceof Dir){
 			curMode = Mode.dir;
 			ui.infoPanel.add(basicInfo);
@@ -326,7 +327,7 @@ public class InfoController extends Controller<MainWindow> implements HasNodeMet
 						params.put(Params.text.toString(), newBigText);
 					}
 					currentBigText = newBigText;
-					TreeOps.updateCurrentTreeNode(params);
+					CommandService.invoke(new UpdateCurrentTreeNode(params));
 				}
 				//else System.out.println("text not modified");
 			}

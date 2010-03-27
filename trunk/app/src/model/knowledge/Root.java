@@ -14,19 +14,19 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class Root implements Parent {
 	
 	// [15.08.2009] jenua.dolganov: все дети лежат в перемешку
-	List<NodeMeta> nodes;
+	List<RootElement> nodes;
 	
 	//protected String uuid;
 	@XStreamOmitField
 	private String dirPath;
 	
 
-	public List<NodeMeta> getNodes() {
-		if(nodes == null) nodes = new ArrayList<NodeMeta>();
+	public List<RootElement> getNodes() {
+		if(nodes == null) nodes = new ArrayList<RootElement>();
 		return nodes;
 	}
 
-	public void setNodes(ArrayList<NodeMeta> nodes) {
+	public void setNodes(ArrayList<RootElement> nodes) {
 		this.nodes = nodes;
 	}
 	

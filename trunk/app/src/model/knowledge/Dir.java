@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 
 @XStreamAlias("dir")
-public class Dir extends NodeMeta {
+public class Dir extends Node {
 	
 
 }

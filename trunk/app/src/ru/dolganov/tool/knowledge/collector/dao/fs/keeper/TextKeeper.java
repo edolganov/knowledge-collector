@@ -6,7 +6,8 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
+import model.knowledge.RootElement;
 import ru.chapaj.util.Check;
 import ru.chapaj.util.collection.SyncHashMap;
 import ru.chapaj.util.file.FileUtil;
@@ -29,12 +30,12 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		super(cache);
 	}
 
-	public void beforeUpdate(NodeMeta node, Map<String, String> params){
+	public void beforeUpdate(RootElement node, Map<String, String> params){
 		String text = params.get(Params.text.toString());
 		saveTextCache.put(node.getUuid(), text);
 	}
 	
-	private void afterUpdate(NodeMeta node) {
+	private void afterUpdate(RootElement node) {
 		saveTextCache.remove(node.getUuid());
 	}
 	
@@ -42,7 +43,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		String rootPath = rootFile.getPath();
 		if(ops.containsKey(SaveOps.rename)){
 			Object[] objects = ops.get(SaveOps.rename);
-			NodeMeta node = (NodeMeta)objects[0];
+			Node node = (Node)objects[0];
 			String newName = node.getName();
 			String oldName = (String)objects[1];
 			
@@ -71,7 +72,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		}
 		
 		if(ops.containsKey(SaveOps.delete)){
-			NodeMeta node = (NodeMeta)ops.get(SaveOps.delete)[0];
+			Node node = (Node)ops.get(SaveOps.delete)[0];
 			String name = node.getName();
 			long timeStamp = System.currentTimeMillis();
 			//delete file
@@ -85,7 +86,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		
 		if(ops.containsKey(SaveOps.update)){
 			Object[] objects = ops.get(SaveOps.update);
-			NodeMeta node = (NodeMeta)objects[0];
+			Node node = (Node)objects[0];
 			String fileName = getTextFileName(node.getName());
 			String text = (String)objects[1];
 			String filePath = DU.getFilePath(rootPath, fileName);
@@ -112,7 +113,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		}
 		
 		if(ops.containsKey(SaveOps.move)){
-			NodeMeta node = (NodeMeta)ops.get(SaveOps.move)[0];
+			Node node = (Node)ops.get(SaveOps.move)[0];
 			String name = node.getName();
 			String dirName = getDirName(name);
 			String textName = getTextFileName(name);
@@ -138,7 +139,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 	}
 
 
-	public Map<String, Object> getExternalData(NodeMeta node) {
+	public Map<String, Object> getExternalData(Node node) {
 		HashMap<String, Object> out = new HashMap<String, Object>(1);
 		String text = saveTextCache.get(node.getUuid());
 		if(text == null){
@@ -170,7 +171,7 @@ public class TextKeeper extends AbstractKeeper implements HasNodeMetaParams{
 		return out;
 	}
 
-	public String getDirName(NodeMeta meta) {
+	public String getDirName(Node meta) {
 		return getDirName(meta.getName());
 	}
 	

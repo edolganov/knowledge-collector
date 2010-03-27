@@ -11,7 +11,8 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
+import model.knowledge.RootElement;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
@@ -73,7 +74,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		dao.addListener(new DAOEventAdapter(){
 
 			@Override
-			public void onAdded(NodeMeta parent, NodeMeta child) {
+			public void onAdded(RootElement parent, RootElement child) {
 				DefaultMutableTreeNode parentNode = dao.getCache().get(parent, TREE_NODE, DefaultMutableTreeNode.class);
 				DefaultMutableTreeNode childNode = dao.getCache().get(child, TREE_NODE, DefaultMutableTreeNode.class);
 				if(childNode != null){
@@ -88,7 +89,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			}
 			
 			@Override
-			public void onDeleted(NodeMeta node) {
+			public void onDeleted(RootElement node) {
 				DefaultMutableTreeNode treeNode = dao.getCache().get(node, TREE_NODE, DefaultMutableTreeNode.class);
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
 				tree.model().removeNodeFromParent(treeNode);
@@ -99,7 +100,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 			}
 			
 			@Override
-			public void onUpdated(NodeMeta node) {
+			public void onUpdated(RootElement node) {
 				DefaultMutableTreeNode treeNode = dao.getCache().get(node, TREE_NODE, DefaultMutableTreeNode.class);
 				treeNode.setUserObject(node);
 				tree.model().reload(treeNode);
@@ -150,9 +151,9 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 
 
 	static class QS {
-		List<NodeMeta> list;
+		List<RootElement> list;
 		DefaultMutableTreeNode node;
-		public QS(List<NodeMeta> list, DefaultMutableTreeNode node) {
+		public QS(List<RootElement> list, DefaultMutableTreeNode node) {
 			super();
 			this.list = list;
 			this.node = node;
@@ -172,7 +173,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 //			if(ob instanceof Dir){
 //				node.add(new DefaultMutableTreeNode(Cell.BUTTONS));
 //			}
-			for(NodeMeta meta : s.list){
+			for(RootElement meta : s.list){
 				DefaultMutableTreeNode chNode = createTreeNode(meta);
 				node.add(chNode);
 				q.addLast(new QS(dao.getChildren(meta),chNode));
@@ -185,7 +186,7 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 		
 	}
 
-	private DefaultMutableTreeNode createTreeNode(NodeMeta meta) {
+	private DefaultMutableTreeNode createTreeNode(RootElement meta) {
 		DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(meta);
 		dao.getCache().put(meta,TREE_NODE, treeNode);
 		return treeNode;

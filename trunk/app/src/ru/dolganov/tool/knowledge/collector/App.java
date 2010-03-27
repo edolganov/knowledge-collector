@@ -29,6 +29,22 @@ public class App {
 	MainWindow ui;
 	DAO dao;
 	LinkedList<AppListener> listeners = new LinkedList<AppListener>();
+	HashMap<String, Object> session = new HashMap<String, Object>();
+	
+	public void putSessionObj(String key, Object value){
+		session.put(key, value);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getSessionObject(String key){
+		return (T)session.get(key);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T removeSessionObject(String key){
+		return (T)session.remove(key);
+	}
+	
 
 	public DAO getDao() {
 		return dao;

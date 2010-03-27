@@ -3,7 +3,7 @@ package ru.dolganov.tool.knowledge.collector.dao;
 import java.util.List;
 import java.util.Map;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 import model.knowledge.Root;
 import model.knowledge.role.Parent;
 import model.tree.TreeSnapshot;
@@ -14,21 +14,21 @@ public interface DAO {
 	Root getRoot();
 
 	//NodeMeta
-	List<NodeMeta> getChildren(Parent parent);
+	List<RootElement> getChildren(Parent parent);
 	
-	boolean addChild(Parent parent, NodeMeta child);
+	boolean addChild(Parent parent, RootElement child);
 	
-	boolean addChild(Parent parent, NodeMeta child,Map<String, String> params);
+	boolean addChild(Parent parent, RootElement child,Map<String, String> params);
 	
 	NodeMetaObjectsCache getCache();
 	
 	void addListener(DAOEventListener listener);
 
-	void delete(NodeMeta node);
+	void delete(RootElement node);
 
-	void update(NodeMeta node, Map<String, String> params);
+	void update(RootElement node, Map<String, String> params);
 
-	Map<String,Object> getExternalData(NodeMeta ob);
+	Map<String,Object> getExternalData(RootElement ob);
 
 	void merge(Root object);
 	

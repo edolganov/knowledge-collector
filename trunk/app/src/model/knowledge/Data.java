@@ -5,7 +5,7 @@ package model.knowledge;
  * @author jenua.dolganov
  *
  */
-public abstract class Data extends NodeMeta {
+public abstract class Data extends Node {
 	
 
 }

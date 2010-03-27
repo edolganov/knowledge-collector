@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 import model.knowledge.Root;
 
 /**
@@ -38,7 +38,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 
 	
 	
-	public void put(NodeMeta node, String key, Object object){
+	public void put(RootElement node, String key, Object object){
 		lock.writeLock().lock();
 		try {
 			HashMap<String, Object> nodeObjects = getNodeObjects(node);
@@ -61,7 +61,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	
 
 	@SuppressWarnings("unchecked")
-	public <T> T get(NodeMeta node, String key, Class<T> clazz){
+	public <T> T get(RootElement node, String key, Class<T> clazz){
 		lock.readLock().lock();
 		try {
 			HashMap<String, Object> nodeObjects = getNodeObjects(node);
@@ -72,7 +72,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 
 	}
 	
-	private HashMap<String, Object> getNodeObjects(NodeMeta node) {
+	private HashMap<String, Object> getNodeObjects(RootElement node) {
 		String key = getNodeKey(node);
 		HashMap<String, Object> out = objectsMap.get(key);
 		if(out == null){
@@ -82,7 +82,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		return out;
 	}
 
-	private String getNodeKey(NodeMeta node) {
+	private String getNodeKey(RootElement node) {
 		return node.getUuid();
 	}
 	
@@ -96,7 +96,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		}
 	}
 
-	public void remove(NodeMeta node) {
+	public void remove(RootElement node) {
 		lock.writeLock().lock();
 		try {
 			objectsMap.remove(getNodeKey(node));
@@ -118,7 +118,7 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 				if(key.startsWith(pathPattern))keys.add(key);
 			for(String key : keys){
 				Root root = rootsMap.remove(key);
-				for(NodeMeta node : root.getNodes()){
+				for(RootElement node : root.getNodes()){
 					objectsMap.remove(getNodeKey(node));
 				}
 			}

@@ -1,6 +1,6 @@
 package model.knowledge;
 
-public abstract class Link extends NodeMeta {
+public abstract class Link extends Node {
 	
 	String url;
 	

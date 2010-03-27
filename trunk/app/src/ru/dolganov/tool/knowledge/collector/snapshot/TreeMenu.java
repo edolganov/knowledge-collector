@@ -47,7 +47,7 @@ public class TreeMenu extends JPopupMenu {
 			
 		});
 
-		
+		rename.setEnabled(false);
 	}
 
 

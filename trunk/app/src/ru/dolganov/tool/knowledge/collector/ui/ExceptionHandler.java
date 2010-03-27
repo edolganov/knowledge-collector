@@ -13,8 +13,20 @@ public class ExceptionHandler {
 	static final Log log = Log.getInstance(ExceptionHandler.class);
 	
 	public static void handle(Throwable e){
+
+		
+		String msg = null;
+		
 		if(e instanceof NodeExistException){
 			NodeExistException ex = (NodeExistException)e;
+			msg = "Node '"+ex.getName()+"' already exist";
+		}
+		else {
+			msg = "System error: "+e.getMessage();
+			log.error(e);
+		}
+		
+		if(msg != null){
 			final ErrorDialog errorDialog = new ErrorDialog();
 			errorDialog.init(App.getDefault().getUI());
 			errorDialog.ok.addActionListener(new ActionListener(){
@@ -25,13 +37,11 @@ public class ExceptionHandler {
 				}
 			});
 			
-			
-			errorDialog.label2.setText("Node '"+ex.getName()+"' already exist");
+			errorDialog.label2.setText(msg);
 			errorDialog.setVisible(true);
 		}
-		else {
-			log.error(e);
-		}
+		
+
 		
 	}
 

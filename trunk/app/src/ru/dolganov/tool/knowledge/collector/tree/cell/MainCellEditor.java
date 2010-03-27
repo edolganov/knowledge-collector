@@ -16,8 +16,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+import ru.dolganov.tool.knowledge.collector.command.AddTreeNode;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
 import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
-import ru.dolganov.tool.knowledge.collector.tree.TreeOps;
 
 public class MainCellEditor implements TreeCellEditor, HasCellConst {
 	
@@ -42,7 +43,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newDir());
+				CommandService.invoke(new AddTreeNode(DialogOps.newDir()));
 			}
 			
 		});
@@ -58,7 +59,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newLink());
+				CommandService.invoke(new AddTreeNode(DialogOps.newLink()));
 			}
 			
 		});
@@ -73,7 +74,7 @@ public class MainCellEditor implements TreeCellEditor, HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newText());
+				CommandService.invoke(new AddTreeNode(DialogOps.newText()));
 			}
 			
 		});

@@ -5,8 +5,9 @@ import java.util.List;
 import ru.chapaj.util.lang.ClassUtil;
 import ru.dolganov.tool.knowledge.collector.dao.exception.NodeExistException;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 import model.knowledge.Root;
+import model.knowledge.RootElement;
 import model.knowledge.role.Parent;
 
 public class DAOCheck {
@@ -17,28 +18,30 @@ public class DAOCheck {
 		this.dao = fsdaoImpl;
 	}
 
-	public void checkNoExist(Parent parent, NodeMeta child) {
+	public void checkNoExist(Parent parent, Node child) {
 		Root root = null;
 		if (parent instanceof Root) {
 			root = (Root) parent;
 		}
-		else if (parent instanceof NodeMeta) {
-			NodeMeta parentNode = (NodeMeta) parent;
+		else if (parent instanceof Node) {
+			Node parentNode = (Node) parent;
 			root = dao.getRoot(parentNode,true);
 		}
 		
 		if(root == null) return;
 		
 		String name = child.getName();
-		Class<? extends NodeMeta> childClass = child.getClass();
+		Class<? extends Node> childClass = child.getClass();
 		checkNoExist(root, name, childClass);
 	}
 	
-	public void checkNoExist(Root root, String name, Class<? extends NodeMeta> childClass) {
-		List<NodeMeta> nodes = root.getNodes();
-		for (NodeMeta n : nodes) {
-			if(n.getName().equals(name) && ClassUtil.isValid(childClass, n.getClass())){
-				throw new NodeExistException(name);
+	public void checkNoExist(Root root, String name, Class<? extends Node> childClass) {
+		List<RootElement> nodes = root.getNodes();
+		for (RootElement n : nodes) {
+			if(n instanceof Node){
+				if(((Node)n).getName().equals(name) && ClassUtil.isValid(childClass, n.getClass())){
+					throw new NodeExistException(name);
+				}
 			}
 		}
 		

@@ -3,7 +3,7 @@ package ru.dolganov.tool.knowledge.collector.dao.fs.keeper;
 import java.io.File;
 import java.util.Map;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 import ru.dolganov.tool.knowledge.collector.dao.fs.DU;
 import ru.dolganov.tool.knowledge.collector.dao.fs.NodeMetaObjectsCacheImpl;
 import ru.dolganov.tool.knowledge.collector.dao.fs.SaveOps;
@@ -22,20 +22,20 @@ public class DirKeeper extends AbstractKeeper{
 	public void manage(File rootFile, Map<SaveOps, Object[]> ops) throws Exception {
 		String path = rootFile.getPath();
 		if(ops.containsKey(SaveOps.create)){
-			NodeMeta node = (NodeMeta)ops.get(SaveOps.create)[0];
+			Node node = (Node)ops.get(SaveOps.create)[0];
 			String dirName = getName(node.getName());
 			String folderPath = DU.getFilePath(path, dirName);
 			if(!new File(folderPath).mkdir())throw new MkDirException(folderPath);
 		}
 		else if(ops.containsKey(SaveOps.delete)){
-			NodeMeta node = (NodeMeta)ops.get(SaveOps.delete)[0];
+			Node node = (Node)ops.get(SaveOps.delete)[0];
 			String name = getName(node.getName());
 			delManager.delete(path, name);
 			cache.deleteAllRoots(DU.getFilePath(path, name));
 		}
 		else if(ops.containsKey(SaveOps.rename)){
 			Object[] objects = ops.get(SaveOps.rename);
-			NodeMeta node = (NodeMeta)objects[0];
+			Node node = (Node)objects[0];
 			String newDirName = getName(node.getName());
 			String oldDirName = getName((String)objects[1]);
 			String parentPath = path;
@@ -49,7 +49,7 @@ public class DirKeeper extends AbstractKeeper{
 			}
 		}
 		else if(ops.containsKey(SaveOps.move)){
-			NodeMeta node = (NodeMeta)ops.get(SaveOps.move)[0];
+			Node node = (Node)ops.get(SaveOps.move)[0];
 			String dirName = getDirName(node);
 			String oldPath = DU.getFilePath(path, dirName);
 			String newRootPath = node.getParent().getDirPath();
@@ -68,7 +68,7 @@ public class DirKeeper extends AbstractKeeper{
 		return DU.convertToValidFSName(name);
 	}
 
-	public String getDirName(NodeMeta meta) {
+	public String getDirName(Node meta) {
 		return getName(meta.getName());
 	}
 

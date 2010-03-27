@@ -11,8 +11,9 @@ import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
+import ru.dolganov.tool.knowledge.collector.command.AddTreeNode;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
 import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
-import ru.dolganov.tool.knowledge.collector.tree.TreeOps;
 
 @ControllerInfo(target=MainWindow.class)
 public class MainController extends Controller<MainWindow> {
@@ -31,7 +32,7 @@ public class MainController extends Controller<MainWindow> {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newDir());
+				CommandService.invoke(new AddTreeNode(DialogOps.newDir()));
 			}
 			
 		});
@@ -39,7 +40,7 @@ public class MainController extends Controller<MainWindow> {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newLink());
+				CommandService.invoke(new AddTreeNode(DialogOps.newLink()));
 			}
 			
 		});
@@ -47,7 +48,7 @@ public class MainController extends Controller<MainWindow> {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newText());
+				CommandService.invoke(new AddTreeNode(DialogOps.newText()));
 			}
 			
 		});

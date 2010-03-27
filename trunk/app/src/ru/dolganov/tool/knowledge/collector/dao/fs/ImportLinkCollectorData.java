@@ -17,7 +17,7 @@ import ru.dolganov.tool.knowledge.collector.model.LinkOps;
 import model.knowledge.Dir;
 import model.knowledge.LocalLink;
 import model.knowledge.NetworkLink;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 import model.knowledge.Note;
 import model.knowledge.TextData;
 import model.knowledge.role.Parent;
@@ -58,7 +58,7 @@ public class ImportLinkCollectorData implements HasNodeMetaParams{
 				ArrayList<Link> links = qs.lcDir.getLinks();
 				if(links != null){
 					for(Link link : links){
-						NodeMeta node = convertLink(link);
+						Node node = convertLink(link);
 						HashMap<String, String> params = null;
 						if(node instanceof TextData){
 							params = new HashMap<String, String>(1);
@@ -92,8 +92,8 @@ public class ImportLinkCollectorData implements HasNodeMetaParams{
 		
 	}
 
-	private static NodeMeta convertLink(Link ob) {
-		NodeMeta meta = null;
+	private static Node convertLink(Link ob) {
+		Node meta = null;
 		String url = ob.getUrl();
 		if(LinkOps.isInetLink(url)){
 			meta = new NetworkLink();

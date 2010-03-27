@@ -1,16 +1,16 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 
 public interface DAOEventListener {
 
-	void onAdded(NodeMeta parent, NodeMeta child);
+	void onAdded(RootElement parent, RootElement child);
 
-	void onDeleted(NodeMeta node);
+	void onDeleted(RootElement node);
 
-	void onUpdated(NodeMeta node);
+	void onUpdated(RootElement node);
 	
 	void onAdded(TreeSnapshotDir dir);
 

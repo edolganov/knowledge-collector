@@ -1,21 +1,21 @@
 package ru.dolganov.tool.knowledge.collector.dao;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.RootElement;
 import model.tree.TreeSnapshot;
 import model.tree.TreeSnapshotDir;
 
 public class DAOEventAdapter implements DAOEventListener {
 
 	@Override
-	public void onAdded(NodeMeta parent, NodeMeta child) {
+	public void onAdded(RootElement parent, RootElement child) {
 	}
 
 	@Override
-	public void onDeleted(NodeMeta node) {
+	public void onDeleted(RootElement node) {
 	}
 	
 	@Override
-	public void onUpdated(NodeMeta node) {
+	public void onUpdated(RootElement node) {
 	}
 	
 	@Override

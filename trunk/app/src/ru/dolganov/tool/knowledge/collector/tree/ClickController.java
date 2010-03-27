@@ -15,13 +15,16 @@ import java.util.TimerTask;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.knowledge.Link;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
+import model.knowledge.RootElement;
 
 import ru.chapaj.util.os.BareBonesBrowserLaunch;
 import ru.chapaj.util.os.win.WinUtil;
 import ru.chapaj.util.swing.tree.TreeUtil;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
+import ru.dolganov.tool.knowledge.collector.command.MoveNode;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 
 @ControllerInfo(target=MainWindow.class,dependence=TreeController.class)
@@ -54,7 +57,7 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 				if(e.getKeyCode() == KeyEvent.VK_C && e.getModifiersEx() == KeyEvent.CTRL_DOWN_MASK){
 					//System.out.println("ctrl+c");
 					movedNode = null;
-					NodeMeta meta = ui.tree.getCurrentObject(NodeMeta.class);
+					Node meta = ui.tree.getCurrentObject(Node.class);
 					if(meta != null && meta.getName() != null){
 						Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					    clipboard.setContents( new StringSelection(meta.getName()), ClickController.this );
@@ -65,7 +68,7 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 					DefaultMutableTreeNode currentNode = ui.tree.getCurrentNode();
 					if(currentNode != null) movedNode = currentNode;
 					
-					NodeMeta meta = ui.tree.getCurrentObject(NodeMeta.class);
+					Node meta = ui.tree.getCurrentObject(Node.class);
 					if(meta != null && meta.getName() != null){
 						Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 					    clipboard.setContents( new StringSelection(meta.getName()), ClickController.this );
@@ -76,7 +79,7 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 					//System.out.println("ctrl+v");
 					DefaultMutableTreeNode currentNode = ui.tree.getCurrentNode();
 					if(currentNode != null && movedNode != null){
-						TreeOps.move(currentNode, movedNode);
+						CommandService.invoke(new MoveNode(currentNode, movedNode));
 					}
 					
 				}
@@ -105,7 +108,7 @@ public class ClickController extends Controller<MainWindow> implements Clipboard
 	}
 	
 	private void doClickAction(final MainWindow ui) {
-		NodeMeta node = ui.tree.getCurrentObject(NodeMeta.class);
+		RootElement node = ui.tree.getCurrentObject(Node.class);
 		if(node instanceof Link){
 			try{
 				String query = ((Link)node).getUrl();

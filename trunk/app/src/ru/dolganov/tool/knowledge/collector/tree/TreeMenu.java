@@ -11,16 +11,20 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.knowledge.Dir;
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
 import model.knowledge.TextData;
 
 import ru.chapaj.util.swing.IconHelper;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.dolganov.tool.knowledge.collector.App;
 import ru.dolganov.tool.knowledge.collector.AppListener;
+import ru.dolganov.tool.knowledge.collector.command.AddNodeLinkCandidate;
+import ru.dolganov.tool.knowledge.collector.command.AddTreeNode;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
+import ru.dolganov.tool.knowledge.collector.command.CreateNodeLink;
+import ru.dolganov.tool.knowledge.collector.command.DeleteCurrentTreeNode;
 import ru.dolganov.tool.knowledge.collector.dialog.DialogOps;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
-import sun.reflect.generics.visitor.Reifier;
 
 public class TreeMenu extends JPopupMenu implements HasCellConst {
 	
@@ -43,6 +47,9 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 	ImageIcon leftIcon = IconHelper.get("/images/kc/app/left.png");
 	ImageIcon rightIcon = IconHelper.get("/images/kc/app/right.png");
 	
+	JMenuItem nodeLinkMenu = new JMenuItem("(temp) copy link");
+	JMenuItem createNodeLink = new JMenuItem("(temp) add link");
+	
 	boolean showInfo = true;
 	
 	
@@ -54,7 +61,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.deleteCurrentTreeNode();
+				CommandService.invoke(new DeleteCurrentTreeNode());
 			}
 			
 		});
@@ -63,7 +70,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newDir());
+				CommandService.invoke(new AddTreeNode(DialogOps.newDir()));
 			}
 			
 		});
@@ -72,7 +79,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newText());
+				CommandService.invoke(new AddTreeNode(DialogOps.newText()));
 			}
 			
 		});
@@ -81,7 +88,7 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TreeOps.addTreeNode(DialogOps.newLink());
+				CommandService.invoke(new AddTreeNode(DialogOps.newLink()));
 			}
 			
 		});
@@ -94,8 +101,8 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				TreeOps.addTreeNode(parent,DialogOps.newDir());
+				Node parent = tree.getParentObject(tree.getCurrentNode(), Node.class);
+				CommandService.invoke(new AddTreeNode(parent,DialogOps.newDir()));
 			}
 			
 		});
@@ -104,8 +111,8 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				TreeOps.addTreeNode(parent,DialogOps.newText());
+				Node parent = tree.getParentObject(tree.getCurrentNode(), Node.class);
+				CommandService.invoke(new AddTreeNode(parent,DialogOps.newText()));
 			}
 			
 		});
@@ -114,8 +121,8 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NodeMeta parent = tree.getParentObject(tree.getCurrentNode(), NodeMeta.class);
-				TreeOps.addTreeNode(parent,DialogOps.newLink());
+				Node parent = tree.getParentObject(tree.getCurrentNode(), Node.class);
+				CommandService.invoke(new AddTreeNode(parent,DialogOps.newLink()));
 			}
 			
 		});
@@ -145,7 +152,24 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			}
 			
 		});
-
+		
+		
+		nodeLinkMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CommandService.invoke(new AddNodeLinkCandidate());
+				
+			}
+		});
+		
+		createNodeLink.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				CommandService.invoke(new CreateNodeLink());
+			}
+		});
 		
 	}
 
@@ -181,6 +205,9 @@ public class TreeMenu extends JPopupMenu implements HasCellConst {
 			showHideInfo.setIcon(leftIcon);
 		}
 		add(showHideInfo);
+		addSeparator();
+		add(nodeLinkMenu);
+		add(createNodeLink);
 		addSeparator();
 		add(delete);
 		

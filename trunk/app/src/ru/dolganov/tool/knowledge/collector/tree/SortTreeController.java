@@ -7,7 +7,8 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import model.knowledge.NodeMeta;
+import model.knowledge.Node;
+import model.knowledge.RootElement;
 import model.knowledge.Root;
 import ru.chapaj.util.collection.ListUtil;
 import ru.chapaj.util.lang.ClassUtil;
@@ -15,6 +16,8 @@ import ru.chapaj.util.swing.tree.ExtendDefaultTreeModel;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.dolganov.tool.knowledge.collector.Controller;
 import ru.dolganov.tool.knowledge.collector.annotation.ControllerInfo;
+import ru.dolganov.tool.knowledge.collector.command.CommandService;
+import ru.dolganov.tool.knowledge.collector.command.MoveNode;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventAdapter;
 import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.model.CompareUtil;
@@ -23,10 +26,10 @@ import ru.dolganov.tool.knowledge.collector.model.CompareUtil;
 public class SortTreeController extends Controller<MainWindow>{
 	
 	
-	private Comparator<NodeMeta> nodeComparator = new Comparator<NodeMeta>(){
+	private Comparator<RootElement> nodeComparator = new Comparator<RootElement>(){
 
 		@Override 
-		public int compare(NodeMeta a,NodeMeta b){
+		public int compare(RootElement a,RootElement b){
 			return CompareUtil.compare(CompareUtil.index(a), CompareUtil.index(b));
 		}
 		
@@ -40,7 +43,7 @@ public class SortTreeController extends Controller<MainWindow>{
 		get(TreeController.class).addListener(new DAOEventAdapter(){
 
 			@Override
-			public void onAdded(NodeMeta parent, NodeMeta child) {
+			public void onAdded(RootElement parent, RootElement child) {
 				sortNodes(parent, child);
 			}
 		});
@@ -59,13 +62,13 @@ public class SortTreeController extends Controller<MainWindow>{
 			@Override
 			public void afterDrop(DefaultMutableTreeNode tagretNode,
 					DefaultMutableTreeNode draggedNode) {
-				TreeOps.move(tagretNode,draggedNode);
+				CommandService.invoke(new MoveNode(tagretNode,draggedNode));
 			}
 		});
 		
 	}
 
-	private void sortNodes(NodeMeta parent, NodeMeta child) {
+	private void sortNodes(RootElement parent, RootElement child) {
 		//update model
 		DefaultMutableTreeNode childInitNode = dao.getCache().get(child, "tree-node", DefaultMutableTreeNode.class);
 		TreePath childPath = new TreePath(childInitNode.getPath());
@@ -74,7 +77,7 @@ public class SortTreeController extends Controller<MainWindow>{
 			selectedPath = childPath;
 		}
 		Root root = child.getParent();
-		List<NodeMeta> nodes = root.getNodes();
+		List<RootElement> nodes = root.getNodes();
 		Collections.sort(nodes, nodeComparator);
 		dao.merge(root);
 		//update tree
@@ -97,15 +100,15 @@ public class SortTreeController extends Controller<MainWindow>{
 		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
 		if(parent == null || parent.getChildCount() == 1) return;
 		Object ob = node.getUserObject();
-		if(!(ob instanceof NodeMeta)) return;
+		if(!(ob instanceof Node)) return;
 		
-		NodeMeta meta = (NodeMeta) ob;
+		RootElement meta = (RootElement) ob;
 		Root root = meta.getParent();
-		List<NodeMeta> nodes = root.getNodes();
+		List<RootElement> nodes = root.getNodes();
 		
 		int oldIndex = nodes.indexOf(meta);
 		int minIndex = oldIndex;
-		Class<? extends NodeMeta> nodeClass = meta.getClass();
+		Class<? extends RootElement> nodeClass = meta.getClass();
 		for(int i = oldIndex -1 ; i > -1; i--){
 			minIndex = i;
 			if(!ClassUtil.isValid(nodes.get(i).getClass(), nodeClass)){
