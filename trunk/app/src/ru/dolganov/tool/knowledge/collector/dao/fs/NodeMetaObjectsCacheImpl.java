@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
+import ru.dolganov.tool.knowledge.collector.dao.NodeObjectsCache;
 
 import model.knowledge.RootElement;
 import model.knowledge.Root;
@@ -16,14 +16,17 @@ import model.knowledge.Root;
  * @author jenua.dolganov
  *
  */
-public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
+public class NodeMetaObjectsCacheImpl implements NodeObjectsCache {
 	
 	
 	
 	ReadWriteLock lock = new ReentrantReadWriteLock();
 	
 	HashMap<String, HashMap<String, Object>> objectsMap = new HashMap<String, HashMap<String, Object>>();
-	HashMap<String, Root> rootsMap = new HashMap<String, Root>();
+	//[path - root]
+	HashMap<String, Root> rootsPathMap = new HashMap<String, Root>();
+	//[uuid - root]
+	HashMap<String, Root> rootsUuidMap = new HashMap<String, Root>();
 	
 	// [14.10.2009] jenua.dolganov: более корректная модель для кеширования рутов 
 	// строим дерево из рутов, храня название их папки (или весь путь для корневого рута)
@@ -52,7 +55,8 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	public void putRoot(Root root){
 		lock.writeLock().lock();
 		try {
-			rootsMap.put(root.getDirPath(), root);
+			rootsPathMap.put(root.getDirPath(), root);
+			rootsUuidMap.put(root.getUuid(), root);
 		} finally {
 			lock.writeLock().unlock();
 		}
@@ -90,7 +94,16 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 	public Root getRoot(String path){
 		lock.readLock().lock();
 		try {
-			return rootsMap.get(path);
+			return rootsPathMap.get(path);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
+	
+	public Root getRootByUuid(String rootUuid) {
+		lock.readLock().lock();
+		try {
+			return rootsUuidMap.get(rootUuid);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -114,10 +127,12 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		try {
 			pathPattern = pathPattern.replace('\\', '/');
 			LinkedList<String> keys = new LinkedList<String>();
-			for(String key : rootsMap.keySet())
+			for(String key : rootsPathMap.keySet())
 				if(key.startsWith(pathPattern))keys.add(key);
 			for(String key : keys){
-				Root root = rootsMap.remove(key);
+				Root root = rootsPathMap.remove(key);
+				rootsUuidMap.remove(root.getUuid());
+				
 				for(RootElement node : root.getNodes()){
 					objectsMap.remove(getNodeKey(node));
 				}
@@ -140,16 +155,16 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 			newPathPattern = newPathPattern.replace('\\', '/');
 			int oldPatternLenth = oldPathPattern.length();
 			LinkedList<String> keys = new LinkedList<String>();
-			for(String key : rootsMap.keySet())
+			for(String key : rootsPathMap.keySet())
 				if(key.startsWith(oldPathPattern))keys.add(key);
 			for(String key : keys){
-				Root root = rootsMap.remove(key);
+				Root root = rootsPathMap.remove(key);
 				String dirPath = root.getDirPath();
 				String newPath = newPathPattern;
 				String part = dirPath.substring(oldPatternLenth);
 				if(part.length() > 0) newPath = newPath + part;
 				root.setDirPath(newPath);
-				rootsMap.put(root.getDirPath(), root);
+				rootsPathMap.put(root.getDirPath(), root);
 			}
 		} finally {
 			lock.writeLock().unlock();
@@ -157,6 +172,8 @@ public class NodeMetaObjectsCacheImpl implements NodeMetaObjectsCache {
 		
 		
 	}
+
+
 	
 
 	

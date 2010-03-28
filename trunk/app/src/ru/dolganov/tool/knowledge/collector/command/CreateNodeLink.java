@@ -17,6 +17,7 @@ public class CreateNodeLink extends TreeCommand {
 			RootElement donor = nodes[1];
 			NodeLink link = new NodeLink();
 			link.setNodeUuid(donor.getUuid());
+			link.setNodeRootUuid(donor.getParent().getUuid());
 			doNextAction(new AddTreeNode(parent, link));
 		}
 	}

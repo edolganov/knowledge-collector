@@ -51,6 +51,15 @@ public abstract class RootElement implements Parent, HavingUuid {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) return false;
+		if(!getClass().equals(obj.getClass())) return false;
+		if(!getUuid().equals(((RootElement)obj).getUuid())) return false;
+		
+		return true;
+	}
+	
+	@Override
 	public String toString() {
 		return getClass().getName() +": " + getUuid();
 	}

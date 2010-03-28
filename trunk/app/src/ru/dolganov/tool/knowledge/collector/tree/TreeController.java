@@ -2,6 +2,8 @@ package ru.dolganov.tool.knowledge.collector.tree;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +14,9 @@ import javax.swing.tree.TreePath;
 
 import model.knowledge.Dir;
 import model.knowledge.Node;
+import model.knowledge.NodeLink;
 import model.knowledge.RootElement;
+import ru.chapaj.util.lang.ProxyUtil;
 import ru.chapaj.util.swing.tree.ExtendTree;
 import ru.chapaj.util.swing.tree.TreeNodeAdapter;
 import ru.chapaj.util.swing.tree.ExtendTree.SelectModel;
@@ -24,6 +28,7 @@ import ru.dolganov.tool.knowledge.collector.main.MainWindow;
 import ru.dolganov.tool.knowledge.collector.tree.cell.HasCellConst;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellEditor;
 import ru.dolganov.tool.knowledge.collector.tree.cell.MainCellRender;
+import ru.dolganov.tool.knowledge.collector.tree.link.TreeLink;
 
 @ControllerInfo(target=MainWindow.class)
 public class TreeController extends Controller<MainWindow> implements HasCellConst{
@@ -187,8 +192,28 @@ public class TreeController extends Controller<MainWindow> implements HasCellCon
 	}
 
 	private DefaultMutableTreeNode createTreeNode(RootElement meta) {
-		DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(meta);
-		dao.getCache().put(meta,TREE_NODE, treeNode);
+		
+		Object treeData = null;
+		RootElement nodeCache = null;
+		if(meta instanceof NodeLink){
+			NodeLink nodeLink = (NodeLink) meta;
+			RootElement node = dao.find(nodeLink.getNodeRootUuid(), nodeLink.getNodeUuid());
+			if(node == null){
+				treeData = nodeLink;
+				nodeCache = nodeLink;
+			}
+			else {
+				treeData = node;//new TreeLink(nodeLink,node);
+				nodeCache = nodeLink;
+			}
+		}
+		else {
+			treeData = meta;
+			nodeCache = meta;
+		}
+		
+		DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(treeData);
+		dao.getCache().put(nodeCache,TREE_NODE, treeNode);
 		return treeNode;
 	}
 	

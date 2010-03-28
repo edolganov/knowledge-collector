@@ -13,14 +13,14 @@ public interface DAO {
 	
 	Root getRoot();
 
-	//NodeMeta
+	//Node
 	List<RootElement> getChildren(Parent parent);
 	
 	boolean addChild(Parent parent, RootElement child);
 	
 	boolean addChild(Parent parent, RootElement child,Map<String, String> params);
 	
-	NodeMetaObjectsCache getCache();
+	NodeObjectsCache getCache();
 	
 	void addListener(DAOEventListener listener);
 
@@ -33,6 +33,8 @@ public interface DAO {
 	void merge(Root object);
 	
 	void merge(Root root, boolean immediately);
+	
+	RootElement find(String rootUuid, String nodeUuid);
 	
 	
 	//Snaps

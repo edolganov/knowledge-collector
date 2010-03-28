@@ -23,7 +23,7 @@ import ru.chapaj.util.store.XmlStore;
 import ru.chapaj.util.xml.ObjectToXMLConverter;
 import ru.dolganov.tool.knowledge.collector.dao.DAO;
 import ru.dolganov.tool.knowledge.collector.dao.DAOEventListener;
-import ru.dolganov.tool.knowledge.collector.dao.NodeMetaObjectsCache;
+import ru.dolganov.tool.knowledge.collector.dao.NodeObjectsCache;
 import ru.dolganov.tool.knowledge.collector.dao.fs.PersistTimer.TimeoutListener;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.DirKeeper;
 import ru.dolganov.tool.knowledge.collector.dao.fs.keeper.SnapshotKeeper;
@@ -186,7 +186,7 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	}
 	
 	@Override
-	public NodeMetaObjectsCache getCache() {
+	public NodeObjectsCache getCache() {
 		return cache;
 	}
 	
@@ -329,6 +329,22 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 	public void merge(Root root, boolean immediately) {
 		save(null, null, root);
 	}
+	
+	@Override
+	public RootElement find(String rootUuid, String nodeUuid) {
+		if(rootUuid == null || nodeUuid == null) return null;
+		
+		Root root = cache.getRootByUuid(rootUuid);
+		if(root == null) return null;
+		
+		List<RootElement> nodes = root.getNodes();
+		for (RootElement rootElement : nodes) {
+			if(rootElement.getUuid().equals(nodeUuid)){
+				return rootElement;
+			}
+		}
+		return null;
+	}
 
 	
 
@@ -359,6 +375,12 @@ public class FSDAOImpl implements DAO, HasNodeMetaParams {
 		else {
 			try {
 				root = metaStore.loadFile(metaFile);
+				//add uuid to the root if it not set yet
+				if(root.getUnsafeUuid() == null){
+					root.getUuid();
+					metaStore.saveFile(metaFile, root, true);
+				}
+				
 				for(RootElement meta : root.getNodes()){
 					meta.setParent(root);
 				}

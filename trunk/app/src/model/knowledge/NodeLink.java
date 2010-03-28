@@ -10,6 +10,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class NodeLink extends RootElement {
 	
 	String nodeUuid;
+	String nodeRootUuid;
+
+	public String getNodeRootUuid() {
+		return nodeRootUuid;
+	}
+
+	public void setNodeRootUuid(String nodeRootUuid) {
+		this.nodeRootUuid = nodeRootUuid;
+	}
 
 	public String getNodeUuid() {
 		return nodeUuid;

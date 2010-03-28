@@ -3,11 +3,11 @@ package ru.dolganov.tool.knowledge.collector.dao;
 import model.knowledge.RootElement;
 
 /**
- * Глобальный кеш объектов
+ * Кеш для сеансового хранения данных, привязанных к объекту
  * @author jenua.dolganov
  *
  */
-public interface NodeMetaObjectsCache {
+public interface NodeObjectsCache {
 
 	/**
 	 * положить для данной ноды по ключу объект
