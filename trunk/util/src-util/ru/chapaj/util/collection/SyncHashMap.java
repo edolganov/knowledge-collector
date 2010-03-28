@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SyncHashMap<K,V> extends HashMap<K, V> {
 	
 	private static final long serialVersionUID = 1L;
-	ReadWriteLock lock = new ReentrantReadWriteLock();
+	protected ReadWriteLock lock = new ReentrantReadWriteLock();
 	
 	@Override
 	public V get(Object key) {
@@ -27,6 +27,10 @@ public class SyncHashMap<K,V> extends HashMap<K, V> {
 		} finally {
 			lock.readLock().unlock();
 		}
+	}
+	
+	public V unsaveGet(Object key) {
+		return super.get(key);
 	}
 
 	@Override
@@ -107,6 +111,10 @@ public class SyncHashMap<K,V> extends HashMap<K, V> {
 		} finally {
 			lock.writeLock().unlock();
 		}
+	}
+	
+	protected V unsavePut(K key, V value) {
+		return super.put(key, value);
 	}
 
 	@Override
