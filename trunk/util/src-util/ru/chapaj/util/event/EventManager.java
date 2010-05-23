@@ -13,6 +13,12 @@ public class EventManager {
 	
 	private Map<Class<?>, ListenerList> listeners = new HashMap<Class<?>, ListenerList>();
 	
+	private ListenerExceptionHandler exceptionHandler;
+	
+	public void setExceptionHandler(ListenerExceptionHandler exceptionHandler) {
+		this.exceptionHandler = exceptionHandler;
+	}
+
 	public EventManager() {
 		super();
 	}
@@ -33,12 +39,17 @@ public class EventManager {
 				//log
 			}
 			catch (Exception e) {
-				throw new FireEventException(e);
+				if(exceptionHandler != null){
+					exceptionHandler.handle(e);
+				}
+				else {
+					throw new FireEventException(e);
+				}
 			}
 		}
 	}
 
-	public void addListener(EventListener<Event<?>> listener) {
+	public <T extends Event<?>> void addListener(EventListener<T> listener) {
 		getListeners(listener.clazz,true).unsorted.add(listener);
 	}
 	
