@@ -9,7 +9,7 @@ public abstract class EventListener<T extends Event<?>> {
 		this.clazz = clazz;
 	}
 	
-	public abstract void onAction(Object source, T event);
+	public abstract void onAction(Object source, T event) throws StopEventException;
 	
 
 }
