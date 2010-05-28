@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ru.chapaj.util.event.annotation.LastEventListener;
@@ -15,7 +16,13 @@ public class EventManager {
 		EventListener<T> eventListener;
 		Method method;
 		Object methodObj;
+		EventCallback<?, T> eventCallback;
 		
+		public ListenerObject(EventCallback<?, T> eventCallback) {
+			super();
+			this.eventCallback = eventCallback;
+		}
+
 		public ListenerObject(EventListener<T> eventListener) {
 			super();
 			this.eventListener = eventListener;
@@ -50,12 +57,15 @@ public class EventManager {
 	public void fireEvent(Object source, Event<?> event){
 		ListenerList listeners = getListeners(event.getClass(), false);
 		if(listeners != null){
+			List<ListenerObject> toDeleteFromUnsorted = new ArrayList<ListenerObject>();
+			List<ListenerObject> toDeleteFromLast = new ArrayList<ListenerObject>();
 			try {
 				for(ListenerObject listenerObject : listeners.unsorted){
-					invokeListenerObject(source, event, listenerObject);
+					invokeListenerObject(source, event, listenerObject,toDeleteFromUnsorted);
 				}
+				
 				for(ListenerObject listenerObject : listeners.last){
-					invokeListenerObject(source, event, listenerObject);
+					invokeListenerObject(source, event, listenerObject,toDeleteFromLast);
 				}
 			}
 			catch (StopEventException e) {
@@ -69,21 +79,30 @@ public class EventManager {
 					throw new FireEventException(e);
 				}
 			}
+			finally {
+				for (ListenerObject listenerObject : toDeleteFromUnsorted) {
+					listeners.unsorted.remove(listenerObject);
+				}
+				for (ListenerObject listenerObject : toDeleteFromLast) {
+					listeners.last.remove(listenerObject);
+				}
+			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void invokeListenerObject(Object source, Event<?> event,
-			ListenerObject listenerObject) throws IllegalAccessException,
+			ListenerObject listenerObject,List<ListenerObject> toDelete) throws IllegalAccessException,
 			InvocationTargetException {
 		//это класс слушатель
 		if(listenerObject.eventListener != null){
 			listenerObject.eventListener.onAction(source, event);
 		}
 		//это метод в объекте помеченный аннотацией слушателя
-		else {
+		else if(listenerObject.method != null){
 			Object ob = listenerObject.methodObj;
 			Method method = listenerObject.method;
+			method.setAccessible(true);
 			Class<?>[] parameterTypes = method.getParameterTypes();
 			if(parameterTypes == null || parameterTypes.length == 0){
 				method.invoke(ob);
@@ -115,6 +134,12 @@ public class EventManager {
 			}
 			
 		}
+		//это событие-колбек
+		else if(listenerObject.eventCallback != null){
+			listenerObject.eventCallback.onAction(source, event);
+			//удаляем кобек из подписчиков
+			toDelete.add(listenerObject);
+		}
 	}
 
 	public <T extends Event<?>> void addListener(EventListener<T> listener) {
@@ -141,6 +166,16 @@ public class EventManager {
 				getListeners(lel.value(), true).last.add(new ListenerObject<Event<?>>(ob,candidat));
 			}
 		}
+	}
+	
+	public <T extends Event<?>,C extends Event<?>> void fireEventCallback(Object source, EventCallback<T,C> eventCallback){
+		getListeners(eventCallback.clazz,true).unsorted.add(new ListenerObject<C>(eventCallback));
+		fireEvent(source, eventCallback.event);
+	}
+	
+	public <T extends Event<?>,C extends Event<?>> void fireLastEventCallback(Object source, EventCallback<T,C> eventCallback){
+		getListeners(eventCallback.clazz,true).last.add(new ListenerObject<C>(eventCallback));
+		fireEvent(source, eventCallback.event);
 	}
 	
 	

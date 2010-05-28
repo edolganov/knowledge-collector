@@ -43,12 +43,17 @@ public class AnnotationTest {
 		System.out.println("call f4");
 	}
 	
-	//bad cases
-	
-	//@EventListener(TestEvent.class)
-	private void invF0(){
-		System.out.println("bad call!");
+	@EventListener(TestEvent.class)
+	private void f5(){
+		System.out.println("call f5");
 	}
+	
+	@LastEventListener(TestEvent.class)
+	void f6(){
+		System.out.println("call f6");
+	}
+	
+	//bad cases
 	
 	//@EventListener(TestEvent.class)
 	public void invF1(String s){
