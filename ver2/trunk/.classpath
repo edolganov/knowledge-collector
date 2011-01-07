@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="common/util/src"/>
+	<classpathentry kind="src" path="common/model/src"/>
+	<classpathentry kind="src" path="common/tools/file-persist/src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
