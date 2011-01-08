@@ -2,6 +2,8 @@ package ru.kc.tools.filepersist.model.impl;
 
 import java.util.Collection;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 import ru.kc.model.Node;
 
 
@@ -11,7 +13,8 @@ public abstract class NodeBean implements Node {
 	protected String name;
 	protected String description;
 	protected Long createDate;
-	protected Collection<Node> children;
+	
+	@XStreamOmitField 
 	protected NodeBean parent;
 	
 	
@@ -59,15 +62,12 @@ public abstract class NodeBean implements Node {
 	
 	@Override
 	public Collection<Node> getChildren() {
-		return children;
-	}
-	public void setChildren(Collection<Node> children) {
-		this.children = children;
+		return null;
 	}
 
 	@Override
 	public String toString() {
-		return "NodeBean [id=" + id + ", name=" + name + ", description="
+		return getClass().getSimpleName()+" [id=" + id + ", name=" + name + ", description="
 				+ description + ", createDate=" + createDate + "]";
 	}
 	

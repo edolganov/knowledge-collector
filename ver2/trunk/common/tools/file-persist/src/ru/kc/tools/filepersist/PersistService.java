@@ -1,12 +1,13 @@
 package ru.kc.tools.filepersist;
 
 import java.io.File;
+import java.io.IOException;
 
 import ru.kc.exception.BaseException;
 import ru.kc.tools.filepersist.command.Command;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
 import ru.kc.tools.filepersist.model.DataFactory;
-import ru.kc.tools.filepersist.persist.PersistManager;
+import ru.kc.tools.filepersist.persist.EntityManager;
 
 public class PersistService {
 	
@@ -20,10 +21,10 @@ public class PersistService {
 		invoke(new CreateOrLoadData());
 	}
 
-	private void initContext(String rootDirPath) throws BaseException {
+	private void initContext(String rootDirPath) throws Exception {
 		File root = createRootDir(rootDirPath);
 		
-		PersistManager dataManager = new PersistManager();
+		EntityManager dataManager = new EntityManager();
 		dataManager.init(root);
 		
 		DataFactory dataFactory = new DataFactory();
