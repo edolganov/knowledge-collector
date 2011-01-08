@@ -9,7 +9,7 @@ public class CreateOrLoadData extends Command<Void>{
 		NodeBean node = c.entityManager.getRoot();
 		if(node == null){
 			NodeBean root = c.dataFactory.createDir(null,"root");
-			c.entityManager.save(root);
+			c.entityManager.create(root);
 		}
 		
 		return null;

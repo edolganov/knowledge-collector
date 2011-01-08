@@ -24,13 +24,13 @@ public class PersistService {
 	private void initContext(String rootDirPath) throws Exception {
 		File root = createRootDir(rootDirPath);
 		
-		EntityManager dataManager = new EntityManager();
-		dataManager.init(root);
+		EntityManager entityManager = new EntityManager();
+		entityManager.init(root);
 		
 		DataFactory dataFactory = new DataFactory();
 		
 		context = new Context(root,
-				dataManager,
+				entityManager,
 				dataFactory);
 	}
 

@@ -3,6 +3,7 @@ package ru.kc.tools.filepersist.persist;
 import java.io.File;
 import java.io.IOException;
 
+import ru.kc.exception.BaseException;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.ContainersTree;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -59,13 +60,15 @@ public class FileSystemImpl {
 		}
 	}
 
-	public void save(NodeBean node) throws IOException {
+	public void create(NodeBean node) throws Exception {
 		NodeBean parent = node.getParent();
 		if(parent != null){
 			//TODO
 		} else {
 			Container c = containersTree.getRoot();
-			c.replace(0,node);
+			if(c.size() > 0) throw new BaseException("node already exist");
+			
+			c.add(node);
 			containerStore.save(c);
 		}
 	}
