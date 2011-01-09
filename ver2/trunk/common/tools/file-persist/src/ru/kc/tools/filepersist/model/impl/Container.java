@@ -3,6 +3,8 @@ package ru.kc.tools.filepersist.model.impl;
 import java.io.File;
 import java.util.ArrayList;
 
+import ru.kc.tools.filepersist.PersistService;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -15,8 +17,16 @@ public class Container {
 	@XStreamOmitField 
 	private int maxSize = Integer.MAX_VALUE;
 	
+	@XStreamOmitField
+	private PersistService persistService;
+	
 	private ArrayList<NodeBean> nodes = new ArrayList<NodeBean>();
 
+	public void init(File file,PersistService service){
+		setFile(file);
+		setMaxSize(100);
+		setPersistService(service);
+	}
 	
 	public void add(NodeBean node){
 		if(isFull()) throw new IllegalStateException("container is full");
@@ -40,6 +50,14 @@ public class Container {
 			nodes.remove(index);
 		} 
 		nodes.add(index,node);
+	}
+	
+	public NodeBean getFirst(){
+		if(size() > 0){
+			return get(0);
+		} else {
+			return null;
+		}
 	}
 	
 	
@@ -67,16 +85,23 @@ public class Container {
 	public void setNodes(ArrayList<NodeBean> nodes) {
 		this.nodes = nodes;
 	}
+	public PersistService getPersistService() {
+		return persistService;
+	}
+
+	public void setPersistService(PersistService persistService) {
+		this.persistService = persistService;
+	}
 	
 	
-	
-	
-	public static Container create(File file){
+
+	public static Container create(File file,PersistService service){
 		Container container = new Container();
-		container.setFile(file);
-		container.setMaxSize(100);
+		container.init(file, service);
 		return container;
 	}
+	
+
 
 
 	

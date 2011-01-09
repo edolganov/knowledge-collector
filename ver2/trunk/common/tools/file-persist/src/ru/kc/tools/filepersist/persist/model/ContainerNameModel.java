@@ -1,4 +1,4 @@
-package ru.kc.tools.filepersist.persist;
+package ru.kc.tools.filepersist.persist.model;
 
 public class ContainerNameModel {
 

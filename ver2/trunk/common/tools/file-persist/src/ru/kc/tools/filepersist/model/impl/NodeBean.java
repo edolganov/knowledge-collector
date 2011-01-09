@@ -14,17 +14,15 @@ public abstract class NodeBean implements Node {
 	protected String description;
 	protected Long createDate;
 	
-	@XStreamOmitField 
-	protected NodeBean parent;
-	
-	
+	@XStreamOmitField
+	protected Container container;
 
-	public NodeBean getParent() {
-		return parent;
+	public Container getContainer() {
+		return container;
 	}
 
-	public void setParent(NodeBean parent) {
-		this.parent = parent;
+	public void setContainer(Container container) {
+		this.container = container;
 	}
 
 	@Override

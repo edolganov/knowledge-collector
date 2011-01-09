@@ -6,10 +6,10 @@ public class CreateOrLoadData extends Command<Void>{
 
 	@Override
 	public Void invoke() throws Exception {
-		NodeBean node = c.entityManager.getRoot();
+		NodeBean node = c.fs.getRoot();
 		if(node == null){
-			NodeBean root = c.dataFactory.createDir(null,"root");
-			c.entityManager.create(root);
+			NodeBean root = c.dataFactory.createDir("root");
+			c.fs.createRoot(root);
 		}
 		
 		return null;

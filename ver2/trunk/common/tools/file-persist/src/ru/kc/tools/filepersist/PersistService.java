@@ -1,17 +1,17 @@
 package ru.kc.tools.filepersist;
 
 import java.io.File;
-import java.io.IOException;
 
 import ru.kc.exception.BaseException;
+import ru.kc.model.Node;
 import ru.kc.tools.filepersist.command.Command;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
 import ru.kc.tools.filepersist.model.DataFactory;
-import ru.kc.tools.filepersist.persist.EntityManager;
+import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
 public class PersistService {
 	
-	Context context;
+	private Context c;
 	
 	public PersistService() {
 	}
@@ -24,14 +24,15 @@ public class PersistService {
 	private void initContext(String rootDirPath) throws Exception {
 		File root = createRootDir(rootDirPath);
 		
-		EntityManager entityManager = new EntityManager();
-		entityManager.init(root);
+		FileSystemImpl fs = new FileSystemImpl();
+		fs.init(root,this);
 		
 		DataFactory dataFactory = new DataFactory();
 		
-		context = new Context(root,
-				entityManager,
-				dataFactory);
+		c = new Context(root,
+				fs,
+				dataFactory,
+				this);
 	}
 
 	private File createRootDir(String rootDirPath) throws BaseException {
@@ -45,7 +46,12 @@ public class PersistService {
 	}
 	
 	private <O> O invoke(Command<O> command) throws Exception{
-		return context.invoke(command);
+		return c.invoke(command);
+	}
+	
+	
+	public Node getRoot() throws Exception{
+		return c.fs.getRoot();
 	}
 
 }

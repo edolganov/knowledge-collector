@@ -1,9 +1,10 @@
-package ru.kc.tools.filepersist.model.impl;
+package ru.kc.tools.filepersist.persist.model;
 
+import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.util.collection.LimitedList;
 import ru.kc.util.collection.TreeList;
 
-public class ContainersTree {
+public class ContainersModel {
 	
 	private TreeList<LimitedList<Container>> tree = new TreeList<LimitedList<Container>>();
 	
@@ -16,11 +17,11 @@ public class ContainersTree {
 
 	public Container getRoot() {
 		LimitedList<Container> pool = tree.getRoot();
-		if(pool.isEmpty()) {
-			return null;
-		} else {
+		if(!pool.isEmpty()) {
 			Container container = pool.get(0);
 			return container;
+		} else {
+			throw new IllegalStateException("no root in model");
 		}
 	}
 

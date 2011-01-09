@@ -2,6 +2,7 @@ package ru.kc.tools.filepersist.persist;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.reflections.Reflections;
@@ -12,11 +13,19 @@ import org.reflections.util.FilterBuilder;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.model.impl.Container;
+import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.util.xml.ObjectToXMLConverter;
 import ru.kc.util.xml.XmlStore;
 
 public class ContainerStore extends XmlStore<Container>{
+	
+	private PersistService persistService;
+	
+	public ContainerStore(PersistService persistService) {
+		this.persistService = persistService;
+	}
 
 	@Override
 	protected void config(ObjectToXMLConverter<Container> converter) {
@@ -43,7 +52,12 @@ public class ContainerStore extends XmlStore<Container>{
 	
 	public Container load(File file) throws IOException{
 		Container container = loadFile(file);
-		container.setFile(file);
+		container.init(file, persistService);
+		
+		ArrayList<NodeBean> nodes = container.getNodes();
+		for (NodeBean nodeBean : nodes) {
+			nodeBean.setContainer(container);
+		}
 		return container;
 	}
 
