@@ -4,12 +4,12 @@ import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.transaction.AtomicAction;
 
-public class AddNodeToNotContainer extends AtomicAction<Void>{
+public class AddNodeToContainer extends AtomicAction<Void>{
 	
 	NodeBean node;
 	Container container;
 
-	public AddNodeToNotContainer(NodeBean node, Container container) {
+	public AddNodeToContainer(NodeBean node, Container container) {
 		super();
 		this.node = node;
 		this.container = container;

@@ -14,7 +14,7 @@ import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.AtomicAction;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
-import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToNotContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
@@ -72,7 +72,7 @@ public class FileSystemImpl {
 		if(c.size() > 0) throw new BaseException("root already exist");
 		
 		doTransaction(
-				new AddNodeToNotContainer(node,c),
+				new AddNodeToContainer(node,c),
 				new SaveContainer(c));
 	}
 
@@ -81,7 +81,7 @@ public class FileSystemImpl {
 		
 		doTransaction(
 				new AddChild(parent, node),
-				new AddNodeToNotContainer(node,containerForChild),
+				new AddNodeToContainer(node,containerForChild),
 				new SaveContainers(parent, node));
 	}
 	
