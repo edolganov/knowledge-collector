@@ -61,4 +61,9 @@ public class ContainerStore extends XmlStore<Container>{
 		return container;
 	}
 
+	public Container rollback(Container container) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

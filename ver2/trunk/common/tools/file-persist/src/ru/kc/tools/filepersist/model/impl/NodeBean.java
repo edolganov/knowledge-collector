@@ -1,6 +1,8 @@
 package ru.kc.tools.filepersist.model.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -16,6 +18,19 @@ public abstract class NodeBean implements Node {
 	
 	@XStreamOmitField
 	protected Container container;
+	protected List<String> childrenIds;
+	
+	
+	public void addChildId(NodeBean node) {
+		if(childrenIds == null) childrenIds = new ArrayList<String>();
+		childrenIds.add(node.getId());
+	}
+	
+	public void removeChildId(NodeBean node) {
+		if(childrenIds == null) return;
+		String id = node.getId();
+		childrenIds.remove(id);
+	}
 
 	public Container getContainer() {
 		return container;
@@ -60,7 +75,15 @@ public abstract class NodeBean implements Node {
 	
 	@Override
 	public Collection<Node> getChildren() {
-		return null;
+		return container.getPersistService().getChildren(this);
+	}
+
+	public List<String> getChildrenIds() {
+		return childrenIds;
+	}
+
+	public void setChildrenIds(List<String> childrenIds) {
+		this.childrenIds = childrenIds;
 	}
 
 	@Override
@@ -68,6 +91,10 @@ public abstract class NodeBean implements Node {
 		return getClass().getSimpleName()+" [id=" + id + ", name=" + name + ", description="
 				+ description + ", createDate=" + createDate + "]";
 	}
+
+
+
+
 	
 
 }

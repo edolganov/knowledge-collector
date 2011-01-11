@@ -1,12 +1,14 @@
 package ru.kc.tools.filepersist;
 
 import java.io.File;
+import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.command.Command;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
 import ru.kc.tools.filepersist.model.DataFactory;
+import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
 public class PersistService {
@@ -52,6 +54,24 @@ public class PersistService {
 	
 	public Node getRoot() throws Exception{
 		return c.fs.getRoot();
+	}
+
+	public Collection<Node> getChildren(Node node) {
+		return c.fs.getChildren(convert(node));
+	}
+	
+	
+	
+
+	private NodeBean convert(Node node) {
+		if(node != null){
+			if(node instanceof NodeBean) return (NodeBean) node;
+			//else
+			throw new IllegalArgumentException("unknow node type: "+node.getClass());
+		} else {
+			throw new IllegalArgumentException("node is null");
+		}
+
 	}
 
 }
