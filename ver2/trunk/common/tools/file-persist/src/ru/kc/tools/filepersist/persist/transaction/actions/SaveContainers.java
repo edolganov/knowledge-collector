@@ -18,7 +18,7 @@ public class SaveContainers extends AtomicAction<Void>{
 	}
 	
 	@Override
-	public Void invoke() throws Exception {
+	public Void invoke() throws Throwable {
 		Container con1 = node1.getContainer();
 		t.invoke(new SaveContainer(con1));
 		

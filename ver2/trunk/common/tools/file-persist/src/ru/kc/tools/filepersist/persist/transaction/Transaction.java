@@ -56,7 +56,7 @@ public abstract class Transaction<T> {
 	}
 	
 	
-	protected <O> O invoke(AtomicAction<O> action) throws Throwable {
+	public <O> O invoke(AtomicAction<O> action) throws Throwable {
 		action.setTransaction(this);
 		O out = action.invoke();
 		done.add(action);
