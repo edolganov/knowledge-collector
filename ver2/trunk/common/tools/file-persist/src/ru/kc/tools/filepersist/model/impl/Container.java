@@ -20,7 +20,11 @@ public class Container {
 	@XStreamOmitField
 	private PersistService persistService;
 
+	private long revision;
 	private ArrayList<NodeBean> nodes = new ArrayList<NodeBean>();
+
+	
+	
 
 	public void init(File file, PersistService service) {
 		setFile(file);
@@ -101,6 +105,14 @@ public class Container {
 
 	public void setPersistService(PersistService persistService) {
 		this.persistService = persistService;
+	}
+
+	public long getRevision() {
+		return revision;
+	}
+
+	public void setRevision(long revision) {
+		this.revision = revision;
 	}
 
 	public static Container create(File file, PersistService service) {
