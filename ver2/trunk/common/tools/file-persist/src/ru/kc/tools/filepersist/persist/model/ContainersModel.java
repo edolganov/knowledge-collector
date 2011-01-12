@@ -1,22 +1,22 @@
 package ru.kc.tools.filepersist.persist.model;
 
 import ru.kc.tools.filepersist.model.impl.Container;
+import ru.kc.util.collection.LimitedLevelTreeList;
 import ru.kc.util.collection.LimitedList;
-import ru.kc.util.collection.TreeList;
 
 public class ContainersModel {
 	
-	private TreeList<LimitedList<Container>> tree = new TreeList<LimitedList<Container>>();
+	private LimitedLevelTreeList<LimitedList<Container>> limitedLevelTreeList = new LimitedLevelTreeList<LimitedList<Container>>();
 	
 	public void setRoot(Container container){
-		if(tree.size() > 0) throw new IllegalStateException("tree is not empty");
+		if(limitedLevelTreeList.size() > 0) throw new IllegalStateException("tree is not empty");
 		
 		LimitedList<Container> pool = LimitedList.create(container);
-		tree.add(pool);
+		limitedLevelTreeList.add(pool);
 	}
 
 	public Container getRoot() {
-		LimitedList<Container> pool = tree.getRoot();
+		LimitedList<Container> pool = limitedLevelTreeList.getRoot();
 		if(!pool.isEmpty()) {
 			Container container = pool.get(0);
 			return container;
@@ -26,8 +26,14 @@ public class ContainersModel {
 	}
 
 	public Container getNotFullContainer() {
-		// TODO Auto-generated method stub
-		return null;
+		LimitedList<Container> notFullList = null;
+		for (LimitedList<Container> list : limitedLevelTreeList) {
+			if(!list.isFull()){
+				notFullList = list;
+				break;
+			}
+		}
+		return notFullList != null? notFullList.getLast() : null;
 	}
 
 }

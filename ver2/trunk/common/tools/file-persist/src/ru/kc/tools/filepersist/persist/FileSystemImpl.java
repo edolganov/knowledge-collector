@@ -11,10 +11,10 @@ import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainerNameModel;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
-import ru.kc.tools.filepersist.persist.transaction.AtomicAction;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
@@ -67,31 +67,48 @@ public class FileSystemImpl {
 		return c.getFirst();
 	}
 	
-	public void createRoot(NodeBean node)throws Exception{
-		Container c = containerModel.getRoot();
-		if(c.size() > 0) throw new BaseException("root already exist");
-		
-		doTransaction(
-				new AddNodeToContainer(node,c),
-				new SaveContainer(c));
+	public void createRoot(final NodeBean node)throws Exception{
+		new Transaction<Void>(createContext()){
+
+			@Override
+			protected Void body() throws Throwable {
+				Container c = containerModel.getRoot();
+				if(c.size() > 0) throw new BaseException("root already exist");
+				
+				invoke(new AddNodeToContainer(node,c));
+				invoke(new SaveContainer(c));
+				
+				return null;
+			}
+			
+		}.start();
 	}
 
-	public void create(NodeBean parent, NodeBean node) throws Exception {		
-		Container containerForChild = containerModel.getNotFullContainer();
+	public void create(final NodeBean parent, final NodeBean node) throws Exception {				
+		new Transaction<Void>(createContext()){
+
+			@Override
+			protected Void body() throws Throwable {
+				Container containerForChild = invoke(new GetNotFullContainer());
+				invoke(new AddChild(parent, node));
+				invoke(new AddNodeToContainer(node,containerForChild));
+				invoke(new SaveContainers(parent, node));
+				
+				return null;
+			}
+			
+		}.start();
+	}
+
+	public void update(NodeBean node)throws Exception {
 		
-		doTransaction(
-				new AddChild(parent, node),
-				new AddNodeToContainer(node,containerForChild),
-				new SaveContainers(parent, node));
 	}
 	
 	public void deleteRecursive(NodeBean node)throws Exception{
 		//TODO
 	}
 	
-	public void update(NodeBean node)throws Exception {
-		//TODO
-	}
+
 	
 	public void moveRecursive(NodeBean node, NodeBean newParent)throws Exception{
 		//TODO
@@ -100,23 +117,9 @@ public class FileSystemImpl {
 	public Collection<Node> getChildren(NodeBean node) {
 		return null;
 	}
-	
 
-	
-	private void doTransaction(AtomicAction<?>... actions) throws Exception {
-		Transaction t = createTransaction();
-		try {
-			for (AtomicAction<?> atomicAction : actions) {
-				t.invoke(atomicAction);
-			}
-		}catch (Exception e) {
-			t.roolback();
-			throw e;
-		}
-	}
-	
-	private Transaction createTransaction(){
-		return new Transaction(containerModel, containerNameModel, containerStore);
+	private Transaction.Context createContext(){
+		return new Transaction.Context(containerModel, containerNameModel, containerStore);
 	}
 
 

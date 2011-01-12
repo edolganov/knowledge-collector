@@ -9,9 +9,24 @@ import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.model.ContainerNameModel;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 
-public class Transaction {
+public abstract class Transaction<T> {
 	
 	private static Log log = LogFactory.getLog(Transaction.class);
+	
+	public static class Context {
+		public final ContainersModel containerModel;
+		public final ContainerNameModel containerNameModel;
+		public final ContainerStore containerStore;
+		
+		public Context(ContainersModel containerModel,
+				ContainerNameModel containerNameModel,
+				ContainerStore containerStore) {
+			super();
+			this.containerModel = containerModel;
+			this.containerNameModel = containerNameModel;
+			this.containerStore = containerStore;
+		}
+	}
 
 	public final ContainersModel containerModel;
 	public final ContainerNameModel containerNameModel;
@@ -20,30 +35,35 @@ public class Transaction {
 	ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	
 
-	public Transaction(ContainersModel containerModel,
-			ContainerNameModel containerNameModel,
-			ContainerStore containerStore) {
+	public Transaction(Context c) {
 		super();
-		this.containerModel = containerModel;
-		this.containerNameModel = containerNameModel;
-		this.containerStore = containerStore;
+		this.containerModel = c.containerModel;
+		this.containerNameModel = c.containerNameModel;
+		this.containerStore = c.containerStore;
 	}
 	
-	public <O> O invoke(AtomicAction<O> action) throws Exception {
-		try {
-			action.setTransaction(this);
-			O out = action.invoke();
-			done.add(action);
-			return (O) out;
-		}catch (Throwable e) {
+	protected abstract T body() throws Throwable;
+	
+	public T start() throws Exception {
+		try{
+			return body();
+		} catch (Throwable e) {
+			roolback();
 			if(e instanceof Exception) throw (Exception)e;
 			if(e instanceof Error) throw (Error)e;
 			else throw new IllegalStateException(e);
- 		}
-		
+		}
 	}
 	
-	public void roolback(){
+	
+	protected <O> O invoke(AtomicAction<O> action) throws Throwable {
+		action.setTransaction(this);
+		O out = action.invoke();
+		done.add(action);
+		return (O) out;
+	}
+	
+	protected void roolback(){
 		AtomicAction<?> action = null;
 		try{
 			for (int i = done.size()-1; i > -1; i--) {

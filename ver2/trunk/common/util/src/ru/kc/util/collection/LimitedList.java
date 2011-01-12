@@ -29,6 +29,10 @@ public class LimitedList<E> extends ArrayList<E> {
 		throw new UnsupportedOperationException();
 	}
 	
+	public E getLast() {
+		return get(size()-1);
+	}
+	
 	
 	public boolean isFull(){
 		return size() >= maxSize;
@@ -49,5 +53,7 @@ public class LimitedList<E> extends ArrayList<E> {
 		list.add(first);
 		return list;
 	}
+
+
 
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * когда заполняется уровень - создаем следующий.
  *
  */
-public class TreeList<T> extends AbstractList<T>{
+public class LimitedLevelTreeList<T> extends AbstractList<T>{
 	
 	public static class TreeNode<T> {
 		private T ob;
@@ -35,11 +35,11 @@ public class TreeList<T> extends AbstractList<T>{
 	private int childInLevel;
 	private ArrayList<TreeNode<T>> allNodes = new ArrayList<TreeNode<T>>();
 	
-	public TreeList() {
+	public LimitedLevelTreeList() {
 		this(10);
 	}
 	
-	public TreeList(int childInLevel) {
+	public LimitedLevelTreeList(int childInLevel) {
 		this.childInLevel = childInLevel;
 	}
 	
