@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
+import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.util.file.FileUtil;
 import static org.junit.Assert.* ;
 
@@ -31,10 +32,11 @@ public class ContainerStoreTransactions  {
 	@Test
 	public void saveAndRollback() throws IOException{
 		Container container = new Container();
-		container.init(new File(dir,"test.xml"), null);
+		container.init(new File(dir,"test.xml"), null,10);
 		assertEquals(0,container.getRevision());
 		
-		ContainerStore store = new ContainerStore(null);
+		ContainerStore store = new ContainerStore();
+		store.init(testContext());
 		
 		store.save(container);
 		assertEquals(1,container.getRevision());
@@ -74,5 +76,9 @@ public class ContainerStoreTransactions  {
 		assertEquals(2,container.getRevision());
 	}
 
+	
+	public FSContext testContext(){
+		return new FSContext(null, null, null, null, null, 10, 10, 10);
+	}
 	
 }
