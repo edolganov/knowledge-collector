@@ -26,9 +26,9 @@ public class Container {
 	
 	
 
-	public void init(File file, PersistService service) {
+	public void init(File file, PersistService service, int maxSize) {
 		setFile(file);
-		setMaxSize(100);
+		setMaxSize(maxSize);
 		setPersistService(service);
 	}
 
@@ -115,9 +115,9 @@ public class Container {
 		this.revision = revision;
 	}
 
-	public static Container create(File file, PersistService service) {
+	public static Container create(File file, PersistService service,int maxSize) {
 		Container container = new Container();
-		container.init(file, service);
+		container.init(file, service,maxSize);
 		return container;
 	}
 

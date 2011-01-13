@@ -5,26 +5,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-
-import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.util.file.FileUtil;
 import ru.kc.util.xml.ObjectToXMLConverter;
 import ru.kc.util.xml.XmlStore;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 public class ContainerStore {
 	
-	private static Log log = LogFactory.getLog(ContainerStore.class);
+	//private static Log log = LogFactory.getLog(ContainerStore.class);
 	
 	private XmlStore<Container> xmlStore = new XmlStore<Container>() {
 		
@@ -45,10 +42,11 @@ public class ContainerStore {
 			}
 		}
 	};
-	private PersistService persistService;
 	
-	public ContainerStore(PersistService persistService) {
-		this.persistService = persistService;
+	private FSContext c;
+	
+	public void init(FSContext c){
+		this.c = c;
 	}
 	
 	
@@ -62,7 +60,7 @@ public class ContainerStore {
 
 	public Container load(File file) throws IOException{
 		Container container = xmlStore.loadFile(file);
-		container.init(file, persistService);
+		container.init(file, c.persistService,c.maxNodesInContainer);
 		
 		ArrayList<NodeBean> nodes = container.getNodes();
 		for (NodeBean nodeBean : nodes) {

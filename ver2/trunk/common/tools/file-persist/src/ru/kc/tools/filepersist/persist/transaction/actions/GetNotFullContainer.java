@@ -7,17 +7,10 @@ public class GetNotFullContainer extends AtomicAction<Container>{
 
 	@Override
 	protected Container invoke() throws Exception {
-		Container out = t.containerModel.getNotFullContainer();
-		if(out == null){
-			//TODO
-		}
-		return out;
+		return c.containerModel.getNotFullContainer();
 	}
 
 	@Override
-	protected void rollback() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void rollback() {}
 
 }

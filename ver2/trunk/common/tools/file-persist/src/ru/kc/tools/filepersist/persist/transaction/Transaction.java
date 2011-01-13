@@ -5,41 +5,20 @@ import java.util.ArrayList;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.tools.filepersist.persist.ContainerStore;
-import ru.kc.tools.filepersist.persist.model.ContainerNameModel;
-import ru.kc.tools.filepersist.persist.model.ContainersModel;
+import ru.kc.tools.filepersist.persist.FSContext;
 
 public abstract class Transaction<T> {
 	
 	private static Log log = LogFactory.getLog(Transaction.class);
 	
-	public static class Context {
-		public final ContainersModel containerModel;
-		public final ContainerNameModel containerNameModel;
-		public final ContainerStore containerStore;
-		
-		public Context(ContainersModel containerModel,
-				ContainerNameModel containerNameModel,
-				ContainerStore containerStore) {
-			super();
-			this.containerModel = containerModel;
-			this.containerNameModel = containerNameModel;
-			this.containerStore = containerStore;
-		}
-	}
-
-	public final ContainersModel containerModel;
-	public final ContainerNameModel containerNameModel;
-	public final ContainerStore containerStore;
+	private final FSContext c;
 	
 	ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	
 
-	public Transaction(Context c) {
+	public Transaction(FSContext c) {
 		super();
-		this.containerModel = c.containerModel;
-		this.containerNameModel = c.containerNameModel;
-		this.containerStore = c.containerStore;
+		this.c = c;
 	}
 	
 	protected abstract T body() throws Throwable;
@@ -57,7 +36,7 @@ public abstract class Transaction<T> {
 	
 	
 	public <O> O invoke(AtomicAction<O> action) throws Throwable {
-		action.setTransaction(this);
+		action.init(this,c);
 		O out = action.invoke();
 		done.add(action);
 		return (O) out;

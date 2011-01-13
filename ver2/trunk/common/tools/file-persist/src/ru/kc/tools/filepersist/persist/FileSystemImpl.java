@@ -9,7 +9,6 @@ import ru.kc.model.Node;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
-import ru.kc.tools.filepersist.persist.model.ContainerNameModel;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
@@ -20,63 +19,64 @@ import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
 public class FileSystemImpl {
 	
-	private PersistService persistService;
-	private File nodesDir;
-	private File blobsDir;
-	
-	private ContainersModel containerModel = new ContainersModel();
-	private ContainerNameModel containerNameModel = new ContainerNameModel();
-	private ContainerStore containerStore;
-	
+	private FSContext c;
 	
 	public void init(File rootDir, PersistService persistService) throws IOException{
-		nodesDir = new File(rootDir,"nodes");
-		blobsDir = new File(rootDir,"nodes-data");
-		this.persistService = persistService;
-		containerStore = new ContainerStore(persistService);
+		File nodesDir = new File(rootDir,"nodes");
+		File blobsDir = new File(rootDir,"nodes-data");
+		ContainerStore containerStore = new ContainerStore();
+		ContainersModel containerModel = new ContainersModel();
+		
+		c = new FSContext(
+				containerModel, 
+				containerStore,
+				persistService,
+				nodesDir,blobsDir,
+				100,
+				100,
+				100);
+		containerStore.init(c);
+		containerModel.init(c);
 		
 		initFolders();
 		initRootNode();
 	}
 
 	private void initFolders() {
-		if(!nodesDir.exists()) nodesDir.mkdir();
-		if(!blobsDir.exists()) blobsDir.mkdir();
+		if(!c.nodesDir.exists()) c.nodesDir.mkdir();
+		if(!c.blobsDir.exists()) c.blobsDir.mkdir();
 	}
 	
-	private void initRootNode() throws IOException {
-		Container container = null;
-		
-		String name = containerNameModel.getFirstName();
-		File file = new File(nodesDir,name);
+	private void initRootNode() throws IOException {		
+		Container container = c.containerModel.createRootContainer();
+		File file = container.getFile();
 		if(file.exists()){
-			container = containerStore.load(file);
+			container = c.containerStore.load(file);
 		} else {
-			container = Container.create(file,persistService);
-			containerStore.save(container);
+			c.containerStore.save(container);
 		}
 		
-		containerModel.setRoot(container);
+		c.containerModel.setRoot(container);
 	}
 	
 	
 	
 	
 	public NodeBean getRoot(){
-		Container c = containerModel.getRoot();
-		return c.getFirst();
+		Container container = c.containerModel.getRoot();
+		return container.getFirst();
 	}
 	
 	public void createRoot(final NodeBean node)throws Exception{
-		new Transaction<Void>(createContext()){
+		new Transaction<Void>(c){
 
 			@Override
 			protected Void body() throws Throwable {
-				Container c = containerModel.getRoot();
-				if(c.size() > 0) throw new BaseException("root already exist");
+				Container container = c.containerModel.getRoot();
+				if(container.size() > 0) throw new BaseException("root already exist");
 				
-				invoke(new AddNodeToContainer(node,c));
-				invoke(new SaveContainer(c));
+				invoke(new AddNodeToContainer(node,container));
+				invoke(new SaveContainer(container));
 				
 				return null;
 			}
@@ -85,7 +85,7 @@ public class FileSystemImpl {
 	}
 
 	public void create(final NodeBean parent, final NodeBean node) throws Exception {				
-		new Transaction<Void>(createContext()){
+		new Transaction<Void>(c){
 
 			@Override
 			protected Void body() throws Throwable {
@@ -116,10 +116,6 @@ public class FileSystemImpl {
 
 	public Collection<Node> getChildren(NodeBean node) {
 		return null;
-	}
-
-	private Transaction.Context createContext(){
-		return new Transaction.Context(containerModel, containerNameModel, containerStore);
 	}
 
 

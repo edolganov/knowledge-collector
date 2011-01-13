@@ -7,6 +7,11 @@ public class LimitedList<E> extends ArrayList<E> {
 	
 	private int maxSize = Integer.MAX_VALUE;
 	
+	public LimitedList(){
+		super();
+		setMaxSize(100);
+	}
+	
 	public boolean add(E e) {
 		if(isFull()) throw new IllegalStateException("list is full");
 		return super.add(e);
@@ -44,14 +49,6 @@ public class LimitedList<E> extends ArrayList<E> {
 	
 	public void setMaxSize(int maxSize) {
 		this.maxSize = maxSize;
-	}
-	
-	
-	public static <M> LimitedList<M> create(M first){
-		LimitedList<M> list = new LimitedList<M>();
-		list.setMaxSize(100);
-		list.add(first);
-		return list;
 	}
 
 

@@ -1,7 +1,7 @@
 package ru.kc.util.collection;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,29 +10,27 @@ import java.util.List;
  * когда заполняется уровень - создаем следующий.
  *
  */
-public class LimitedLevelTreeList<T> extends AbstractList<T>{
+public class LimitedLevelTreeList<T> implements Iterable<T>{
 	
 	public static class TreeNode<T> {
 		private T ob;
-		private int index;
 		private List<TreeNode<T>> children;
 		
 		public TreeNode(T ob, int index) {
 			super();
 			this.ob = ob;
-			this.index = index;
 		}
 
 		public T getOb() {
 			return ob;
 		}
-
-		public int getIndex() {
-			return index;
+		
+		public List<TreeNode<T>> getChildren(){
+			return children == null? new ArrayList<TreeNode<T>>() : new ArrayList<TreeNode<T>>(children);
 		}
 	}
 	
-	private int childInLevel;
+	private int maxChildInLevel;
 	private ArrayList<TreeNode<T>> allNodes = new ArrayList<TreeNode<T>>();
 	
 	public LimitedLevelTreeList() {
@@ -40,30 +38,42 @@ public class LimitedLevelTreeList<T> extends AbstractList<T>{
 	}
 	
 	public LimitedLevelTreeList(int childInLevel) {
-		this.childInLevel = childInLevel;
+		this.maxChildInLevel = childInLevel;
 	}
 	
 	public boolean add(T e) {
 		if(allNodes.size() > 0){
-			findAndAdd(e);
+			findAndAdd(e,false);
 		} else {
 			addChild(null, e);
 		}
 		return true;
 	};
 	
-	@Override
 	public T get(int index) {
-		TreeNode<T> node = allNodes.get(index);
-		return node != null? node.ob : null;
+		return allNodes.get(index).getOb();
+	}
+	
+	
+	public TreeNode<T> getParentCandidat() {
+		if(allNodes.size() > 0){
+			return findAndAdd(null,true);
+		} else {
+			return null;
+		}
+		
+	}
+	
+	public void setRoot(T root) {
+		if(size() > 0) throw new IllegalStateException("root is already set");
+		add(root);
 	}
 	
 	public T getRoot() {
-		if(size() == 0) return null;
-		else return get(0);
+		if(allNodes.size() == 0) return null;
+		else return allNodes.get(0).getOb();
 	}
 
-	@Override
 	public int size() {
 		return allNodes.size();
 	}
@@ -75,7 +85,7 @@ public class LimitedLevelTreeList<T> extends AbstractList<T>{
 	}
 
 	public boolean isFullLevel(int index){
-		return getChildCount(index) >= childInLevel;
+		return getChildCount(index) >= maxChildInLevel;
 	}
 	
 	public List<TreeNode<T>> getChildren(int index){
@@ -90,14 +100,16 @@ public class LimitedLevelTreeList<T> extends AbstractList<T>{
 	
 	
 
-	private void findAndAdd(T ob) {
+	private TreeNode<T> findAndAdd(T ob, boolean onlyFind) {
 		LinkedList<TreeNode<T>> levels = new LinkedList<TreeNode<T>>();
 		levels.addLast(allNodes.get(0));
 		while(true){
 			TreeNode<T> candidat = levels.removeFirst();
 			if(canAddChild(candidat)){
-				addChild(candidat,ob);
-				break;
+				if(!onlyFind){ 
+					addChild(candidat,ob);
+				}
+				return candidat;
 			} else {
 				for (TreeNode<T> child : candidat.children) {
 					levels.addLast(child);
@@ -107,7 +119,7 @@ public class LimitedLevelTreeList<T> extends AbstractList<T>{
 	}
 	
 	private boolean canAddChild(TreeNode<T> parent) {
-		boolean out = parent.children == null || parent.children.size() < childInLevel;
+		boolean out = parent.children == null || parent.children.size() < maxChildInLevel;
 		return out;
 	}
 
@@ -128,6 +140,39 @@ public class LimitedLevelTreeList<T> extends AbstractList<T>{
 		if(node.children == null) return 0;
 		else return node.children.size();
 	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new Iterator<T>() {
+			
+			Iterator<TreeNode<T>> it = allNodes.iterator();
+
+			@Override
+			public boolean hasNext() {
+				return it.hasNext();
+			}
+
+			@Override
+			public T next() {
+				return it.next().getOb();
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
+
+	public int getMaxChildInLevel() {
+		return maxChildInLevel;
+	}
+
+
+
+	
+
+
 
 
 
