@@ -3,6 +3,8 @@ package filepersist;
 import java.io.File;
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,9 +13,8 @@ import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.util.file.FileUtil;
-import static org.junit.Assert.* ;
 
-public class ContainerStoreTransactions  {
+public class ContainerStoreTransactions extends Assert  {
 	
 	File dir = new File("./test_data");
 	

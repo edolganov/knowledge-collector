@@ -81,7 +81,7 @@ public class ContainersModel {
 				File parentFolderFile = node.getOb().file;
 				File newFolderFile = null;
 				if(children.size() == 0){
-					newFolderFile = new File(parentFolderFile,nameModel.getFirstName());
+					newFolderFile = new File(parentFolderFile,nameModel.first());
 				} else {
 					TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
 					String lastChildFolderName = lastChild.getOb().file.getName();
