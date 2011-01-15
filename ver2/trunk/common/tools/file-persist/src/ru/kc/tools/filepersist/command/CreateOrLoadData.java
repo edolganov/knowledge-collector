@@ -1,5 +1,6 @@
 package ru.kc.tools.filepersist.command;
 
+import ru.kc.model.Dir;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 
 public class CreateOrLoadData extends Command<Void>{
@@ -8,7 +9,8 @@ public class CreateOrLoadData extends Command<Void>{
 	public Void invoke() throws Exception {
 		NodeBean node = c.fs.getRoot();
 		if(node == null){
-			NodeBean root = c.dataFactory.createDir("root");
+			Dir dir = c.dataFactory.createDir("root");
+			NodeBean root = c.convertorService.convert(dir);
 			c.fs.createRoot(root);
 		}
 		

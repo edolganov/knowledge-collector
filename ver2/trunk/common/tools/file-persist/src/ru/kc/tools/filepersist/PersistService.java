@@ -10,6 +10,6 @@ public interface PersistService {
 	
 	Collection<Node> getChildren(Node node) throws Exception;
 	
-	void create(Node parent, Node node) throws Exception;
+	void add(Node parent, Node node) throws Exception;
 
 }

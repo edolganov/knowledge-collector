@@ -7,6 +7,7 @@ import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.command.Command;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
+import ru.kc.tools.filepersist.impl.ConvertorServiceImpl;
 import ru.kc.tools.filepersist.model.DataFactoryImpl;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
@@ -34,10 +35,7 @@ public class PersistServiceImpl implements PersistService {
 		
 		DataFactoryImpl dataFactory = new DataFactoryImpl();
 		
-		c = new Context(root,
-				fs,
-				dataFactory,
-				this);
+		c = new Context(fs,dataFactory,this,new ConvertorServiceImpl());
 	}
 
 	private File createRootDir(String rootDirPath) throws BaseException {
@@ -63,7 +61,7 @@ public class PersistServiceImpl implements PersistService {
 	}
 	
 	@Override
-	public void create(Node parent, Node node) throws Exception {
+	public void add(Node parent, Node node) throws Exception {
 		c.fs.create(convert(parent), convert(parent));
 	}
 	

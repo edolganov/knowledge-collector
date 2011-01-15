@@ -1,16 +1,40 @@
 package ru.kc.tools.filepersist.model;
 
+import ru.kc.model.Dir;
+import ru.kc.model.FileLink;
+import ru.kc.model.Link;
+import ru.kc.model.Text;
+import ru.kc.tools.filepersist.DataFactory;
 import ru.kc.tools.filepersist.model.impl.DirBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 
-public class DataFactoryImpl {
+public class DataFactoryImpl implements DataFactory {
 
-	public NodeBean createDir(String name) {
+	public Dir createDir(String name) {
 		DirBean dir = new DirBean();
 		init(dir,name);
 		return dir;
 	}
 
+	@Override
+	public FileLink createFileLink(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Link createLink(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Text createText(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	private void init(NodeBean node, String name) {
 		node.setId(generateId());
 		node.setCreateDate(System.currentTimeMillis());
