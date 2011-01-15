@@ -28,6 +28,13 @@ public class LimitedLevelTreeList<T> implements Iterable<T>{
 		public List<TreeNode<T>> getChildren(){
 			return children == null? new ArrayList<TreeNode<T>>() : new ArrayList<TreeNode<T>>(children);
 		}
+
+		@Override
+		public String toString() {
+			return "TreeNode [ob=" + ob + ", childrenSize=" + (children == null? 0 : children.size()) + "]";
+		}
+		
+		
 	}
 	
 	private int maxChildInLevel;
@@ -51,6 +58,7 @@ public class LimitedLevelTreeList<T> implements Iterable<T>{
 	};
 	
 	public T get(int index) {
+		if(index > size()-1) throw new IndexOutOfBoundsException("Index:"+index+" Size:"+size());
 		return allNodes.get(index).getOb();
 	}
 	
@@ -168,13 +176,11 @@ public class LimitedLevelTreeList<T> implements Iterable<T>{
 		return maxChildInLevel;
 	}
 
-
-
-	
-
-
-
-
+	@Override
+	public String toString() {
+		return "LimitedLevelTreeList [maxChildInLevel=" + maxChildInLevel
+				+ ", allNodes=" + allNodes + "]";
+	}
 
 
 

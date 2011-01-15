@@ -51,6 +51,7 @@ public class ContainerStore {
 	
 	
 	public void save(Container container) throws IOException {
+		container.getFile().getParentFile().mkdirs();
 		createHistoryFile(container);
 		container.setRevision(container.getRevision()+1);
 		xmlStore.saveFile(container.getFile(), container);

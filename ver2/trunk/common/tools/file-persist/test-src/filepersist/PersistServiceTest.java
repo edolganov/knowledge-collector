@@ -11,7 +11,7 @@ import ru.kc.util.file.FileUtil;
 import static org.junit.Assert.* ;
 
 
-public class NodesCRUD {
+public class PersistServiceTest {
 	
 	File dir = new File("./test_data");
 	File rootFile = new File(dir.getPath()+"/nodes/000.xml");

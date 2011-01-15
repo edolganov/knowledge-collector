@@ -65,7 +65,7 @@ public class ContainersModel {
 		}
 		else {
 			//создаем новый пустой контейнер
-			ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size());
+			ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
 			if(!lastFolder.isFull()){
 				File lastExistFile = lastFolder.getLast().getFile();
 				String newName = nameModel.next(lastExistFile.getName());
@@ -87,11 +87,10 @@ public class ContainersModel {
 					String lastChildFolderName = lastChild.getOb().file.getName();
 					newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 				}
-				newFolderFile.mkdir();
 				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.maxContainerFilesInFolder);
 				folderTreeList.add(newFolder);
 				
-				File newContainerFile = new File(lastFolder.file,nameModel.first(CONTAINER_FILE_EXT));
+				File newContainerFile = new File(newFolder.file,nameModel.first(CONTAINER_FILE_EXT));
 				Container container = Container.create(newContainerFile, c.persistService, c.maxNodesInContainer);
 				newFolder.add(container);
 				return container;

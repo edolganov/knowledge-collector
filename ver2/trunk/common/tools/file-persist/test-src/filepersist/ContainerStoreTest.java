@@ -14,7 +14,7 @@ import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.util.file.FileUtil;
 
-public class ContainerStoreTransactions extends Assert  {
+public class ContainerStoreTest extends Assert  {
 	
 	File dir = new File("./test_data");
 	
