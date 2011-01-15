@@ -1,10 +1,9 @@
 package ru.kc.tools.filepersist.model;
 
-import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.DirBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 
-public class DataFactory {
+public class DataFactoryImpl {
 
 	public NodeBean createDir(String name) {
 		DirBean dir = new DirBean();

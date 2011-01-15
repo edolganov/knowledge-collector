@@ -7,7 +7,7 @@ import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.command.Command;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
-import ru.kc.tools.filepersist.model.DataFactory;
+import ru.kc.tools.filepersist.model.DataFactoryImpl;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
@@ -32,7 +32,7 @@ public class PersistServiceImpl implements PersistService {
 		FileSystemImpl fs = new FileSystemImpl();
 		fs.init(root,this,init);
 		
-		DataFactory dataFactory = new DataFactory();
+		DataFactoryImpl dataFactory = new DataFactoryImpl();
 		
 		c = new Context(root,
 				fs,
@@ -62,8 +62,9 @@ public class PersistServiceImpl implements PersistService {
 		return c.fs.getChildren(convert(node));
 	}
 	
-	public void create(Node parent, NodeBean node) throws Exception {
-		
+	@Override
+	public void create(Node parent, Node node) throws Exception {
+		c.fs.create(convert(parent), convert(parent));
 	}
 	
 	
