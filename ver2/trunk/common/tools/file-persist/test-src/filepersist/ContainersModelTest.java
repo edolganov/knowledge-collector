@@ -5,7 +5,8 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import ru.kc.tools.filepersist.impl.InitContext;
+import ru.kc.tools.filepersist.InitParams;
+import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.FSContext;
@@ -20,7 +21,9 @@ public class ContainersModelTest extends Assert {
 	
 	@Before
 	public void init() throws Exception{
-		context = new FSContext(null, null, null, new InitContext(dir, null, 2, 2, 2));
+		InitParams params = new InitParams(dir, 2, 2, 2);
+		InitContextExt init = new InitContextExt(params, null, null);
+		context = new FSContext(null, null, null, init);
 	}
 	
 	

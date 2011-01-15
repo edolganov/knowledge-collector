@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.impl.InitContext;
-import ru.kc.tools.filepersist.impl.TreeImpl;
+import ru.kc.tools.filepersist.Tree;
+import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
@@ -22,15 +22,14 @@ public class FileSystemImpl {
 	
 	private FSContext c;
 	
-	public void init(File rootDir, 
-			TreeImpl persistService, InitContext init) throws IOException{
+	public void init(InitContextExt init, Tree tree) throws IOException{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
 		
 		c = new FSContext(
 				containerModel, 
 				containerStore,
-				persistService,
+				tree,
 				init);
 		containerStore.init(c);
 		containerModel.init(c);

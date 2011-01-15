@@ -61,7 +61,7 @@ public class ContainerStore {
 
 	public Container load(File file) throws IOException{
 		Container container = xmlStore.loadFile(file);
-		container.init(file, c.persistService,c.init.maxNodesInContainer);
+		container.init(file, c.persistService,c.init.params.maxNodesInContainer);
 		
 		ArrayList<NodeBean> nodes = container.getNodes();
 		for (NodeBean nodeBean : nodes) {

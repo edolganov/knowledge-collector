@@ -3,6 +3,7 @@ package ru.kc.tools.filepersist.impl;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
+import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.model.impl.DirBean;

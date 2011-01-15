@@ -1,66 +1,50 @@
 package ru.kc.tools.filepersist.impl;
 
-import java.io.File;
 import java.util.Collection;
 
-import ru.kc.exception.BaseException;
+import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.command.CreateOrLoadData;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
 public class TreeImpl implements Tree {
 	
 	private Context c;
+	private FileSystemImpl fs;
 	
-	public TreeImpl() {
-	}
 	
-	public void init(String rootDirPath, InitContext params) throws Exception{
-		initContext(rootDirPath,params);
-		c.invoke(new CreateOrLoadData());
+	public void init(Context c) throws Exception{
+		this.c = c;
+		this.fs = new FileSystemImpl();
+		fs.init(c.init, this);
+		createOrLoadData();
 	}
 
-	private void initContext(String rootDirPath, InitContext params) throws Exception {
-		File root = createRootDir(rootDirPath);
-		File nodesDir = new File(root,"nodes");
-		File blobsDir = new File(root,"nodes-data");
-		InitContext init = new InitContext(nodesDir,blobsDir,params.maxNodesInContainer, params.maxContainerFilesInFolder, params.maxFoldersInLevel);
-		
-		FileSystemImpl fs = new FileSystemImpl();
-		fs.init(root,this,init);
-		
-		FactoryImpl dataFactory = new FactoryImpl();
-		
-		c = new Context(fs,dataFactory,this,new ConvertorServiceImpl());
-	}
-
-	private File createRootDir(String rootDirPath) throws BaseException {
-		File root = new File(rootDirPath);
-		root.mkdirs();
-		root.mkdir();
-		if(!root.isDirectory()){
-			throw new BaseException("!root.isDirectory() with path "+rootDirPath);
+	private void createOrLoadData() throws Exception {
+		NodeBean node = fs.getRoot();
+		if(node == null){
+			Dir dir = c.factory.createDir("root");
+			NodeBean root = convert(dir);
+			fs.createRoot(root);
 		}
-		return root;
 	}
 	
 
 	
 	@Override
 	public Node getRoot() throws Exception{
-		return c.fs.getRoot();
+		return fs.getRoot();
 	}
 
 	@Override
 	public Collection<Node> getChildren(Node node) {
-		return c.fs.getChildren(convert(node));
+		return fs.getChildren(convert(node));
 	}
 	
 	@Override
 	public void add(Node parent, Node node) throws Exception {
-		c.fs.create(convert(parent), convert(parent));
+		fs.create(convert(parent), convert(parent));
 	}
 	
 	

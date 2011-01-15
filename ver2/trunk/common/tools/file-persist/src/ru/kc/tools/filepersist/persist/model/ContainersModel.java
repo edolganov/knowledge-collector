@@ -20,21 +20,21 @@ public class ContainersModel {
 	
 	public void init(FSContext c){
 		this.c = c;
-		folderTreeList = new LimitedLevelTreeList<ContainersFolder>(c.init.maxFoldersInLevel);
+		folderTreeList = new LimitedLevelTreeList<ContainersFolder>(c.init.params.maxFoldersInLevel);
 		nameModel = new NameModel();
 		String name = nameModel.first(CONTAINER_FILE_EXT);
 		firstFile = new File(c.init.nodesDir,name);
 	}
 	
 	public Container createRootContainer() {
-		return Container.create(firstFile,c.persistService,c.init.maxNodesInContainer);
+		return Container.create(firstFile,c.persistService,c.init.params.maxNodesInContainer);
 	}
 	
 	public void setRoot(Container container){
 		if(folderTreeList.size() > 0) throw new IllegalStateException("root is already set");
 		if(!firstFile.equals(container.getFile()))throw new IllegalStateException("container file "+container.getFile()+" is unknow: "+firstFile+" expected");
 			
-		ContainersFolder rootFolder = new ContainersFolder(c.init.nodesDir, c.init.maxContainerFilesInFolder);
+		ContainersFolder rootFolder = new ContainersFolder(c.init.nodesDir, c.init.params.maxContainerFilesInFolder);
 		rootFolder.add(container);
 		folderTreeList.setRoot(rootFolder);
 	}
@@ -70,7 +70,7 @@ public class ContainersModel {
 				File lastExistFile = lastFolder.getLast().getFile();
 				String newName = nameModel.next(lastExistFile.getName());
 				File newFile = new File(lastFolder.file,newName);
-				Container container = Container.create(newFile, c.persistService, c.init.maxNodesInContainer);
+				Container container = Container.create(newFile, c.persistService, c.init.params.maxNodesInContainer);
 				lastFolder.add(container);
 				return container;
 				
@@ -87,11 +87,11 @@ public class ContainersModel {
 					String lastChildFolderName = lastChild.getOb().file.getName();
 					newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 				}
-				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.init.maxContainerFilesInFolder);
+				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.init.params.maxContainerFilesInFolder);
 				folderTreeList.add(newFolder);
 				
 				File newContainerFile = new File(newFolder.file,nameModel.first(CONTAINER_FILE_EXT));
-				Container container = Container.create(newContainerFile, c.persistService, c.init.maxNodesInContainer);
+				Container container = Container.create(newContainerFile, c.persistService, c.init.params.maxNodesInContainer);
 				newFolder.add(container);
 				return container;
 			}
