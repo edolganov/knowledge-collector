@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ru.kc.tools.filepersist.InitContext;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
@@ -79,7 +80,7 @@ public class ContainerStoreTest extends Assert  {
 
 	
 	public FSContext testContext(){
-		return new FSContext(null, null, null, null, null, 10, 10, 10);
+		return new FSContext(null, null, null, new InitContext(null, null, 10, 10, 10));
 	}
 	
 }

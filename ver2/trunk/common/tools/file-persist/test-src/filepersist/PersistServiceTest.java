@@ -6,7 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ru.kc.tools.filepersist.InitContext;
 import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.PersistServiceImpl;
 import ru.kc.util.file.FileUtil;
 import static org.junit.Assert.* ;
 
@@ -15,13 +17,14 @@ public class PersistServiceTest {
 	
 	File dir = new File("./test_data");
 	File rootFile = new File(dir.getPath()+"/nodes/000.xml");
-	PersistService service = new PersistService();
+	PersistService service = new PersistServiceImpl();
+	InitContext params = new InitContext(10, 10, 10);
 	
 	@Before
 	public void init() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
 		dir.mkdirs();
-		service.init(dir.getPath());
+		((PersistServiceImpl)service).init(dir.getPath(),params);
 	}
 	
 	@After
@@ -36,11 +39,16 @@ public class PersistServiceTest {
 		assertEquals(true, rootFile.exists());
 		
 		long lastModified = rootFile.lastModified();
-		PersistService service2 = new PersistService();
-		service2.init(dir.getPath());
+		PersistServiceImpl service2 = new PersistServiceImpl();
+		service2.init(dir.getPath(),params);
 		assertEquals(true, lastModified == rootFile.lastModified());
 	}
 
+	
+	public void createNode(){
+//		service.
+		
+	}
 	
 
 

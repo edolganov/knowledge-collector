@@ -10,7 +10,7 @@ public interface Node {
 	
 	String getDescription();
 	
-	Collection<Node> getChildren();
+	Collection<Node> getChildren() throws Exception;
 	
 	Long getCreateDate();
 

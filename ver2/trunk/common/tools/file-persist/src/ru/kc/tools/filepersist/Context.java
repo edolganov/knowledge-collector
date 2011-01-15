@@ -11,9 +11,9 @@ public class Context {
 	public final File rootDir;
 	public final FileSystemImpl fs;
 	public final DataFactory dataFactory;
-	public final PersistService persistService;
+	public final PersistServiceImpl persistService;
 	
-	public Context(File rootDir, FileSystemImpl fs,DataFactory dataFactory,PersistService persistService) {
+	public Context(File rootDir, FileSystemImpl fs,DataFactory dataFactory,PersistServiceImpl persistService) {
 		super();
 		this.rootDir = rootDir;
 		this.fs = fs;

@@ -6,7 +6,8 @@ import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.InitContext;
+import ru.kc.tools.filepersist.PersistServiceImpl;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
@@ -21,9 +22,8 @@ public class FileSystemImpl {
 	
 	private FSContext c;
 	
-	public void init(File rootDir, PersistService persistService) throws IOException{
-		File nodesDir = new File(rootDir,"nodes");
-		File blobsDir = new File(rootDir,"nodes-data");
+	public void init(File rootDir, 
+			PersistServiceImpl persistService, InitContext init) throws IOException{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
 		
@@ -31,10 +31,7 @@ public class FileSystemImpl {
 				containerModel, 
 				containerStore,
 				persistService,
-				nodesDir,blobsDir,
-				100,
-				100,
-				100);
+				init);
 		containerStore.init(c);
 		containerModel.init(c);
 		
@@ -43,8 +40,8 @@ public class FileSystemImpl {
 	}
 
 	private void initFolders() {
-		if(!c.nodesDir.exists()) c.nodesDir.mkdir();
-		if(!c.blobsDir.exists()) c.blobsDir.mkdir();
+		if(!c.init.nodesDir.exists()) c.init.nodesDir.mkdir();
+		if(!c.init.blobsDir.exists()) c.init.blobsDir.mkdir();
 	}
 	
 	private void initRootNode() throws IOException {		
