@@ -22,7 +22,7 @@ public class ContainersModelTest extends Assert {
 	@Before
 	public void init() throws Exception{
 		InitParams params = new InitParams(dir, 2, 2, 2);
-		InitContextExt init = new InitContextExt(params, null, null);
+		InitContextExt init = new InitContextExt(params, dir, null);
 		context = new FSContext(null, null, null, init);
 	}
 	
