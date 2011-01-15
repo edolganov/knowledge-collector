@@ -20,7 +20,7 @@ public class PersistServiceTest {
 	
 	File dir = new File("./test_data");
 	File rootFile = new File(dir.getPath()+"/nodes/000.xml");
-	Tree service = new TreeImpl();
+	Tree service;
 	Context context;
 	
 	@Before
@@ -32,10 +32,7 @@ public class PersistServiceTest {
 		PeristService ps = new PeristService();
 		ps.init(init);
 		
-		
-
-		params = new InitContextExt(init, null, null);
-		((TreeImpl)service).init(dir.getPath(),params);
+		service = ps.tree();
 	}
 	
 	@After
@@ -50,8 +47,11 @@ public class PersistServiceTest {
 		assertEquals(true, rootFile.exists());
 		
 		long lastModified = rootFile.lastModified();
-		TreeImpl service2 = new TreeImpl();
-		service2.init(dir.getPath(),params);
+		
+		InitParams init = new InitParams(dir, 10, 10, 10);
+		PeristService ps2 = new PeristService();
+		ps2.init(init);
+		ps2.tree();
 		assertEquals(true, lastModified == rootFile.lastModified());
 	}
 

@@ -11,6 +11,7 @@ import ru.kc.tools.filepersist.impl.TreeImpl;
 public class PeristService {
 	
 	InitParams params;
+	Context context;
 	
 	public void init(InitParams params)throws Exception {
 		this.params = params;
@@ -22,7 +23,7 @@ public class PeristService {
 		FactoryImpl factory = new FactoryImpl();
 		TreeImpl tree = new TreeImpl();
 		
-		Context context = new Context(init, factory, tree);
+		context = new Context(init, factory, tree);
 		tree.init(context);
 		
 	}
@@ -32,6 +33,10 @@ public class PeristService {
 		if(!params.rootDir.isDirectory()){
 			throw new BaseException("!root.isDirectory(): "+params.rootDir);
 		}
+	}
+	
+	public Tree tree(){
+		return context.tree;
 	}
 
 }
