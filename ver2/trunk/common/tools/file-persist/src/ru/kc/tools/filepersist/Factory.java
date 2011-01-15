@@ -5,7 +5,7 @@ import ru.kc.model.FileLink;
 import ru.kc.model.Link;
 import ru.kc.model.Text;
 
-public interface DataFactory {
+public interface Factory {
 	
 	Dir createDir(String name);
 	

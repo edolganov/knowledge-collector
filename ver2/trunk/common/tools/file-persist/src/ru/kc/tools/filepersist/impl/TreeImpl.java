@@ -5,17 +5,16 @@ import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
-import ru.kc.tools.filepersist.model.DataFactoryImpl;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
-public class PersistServiceImpl implements PersistService {
+public class TreeImpl implements Tree {
 	
 	private Context c;
 	
-	public PersistServiceImpl() {
+	public TreeImpl() {
 	}
 	
 	public void init(String rootDirPath, InitContext params) throws Exception{
@@ -32,7 +31,7 @@ public class PersistServiceImpl implements PersistService {
 		FileSystemImpl fs = new FileSystemImpl();
 		fs.init(root,this,init);
 		
-		DataFactoryImpl dataFactory = new DataFactoryImpl();
+		FactoryImpl dataFactory = new FactoryImpl();
 		
 		c = new Context(fs,dataFactory,this,new ConvertorServiceImpl());
 	}

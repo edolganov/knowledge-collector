@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import ru.kc.model.Node;
 
-public interface PersistService {
+public interface Tree {
 	
 	Node getRoot() throws Exception;
 	
