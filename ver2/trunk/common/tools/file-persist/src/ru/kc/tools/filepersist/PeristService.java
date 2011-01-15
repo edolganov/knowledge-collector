@@ -7,6 +7,7 @@ import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.impl.FactoryImpl;
 import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.impl.TreeImpl;
+import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
 public class PeristService {
 	
@@ -21,10 +22,14 @@ public class PeristService {
 		
 		InitContextExt init = new InitContextExt(params,nodesDir,blobsDir);
 		FactoryImpl factory = new FactoryImpl();
-		TreeImpl tree = new TreeImpl();
+		TreeImpl tree = new TreeImpl();		
+		FileSystemImpl fs = new FileSystemImpl();
+
 		
-		context = new Context(init, factory, tree);
+		context = new Context(init, factory, tree, fs);
+		fs.init(context);
 		tree.init(context);
+		factory.init(context);
 		
 	}
 	
@@ -37,6 +42,10 @@ public class PeristService {
 	
 	public Tree tree(){
 		return context.tree;
+	}
+	
+	public Factory factory(){
+		return context.factory;
 	}
 
 }

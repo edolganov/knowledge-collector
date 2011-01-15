@@ -7,7 +7,7 @@ import java.util.Collection;
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.impl.InitContextExt;
+import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
@@ -22,15 +22,14 @@ public class FileSystemImpl {
 	
 	private FSContext c;
 	
-	public void init(InitContextExt init, Tree tree) throws IOException{
+	public void init(Context context) throws IOException{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
 		
 		c = new FSContext(
 				containerModel, 
 				containerStore,
-				tree,
-				init);
+				context);
 		containerStore.init(c);
 		containerModel.init(c);
 		
@@ -39,8 +38,8 @@ public class FileSystemImpl {
 	}
 
 	private void initFolders() {
-		if(!c.init.nodesDir.exists()) c.init.nodesDir.mkdir();
-		if(!c.init.blobsDir.exists()) c.init.blobsDir.mkdir();
+		if(!c.c.init.nodesDir.exists()) c.c.init.nodesDir.mkdir();
+		if(!c.c.init.blobsDir.exists()) c.c.init.blobsDir.mkdir();
 	}
 	
 	private void initRootNode() throws IOException {		

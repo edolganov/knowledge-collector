@@ -3,7 +3,7 @@ package ru.kc.tools.filepersist.model.impl;
 import java.io.File;
 import java.util.ArrayList;
 
-import ru.kc.tools.filepersist.Tree;
+import ru.kc.tools.filepersist.impl.Context;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -18,7 +18,7 @@ public class Container {
 	private int maxSize = Integer.MAX_VALUE;
 	
 	@XStreamOmitField
-	private Tree persistService;
+	private Context context;
 
 	private long revision;
 	private ArrayList<NodeBean> nodes = new ArrayList<NodeBean>();
@@ -26,10 +26,10 @@ public class Container {
 	
 	
 
-	public void init(File file, Tree service, int maxSize) {
+	public void init(File file,Context context) {
 		setFile(file);
-		setMaxSize(maxSize);
-		setPersistService(service);
+		setMaxSize(context.init.params.maxNodesInContainer);
+		setContext(context);
 	}
 
 	public void add(NodeBean node) {
@@ -99,12 +99,12 @@ public class Container {
 		this.nodes = nodes;
 	}
 
-	public Tree getPersistService() {
-		return persistService;
+	public Context getContext() {
+		return context;
 	}
 
-	public void setPersistService(Tree persistService) {
-		this.persistService = persistService;
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	public long getRevision() {
@@ -115,9 +115,9 @@ public class Container {
 		this.revision = revision;
 	}
 
-	public static Container create(File file, Tree service,int maxSize) {
+	public static Container create(File file, Context c) {
 		Container container = new Container();
-		container.init(file, service,maxSize);
+		container.init(file,c);
 		return container;
 	}
 

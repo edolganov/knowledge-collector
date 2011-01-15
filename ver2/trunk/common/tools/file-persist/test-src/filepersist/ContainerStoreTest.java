@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import ru.kc.tools.filepersist.InitParams;
+import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
@@ -19,11 +20,14 @@ import ru.kc.util.file.FileUtil;
 public class ContainerStoreTest extends Assert  {
 	
 	File dir = new File("./test_data");
+	FSContext context;
 	
 	@Before
 	public void init() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
 		dir.mkdirs();
+		
+		context = testContext();
 
 	}
 	
@@ -35,7 +39,7 @@ public class ContainerStoreTest extends Assert  {
 	@Test
 	public void saveAndRollback() throws IOException{
 		Container container = new Container();
-		container.init(new File(dir,"test.xml"), null,10);
+		container.init(new File(dir,"test.xml"), context.c);
 		assertEquals(0,container.getRevision());
 		
 		ContainerStore store = new ContainerStore();
@@ -83,7 +87,8 @@ public class ContainerStoreTest extends Assert  {
 	public FSContext testContext(){
 		InitParams params = new InitParams(dir, 10, 10, 10);
 		InitContextExt init = new InitContextExt(params, null, null);
-		return new FSContext(null, null, null, init);
+		Context c = new Context(init, null, null, null);
+		return new FSContext(null, null, c);
 	}
 	
 }

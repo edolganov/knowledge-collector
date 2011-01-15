@@ -75,7 +75,7 @@ public abstract class NodeBean implements Node {
 	
 	@Override
 	public Collection<Node> getChildren() throws Exception {
-		return container.getPersistService().getChildren(this);
+		return container.getContext().tree.getChildren(this);
 	}
 
 	public List<String> getChildrenIds() {

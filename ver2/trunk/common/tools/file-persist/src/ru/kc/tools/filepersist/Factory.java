@@ -7,12 +7,12 @@ import ru.kc.model.Text;
 
 public interface Factory {
 	
-	Dir createDir(String name);
+	Dir createDir(String name, String description);
 	
-	Text createText(String name);
+	Text createText(String name, String text);
 	
-	Link createLink(String name);
+	Link createLink(String name, String url, String description);
 	
-	FileLink createFileLink(String name);
+	FileLink createFileLink(String name, String path, String description);
 
 }

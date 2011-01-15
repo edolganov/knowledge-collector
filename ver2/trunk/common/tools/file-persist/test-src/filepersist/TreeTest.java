@@ -6,22 +6,23 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ru.kc.model.Link;
+import ru.kc.model.Node;
+import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.PeristService;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.impl.Context;
-import ru.kc.tools.filepersist.impl.InitContextExt;
-import ru.kc.tools.filepersist.impl.TreeImpl;
 import ru.kc.util.file.FileUtil;
 import static org.junit.Assert.* ;
 
 
-public class PersistServiceTest {
+public class TreeTest {
 	
 	File dir = new File("./test_data");
 	File rootFile = new File(dir.getPath()+"/nodes/000.xml");
-	Tree service;
-	Context context;
+	PeristService ps;
+	Tree tree;
+	Factory factory;
 	
 	@Before
 	public void init() throws Exception{
@@ -32,12 +33,13 @@ public class PersistServiceTest {
 		PeristService ps = new PeristService();
 		ps.init(init);
 		
-		service = ps.tree();
+		tree = ps.tree();
+		factory = ps.factory();
 	}
 	
 	@After
 	public void deleteDir() {
-		FileUtil.deleteDirRecursive(dir);
+		//FileUtil.deleteDirRecursive(dir);
 	}
 	
 	
@@ -55,9 +57,11 @@ public class PersistServiceTest {
 		assertEquals(true, lastModified == rootFile.lastModified());
 	}
 
-	
-	public void createNode(){
-//		service.
+	@Test
+	public void createNode() throws Exception{
+//		Node root = tree.getRoot();
+//		Link child = factory.createLink("test",null,null);
+//		tree.add(root, child);
 		
 	}
 	

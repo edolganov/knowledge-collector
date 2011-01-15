@@ -16,15 +16,14 @@ public class TreeImpl implements Tree {
 	
 	public void init(Context c) throws Exception{
 		this.c = c;
-		this.fs = new FileSystemImpl();
-		fs.init(c.init, this);
+		this.fs = c.fs;
 		createOrLoadData();
 	}
 
 	private void createOrLoadData() throws Exception {
 		NodeBean node = fs.getRoot();
 		if(node == null){
-			Dir dir = c.factory.createDir("root");
+			Dir dir = c.factory.createDir("root",null);
 			NodeBean root = convert(dir);
 			fs.createRoot(root);
 		}
@@ -39,11 +38,14 @@ public class TreeImpl implements Tree {
 
 	@Override
 	public Collection<Node> getChildren(Node node) {
+		if(node == null) throw new NullPointerException("node");
 		return fs.getChildren(convert(node));
 	}
 	
 	@Override
 	public void add(Node parent, Node node) throws Exception {
+		if(parent == null) throw new NullPointerException("parent");
+		if(node == null) throw new NullPointerException("node");
 		fs.create(convert(parent), convert(parent));
 	}
 	
