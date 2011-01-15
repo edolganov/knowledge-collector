@@ -50,9 +50,7 @@ public class PersistServiceImpl implements PersistService {
 		return root;
 	}
 	
-	private <O> O invoke(Command<O> command) throws Exception{
-		return c.invoke(command);
-	}
+
 	
 	@Override
 	public Node getRoot() throws Exception{
@@ -62,6 +60,10 @@ public class PersistServiceImpl implements PersistService {
 	@Override
 	public Collection<Node> getChildren(Node node) {
 		return c.fs.getChildren(convert(node));
+	}
+	
+	public void create(Node parent, NodeBean node) throws Exception {
+		
 	}
 	
 	
@@ -76,6 +78,10 @@ public class PersistServiceImpl implements PersistService {
 			throw new IllegalArgumentException("node is null");
 		}
 
+	}
+	
+	private <O> O invoke(Command<O> command) throws Exception{
+		return c.invoke(command);
 	}
 
 }
