@@ -1,4 +1,4 @@
-package ru.kc.tools.filepersist;
+package ru.kc.tools.filepersist.impl;
 
 import java.io.File;
 

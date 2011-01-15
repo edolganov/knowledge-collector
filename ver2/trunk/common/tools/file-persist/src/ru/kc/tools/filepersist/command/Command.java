@@ -1,6 +1,6 @@
 package ru.kc.tools.filepersist.command;
 
-import ru.kc.tools.filepersist.Context;
+import ru.kc.tools.filepersist.impl.Context;
 
 public abstract class Command<O> {
 	

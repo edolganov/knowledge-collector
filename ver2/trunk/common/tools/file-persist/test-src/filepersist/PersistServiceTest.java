@@ -6,9 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ru.kc.tools.filepersist.InitContext;
 import ru.kc.tools.filepersist.PersistService;
-import ru.kc.tools.filepersist.PersistServiceImpl;
+import ru.kc.tools.filepersist.impl.InitContext;
+import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.util.file.FileUtil;
 import static org.junit.Assert.* ;
 

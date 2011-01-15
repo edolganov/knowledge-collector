@@ -1,9 +1,8 @@
-package ru.kc.tools.filepersist;
+package ru.kc.tools.filepersist.impl;
 
 import java.io.File;
 
 import ru.kc.tools.filepersist.command.Command;
-import ru.kc.tools.filepersist.impl.ConvertorServiceImpl;
 import ru.kc.tools.filepersist.model.DataFactoryImpl;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 

@@ -1,13 +1,12 @@
-package ru.kc.tools.filepersist;
+package ru.kc.tools.filepersist.impl;
 
 import java.io.File;
 import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.command.Command;
+import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.command.CreateOrLoadData;
-import ru.kc.tools.filepersist.impl.ConvertorServiceImpl;
 import ru.kc.tools.filepersist.model.DataFactoryImpl;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
@@ -21,7 +20,7 @@ public class PersistServiceImpl implements PersistService {
 	
 	public void init(String rootDirPath, InitContext params) throws Exception{
 		initContext(rootDirPath,params);
-		invoke(new CreateOrLoadData());
+		c.invoke(new CreateOrLoadData());
 	}
 
 	private void initContext(String rootDirPath, InitContext params) throws Exception {
@@ -77,10 +76,6 @@ public class PersistServiceImpl implements PersistService {
 			throw new IllegalArgumentException("node is null");
 		}
 
-	}
-	
-	private <O> O invoke(Command<O> command) throws Exception{
-		return c.invoke(command);
 	}
 
 }

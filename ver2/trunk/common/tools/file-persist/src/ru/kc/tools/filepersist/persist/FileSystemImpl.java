@@ -6,8 +6,8 @@ import java.util.Collection;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.InitContext;
-import ru.kc.tools.filepersist.PersistServiceImpl;
+import ru.kc.tools.filepersist.impl.InitContext;
+import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;

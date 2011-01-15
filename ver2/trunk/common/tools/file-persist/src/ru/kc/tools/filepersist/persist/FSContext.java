@@ -4,8 +4,8 @@
 package ru.kc.tools.filepersist.persist;
 
 
-import ru.kc.tools.filepersist.InitContext;
 import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.impl.InitContext;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 
 public class FSContext {
