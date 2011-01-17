@@ -1,5 +1,6 @@
 package ru.kc.tools.filepersist.model.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import ru.kc.model.Node;
+import ru.kc.util.collection.Pair;
 
 
 public abstract class NodeBean implements Node {
@@ -22,14 +24,45 @@ public abstract class NodeBean implements Node {
 	
 	
 	public void addChildId(NodeBean node) {
+		String childId = generateChildId(node);
 		if(childrenIds == null) childrenIds = new ArrayList<String>();
-		childrenIds.add(node.getId());
+		childrenIds.add(childId);
 	}
 	
 	public void removeChildId(NodeBean node) {
 		if(childrenIds == null) return;
-		String id = node.getId();
-		childrenIds.remove(id);
+		String childId = generateChildId(node);
+		childrenIds.remove(childId);
+	}
+	
+	private String generateChildId(NodeBean node){
+		if(container == null) throw new IllegalStateException("parent must contains container: "+this);
+		Container otherContainer = node.getContainer();
+		if(otherContainer == null) throw new IllegalStateException("child must contains container: "+node);
+		
+		String childId = null;
+		String nodeId = node.getId();
+		if(container.equals(otherContainer)){
+			childId = nodeId;
+		} else {
+			String filePath = otherContainer.getFileSimplePath();
+			childId = filePath+":"+nodeId;
+		}
+		return childId;
+	}
+	
+	public Pair<String, String> parse(String path) {
+		String filePath = "";
+		String childId = null;
+		String[] split = path.split(":");
+		int lastIndex = split.length-1;
+		for (int i = 0; i < lastIndex; i++) {
+			filePath = filePath + split[i];
+		}
+		childId = split[lastIndex];
+		if(filePath.equals("")) filePath = container.getFileSimplePath();
+		
+		return new Pair<String, String>(filePath, childId);
 	}
 
 	public Container getContainer() {
@@ -91,6 +124,8 @@ public abstract class NodeBean implements Node {
 		return getClass().getSimpleName()+" [id=" + id + ", name=" + name + ", description="
 				+ description + ", createDate=" + createDate + "]";
 	}
+
+
 
 
 

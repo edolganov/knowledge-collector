@@ -1,6 +1,6 @@
 package ru.kc.tools.filepersist.impl;
 
-import java.util.Collection;
+import java.util.List;
 
 import ru.kc.model.Dir;
 import ru.kc.model.Node;
@@ -36,10 +36,11 @@ public class TreeImpl implements Tree {
 		return fs.getRoot();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<Node> getChildren(Node node) {
+	public List<Node> getChildren(Node node)throws Exception {
 		if(node == null) throw new NullPointerException("node");
-		return fs.getChildren(convert(node));
+		return (List)fs.getChildren(convert(node));
 	}
 	
 	@Override

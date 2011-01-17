@@ -1,6 +1,7 @@
 package ru.kc.tools.filepersist.persist.model;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import ru.kc.tools.filepersist.model.impl.Container;
@@ -14,8 +15,11 @@ public class ContainersModel {
 	private static final String CONTAINER_FILE_EXT = ".xml";
 	
 	private FSContext c;
-	private LimitedLevelTreeList<ContainersFolder> folderTreeList;
 	private NameModel nameModel;
+	
+	//data
+	private LimitedLevelTreeList<ContainersFolder> folderTreeList;
+	private HashMap<String, Container> containersCache = new HashMap<String, Container>();
 	private File firstFile;
 	
 	public void init(FSContext c){
@@ -36,7 +40,9 @@ public class ContainersModel {
 			
 		ContainersFolder rootFolder = new ContainersFolder(c.c.init.nodesDir, c.c.init.params.maxContainerFilesInFolder);
 		rootFolder.add(container);
+		
 		folderTreeList.setRoot(rootFolder);
+		containersCache.put(container.getFileSimplePath(), container);
 	}
 
 	public Container getRoot() {
@@ -87,15 +93,20 @@ public class ContainersModel {
 					String lastChildFolderName = lastChild.getOb().file.getName();
 					newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 				}
-				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
-				folderTreeList.add(newFolder);
-				
+				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);				
 				File newContainerFile = new File(newFolder.file,nameModel.first(CONTAINER_FILE_EXT));
 				Container container = Container.create(newContainerFile, c.c);
 				newFolder.add(container);
+				
+				folderTreeList.add(newFolder);
+				containersCache.put(container.getFileSimplePath(), container);
 				return container;
 			}
 		}
+	}
+
+	public Container getContainer(String fileSimplePath) {
+		return containersCache.get(fileSimplePath);
 	}
 
 

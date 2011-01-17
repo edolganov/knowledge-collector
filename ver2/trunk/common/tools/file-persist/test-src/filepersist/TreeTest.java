@@ -1,6 +1,8 @@
 package filepersist;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -59,10 +61,22 @@ public class TreeTest {
 		PeristService ps = createService(10);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-
+		
 		Node root = tree.getRoot();
 		Link child = factory.createLink("test",null,null);
 		tree.add(root, child);
+		
+		List<Node> children = tree.getChildren(root);
+		assertEquals(true, children.size() == 1);
+		assertEquals(true, children.get(0) == child);
+
+		//create many children
+//		for (int i = 0; i < 200; i++) {
+//			Node root = tree.getRoot();
+//			Link child = factory.createLink("test",null,null);
+//			tree.add(root, child);
+//		}
+
 		
 		
 	}

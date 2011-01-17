@@ -3,9 +3,9 @@ package ru.kc.tools.filepersist.persist;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import ru.kc.exception.BaseException;
-import ru.kc.model.Node;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -13,6 +13,7 @@ import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
@@ -84,8 +85,8 @@ public class FileSystemImpl {
 			@Override
 			protected Void body() throws Throwable {
 				Container containerForChild = invoke(new GetNotFullContainer());
-				invoke(new AddChild(parent, node));
 				invoke(new AddNodeToContainer(node,containerForChild));
+				invoke(new AddChild(parent, node));
 				invoke(new SaveContainers(parent, node));
 				
 				return null;
@@ -94,10 +95,14 @@ public class FileSystemImpl {
 		}.start();
 	}
 	
-	public Collection<Node> getChildren(NodeBean node) {
-//		c.containerModel.
-//		node.getContainer()
-		return null;
+	public List<NodeBean> getChildren(final NodeBean node) throws Exception {
+		return new Transaction<List<NodeBean>>(c) {
+
+			@Override
+			protected List<NodeBean> body() throws Throwable {
+				return invoke(new GetChildren(node));
+			}
+		}.start();
 	}
 
 	public void update(NodeBean node)throws Exception {

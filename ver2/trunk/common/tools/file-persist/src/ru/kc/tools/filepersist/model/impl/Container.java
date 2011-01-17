@@ -27,6 +27,10 @@ public class Container {
 	
 
 	public void init(File file,Context context) {
+		String path = file.getPath();
+		String rootPath = context.init.nodesDir.getPath();
+		if(!path.startsWith(rootPath)) throw new IllegalStateException("unknow path: "+path+ " don't start with "+ rootPath);
+			
 		setFile(file);
 		setMaxSize(context.init.params.maxNodesInContainer);
 		setContext(context);
@@ -68,7 +72,26 @@ public class Container {
 			return null;
 		}
 	}
+	
+	public NodeBean find(String childId) {
+		for (NodeBean node : nodes) {
+			if(node.getId().equals(childId)) return node;
+		}
+		return null;
+	}
+	
+	
+	
+	
+	public String getFileSimplePath() {
+		String path = getFile().getPath();
+		String rootPath = context.init.nodesDir.getPath();
+		String out = path.substring(rootPath.length()+1);
+		return out;
+	}
 
+	
+	
 	@Override
 	public String toString() {
 		return "Container [file=" + file + ", maxSize=" + maxSize + ", nodes="
@@ -114,12 +137,19 @@ public class Container {
 	public void setRevision(long revision) {
 		this.revision = revision;
 	}
+	
+	
+	
 
 	public static Container create(File file, Context c) {
 		Container container = new Container();
 		container.init(file,c);
 		return container;
 	}
+
+
+
+
 
 
 
