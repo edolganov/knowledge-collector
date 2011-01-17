@@ -10,6 +10,7 @@ import ru.kc.tools.filepersist.model.impl.FileLinkBean;
 import ru.kc.tools.filepersist.model.impl.LinkBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.model.impl.TextBean;
+import ru.kc.util.UuidGenerator;
 
 public class FactoryImpl implements Factory {
 	
@@ -58,11 +59,7 @@ public class FactoryImpl implements Factory {
 	}
 
 	private String generateId() {
-		return new StringBuilder()
-			.append(System.currentTimeMillis())
-			.append('-')
-			.append(System.nanoTime())
-			.toString();
+		return UuidGenerator.simpleUuid(3);
 	}
 
 

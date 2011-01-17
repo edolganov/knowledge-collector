@@ -18,12 +18,14 @@ public class AddNodeToContainer extends AtomicAction<Void>{
 	@Override
 	public Void invoke() throws Exception {
 		container.add(node);
+		node.setContainer(container);
 		return null;
 	}
 
 	@Override
 	public void rollback() throws Exception {
 		container.remove(node);
+		node.setContainer(null);
 		
 	}
 

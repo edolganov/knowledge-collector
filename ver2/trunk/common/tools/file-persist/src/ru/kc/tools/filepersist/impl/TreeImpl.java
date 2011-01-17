@@ -46,7 +46,7 @@ public class TreeImpl implements Tree {
 	public void add(Node parent, Node node) throws Exception {
 		if(parent == null) throw new NullPointerException("parent");
 		if(node == null) throw new NullPointerException("node");
-		fs.create(convert(parent), convert(parent));
+		fs.create(convert(parent), convert(node));
 	}
 	
 	
