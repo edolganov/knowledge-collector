@@ -28,10 +28,11 @@ public class GetChildren extends AtomicAction<List<NodeBean>>{
 		List<String> childrenIds = parent.getChildrenIds();
 		for (String path : childrenIds) {
 			Pair<String,String> data = parent.parse(path);
-			String filePath = data.getFirst();
-			Container container = c.containerModel.getContainer(filePath);
+			String simpleFilePath = data.getFirst();
+			Container container = c.containerModel.getContainer(simpleFilePath);
 			if(container == null){
-				//load
+				container = c.containerStore.load(simpleFilePath);
+				c.containerModel.setContainer(container);
 				loadContainers.add(container);
 			}
 			

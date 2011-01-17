@@ -78,6 +78,7 @@ public class ContainersModel {
 				File newFile = new File(lastFolder.file,newName);
 				Container container = Container.create(newFile, c.c);
 				lastFolder.add(container);
+				containersCache.put(container.getFileSimplePath(), container);
 				return container;
 				
 			} else {
@@ -104,10 +105,17 @@ public class ContainersModel {
 			}
 		}
 	}
+	
+	public void setContainer(Container container) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	public Container getContainer(String fileSimplePath) {
 		return containersCache.get(fileSimplePath);
 	}
+
+
 
 
 

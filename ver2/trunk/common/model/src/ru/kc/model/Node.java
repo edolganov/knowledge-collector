@@ -1,6 +1,6 @@
 package ru.kc.model;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Node {
 	
@@ -10,7 +10,7 @@ public interface Node {
 	
 	String getDescription();
 	
-	Collection<Node> getChildren() throws Exception;
+	List<Node> getChildren() throws Exception;
 	
 	Long getCreateDate();
 

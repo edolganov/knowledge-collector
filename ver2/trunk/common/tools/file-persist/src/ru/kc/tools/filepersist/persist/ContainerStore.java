@@ -130,4 +130,17 @@ public class ContainerStore {
 		return out;
 	}
 
+
+	public Container load(String simpleFilePath) throws IOException {
+		File containerFile = null;
+		File nodesDir = c.c.init.nodesDir;
+		String nodesDirPath = nodesDir.getPath();
+		if(simpleFilePath.startsWith(nodesDirPath)){
+			containerFile = new File(simpleFilePath);
+		} else {
+			containerFile = new File(nodesDirPath+"/"+simpleFilePath);
+		}
+		return load(containerFile);
+	}
+
 }

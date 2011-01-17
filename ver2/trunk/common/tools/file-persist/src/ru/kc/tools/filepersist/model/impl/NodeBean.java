@@ -1,14 +1,12 @@
 package ru.kc.tools.filepersist.model.impl;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import ru.kc.model.Node;
 import ru.kc.util.collection.Pair;
+
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 
 public abstract class NodeBean implements Node {
@@ -107,7 +105,7 @@ public abstract class NodeBean implements Node {
 	}
 	
 	@Override
-	public Collection<Node> getChildren() throws Exception {
+	public List<Node> getChildren() throws Exception {
 		return container.getContext().tree.getChildren(this);
 	}
 

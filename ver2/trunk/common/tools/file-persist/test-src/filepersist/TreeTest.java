@@ -1,7 +1,6 @@
 package filepersist;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.List;
 
 import org.junit.After;
@@ -58,7 +57,7 @@ public class TreeTest {
 	@Test
 	public void createNode() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
-		PeristService ps = createService(10);
+		PeristService ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -66,9 +65,18 @@ public class TreeTest {
 		Link child = factory.createLink("test",null,null);
 		tree.add(root, child);
 		
-		List<Node> children = tree.getChildren(root);
+		List<Node> children = root.getChildren();
 		assertEquals(true, children.size() == 1);
 		assertEquals(true, children.get(0) == child);
+		
+		Link child2 = factory.createLink("test",null,null);
+		tree.add(root, child2);
+		List<Node> children2 = root.getChildren();
+		assertEquals(true, children2.size() == 2);
+		assertEquals(true, children2.get(0) == child);
+		assertEquals(true, children2.get(1) == child2);
+		
+		
 
 		//create many children
 //		for (int i = 0; i < 200; i++) {
@@ -81,8 +89,14 @@ public class TreeTest {
 		
 	}
 	
+	
 	private PeristService createService(int countElements){
-		InitParams init = new InitParams(dir, countElements, countElements, countElements);
+		return createService(countElements, countElements, countElements);
+	}
+	
+	private PeristService createService(int maxNodesInContainer,
+			int maxContainerFilesInFolder, int maxFoldersInLevel){
+		InitParams init = new InitParams(dir, maxNodesInContainer, maxContainerFilesInFolder, maxFoldersInLevel);
 		PeristService ps = new PeristService();
 		try {
 			ps.init(init);
@@ -91,6 +105,8 @@ public class TreeTest {
 		}
 		return ps;
 	}
+	
+
 	
 
 
