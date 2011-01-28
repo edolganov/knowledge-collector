@@ -38,7 +38,7 @@ public class ContainersFolder implements Iterable<Container> {
 		return containers.isEmpty();
 	}
 
-	private int size() {
+	public int size() {
 		return containers.size();
 	}
 

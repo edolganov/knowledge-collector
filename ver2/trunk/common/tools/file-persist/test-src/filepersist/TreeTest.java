@@ -75,8 +75,6 @@ public class TreeTest {
 		assertEquals(true, children2.size() == 2);
 		assertEquals(true, children2.get(0) == child);
 		assertEquals(true, children2.get(1) == child2);
-		
-		
 
 		//create many children
 //		for (int i = 0; i < 200; i++) {
@@ -84,14 +82,27 @@ public class TreeTest {
 //			Link child = factory.createLink("test",null,null);
 //			tree.add(root, child);
 //		}
-
-		
-		
 	}
 	
-	
-	private PeristService createService(int countElements){
-		return createService(countElements, countElements, countElements);
+	@Test
+	public void loadNodes() throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		//create data
+		PeristService ps_ = createService(2,10,10);
+		Node root_ = ps_.tree().getRoot();
+		ps_.tree().add(root_, ps_.factory().createLink("test",null,null));
+		ps_.tree().add(root_, ps_.factory().createLink("test",null,null));
+		ps_.tree().add(root_, ps_.factory().createLink("test",null,null));
+		ps_.tree().add(root_, ps_.factory().createLink("test",null,null));
+		
+		//load data
+		PeristService ps = createService(2,10,10);
+		Tree tree = ps.tree();
+		//Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		List<Node> children = root.getChildren();
+		assertEquals(true, children.size() == 4);
 	}
 	
 	private PeristService createService(int maxNodesInContainer,

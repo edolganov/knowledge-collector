@@ -30,12 +30,8 @@ public class GetChildren extends AtomicAction<List<NodeBean>>{
 			Pair<String,String> data = parent.parse(path);
 			String simpleFilePath = data.getFirst();
 			Container container = c.containerModel.getContainer(simpleFilePath);
-			if(container == null){
-				container = c.containerStore.load(simpleFilePath);
-				c.containerModel.setContainer(container);
-				loadContainers.add(container);
-			}
-			
+			if(container == null) throw new IllegalStateException("container not found by path "+simpleFilePath);
+				
 			String childId = data.getSecond();
 			NodeBean node = container.find(childId);
 			out.add(node);

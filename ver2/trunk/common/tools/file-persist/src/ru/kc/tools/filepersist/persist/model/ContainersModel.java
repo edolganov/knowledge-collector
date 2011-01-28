@@ -55,6 +55,72 @@ public class ContainersModel {
 		}
 	}
 	
+	public Container createNextContainer(){
+		ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
+		if(!lastFolder.isFull()){
+			File lastExistFile = lastFolder.getLast().getFile();
+			String newName = nameModel.next(lastExistFile.getName());
+			File newFile = new File(lastFolder.file,newName);
+			Container container = Container.create(newFile, c.c);
+			return container;
+		} else {
+			TreeNode<ContainersFolder> node = folderTreeList.getParentCandidat();
+			List<TreeNode<ContainersFolder>> children = node.getChildren();
+			File parentFolderFile = node.getOb().file;
+			File newFolderFile = null;
+			if(children.size() == 0){
+				newFolderFile = new File(parentFolderFile,nameModel.first());
+			} else {
+				TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
+				String lastChildFolderName = lastChild.getOb().file.getName();
+				newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
+			}				
+			File newContainerFile = new File(newFolderFile,nameModel.first(CONTAINER_FILE_EXT));
+			Container container = Container.create(newContainerFile, c.c);
+			return container;
+		}
+	}
+	
+	public void add(Container container) {
+		File file = container.getFile();
+		if(file == null) throw new IllegalArgumentException("file is null in "+container);
+		
+		ContainersFolder parentFolder = null;
+		ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
+		if(!lastFolder.isFull()){
+			parentFolder = lastFolder;
+		} else {
+			TreeNode<ContainersFolder> node = folderTreeList.getParentCandidat();
+			List<TreeNode<ContainersFolder>> children = node.getChildren();
+			File parentFolderFile = node.getOb().file;
+			File newFolderFile = null;
+			if(children.size() == 0){
+				newFolderFile = new File(parentFolderFile,nameModel.first());
+			} else {
+				TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
+				String lastChildFolderName = lastChild.getOb().file.getName();
+				newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
+			}				
+			
+			ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
+			folderTreeList.add(newFolder);
+			containersCache.put(container.getFileSimplePath(), container);
+			parentFolder = newFolder;
+		}
+		
+		File nextContainerFile = null;
+		if(parentFolder.size() == 0){
+			nextContainerFile = new File(parentFolder.file,nameModel.first(CONTAINER_FILE_EXT));
+		} else {
+			Container lastContainer = parentFolder.getLast();
+			File lastFileInFolder = lastContainer.getFile();
+			String name = lastFileInFolder.getName();
+			nextContainerFile = new File(parentFolder.file,nameModel.next(name));
+		}
+		
+		if(!file.equals(nextContainerFile)) throw new IllegalArgumentException("invalid file "+file+" of "+container);
+	}
+	
 	public Container getNotFullContainer(){
 		//ищем не полный контейнер среди существующих
 		Container firstNotFullContainer = null;
@@ -93,10 +159,11 @@ public class ContainersModel {
 					TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
 					String lastChildFolderName = lastChild.getOb().file.getName();
 					newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
-				}
-				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);				
-				File newContainerFile = new File(newFolder.file,nameModel.first(CONTAINER_FILE_EXT));
+				}				
+				File newContainerFile = new File(newFolderFile,nameModel.first(CONTAINER_FILE_EXT));
 				Container container = Container.create(newContainerFile, c.c);
+				
+				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
 				newFolder.add(container);
 				
 				folderTreeList.add(newFolder);
@@ -105,16 +172,10 @@ public class ContainersModel {
 			}
 		}
 	}
-	
-	public void setContainer(Container container) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	public Container getContainer(String fileSimplePath) {
 		return containersCache.get(fileSimplePath);
 	}
-
 
 
 

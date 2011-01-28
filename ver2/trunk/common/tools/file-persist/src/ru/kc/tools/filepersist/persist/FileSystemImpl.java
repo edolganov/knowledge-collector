@@ -2,7 +2,6 @@ package ru.kc.tools.filepersist.persist;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 
 import ru.kc.exception.BaseException;
@@ -34,7 +33,8 @@ public class FileSystemImpl {
 		containerModel.init(c);
 		
 		initFolders();
-		initRootNode();
+		initRootContainer();
+		loadAllContainers();
 	}
 
 	private void initFolders() {
@@ -42,7 +42,7 @@ public class FileSystemImpl {
 		if(!c.c.init.blobsDir.exists()) c.c.init.blobsDir.mkdir();
 	}
 	
-	private void initRootNode() throws IOException {		
+	private void initRootContainer() throws IOException {		
 		Container container = c.containerModel.createRootContainer();
 		File file = container.getFile();
 		if(file.exists()){
@@ -52,6 +52,22 @@ public class FileSystemImpl {
 		}
 		
 		c.containerModel.setRoot(container);
+	}
+	
+
+	private void loadAllContainers() throws IOException {
+		Container next = c.containerModel.createNextContainer();
+		while(true){
+			File file = next.getFile();
+			if(file.exists()){
+				Container loaded = c.containerStore.load(file);
+				c.containerModel.add(loaded);
+				next = c.containerModel.createNextContainer();
+			} else {
+				break;
+			}
+		}
+		
 	}
 	
 	
