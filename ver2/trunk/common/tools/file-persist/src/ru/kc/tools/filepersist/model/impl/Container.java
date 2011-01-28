@@ -50,7 +50,7 @@ public class Container {
 	
 	private void checkExist(NodeBean node) {
 		for(NodeBean child : nodes){
-			if(child.getId() == node.getId())
+			if(child.getId().equals(node.getId()))
 				throw new IllegalStateException(child+" already exists in "+this);
 		}
 	}

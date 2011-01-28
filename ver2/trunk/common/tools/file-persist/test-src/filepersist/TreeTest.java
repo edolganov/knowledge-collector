@@ -14,10 +14,10 @@ import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.PeristService;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.util.file.FileUtil;
-import static org.junit.Assert.* ;
+import org.junit.Assert;
 
 
-public class TreeTest {
+public class TreeTest extends Assert{
 	
 	File dir = new File("./test_data");
 	
@@ -90,14 +90,11 @@ public class TreeTest {
 		//create data
 		PeristService ps_ = createService(2,2,2);
 		Node root_ = ps_.tree().getRoot();
-		ps_.tree().add(root_, ps_.factory().createLink("test1",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test2",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test3",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test4",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test5",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test6",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test7",null,null));
-		ps_.tree().add(root_, ps_.factory().createLink("test8",null,null));
+		
+		int size = 8;
+		for(int i=0; i<size; ++i){
+			ps_.tree().add(root_, ps_.factory().createLink("test"+(i+1),null,null));
+		}
 		
 		//load data
 		PeristService ps = createService(2,2,2);
@@ -106,7 +103,10 @@ public class TreeTest {
 		
 		Node root = tree.getRoot();
 		List<Node> children = root.getChildren();
-		assertEquals(true, children.size() == 8);
+		assertEquals(true, children.size() == size);
+		for(int i=0; i<size; ++i){
+			assertEquals("test"+(i+1), children.get(i).getName());
+		}
 	}
 	
 	private PeristService createService(int maxNodesInContainer,

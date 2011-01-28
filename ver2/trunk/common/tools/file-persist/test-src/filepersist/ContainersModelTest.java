@@ -73,7 +73,9 @@ public class ContainersModelTest extends Assert {
 	private Container fillContainer(Container container) {
 		int maxSize = container.getMaxSize();
 		for (int i = 0; i < maxSize; i++) {
-			container.add(new TextBean());
+			TextBean node = new TextBean();
+			node.setId(""+i);
+			container.add(node);
 		}
 		return container;
 	}
