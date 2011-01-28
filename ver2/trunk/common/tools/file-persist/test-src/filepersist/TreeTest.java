@@ -84,9 +84,11 @@ public class TreeTest extends Assert{
 //		}
 	}
 	
+
 	@Test
 	public void loadNodes() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
+		
 		//create data
 		PeristService ps_ = createService(2,2,2);
 		Node root_ = ps_.tree().getRoot();
@@ -95,18 +97,22 @@ public class TreeTest extends Assert{
 		for(int i=0; i<size; ++i){
 			ps_.tree().add(root_, ps_.factory().createLink("test"+(i+1),null,null));
 		}
+		List<Node> children_ = ps_.tree().getRoot().getChildren();
+		for(int i=0; i<size; ++i){
+			ps_.tree().add(children_.get(0), ps_.factory().createDir("test"+(i+1),null));
+			ps_.tree().add(children_.get(1), ps_.factory().createFileLink("test"+(i+1),null,null));
+		}
 		
-		//load data
+		//check data loading from fs
 		PeristService ps = createService(2,2,2);
-		Tree tree = ps.tree();
-		//Factory factory = ps.factory();
-		
-		Node root = tree.getRoot();
+		Node root = ps.tree().getRoot();
 		List<Node> children = root.getChildren();
 		assertEquals(true, children.size() == size);
-		for(int i=0; i<size; ++i){
-			assertEquals("test"+(i+1), children.get(i).getName());
-		}
+		for(int i=0; i<size; ++i) assertEquals("test"+(i+1), children.get(i).getName());
+		for(int i=0; i<size; ++i) assertEquals(size, children.get(0).getChildren().size());
+		for(int i=0; i<size; ++i) assertEquals(size, children.get(1).getChildren().size());
+		
+		
 	}
 	
 	private PeristService createService(int maxNodesInContainer,
