@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ru.kc.tools.filepersist.model.impl.Container;
-import ru.kc.tools.filepersist.model.impl.ContainersFolder;
+import ru.kc.tools.filepersist.model.impl.Folder;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.util.collection.LimitedLevelTreeList;
 import ru.kc.util.collection.LimitedLevelTreeList.TreeNode;
@@ -18,13 +18,13 @@ public class ContainersModel {
 	private NameModel nameModel;
 	
 	//data
-	private LimitedLevelTreeList<ContainersFolder> folderTreeList;
+	private LimitedLevelTreeList<Folder> folderTreeList;
 	private HashMap<String, Container> containersCache = new HashMap<String, Container>();
 	private File firstFile;
 	
 	public void init(FSContext c){
 		this.c = c;
-		folderTreeList = new LimitedLevelTreeList<ContainersFolder>(c.c.init.params.maxFoldersInLevel);
+		folderTreeList = new LimitedLevelTreeList<Folder>(c.c.init.params.maxFoldersInLevel);
 		nameModel = new NameModel();
 		String name = nameModel.first(CONTAINER_FILE_EXT);
 		firstFile = new File(c.c.init.nodesDir,name);
@@ -38,7 +38,7 @@ public class ContainersModel {
 		if(folderTreeList.size() > 0) throw new IllegalStateException("root is already set");
 		if(!firstFile.equals(container.getFile()))throw new IllegalStateException("container file "+container.getFile()+" is unknow: "+firstFile+" expected");
 			
-		ContainersFolder rootFolder = new ContainersFolder(c.c.init.nodesDir, c.c.init.params.maxContainerFilesInFolder);
+		Folder rootFolder = new Folder(c.c.init.nodesDir, c.c.init.params.maxContainerFilesInFolder);
 		rootFolder.add(container);
 		
 		folderTreeList.setRoot(rootFolder);
@@ -46,7 +46,7 @@ public class ContainersModel {
 	}
 
 	public Container getRoot() {
-		ContainersFolder folder = folderTreeList.getRoot();
+		Folder folder = folderTreeList.getRoot();
 		if(!folder.isEmpty()) {
 			Container container = folder.get(0);
 			return container;
@@ -56,7 +56,7 @@ public class ContainersModel {
 	}
 	
 	public Container createNextContainer(){
-		ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
+		Folder lastFolder = folderTreeList.get(folderTreeList.size()-1);
 		if(!lastFolder.isFull()){
 			File lastExistFile = lastFolder.getLast().getFile();
 			String newName = nameModel.next(lastExistFile.getName());
@@ -64,14 +64,14 @@ public class ContainersModel {
 			Container container = Container.create(newFile, c.c);
 			return container;
 		} else {
-			TreeNode<ContainersFolder> node = folderTreeList.getParentCandidat();
-			List<TreeNode<ContainersFolder>> children = node.getChildren();
+			TreeNode<Folder> node = folderTreeList.getParentCandidat();
+			List<TreeNode<Folder>> children = node.getChildren();
 			File parentFolderFile = node.getOb().file;
 			File newFolderFile = null;
 			if(children.size() == 0){
 				newFolderFile = new File(parentFolderFile,nameModel.first());
 			} else {
-				TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
+				TreeNode<Folder> lastChild = children.get(children.size()-1);
 				String lastChildFolderName = lastChild.getOb().file.getName();
 				newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 			}				
@@ -85,46 +85,57 @@ public class ContainersModel {
 		File file = container.getFile();
 		if(file == null) throw new IllegalArgumentException("file is null in "+container);
 		
-		ContainersFolder parentFolder = null;
-		ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
+		Folder parentFolder = null;
+		Folder lastFolder = folderTreeList.get(folderTreeList.size()-1);
 		if(!lastFolder.isFull()){
 			parentFolder = lastFolder;
 		} else {
-			TreeNode<ContainersFolder> node = folderTreeList.getParentCandidat();
-			List<TreeNode<ContainersFolder>> children = node.getChildren();
+			TreeNode<Folder> node = folderTreeList.getParentCandidat();
+			List<TreeNode<Folder>> children = node.getChildren();
 			File parentFolderFile = node.getOb().file;
 			File newFolderFile = null;
 			if(children.size() == 0){
 				newFolderFile = new File(parentFolderFile,nameModel.first());
 			} else {
-				TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
+				TreeNode<Folder> lastChild = children.get(children.size()-1);
 				String lastChildFolderName = lastChild.getOb().file.getName();
 				newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 			}				
 			
-			ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
+			Folder newFolder = new Folder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
 			folderTreeList.add(newFolder);
 			containersCache.put(container.getFileSimplePath(), container);
 			parentFolder = newFolder;
 		}
 		
-		File nextContainerFile = null;
-		if(parentFolder.size() == 0){
-			nextContainerFile = new File(parentFolder.file,nameModel.first(CONTAINER_FILE_EXT));
-		} else {
-			Container lastContainer = parentFolder.getLast();
-			File lastFileInFolder = lastContainer.getFile();
-			String name = lastFileInFolder.getName();
-			nextContainerFile = new File(parentFolder.file,nameModel.next(name));
-		}
+		assertEqualsActualAndExceptedFiles(container,parentFolder);
 		
-		if(!file.equals(nextContainerFile)) throw new IllegalArgumentException("invalid file "+file+" of "+container);
+		parentFolder.add(container);
+		containersCache.put(container.getFileSimplePath(), container);
+		
 	}
 	
+	private void assertEqualsActualAndExceptedFiles(Container container, Folder folder) {
+		File expected = null;
+		if(folder.size() == 0){
+			expected = new File(folder.file,nameModel.first(CONTAINER_FILE_EXT));
+		} else {
+			Container lastContainer = folder.getLast();
+			File lastFileInFolder = lastContainer.getFile();
+			String name = lastFileInFolder.getName();
+			expected = new File(folder.file,nameModel.next(name));
+		}
+		
+		File actual = container.getFile();
+		if(!actual.equals(expected)) 
+			throw new IllegalArgumentException("invalid file "+actual+" of "+container);
+	}
+	
+
 	public Container getNotFullContainer(){
 		//ищем не полный контейнер среди существующих
 		Container firstNotFullContainer = null;
-		for(ContainersFolder folder : folderTreeList){
+		for(Folder folder : folderTreeList){
 			for (Container container : folder) {
 				if(!container.isFull()){
 					firstNotFullContainer = container;
@@ -137,7 +148,7 @@ public class ContainersModel {
 		}
 		else {
 			//создаем новый пустой контейнер
-			ContainersFolder lastFolder = folderTreeList.get(folderTreeList.size()-1);
+			Folder lastFolder = folderTreeList.get(folderTreeList.size()-1);
 			if(!lastFolder.isFull()){
 				File lastExistFile = lastFolder.getLast().getFile();
 				String newName = nameModel.next(lastExistFile.getName());
@@ -149,21 +160,21 @@ public class ContainersModel {
 				
 			} else {
 				//создаем новую папку и первый контейнер
-				TreeNode<ContainersFolder> node = folderTreeList.getParentCandidat();
-				List<TreeNode<ContainersFolder>> children = node.getChildren();
+				TreeNode<Folder> node = folderTreeList.getParentCandidat();
+				List<TreeNode<Folder>> children = node.getChildren();
 				File parentFolderFile = node.getOb().file;
 				File newFolderFile = null;
 				if(children.size() == 0){
 					newFolderFile = new File(parentFolderFile,nameModel.first());
 				} else {
-					TreeNode<ContainersFolder> lastChild = children.get(children.size()-1);
+					TreeNode<Folder> lastChild = children.get(children.size()-1);
 					String lastChildFolderName = lastChild.getOb().file.getName();
 					newFolderFile = new File(parentFolderFile,nameModel.next(lastChildFolderName));
 				}				
 				File newContainerFile = new File(newFolderFile,nameModel.first(CONTAINER_FILE_EXT));
 				Container container = Container.create(newContainerFile, c.c);
 				
-				ContainersFolder newFolder = new ContainersFolder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
+				Folder newFolder = new Folder(newFolderFile, c.c.init.params.maxContainerFilesInFolder);
 				newFolder.add(container);
 				
 				folderTreeList.add(newFolder);

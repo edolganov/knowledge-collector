@@ -37,11 +37,24 @@ public class Container {
 	}
 
 	public void add(NodeBean node) {
-		if (isFull())
-			throw new IllegalStateException("container is full");
+		checkFull();
+		checkExist(node);
 		nodes.add(node);
 	}
 	
+
+	private void checkFull() {
+		if (isFull())
+			throw new IllegalStateException("container is full");
+	}
+	
+	private void checkExist(NodeBean node) {
+		for(NodeBean child : nodes){
+			if(child.getId() == node.getId())
+				throw new IllegalStateException(child+" already exists in "+this);
+		}
+	}
+
 	public void remove(NodeBean node) {
 		nodes.remove(node);
 	}
@@ -94,8 +107,9 @@ public class Container {
 	
 	@Override
 	public String toString() {
-		return "Container [file=" + file + ", maxSize=" + maxSize + ", nodes="
-				+ nodes + "]";
+		return "Container [file=" + file 
+			+ ",\n maxSize=" + maxSize+" ,curSize="+nodes.size() 
+			+ ",\n nodes="+ nodes + "]";
 	}
 
 	public int getMaxSize() {

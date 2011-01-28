@@ -178,8 +178,9 @@ public class LimitedLevelTreeList<T> implements Iterable<T>{
 
 	@Override
 	public String toString() {
-		return "LimitedLevelTreeList [maxChildInLevel=" + maxChildInLevel
-				+ ", allNodes=" + allNodes + "]";
+		return "LimitedLevelTreeList [" +"size="+allNodes.size()
+				+", maxChildInLevel=" + maxChildInLevel
+				+ ",\n allNodes=" + allNodes + "]";
 	}
 
 

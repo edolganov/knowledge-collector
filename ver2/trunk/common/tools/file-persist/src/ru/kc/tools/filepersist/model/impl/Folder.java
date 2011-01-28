@@ -4,22 +4,33 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ContainersFolder implements Iterable<Container> {
+public class Folder implements Iterable<Container> {
 	
 	public final File file;
 	ArrayList<Container> containers = new ArrayList<Container>();
 	int containersMaxCount;
 	
-	public ContainersFolder(File file, int containersMaxCount){
+	public Folder(File file, int containersMaxCount){
 		this.file = file;
 		this.containersMaxCount = containersMaxCount;
 	}
 	
 	public void add(Container container) {
-		if(isFull()) throw new IllegalStateException(this+" is full");
+		checkFull();
+		checkExist(container);
 		containers.add(container);
 	};
 	
+	private void checkFull() {
+		if(isFull()) throw new IllegalStateException(this+" is full");
+	}
+
+	private void checkExist(Container container) {
+		for(Container child : containers)
+			if(child.getFile().equals(container.getFile()))
+				throw new IllegalStateException(child+" already exists in "+this);
+	}
+
 	public Container get(int index) {
 		return containers.get(index);
 	}
@@ -44,8 +55,9 @@ public class ContainersFolder implements Iterable<Container> {
 
 	@Override
 	public String toString() {
-		return "ContainersFolder [file=" + file + ", containersMaxCount="
-				+ containersMaxCount + "]";
+		return "Folder [file=" + file + 
+				",\n maxSize="+ containersMaxCount + ", curSize="+containers.size() 
+				+",\n containers:"+containers+ "]";
 	}
 
 	@Override
