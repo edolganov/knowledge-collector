@@ -3,10 +3,10 @@ package scriptengine.scripts;
 import scriptengine.Mapping;
 
 @Mapping("test")
-public class TestScript {
+public class TestScript2 {
 	
 	public String getText(){
-		return "1";
+		return "2";
 	}
 
 }

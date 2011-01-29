@@ -15,8 +15,11 @@ public class Script {
 	private ScriptServiceController controller;
 	private File file;
 	private GroovyClassLoader loader;
-	private GroovyObject groovyObject;
-	private Object mappingValue;
+	
+	//model
+	private Object mapping;
+	private Class<?> groovyClass;
+
 
 
 	public Script(File file,GroovyClassLoader loader, ScriptServiceController controller) {
@@ -26,31 +29,51 @@ public class Script {
 		this.controller = controller;
 	}
 
-	public void createScript() throws Exception {
+	public void init() throws Exception {
         String text = readFromFile(file.getPath());
 		String fileName = file.getName();
-		Class<?> groovyClass = loader.parseClass(text, fileName);
-
-	    groovyObject = (GroovyObject) groovyClass.newInstance();
+		groovyClass = loader.parseClass(text, fileName);
 		
-		mappingValue = controller.getMapping(groovyObject);
-		if(mappingValue == null)
-			throw new IllegalStateException(groovyObject+" has null mapping");
-        
+		mapping = controller.getMapping(groovyClass);
+		if(mapping == null)
+			throw new IllegalStateException(groovyClass+" has null mapping");
 	}
-	
+
 	public File getFile() {
 		return file;
 	}
 	
     public Object getMapping() {
-		return mappingValue;
+		return mapping;
 	}
+    
+    public String getType() {
+		return groovyClass.getName();
+	}
+
+	public Object createInstance() throws Exception {
+    	return groovyClass.newInstance();
+    }
+
+	@SuppressWarnings("unchecked")
+	public <T> T invoke(Object instance, String method, Object... args) {
+		if(instance instanceof GroovyObject){
+			GroovyObject ob = (GroovyObject) instance;
+			return (T) ob.invokeMethod(method, args);
+		} else {
+			throw new IllegalArgumentException("unknow type of object "+instance);
+		}
+	}
+
 
 	@Override
 	public String toString() {
-		return "Script [mappingValue=" + mappingValue + ", file=" + file + "]";
+		return "Script [mapping=" + mapping + ", type=" + groovyClass
+				+ ", file=" + file + "]";
 	}
+	
+	
+
 
 	public static String readFromFile(String path) throws IOException {
         StringBuffer sb = new StringBuffer();
@@ -65,10 +88,7 @@ public class Script {
         return sb.toString();
     }
 
-	@SuppressWarnings("unchecked")
-	public <T> T invoke(String method, Object... args) {
-		return (T) groovyObject.invokeMethod(method, args);
-	}
+
 
 
     

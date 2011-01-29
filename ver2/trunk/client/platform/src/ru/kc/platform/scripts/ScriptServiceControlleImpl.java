@@ -6,14 +6,12 @@ import ru.kc.tools.scriptengine.ScriptServiceController;
 public class ScriptServiceControlleImpl implements ScriptServiceController {
 	
 	@Override
-	public Object getMapping(Object ob) {
-		Class<?> obClass = ob.getClass();
+	public Object getMapping(Class<?> clazz) {
+		Class<?> obClass = clazz;
 		Mapping annotation = obClass.getAnnotation(Mapping.class);
 		if(annotation == null) return null;
 		
-		Class<?> uiClass = annotation.value();
-		
-		return ""+uiClass+"-"+obClass;
+		return annotation.value();
 	}
 
 }

@@ -4,8 +4,10 @@ import groovy.lang.GroovyClassLoader;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -16,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.tools.scriptengine.model.Script;
 import ru.kc.util.Check;
 import ru.kc.util.file.redeploy.RedeployManager;
+import ru.kc.util.file.redeploy.RedeployManagerListener;
 
 public class ScriptsService {
 	
@@ -30,7 +33,7 @@ public class ScriptsService {
 	private ReadWriteLock rw = new ReentrantReadWriteLock();
 	private Lock readLock = rw.readLock();
 	private Lock writeLock = rw.writeLock();
-	private HashMap<Object, Script> scriptsByMapping = new HashMap<Object, Script>();
+	private HashMap<Object, HashMap<String,Script>> scriptsByMapping = new HashMap<Object, HashMap<String,Script>>();
 	private HashMap<String, Script> scriptsByAbsolutePath = new HashMap<String, Script>();
 	
 	public ScriptsService(ScriptServiceController serviceController) {
@@ -84,7 +87,7 @@ public class ScriptsService {
 		log.info("Registering: " + script);
 		
 		try {
-			script.createScript();
+			script.init();
 		}catch (Exception e) {
 			log.error(e.getMessage());
 			return;
@@ -101,10 +104,15 @@ public class ScriptsService {
 		writeLock.lock();
 		try{
 			Script oldByPath = scriptsByAbsolutePath.put(absolutePath, script);
-			if(oldByPath != null)
-				scriptsByMapping.remove(oldByPath.getMapping());
+			removeFromMapping(oldByPath);
 			
-			scriptsByMapping.put(script.getMapping(), script);
+			Object mapping = script.getMapping();
+			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			if(map == null){
+				map = new HashMap<String, Script>();
+				scriptsByMapping.put(mapping, map);
+			}
+			map.put(script.getType(), script);
 
 		}finally{
 			writeLock.unlock();
@@ -117,31 +125,62 @@ public class ScriptsService {
 		writeLock.lock();
 		try{
 			Script oldByPath = scriptsByAbsolutePath.remove(absolutePath);
-			if(oldByPath != null)
-				scriptsByMapping.remove(oldByPath.getMapping());
+			removeFromMapping(oldByPath);
 
 		}finally{
 			writeLock.unlock();
 		}
 	}
 	
-
-	public <T> T invoke(String mapping, String method)throws Exception{
-		return invoke(mapping, method, (Object[])null);
+	private void removeFromMapping(Script oldByPath) {
+		if(oldByPath != null){
+			Object mapping = oldByPath.getMapping();
+			String type = oldByPath.getType();
+			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			map.remove(type);
+		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T> T invoke(String mapping, String method, Object... args)throws Exception{
-		Script script = getByMapping(mapping);
-		if(script == null) 
-			throw new IllegalArgumentException("no script by mapping "+mapping);
-		return (T)script.invoke(method, args);
-	}
 	
-	private Script getByMapping(String mapping){
+	public List<String> getTypes(Object mapping){
 		readLock.lock();
 		try{
-			return scriptsByMapping.get(mapping);
+			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			if(map == null) return new ArrayList<String>(0);
+			
+			ArrayList<String> out = new ArrayList<String>();
+			for(Script script : map.values()){
+				out.add(script.getType());
+			}
+			return out;
+		}finally{
+			readLock.unlock();
+		}
+	}
+	
+	public InstanceDelegate createInstance(Object mapping, String type) throws Exception{
+		readLock.lock();
+		try{
+			InstanceDelegate nullInstance = new InstanceDelegate(null,mapping,type, this);
+			
+			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			if(map == null) return nullInstance;
+			Script script = map.get(type);
+			if(script == null) return nullInstance;
+			
+			Object ob = script.createInstance();
+			return new InstanceDelegate(ob,mapping,type,this);
+		}finally{
+			readLock.unlock();
+		}
+	}
+	
+	Script getScript(Object mapping, String type) {
+		readLock.lock();
+		try{
+			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			if(map == null) return null;
+			return map.get(type);
 		}finally{
 			readLock.unlock();
 		}
@@ -151,11 +190,14 @@ public class ScriptsService {
 	public int getScriptsCount(){
 		readLock.lock();
 		try{
-			return scriptsByMapping.size();
+			return scriptsByAbsolutePath.size();
 		}finally{
 			readLock.unlock();
 		}
 	}
+
+
+
 
 }
 
@@ -183,4 +225,36 @@ class DirFilter implements FileFilter {
 	public boolean accept(File pathname) {
 		return pathname.isDirectory();
 	}
+}
+
+
+class RedeployManagerListenerImpl implements RedeployManagerListener{
+	
+	ScriptsService scriptsService;
+	
+	public RedeployManagerListenerImpl(ScriptsService scriptsService) {
+		super();
+		this.scriptsService = scriptsService;
+	}
+
+	@Override
+	public void onCreate(String path) {
+		File file = new File(path);
+		if(file.isDirectory()){
+			scriptsService.initRecursive(file);
+		}else {
+			scriptsService.registerScriptRequest(file);
+		}
+	}
+	
+	@Override
+	public void onUpdate(String path) {
+		scriptsService.registerScriptRequest(new File(path));
+	}
+	
+	@Override
+	public void onDelete(String path) {
+		scriptsService.removeByPath(path);
+	}
+
 }

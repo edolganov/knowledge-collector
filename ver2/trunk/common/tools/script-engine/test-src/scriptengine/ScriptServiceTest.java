@@ -1,6 +1,7 @@
 package scriptengine;
 
 import java.io.File;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.junit.Test;
@@ -20,7 +21,11 @@ public class ScriptServiceTest extends Assert implements ScriptServiceController
 	@Test
 	public void invoke() throws Exception{
 		ScriptsService service = createService();
-		service.invoke("test", "getText");
+		List<String> list = service.getTypes("test");
+		assertEquals(2, list.size());
+		
+		assertEquals("1",service.createInstance("test", list.get(0)).invoke("getText"));
+		assertEquals("2",service.createInstance("test", list.get(1)).invoke("getText"));
 		
 	}
 
@@ -32,8 +37,8 @@ public class ScriptServiceTest extends Assert implements ScriptServiceController
 	}
 
 	@Override
-	public Object getMapping(Object ob) {
-		Mapping annotation = ob.getClass().getAnnotation(Mapping.class);
+	public Object getMapping(Class<?> type) {
+		Mapping annotation = type.getAnnotation(Mapping.class);
 		return annotation != null? annotation.value() : null;
 	}
 
