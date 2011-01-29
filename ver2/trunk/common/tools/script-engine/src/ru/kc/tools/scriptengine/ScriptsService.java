@@ -39,6 +39,7 @@ public class ScriptsService {
 	public ScriptsService(ScriptServiceController serviceController) {
 		this.serviceController = serviceController;
         loader = new GroovyClassLoader(this.getClass().getClassLoader());
+        redeployManager.start();
 	}
 	
 	
@@ -142,7 +143,7 @@ public class ScriptsService {
 	}
 	
 	
-	public List<String> getTypes(Object mapping){
+	public List<String> getTypesByMapping(Object mapping){
 		readLock.lock();
 		try{
 			HashMap<String, Script> map = scriptsByMapping.get(mapping);

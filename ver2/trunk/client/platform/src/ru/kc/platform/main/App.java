@@ -3,6 +3,7 @@ package ru.kc.platform.main;
 import java.io.File;
 
 import ru.kc.platform.main.ui.MainForm;
+import ru.kc.platform.scripts.ScriptControllerScan;
 import ru.kc.platform.scripts.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptsService;
 
@@ -22,15 +23,18 @@ public class App {
 		
 		ScriptsService scriptsService = new ScriptsService(new ScriptServiceControlleImpl());
 		scriptsService.addCodeBase(new File("./client/platform/script-src"));
+		context.scriptsService = scriptsService;
 		
 	}
 
 	private void initUI() {
 		context.rootUI = new MainForm();
+		
+		new ScriptControllerScan(context.scriptsService).scanAndInit(context.rootUI);
 	}
 
 	private void showUI() {
-		// TODO Auto-generated method stub
+		context.rootUI.setVisible(true);
 		
 	}
 

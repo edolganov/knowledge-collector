@@ -21,7 +21,7 @@ public class ScriptServiceTest extends Assert implements ScriptServiceController
 	@Test
 	public void invoke() throws Exception{
 		ScriptsService service = createService();
-		List<String> list = service.getTypes("test");
+		List<String> list = service.getTypesByMapping("test");
 		assertEquals(2, list.size());
 		
 		assertEquals("1",service.createInstance("test", list.get(0)).invoke("getText"));
