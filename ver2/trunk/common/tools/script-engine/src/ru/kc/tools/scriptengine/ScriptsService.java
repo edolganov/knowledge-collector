@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -28,6 +29,7 @@ public class ScriptsService {
 	private ScriptServiceController serviceController;
 	private GroovyClassLoader loader;
 	private RedeployManager redeployManager = new RedeployManager(FILE_EXT, new RedeployManagerListenerImpl(this));
+	private CopyOnWriteArrayList<ScriptServiceListener> listeners = new CopyOnWriteArrayList<ScriptServiceListener>();
 	
 	//model
 	private ReadWriteLock rw = new ReentrantReadWriteLock();
@@ -102,22 +104,34 @@ public class ScriptsService {
 	private void put(Script script){
 		String absolutePath = script.getFile().getAbsolutePath();
 		
+		Script oldByPath = null;
+		Object mapping = null;
+		String type = null;
+		
 		writeLock.lock();
 		try{
-			Script oldByPath = scriptsByAbsolutePath.put(absolutePath, script);
+			oldByPath = scriptsByAbsolutePath.put(absolutePath, script);
 			removeFromMapping(oldByPath);
 			
-			Object mapping = script.getMapping();
+			mapping = script.getMapping();
 			HashMap<String, Script> map = scriptsByMapping.get(mapping);
 			if(map == null){
 				map = new HashMap<String, Script>();
 				scriptsByMapping.put(mapping, map);
 			}
-			map.put(script.getType(), script);
+			type = script.getType();
+			map.put(type, script);
 
 		}finally{
 			writeLock.unlock();
 		}
+		
+		if(oldByPath != null){
+			for (ScriptServiceListener l : listeners) l.onScriptUpdated(mapping, type);
+		} else {
+			for (ScriptServiceListener l : listeners) l.onScriptCreated(mapping, type);
+		}
+		
 	}
 	
 	void removeByPath(String path){
@@ -195,6 +209,11 @@ public class ScriptsService {
 		}finally{
 			readLock.unlock();
 		}
+	}
+	
+	
+	public void addListener(ScriptServiceListener listener){
+		listeners.add(listener);
 	}
 
 

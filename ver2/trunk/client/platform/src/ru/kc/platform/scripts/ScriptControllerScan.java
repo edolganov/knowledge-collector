@@ -34,4 +34,22 @@ public class ScriptControllerScan {
 		
 	}
 
+	public void init(Object ob, String type) {
+		Class<? extends Object> mapping = ob.getClass();
+		List<String> types = scriptsService.getTypesByMapping(mapping);
+		for (String candidat : types) {
+			if(candidat.equals(type)){
+				try{
+					InstanceDelegate inst = scriptsService.createInstance(mapping, type);
+					inst.invoke("init", ob);
+					inst.invoke("init");
+					
+				}catch (Exception e) {
+					log.error("init error",e);
+				}
+				break;
+			}
+		}
+	}
+
 }

@@ -11,6 +11,7 @@ public class InitMainForm extends ScriptController<MainForm>{
 	public void init() {
 		ui.menu.setVisible(false);
 		ui.root.header.setVisible(false);
+		ui.root.footer.setVisible(true);
 		
 	}
 
