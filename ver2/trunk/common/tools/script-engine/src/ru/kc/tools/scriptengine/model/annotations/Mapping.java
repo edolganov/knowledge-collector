@@ -1,4 +1,4 @@
-package ru.kc.platform.scripts.model.annotations;
+package ru.kc.tools.scriptengine.model.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

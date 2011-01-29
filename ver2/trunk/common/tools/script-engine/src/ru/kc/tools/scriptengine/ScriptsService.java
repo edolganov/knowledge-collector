@@ -1,4 +1,4 @@
-package ru.kc.platform.scripts;
+package ru.kc.tools.scriptengine;
 
 import groovy.lang.GroovyClassLoader;
 
@@ -9,8 +9,8 @@ import java.util.HashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.scripts.model.Script;
-import ru.kc.platform.scripts.model.annotations.Mapping;
+import ru.kc.tools.scriptengine.model.Script;
+import ru.kc.tools.scriptengine.model.annotations.Mapping;
 import ru.kc.util.Check;
 
 public class ScriptsService {

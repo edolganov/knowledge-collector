@@ -1,4 +1,4 @@
-package ru.kc.platform.scripts.model;
+package ru.kc.tools.scriptengine.model;
 
 import groovy.lang.GroovyClassLoader;
 
