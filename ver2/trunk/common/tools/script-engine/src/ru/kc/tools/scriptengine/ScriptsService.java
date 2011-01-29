@@ -161,7 +161,7 @@ public class ScriptsService {
 	public InstanceDelegate createInstance(Object mapping, String type) throws Exception{
 		readLock.lock();
 		try{
-			InstanceDelegate nullInstance = new InstanceDelegate(null,mapping,type, this);
+			InstanceDelegate nullInstance = new InstanceDelegate(null,null,null);
 			
 			HashMap<String, Script> map = scriptsByMapping.get(mapping);
 			if(map == null) return nullInstance;
@@ -169,7 +169,7 @@ public class ScriptsService {
 			if(script == null) return nullInstance;
 			
 			Object ob = script.createInstance();
-			return new InstanceDelegate(ob,mapping,type,this);
+			return new InstanceDelegate(ob,script,this);
 		}finally{
 			readLock.unlock();
 		}
