@@ -1,10 +1,9 @@
-package ru.kc.platform.scripts;
+package ru.kc.platform.scripts.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.scripts.annotations.Mapping;
-import ru.kc.platform.scripts.controller.ScriptController;
 import ru.kc.tools.scriptengine.ScriptServiceController;
 
 public class ScriptServiceControlleImpl implements ScriptServiceController {

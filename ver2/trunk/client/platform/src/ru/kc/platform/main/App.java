@@ -3,8 +3,8 @@ package ru.kc.platform.main;
 import java.io.File;
 
 import ru.kc.platform.main.ui.MainForm;
-import ru.kc.platform.scripts.ScriptControllerScan;
-import ru.kc.platform.scripts.ScriptServiceControlleImpl;
+import ru.kc.platform.scripts.controller.ScriptControllerScan;
+import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptServiceListener;
 import ru.kc.tools.scriptengine.ScriptsService;
 

@@ -1,4 +1,4 @@
-package ru.kc.platform.scripts;
+package ru.kc.platform.scripts.controller;
 
 import java.util.List;
 
@@ -22,14 +22,7 @@ public class ScriptControllerScan {
 		Class<? extends Object> mapping = ob.getClass();
 		List<String> types = scriptsService.getTypesByMapping(mapping);
 		for (String type : types) {
-			try{
-				InstanceDelegate inst = scriptsService.createInstance(mapping, type);
-				inst.invoke("init", ob);
-				inst.invoke("init");
-				
-			}catch (Exception e) {
-				log.error("init error",e);
-			}
+			tryInit(ob, mapping, type);
 		}
 		
 	}
@@ -39,17 +32,25 @@ public class ScriptControllerScan {
 		List<String> types = scriptsService.getTypesByMapping(mapping);
 		for (String candidat : types) {
 			if(candidat.equals(type)){
-				try{
-					InstanceDelegate inst = scriptsService.createInstance(mapping, type);
-					inst.invoke("init", ob);
-					inst.invoke("init");
-					
-				}catch (Exception e) {
-					log.error("init error",e);
-				}
+				tryInit(ob, mapping, type);
 				break;
 			}
 		}
+	}
+	
+	private void tryInit(Object ob, Class<? extends Object> mapping, String type) {
+		try{
+			init(ob, mapping, type);
+		}catch (Exception e) {
+			log.error("init error",e);
+		}
+	}
+
+	private void init(Object ob, Class<? extends Object> mapping, String type)
+			throws Exception {
+		InstanceDelegate inst = scriptsService.createInstance(mapping, type);
+		inst.invoke("init", ob);
+		inst.invoke("init");
 	}
 
 }
