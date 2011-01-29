@@ -22,6 +22,7 @@ public class ScriptsService {
 	public static final String FILE_EXT = ".java";
 	private static Log log = LogFactory.getLog(ScriptsService.class);
 	
+	private ScriptServiceController serviceController;
 	private GroovyClassLoader loader;
 	private RedeployManager redeployManager = new RedeployManager(FILE_EXT, new RedeployManagerListenerImpl(this));
 	
@@ -29,10 +30,11 @@ public class ScriptsService {
 	private ReadWriteLock rw = new ReentrantReadWriteLock();
 	private Lock readLock = rw.readLock();
 	private Lock writeLock = rw.writeLock();
-	private HashMap<String, Script> scriptsByMapping = new HashMap<String, Script>();
+	private HashMap<Object, Script> scriptsByMapping = new HashMap<Object, Script>();
 	private HashMap<String, Script> scriptsByAbsolutePath = new HashMap<String, Script>();
 	
-	public ScriptsService() {
+	public ScriptsService(ScriptServiceController serviceController) {
+		this.serviceController = serviceController;
         loader = new GroovyClassLoader(this.getClass().getClassLoader());
 	}
 	
@@ -78,7 +80,7 @@ public class ScriptsService {
 	}
 	
 	void registerScriptRequest(File file) {
-		Script script = new Script(file,loader);
+		Script script = new Script(file,loader,serviceController);
 		log.info("Registering: " + script);
 		
 		try {

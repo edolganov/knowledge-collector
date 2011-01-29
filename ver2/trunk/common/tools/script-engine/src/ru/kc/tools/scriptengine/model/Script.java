@@ -8,19 +8,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import ru.kc.tools.scriptengine.model.annotations.Mapping;
+import ru.kc.tools.scriptengine.ScriptServiceController;
 
 public class Script {
 	
+	private ScriptServiceController controller;
 	private File file;
 	private GroovyClassLoader loader;
 	private GroovyObject groovyObject;
-	private String mappingValue;
+	private Object mappingValue;
 
-	public Script(File file,GroovyClassLoader loader) {
+
+	public Script(File file,GroovyClassLoader loader, ScriptServiceController controller) {
 		super();
 		this.file = file;
 		this.loader = loader;
+		this.controller = controller;
 	}
 
 	public void createScript() throws Exception {
@@ -30,14 +33,9 @@ public class Script {
 
 	    groovyObject = (GroovyObject) groovyClass.newInstance();
 		
-		Mapping mapping = groovyObject.getClass().getAnnotation(Mapping.class);
-		if(mapping == null)
-			throw new IllegalStateException(groovyObject+" doesn't have @Mapping annotation");
-		
-		
-		mappingValue = mapping.value();
+		mappingValue = controller.getMapping(groovyObject);
 		if(mappingValue == null)
-			throw new IllegalStateException(groovyObject+" have null mapping");
+			throw new IllegalStateException(groovyObject+" has null mapping");
         
 	}
 	
@@ -45,7 +43,7 @@ public class Script {
 		return file;
 	}
 	
-    public String getMapping() {
+    public Object getMapping() {
 		return mappingValue;
 	}
 

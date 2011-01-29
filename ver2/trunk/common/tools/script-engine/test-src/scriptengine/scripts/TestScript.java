@@ -1,6 +1,6 @@
 package scriptengine.scripts;
 
-import ru.kc.tools.scriptengine.model.annotations.Mapping;
+import scriptengine.Mapping;
 
 @Mapping("test")
 public class TestScript {
