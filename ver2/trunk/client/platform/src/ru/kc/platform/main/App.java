@@ -1,5 +1,9 @@
 package ru.kc.platform.main;
 
+import java.io.File;
+
+import ru.kc.tools.scriptengine.ScriptsService;
+
 public class App {
 
 	public void init() {
@@ -11,7 +15,8 @@ public class App {
 	}
 
 	private void initScriptService() {
-		// TODO Auto-generated method stub
+		ScriptsService scriptsService = new ScriptsService();
+		scriptsService.addCodeBase(new File("./client"));
 		
 	}
 

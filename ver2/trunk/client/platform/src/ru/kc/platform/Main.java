@@ -23,6 +23,9 @@ public class Main {
 	}
 	
 	private static void setupLog() throws IOException {
+		File dir = new File("./data");
+		dir.mkdir();
+		
 		String logFileName = "./data/client.log";
 		new File(logFileName).delete();
 		Log4JConfig.defaultConfig(Log4JConfig.JBOSS_PATTERN,logFileName);
