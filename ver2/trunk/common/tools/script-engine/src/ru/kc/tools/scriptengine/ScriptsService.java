@@ -88,14 +88,14 @@ public class ScriptsService {
 	
 	void registerScriptRequest(File file) {
 		Script script = new Script(file,loader,serviceController);
-		log.info("load script from file: " + file);
+		//log.info("load script from file: " + file);
 		
 		try {
 			script.init();
 			put(script);
 			log.info("registered: " + script);
 		}catch (Exception e) {
-			log.error("error registring script",e);
+			log.error("error registring script by file "+file, e);
 			return;
 		}
 		
