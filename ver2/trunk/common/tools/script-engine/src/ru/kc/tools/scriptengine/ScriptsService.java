@@ -4,10 +4,10 @@ import groovy.lang.GroovyClassLoader;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -16,6 +16,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.tools.scriptengine.exception.ScriptNotExistException;
 import ru.kc.tools.scriptengine.model.Script;
 import ru.kc.util.Check;
 import ru.kc.util.file.redeploy.RedeployManager;
@@ -35,7 +36,7 @@ public class ScriptsService {
 	private ReadWriteLock rw = new ReentrantReadWriteLock();
 	private Lock readLock = rw.readLock();
 	private Lock writeLock = rw.writeLock();
-	private HashMap<Object, HashMap<String,Script>> scriptsByMapping = new HashMap<Object, HashMap<String,Script>>();
+	private HashMap<Object, HashMap<Object,Script>> scriptsById = new HashMap<Object, HashMap<Object,Script>>();
 	private HashMap<String, Script> scriptsByAbsolutePath = new HashMap<String, Script>();
 	
 	public ScriptsService(ScriptServiceController serviceController) {
@@ -87,85 +88,97 @@ public class ScriptsService {
 	
 	void registerScriptRequest(File file) {
 		Script script = new Script(file,loader,serviceController);
-		log.info("Registering: " + script);
+		log.info("load script from file: " + file);
 		
 		try {
 			script.init();
+			put(script);
+			log.info("registered: " + script);
 		}catch (Exception e) {
-			log.error(e.getMessage());
+			log.error("error registring script",e);
 			return;
 		}
 		
-		put(script);
+
 	}
 
 
 	
 	private void put(Script script){
-		String absolutePath = script.getFile().getAbsolutePath();
-		
+		String absolutePath = script.getAbsoluteFilePath();
+		ScriptId id = script.getId();
 		Script oldByPath = null;
-		Object mapping = null;
-		String type = null;
 		
 		writeLock.lock();
 		try{
-			oldByPath = scriptsByAbsolutePath.put(absolutePath, script);
-			removeFromMapping(oldByPath);
+			checkIdUnique(script);
 			
-			mapping = script.getMapping();
-			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			oldByPath = scriptsByAbsolutePath.put(absolutePath, script);
+			removeFromIdMapIfCan(oldByPath);
+			
+			HashMap<Object, Script> map = scriptsById.get(id.domain);
 			if(map == null){
-				map = new HashMap<String, Script>();
-				scriptsByMapping.put(mapping, map);
+				map = new HashMap<Object, Script>();
+				scriptsById.put(id.domain, map);
 			}
-			type = script.getType();
-			map.put(type, script);
-
+				
+			map.put(id.uniqueName, script);
 		}finally{
 			writeLock.unlock();
 		}
 		
 		if(oldByPath != null){
-			for (ScriptServiceListener l : listeners) l.onScriptUpdated(mapping, type);
+			for (ScriptServiceListener l : listeners) l.onScriptUpdated(id);
 		} else {
-			for (ScriptServiceListener l : listeners) l.onScriptCreated(mapping, type);
+			for (ScriptServiceListener l : listeners) l.onScriptCreated(id);
 		}
 		
 	}
 	
+	private void checkIdUnique(Script script) {
+		ScriptId id = script.getId();
+		String absoluteFilePath = script.getAbsoluteFilePath();
+		
+		HashMap<Object, Script> map = scriptsById.get(id.domain);
+		if(map != null){
+			Script oldScript = map.get(id.uniqueName);
+			if(oldScript != null && !oldScript.getAbsoluteFilePath().equals(absoluteFilePath)){
+				throw new IllegalArgumentException("script with "+id+" already exists");
+			}
+		}
+	}
+
+
 	void removeByPath(String path){
 		String absolutePath = new File(path).getAbsolutePath();
 		
 		writeLock.lock();
 		try{
 			Script oldByPath = scriptsByAbsolutePath.remove(absolutePath);
-			removeFromMapping(oldByPath);
-
+			removeFromIdMapIfCan(oldByPath);
 		}finally{
 			writeLock.unlock();
 		}
 	}
 	
-	private void removeFromMapping(Script oldByPath) {
+	private void removeFromIdMapIfCan(Script oldByPath) {
 		if(oldByPath != null){
-			Object mapping = oldByPath.getMapping();
-			String type = oldByPath.getType();
-			HashMap<String, Script> map = scriptsByMapping.get(mapping);
-			map.remove(type);
+			ScriptId id = oldByPath.getId();
+			HashMap<Object, Script> map = scriptsById.get(id.domain);
+			map.remove(id.uniqueName);
 		}
 	}
 	
 	
-	public List<String> getTypesByMapping(Object mapping){
+	public Set<Object> getNamesByDomain(Object domain){
 		readLock.lock();
 		try{
-			HashMap<String, Script> map = scriptsByMapping.get(mapping);
-			if(map == null) return new ArrayList<String>(0);
+			HashMap<Object, Script> map = scriptsById.get(domain);
+			if(map == null) return new HashSet<Object>(0);
 			
-			ArrayList<String> out = new ArrayList<String>();
+			HashSet<Object> out = new HashSet<Object>();
 			for(Script script : map.values()){
-				out.add(script.getType());
+				out.add(script.getId().uniqueName);
 			}
 			return out;
 		}finally{
@@ -173,15 +186,13 @@ public class ScriptsService {
 		}
 	}
 	
-	public InstanceDelegate createInstance(Object mapping, String type) throws Exception{
+	public InstanceDelegate createInstance(Object domain, Object name) throws Exception{
 		readLock.lock();
 		try{
-			InstanceDelegate nullInstance = new InstanceDelegate(null,null,null);
-			
-			HashMap<String, Script> map = scriptsByMapping.get(mapping);
-			if(map == null) return nullInstance;
-			Script script = map.get(type);
-			if(script == null) return nullInstance;
+			HashMap<Object, Script> map = scriptsById.get(domain);
+			if(map == null) throw new ScriptNotExistException("no domain "+domain);
+			Script script = map.get(name);
+			if(script == null) throw new ScriptNotExistException("no name "+name+" in domain "+domain);
 			
 			Object ob = script.createInstance();
 			return new InstanceDelegate(ob,script,this);
@@ -190,12 +201,12 @@ public class ScriptsService {
 		}
 	}
 	
-	Script getScript(Object mapping, String type) {
+	Script getScript(ScriptId id) {
 		readLock.lock();
 		try{
-			HashMap<String, Script> map = scriptsByMapping.get(mapping);
+			HashMap<Object, Script> map = scriptsById.get(id.domain);
 			if(map == null) return null;
-			return map.get(type);
+			return map.get(id.uniqueName);
 		}finally{
 			readLock.unlock();
 		}

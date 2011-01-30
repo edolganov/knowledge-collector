@@ -5,6 +5,7 @@ import java.io.File;
 import ru.kc.platform.main.ui.MainForm;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
+import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceListener;
 import ru.kc.tools.scriptengine.ScriptsService;
 
@@ -36,16 +37,19 @@ public class App {
 		context.scriptsService.addListener(new ScriptServiceListener() {
 			
 			@Override
-			public void onScriptUpdated(Object mapping, String type) {
-				onScriptCreated(mapping, type);
+			public void onScriptUpdated(ScriptId id) {
+				onScriptCreated(id);
 			}
 			
 			@Override
-			public void onScriptCreated(Object mapping, String type) {
-				if(mapping == context.rootUI.getClass()){
-					scriptControllerScan.init(context.rootUI,type);
+			public void onScriptCreated(ScriptId id) {
+				if(id.domain == context.rootUI.getClass()){
+					scriptControllerScan.init(context.rootUI,id);
 				}
 			}
+			
+			@Override
+			public void onScriptDeleted(ScriptId id) {}
 		});
 	}
 

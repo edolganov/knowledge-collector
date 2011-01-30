@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceController;
 
 public class Script {
@@ -17,8 +18,8 @@ public class Script {
 	private GroovyClassLoader loader;
 	
 	//model
-	private Object mapping;
 	private Class<?> groovyClass;
+	private ScriptId id;
 
 
 
@@ -34,21 +35,17 @@ public class Script {
 		String fileName = file.getName();
 		groovyClass = loader.parseClass(text, fileName);
 		
-		mapping = controller.getMapping(groovyClass);
-		if(mapping == null)
-			throw new IllegalStateException(groovyClass+" has null mapping");
+		id = controller.getId(groovyClass);
+		if(id == null)
+			throw new IllegalStateException(groovyClass+" has null id");
 	}
 
-	public File getFile() {
-		return file;
+	public String getAbsoluteFilePath() {
+		return file.getAbsolutePath();
 	}
 	
-    public Object getMapping() {
-		return mapping;
-	}
-    
-    public String getType() {
-		return groovyClass.getName();
+    public ScriptId getId() {
+		return id;
 	}
 
 	public Object createInstance() throws Exception {
@@ -68,7 +65,7 @@ public class Script {
 
 	@Override
 	public String toString() {
-		return "Script [mapping=" + mapping + ", type=" + groovyClass
+		return "Script [id=" + id + ", type=" + groovyClass
 				+ ", file=" + file + "]";
 	}
 	

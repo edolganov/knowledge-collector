@@ -21,12 +21,8 @@ public class InstanceDelegate {
 		return invoke(method, (Object[])null);
 	}
 	
-	public <T> T invoke(String method, Object... args) throws Exception{
-		if(curInstance == null) throw new ScriptNotExistException();
-	
-		Object mapping = curScript.getMapping();
-		String type = curScript.getType();
-		Script lastScript = service.getScript(mapping,type);
+	public <T> T invoke(String method, Object... args) throws Exception{	
+		Script lastScript = service.getScript(curScript.getId());
 		if(lastScript == null) throw new ScriptNotExistException();
 		
 		try {

@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.scripts.annotations.Mapping;
+import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceController;
 
 public class ScriptServiceControlleImpl implements ScriptServiceController {
@@ -11,8 +12,7 @@ public class ScriptServiceControlleImpl implements ScriptServiceController {
 	private static Log log = LogFactory.getLog(ScriptServiceControlleImpl.class);
 	
 	@Override
-	public Object getMapping(Class<?> clazz) {
-		Class<?> type = clazz;
+	public ScriptId getId(Class<?> type) {
 		Mapping annotation = type.getAnnotation(Mapping.class);
 		if(annotation == null){
 			log.info("no annotation "+Mapping.class);
@@ -25,7 +25,9 @@ public class ScriptServiceControlleImpl implements ScriptServiceController {
 			return null;
 		}
 		
-		return annotation.value();
+		Class<?> domain = annotation.value();
+		String name = type.getSimpleName();
+		return new ScriptId(domain, name);
 	}
 
 }

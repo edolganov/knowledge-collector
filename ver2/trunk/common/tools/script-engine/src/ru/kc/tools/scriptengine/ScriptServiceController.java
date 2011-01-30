@@ -2,6 +2,6 @@ package ru.kc.tools.scriptengine;
 
 public interface ScriptServiceController {
 	
-	Object getMapping(Class<?> type);
+	ScriptId getId(Class<?> type);
 
 }
