@@ -3,9 +3,9 @@ package kc.main;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import ru.kc.platform.main.ui.MainForm;
 import ru.kc.platform.scripts.annotations.Mapping;
 import ru.kc.platform.scripts.controller.ScriptController;
+import ru.kc.platform.ui.tabbedform.MainForm;
 
 @Mapping(MainForm.class)
 public class SetSizeAndPosition extends ScriptController<MainForm>{

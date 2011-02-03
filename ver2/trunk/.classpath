@@ -6,8 +6,9 @@
 	<classpathentry kind="src" path="common/tools/file-persist/test-src"/>
 	<classpathentry kind="src" path="common/tools/script-engine/src"/>
 	<classpathentry kind="src" path="common/tools/script-engine/test-src"/>
-	<classpathentry kind="src" path="client/platform/src"/>
-	<classpathentry kind="src" path="client/platform/script-src"/>
+	<classpathentry kind="src" path="common/tools/swing-platform/src"/>
+	<classpathentry kind="src" path="client/main/src"/>
+	<classpathentry kind="src" path="client/main/script-src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="thirdparty/commons-logging.jar"/>
 	<classpathentry kind="lib" path="thirdparty/dom4j-1.6.jar"/>
