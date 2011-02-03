@@ -17,10 +17,12 @@ public class InstanceDelegate {
 		this.curScript = script;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> T invoke(String method) throws Exception{
-		return invoke(method, (Object[])null);
+		return (T)invoke(method, (Object[])null);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> T invoke(String method, Object... args) throws Exception{	
 		Script lastScript = service.getScript(curScript.getId());
 		if(lastScript == null) throw new ScriptNotExistException();
@@ -32,7 +34,7 @@ public class InstanceDelegate {
 				curScript = lastScript;
 			}
 			
-			return curScript.invoke(curInstance, method, args);
+			return (T)curScript.invoke(curInstance, method, args);
 		}catch (Exception e) {
 			throw new InvocationException(e);
 		}

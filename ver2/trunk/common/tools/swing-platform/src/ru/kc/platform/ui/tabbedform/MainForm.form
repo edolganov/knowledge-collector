@@ -49,7 +49,7 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="ru.kc.platform.main.ui.TabbedPanel" name="root">
+    <Component class="ru.kc.platform.ui.tabbedform.TabbedPanel" name="root">
     </Component>
   </SubComponents>
 </Form>
