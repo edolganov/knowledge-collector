@@ -33,8 +33,8 @@ public class TabbedPanel extends javax.swing.JPanel {
 
         header = new javax.swing.JPanel();
         tabs = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        testTab1 = new javax.swing.JPanel();
+        testTab2 = new javax.swing.JPanel();
         footer = new javax.swing.JPanel();
 
         header.setBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("ToolBar:ToggleButton[Disabled+Selected].textForeground")));
@@ -50,31 +50,31 @@ public class TabbedPanel extends javax.swing.JPanel {
             .addGap(0, 32, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout testTab1Layout = new javax.swing.GroupLayout(testTab1);
+        testTab1.setLayout(testTab1Layout);
+        testTab1Layout.setHorizontalGroup(
+            testTab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 820, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        testTab1Layout.setVerticalGroup(
+            testTab1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 407, Short.MAX_VALUE)
         );
 
-        tabs.addTab("tab1", jPanel1);
+        tabs.addTab("tab1", testTab1);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout testTab2Layout = new javax.swing.GroupLayout(testTab2);
+        testTab2.setLayout(testTab2Layout);
+        testTab2Layout.setHorizontalGroup(
+            testTab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 820, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        testTab2Layout.setVerticalGroup(
+            testTab2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 407, Short.MAX_VALUE)
         );
 
-        tabs.addTab("tab2", jPanel2);
+        tabs.addTab("tab2", testTab2);
 
         footer.setBorder(javax.swing.BorderFactory.createLineBorder(javax.swing.UIManager.getDefaults().getColor("TabbedPane:TabbedPaneTab[Disabled].textForeground")));
 
@@ -112,9 +112,9 @@ public class TabbedPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel footer;
     public javax.swing.JPanel header;
-    public javax.swing.JPanel jPanel1;
-    public javax.swing.JPanel jPanel2;
     public javax.swing.JTabbedPane tabs;
+    public javax.swing.JPanel testTab1;
+    public javax.swing.JPanel testTab2;
     // End of variables declaration//GEN-END:variables
 
 }

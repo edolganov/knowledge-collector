@@ -12,7 +12,6 @@ import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
-import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceListener;
 import ru.kc.tools.scriptengine.ScriptsService;

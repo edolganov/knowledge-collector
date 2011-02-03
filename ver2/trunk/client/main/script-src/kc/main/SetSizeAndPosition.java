@@ -13,9 +13,12 @@ public class SetSizeAndPosition extends ScriptController<MainForm>{
 	@Override
 	public void init() {
 		ui.setTitle("Knowledge Collector");
-		ui.setMinimumSize(new Dimension(1024, 540));
 		
-		ui.setSize(1024, 540);
+		//size
+		int width = 1024;
+		int height = 540;
+		ui.setMinimumSize(new Dimension(width, height));
+		ui.setSize(width, height);
 		
         //position
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
