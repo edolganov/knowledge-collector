@@ -19,7 +19,8 @@ public class InitTabs extends ScriptController<MainForm>{
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
 		tabs.addTab(new JPanel(), "test tab");
-		tabs.addTab(0,new JPanel(), "test tab 2");
+		tabs.addTab(new JPanel(), "test tab 2");
+		tabs.addTab(0,new JPanel(), "test tab 3",false);
 		
 	}
 

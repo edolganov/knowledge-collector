@@ -23,7 +23,11 @@ public class TabbedWrapper {
 	}
 	
 	public void addTab(int index,Component comp, String text){
-		final TabHeader tabHeader = new TabHeader(text);
+		addTab(index, comp, text, true);
+	}
+	
+	public void addTab(int index,Component comp, String text, boolean canClose){
+		final TabHeader tabHeader = new TabHeader(text,canClose);
 		tabs.add(comp,index);
 		tabs.setTabComponentAt(index, tabHeader);
 		headers.add(index, tabHeader);

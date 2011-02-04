@@ -14,7 +14,7 @@ public class TabHeader extends JPanel {
     private static class CloseButton extends JButton {
     	
         private static class MouseListenerImpl extends MouseAdapter {
-        	
+       
         	CloseButton parent;
         	
             public MouseListenerImpl(CloseButton parent) {
@@ -23,20 +23,25 @@ public class TabHeader extends JPanel {
 			}
 
 			public void mouseEntered(MouseEvent e) {
-				parent.setIcon(active);
+				parent.setActive();
             }
 
             public void mouseExited(MouseEvent e) {
-            	if(!parent.selected)parent.setIcon(passive);
-            	else parent.setIcon(active);
-            	
+            	parent.setPassive();
             }
         };
         
-        boolean selected;
+        
+        boolean canClose;
     	
-        public CloseButton() {
-            int size = 17;
+        public CloseButton(boolean canClose) {
+            initUI();
+            this.canClose = canClose;
+            setPassive();
+        }
+
+		private void initUI() {
+			int size = 17;
             setPreferredSize(new Dimension(size, size));
             setToolTipText("Close");
             setUI(new BasicButtonUI());
@@ -46,49 +51,49 @@ public class TabHeader extends JPanel {
             setBorderPainted(false);
             setRolloverEnabled(true);
             addMouseListener(new MouseListenerImpl(this));
-            setIcon(passive);
+		}
+        
+        public void setActive(){
+            if(canClose){
+            	setIcon(active);
+            } else {
+            	setIcon(null);
+            }
+        }
+        
+        public void setPassive(){
+            if(canClose){
+            	setIcon(passive);
+            } else {
+            	setIcon(null);
+            }
         }
 
-
-        public void updateUI() {}
-
-
-		public void setSelected(boolean b) {
-			selected = b;
-			if(selected){
-				setIcon(active);
-			}else{
-				setIcon(passive);
-			}
-			
-		}
     }
 	
-	static Icon active = IconUtil.get("/ru/kc/platform/ui/img/close-active.png");
-	static Icon passive = IconUtil.get("/ru/kc/platform/ui/img/close-passive.png");
+    private static Icon active = IconUtil.get("/ru/kc/platform/ui/img/close-active.png");
+	private static Icon passive = IconUtil.get("/ru/kc/platform/ui/img/close-passive.png");
 	
-	JLabel label  = new JLabel();
-	String text;
-	String textPreffix;
-	boolean textPreffixVisible;
-	boolean bold = false;
+	private JLabel label  = new JLabel();
+	private String text;
+	private String textPreffix;
+	private boolean textPreffixVisible;
+	private boolean bold = false;
 	
-	CloseButton button = new CloseButton();
-	boolean silentMode = false;
+	private CloseButton button;
 	
-    public TabHeader() {
+    
+    public TabHeader(String text, boolean canClose) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setOpaque(false);
-
+        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+        
         add(label);
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
         
+        button = new CloseButton(canClose);
         add(button);
-        setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
-    }
-    
-    public TabHeader(String text) {
-		this();
+
 		setText(text);
 	}
     
