@@ -38,6 +38,7 @@ public class TabHeader extends JPanel {
         public CloseButton(boolean canClose) {
             initUI();
             this.canClose = canClose;
+            if(!canClose)setVisible(false);
             setPassive();
         }
 
@@ -85,9 +86,9 @@ public class TabHeader extends JPanel {
     private static Icon active = IconUtil.get("/ru/kc/platform/ui/img/close-active.png");
 	private static Icon passive = IconUtil.get("/ru/kc/platform/ui/img/close-passive.png");
 	
-	private JLabel label  = new JLabel();
+	private JLabel label;
 	private String text;
-	private boolean bold = false;
+	private boolean bold;
 	
 	private CloseButton button;
 	
@@ -98,9 +99,10 @@ public class TabHeader extends JPanel {
         setOpaque(false);
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
         
-        add(label);
+        label = new JLabel();
         label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
-        
+        add(label);
+
         button = new CloseButton(canClose);
         add(button);
 

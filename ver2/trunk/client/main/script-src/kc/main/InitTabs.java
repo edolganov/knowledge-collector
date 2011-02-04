@@ -25,6 +25,7 @@ public class InitTabs extends ScriptController<MainForm>{
 		tabs.addTab(new JPanel(), "test tab 5");
 		tabs.addTab(new JPanel(), "test tab 6");
 		tabs.addTab(0,new JPanel(), "test tab 0",false);
+		tabs.setSelectedIndex(0);
 		
 	}
 

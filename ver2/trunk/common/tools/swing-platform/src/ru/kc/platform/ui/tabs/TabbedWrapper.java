@@ -59,9 +59,15 @@ public class TabbedWrapper {
 
 		});
 	}
+	
+	public void setSelectedIndex(int index) {
+		tabs.setSelectedIndex(index);
+	}
 
 	private void desellectAllHeaders() {
 		for (TabHeader h : headers) h.setSelected(false);
 	}
+
+
 
 }
