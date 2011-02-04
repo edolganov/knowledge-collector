@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.utils.AppUtils;
 
 public abstract class Module<T extends Component> extends JPanel {
@@ -58,24 +59,18 @@ public abstract class Module<T extends Component> extends JPanel {
 	public void tryInit() {
 		if(inited) return;
 		else {
-			Module<?> parentModule = null;
+			AppContext context = null;
 			Container parent = getParent();
 			
 			while(parent != null) {
 				if(parent instanceof Module<?>){
-					parentModule = (Module<?>)parent;
-					break;
-				} else{
-					parent = parent.getParent();
+					context = ((Module<?>)parent).appContext;
+					if(context != null) break;
 				}
+				parent = parent.getParent();
 			}
 			
-			if(parentModule == null) return;
-			AppContext context = parentModule.appContext;
-			if(context == null){
-				log.error("appContext is null from parent "+parentModule);
-				return;
-			}
+			if(context == null) return;
 			setAppContext(context);
 		}
 	}
@@ -87,8 +82,7 @@ public abstract class Module<T extends Component> extends JPanel {
     	try {
 			this.appContext = context;
 			
-			//new ControllerScan(this.appContext).scanAndInit(this.getClass().getPackage().getName(), ui,getBlackList());
-			//appContext.getRuntimeConfig().scanAndInit(ui);
+			new ControllerScan(this.appContext).scanAndInit(this.getClass().getPackage().getName(), ui, getBlackList());
 			afterInit();
 			inited = true;
     	}catch (Exception e) {

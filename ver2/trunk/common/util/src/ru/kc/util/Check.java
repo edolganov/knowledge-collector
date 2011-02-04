@@ -17,5 +17,17 @@ public class Check {
 	public static boolean isEmpty(Object[] array) {
 		return array == null|| array.length == 0;
 	}
+	
+	
+	public static boolean contains(Object ob, Object[] array) {
+		if(array.length == 0) return false;
+		
+		for (Object object : array) {
+			if(object.equals(ob)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

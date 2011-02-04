@@ -1,6 +1,6 @@
 package kc.main;
 
-import ru.kc.platform.scripts.annotations.Mapping;
+import ru.kc.platform.controller.annotations.Mapping;
 import ru.kc.platform.scripts.controller.ScriptController;
 import ru.kc.platform.ui.tabbedform.MainForm;
 
