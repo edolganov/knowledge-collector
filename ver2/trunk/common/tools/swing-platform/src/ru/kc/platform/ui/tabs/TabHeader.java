@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-public class TabButton extends JPanel {
+public class TabHeader extends JPanel {
 	
     private static class CloseButton extends JButton {
     	
@@ -76,7 +76,7 @@ public class TabButton extends JPanel {
 	CloseButton button = new CloseButton();
 	boolean silentMode = false;
 	
-    public TabButton() {
+    public TabHeader() {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         setOpaque(false);
 
@@ -87,7 +87,7 @@ public class TabButton extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
     }
     
-    public TabButton(String text) {
+    public TabHeader(String text) {
 		this();
 		setText(text);
 	}

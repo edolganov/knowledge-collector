@@ -10,8 +10,8 @@ import javax.swing.JTabbedPane;
 public class TabbedWrapper {
 	
 	JTabbedPane tabs;
-	ArrayList<TabButton> buttons = new ArrayList<TabButton>();
-	TabButton selected;
+	ArrayList<TabHeader> headers = new ArrayList<TabHeader>();
+	TabHeader selected;
 
 	public TabbedWrapper(JTabbedPane tabs) {
 		super();
@@ -23,10 +23,10 @@ public class TabbedWrapper {
 	}
 	
 	public void addTab(int index,Component comp, String text){
-		final TabButton button = new TabButton(text);
+		final TabHeader tabHeader = new TabHeader(text);
 		tabs.add(comp,index);
-		tabs.setTabComponentAt(index, button);
-		buttons.add(index, button);
+		tabs.setTabComponentAt(index, tabHeader);
+		headers.add(index, tabHeader);
 		
 //		if(tabs.getTabCount() == 1){
 //			button.showButton();
