@@ -1,15 +1,15 @@
 package ru.kc.platform.app;
 
-import java.awt.Component;
+import java.awt.Container;
 
 import ru.kc.tools.scriptengine.ScriptsService;
 
 public class AppContext {
 	
-	public final Component rootUI;
+	public final Container rootUI;
 	public final ScriptsService scriptsService;
 	
-	public AppContext(Component rootUI, ScriptsService scriptsService) {
+	public AppContext(Container rootUI, ScriptsService scriptsService) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;

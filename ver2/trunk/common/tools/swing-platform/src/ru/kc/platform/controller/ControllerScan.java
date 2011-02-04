@@ -3,6 +3,7 @@ package ru.kc.platform.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -46,7 +47,10 @@ public class ControllerScan {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
+	public List<Controller<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
+		
+		ArrayList<Controller<?>> out = new ArrayList<Controller<?>>();
+		
 		if(packagePreffix == null) 
 			throw new IllegalArgumentException("packagePreffix is null");
 		if(initOb == null) 
@@ -65,7 +69,7 @@ public class ControllerScan {
 		.filterInputsBy(new FilterBuilder.Include(FilterBuilder.prefix(packagePreffix))));
 		
 		Set<Class<?>> all = reflections.getTypesAnnotatedWith(Mapping.class);
-		//System.out.println("ControllerScan.scanAndInit: "+all.size());
+		//log.info("found: "+all.size());
 		
 		for (Class<?> controller : all) {
 			if(Check.contains(controller,blackList)){
@@ -128,9 +132,11 @@ public class ControllerScan {
 			ControllerDependenceNode node = queue.removeFirst();
 			try {
 				Controller c = (Controller<?>) node.controllerClass.newInstance();
-				// System.out.println("init c:" + c);
+
 				//log.info("init controller: "+c.getClass().getName());
 				c.init(appContext, initOb);
+				out.add(c);
+				
 				allNodes.remove(node.controllerClass);
 				
 				if(node.children != null){
@@ -151,6 +157,8 @@ public class ControllerScan {
 		firstLevelNodes.clear();
 		allNodes.clear();
 		dependenceNodes.clear();
+		
+		return out;
 	}
 	
 

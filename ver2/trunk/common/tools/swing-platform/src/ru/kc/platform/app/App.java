@@ -1,6 +1,6 @@
 package ru.kc.platform.app;
 
-import java.awt.Component;
+import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptId;
@@ -23,7 +24,7 @@ public class App {
 	//init data
 	ArrayList<File> scriptsDevDirs = new ArrayList<File>();
 	ArrayList<File> scriptsProdactionDirs = new ArrayList<File>();
-	Component rootUI;
+	Container rootUI;
 	
 	//app data
 	ScriptsService scriptsService;
@@ -54,7 +55,7 @@ public class App {
 	private void init() {
 		initServices();
 		initContext();
-		initUIControllers();
+		initUI();
 		showUI();
 		
 	}
@@ -92,7 +93,11 @@ public class App {
 		log.warn("can't find scripts files");
 	}
 
-	private void initUIControllers() {
+	private void initUI() {
+        //init modules
+        new ModuleScan(context).scanAndInit(context.rootUI);
+        
+		//scripts controllers
 		new ScriptControllerScan(context.scriptsService).scanAndInit(context.rootUI);
 		context.scriptsService.addListener(new RootUIScriptListener(context));
 	}
