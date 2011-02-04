@@ -33,6 +33,7 @@ public class TabHeader extends JPanel {
         
         
         boolean canClose;
+        boolean selectedState;
     	
         public CloseButton(boolean canClose) {
             initUI();
@@ -63,11 +64,21 @@ public class TabHeader extends JPanel {
         
         public void setPassive(){
             if(canClose){
-            	setIcon(passive);
+            	if(!selectedState){
+            		setIcon(passive);
+            	}else {
+            		setIcon(active);
+            	}
             } else {
             	setIcon(null);
             }
         }
+
+		public void setSelectedState(boolean b) {
+			this.selectedState = b;
+			if(b) setActive();
+			else setPassive();
+		}
 
     }
 	
@@ -76,11 +87,10 @@ public class TabHeader extends JPanel {
 	
 	private JLabel label  = new JLabel();
 	private String text;
-	private String textPreffix;
-	private boolean textPreffixVisible;
 	private boolean bold = false;
 	
 	private CloseButton button;
+	
 	
     
     public TabHeader(String text, boolean canClose) {
@@ -106,38 +116,33 @@ public class TabHeader extends JPanel {
     
     public void setText(String text) {
     	this.text = text;
-        label.setText(text);
+    	printText();
     }
     
-	public void setTextPreffix(String textPreffix) {
-		this.textPreffix = textPreffix;
+	
+	public void setBold(boolean value) {
+		this.bold = value;
+		printText();
 	}
 	
-	public void setTextPreffixVisible(boolean visible) {
-		if(visible && !textPreffixVisible){
-			label.setText(textPreffix+text);
-			textPreffixVisible = true;
-		} else if(!visible && textPreffixVisible){
-			label.setText(text);
-			textPreffixVisible = false;
-		}
-	}
-	
-	public void setBold(boolean visible) {
-		if(visible && !bold){
-			label.setText("<html><b>"+label.getText()+"</b></html>");
-			bold = true;
-		} else if(!visible && bold){
-			setTextPreffixVisible(textPreffixVisible);
-			bold = false;
-		}
-		
-	}
+    private void printText(){
+    	if(bold){
+    		label.setText("<html><b>"+text+"</b></html>");
+    	} else {
+    		label.setText(text);
+    	}
+    }
 	
     
     public String getText() {
-        return label.getText();
+        return text;
     }
+
+
+	public void setSelected(boolean b) {
+		button.setSelectedState(b);
+		setBold(b);
+	}
 
 
 

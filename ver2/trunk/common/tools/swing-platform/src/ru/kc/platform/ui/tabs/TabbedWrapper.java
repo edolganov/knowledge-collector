@@ -27,43 +27,41 @@ public class TabbedWrapper {
 	}
 	
 	public void addTab(int index,Component comp, String text, boolean canClose){
-		final TabHeader tabHeader = new TabHeader(text,canClose);
+		final TabHeader header = new TabHeader(text,canClose);
 		tabs.add(comp,index);
-		tabs.setTabComponentAt(index, tabHeader);
-		headers.add(index, tabHeader);
 		
-//		if(tabs.getTabCount() == 1){
-//			button.showButton();
-//		} else {
-//			button.hideButton();
-//		}
+		tabs.setTabComponentAt(index, header);
+		headers.add(index, header);
 		
-//		comp.addComponentListener(new ComponentListener() {
-//			
-//			@Override
-//			public void componentShown(ComponentEvent e) {
-//				hideAllButtons();
-//				button.showButton();
-//			}
-//			
-//			@Override
-//			public void componentHidden(ComponentEvent e) {
-//				hideAllButtons();
-//				button.hideButton();
-//			}
-//			
-//			@Override
-//			public void componentResized(ComponentEvent e) {}
-//			
-//			@Override
-//			public void componentMoved(ComponentEvent e) {}
-//			
-//
-//		});
+		
+		if(tabs.getTabCount() == 1){
+			header.setSelected(true);
+		}
+		
+		comp.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				header.setSelected(true);
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				desellectAllHeaders();
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent e) {}
+			
+			@Override
+			public void componentMoved(ComponentEvent e) {}
+			
+
+		});
 	}
 
-//	private void hideAllButtons() {
-//		for (TabButton b : buttons) b.hideButton();
-//	}
+	private void desellectAllHeaders() {
+		for (TabHeader h : headers) h.setSelected(false);
+	}
 
 }
