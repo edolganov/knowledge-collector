@@ -8,8 +8,8 @@ import ru.kc.platform.controller.annotations.Mapping;
 public class DashboardController extends Controller<Dashboard>{
 
 	@Override
-	public void init(Dashboard ui) {
-		System.out.println("work!!!!!!!!!!");
+	public void init() {
+		
 	}
 
 }

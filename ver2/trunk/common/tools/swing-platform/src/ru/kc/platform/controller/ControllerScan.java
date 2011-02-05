@@ -45,6 +45,11 @@ public class ControllerScan {
 	public ControllerScan(AppContext appContext) {
 		this.appContext = appContext;
 	}
+	
+
+	public List<Controller<?>> scanAndInit(String packagePreffix, Object initOb){
+		return scanAndInit(packagePreffix, initOb, null);
+	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<Controller<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){

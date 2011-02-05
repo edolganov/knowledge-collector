@@ -9,13 +9,15 @@ public abstract class Controller<T> {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	protected AppContext appContext;
+	protected T ui;
 	
 	public void init(AppContext appContext, T ui){
 		setAppContext(appContext);
-		init((T)ui);
+		this.ui = ui;
+		init();
 	}
 	
-	public abstract void init(T ui);
+	public abstract void init();
 
 
 

@@ -10,6 +10,8 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.controller.Controller;
+import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
@@ -24,11 +26,13 @@ public class App {
 	//init data
 	ArrayList<File> scriptsDevDirs = new ArrayList<File>();
 	ArrayList<File> scriptsProdactionDirs = new ArrayList<File>();
+	ArrayList<String> rootControllersPackages = new ArrayList<String>();
 	Container rootUI;
 	
 	//app data
 	ScriptsService scriptsService;
 	AppContext context;
+	ArrayList<Controller<?>> rootControllers = new ArrayList<Controller<?>>();
 	
 	public void setRootUI(JFrame rootUI) {
 		this.rootUI = rootUI;
@@ -40,6 +44,10 @@ public class App {
 	
 	public void addScriptsProdactionDir(File file) {
 		scriptsProdactionDirs.add(file);
+	}
+	
+	public void addRootControllersPackage(String packageName) {
+		rootControllersPackages.add(packageName);
 	}
 	
 	public void run() {
@@ -98,6 +106,14 @@ public class App {
         //init modules
         new ModuleScan(context).scanAndInit(context.rootUI);
         
+        //root's controllers
+        ControllerScan controllerScan = new ControllerScan(context);
+        for(String packageName : rootControllersPackages){
+			rootControllers.addAll(controllerScan.scanAndInit(packageName, context.rootUI));
+        }
+        log.info("inited root controllers: count="+rootControllers.size()+", "+rootControllers);
+
+        
 		//scripts controllers
 		new ScriptControllerScan(context.scriptsService).scanAndInit(context.rootUI);
 		context.scriptsService.addListener(new RootUIScriptListener(context));
@@ -106,6 +122,8 @@ public class App {
 	private void showUI() {
 		context.rootUI.setVisible(true);
 	}
+
+
 
 
 

@@ -1,4 +1,4 @@
-package kc.main;
+package ru.kc.main;
 
 import java.awt.Component;
 
@@ -6,16 +6,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ru.kc.main.dashboard.DashboardModule;
+import ru.kc.platform.controller.Controller;
 import ru.kc.platform.controller.annotations.Mapping;
-import ru.kc.platform.scripts.controller.ScriptController;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.platform.ui.tabs.TabbedWrapper.TabsListener;
 
 @Mapping(MainForm.class)
-public class InitTabs extends ScriptController<MainForm>{
-	
+public class TabsController extends Controller<MainForm> {
+
 	@Override
 	public void init() {
 		TabbedPanel root = ui.root;
@@ -24,13 +24,7 @@ public class InitTabs extends ScriptController<MainForm>{
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
 		tabs.addTab(new DashboardModule(), "dashboard", false);
-		tabs.addTab(new JPanel(), "test tab 1");
-		tabs.addTab(new JPanel(), "test tab 2");
-		tabs.addTab(new JPanel(), "test tab 3");
-		tabs.addTab(new JPanel(), "test tab 4");
-		tabs.addTab(new JPanel(), "test tab 5");
-		tabs.addTab(new JPanel(), "test tab 6");
-		tabs.setSelectedIndex(0);
+		tabs.addTab(new JPanel(), "test tab");
 		
 		tabs.addListener(new TabsListener() {
 			
