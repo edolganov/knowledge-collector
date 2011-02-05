@@ -33,10 +33,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="org.jdesktop.swingx.JXTree" name="tree">
-          <Properties>
-            <Property name="dragEnabled" type="boolean" value="true"/>
-          </Properties>
+        <Component class="javax.swing.JTree" name="tree">
         </Component>
       </SubComponents>
     </Container>

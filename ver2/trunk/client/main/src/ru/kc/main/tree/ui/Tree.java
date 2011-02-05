@@ -32,9 +32,8 @@ public class Tree extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tree = new org.jdesktop.swingx.JXTree();
+        tree = new javax.swing.JTree();
 
-        tree.setDragEnabled(true);
         jScrollPane1.setViewportView(tree);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -52,7 +51,7 @@ public class Tree extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JScrollPane jScrollPane1;
-    public org.jdesktop.swingx.JXTree tree;
+    public javax.swing.JTree tree;
     // End of variables declaration//GEN-END:variables
 
 }

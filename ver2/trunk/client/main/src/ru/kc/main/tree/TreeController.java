@@ -1,9 +1,9 @@
 package ru.kc.main.tree;
 
-import javax.swing.TransferHandler;
+import javax.swing.JTree;
 
-import org.jdesktop.swingx.JXTree;
 
+import ru.kc.main.tree.tools.TreeTransferHandler;
 import ru.kc.main.tree.ui.Tree;
 import ru.kc.platform.controller.Controller;
 import ru.kc.platform.controller.annotations.Mapping;
@@ -14,8 +14,8 @@ public class TreeController extends Controller<Tree>{
 
 	@Override
 	public void init() {
-		JXTree tree = ui.tree;
-		//tree.setTransferHandler(new TransferHandler(null));
+		JTree tree = ui.tree;
+		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
 		
 	}
