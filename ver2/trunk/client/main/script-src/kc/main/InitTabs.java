@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import ru.kc.main.dashboard.DashboardModule;
 import ru.kc.platform.controller.annotations.Mapping;
 import ru.kc.platform.scripts.controller.ScriptController;
 import ru.kc.platform.ui.tabbedform.MainForm;
@@ -22,13 +23,13 @@ public class InitTabs extends ScriptController<MainForm>{
 		root.tabs.remove(root.testTab2);
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
+		tabs.addTab(new DashboardModule(), "dashboard", false);
 		tabs.addTab(new JPanel(), "test tab 1");
 		tabs.addTab(new JPanel(), "test tab 2");
 		tabs.addTab(new JPanel(), "test tab 3");
 		tabs.addTab(new JPanel(), "test tab 4");
 		tabs.addTab(new JPanel(), "test tab 5");
 		tabs.addTab(new JPanel(), "test tab 6");
-		tabs.addTab(0,new JPanel(), "test tab 0",false);
 		tabs.setSelectedIndex(0);
 		
 		tabs.addListener(new TabsListener() {

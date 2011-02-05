@@ -28,16 +28,21 @@ public class TabbedWrapper {
 		super();
 		this.tabs = tabs;
 	}
+
 	
 	public void addTab(Component comp, String text){
 		addTab(tabs.getTabCount(), comp, text);
 	}
 	
-	public void addTab(int index,Component comp, String text){
+	public void addTab(Component comp, String text, boolean canClose){
+		addTab(tabs.getTabCount(), comp, text,canClose);
+	}
+	
+	public void addTab(int index, Component comp, String text){
 		addTab(index, comp, text, true);
 	}
 	
-	public void addTab(int index,final Component comp, String text, boolean canClose){
+	public void addTab(int index, final Component comp, String text, boolean canClose){
 		final TabHeader header = new TabHeader(text,canClose);
 		tabs.add(comp,index);
 		
@@ -93,6 +98,7 @@ public class TabbedWrapper {
 
 	private void desellectAllHeaders() {
 		for (TabHeader h : headers) h.setSelected(false);
+		tabs.repaint();
 	}
 
 	private boolean canClose(Component comp) {

@@ -66,12 +66,17 @@ public abstract class Module<T extends Component> extends JPanel {
 			AppContext context = null;
 			Container parent = getParent();
 			
+			Object key = null;
 			while(parent != null) {
 				if(parent instanceof Module<?>){
 					context = ((Module<?>)parent).appContext;
 					if(context != null) break;
 				}
+				key = parent;
 				parent = parent.getParent();
+			}
+			if(context == null && key != null){
+				context = AppContext.get(key);
 			}
 			
 			if(context == null) return;
@@ -92,8 +97,10 @@ public abstract class Module<T extends Component> extends JPanel {
 			
 			afterInit();
 			inited = true;
+			
+			log.info("inited "+this);
     	}catch (Exception e) {
-			log.error("error by set context", e);
+			log.error("error while inited "+this, e);
 		}
 	}
 	
@@ -108,7 +115,11 @@ public abstract class Module<T extends Component> extends JPanel {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName()+" [ui=" + AppUtils.toStringLikeObject(ui) + ", inited=" + inited + "]";
+		return getClass().getSimpleName() + " [inited=" + inited + ", ui=" + AppUtils.toStringLikeObject(ui) + ", controllers="
+				+ controllers + "]";
 	}
+
+
+	
 
 }

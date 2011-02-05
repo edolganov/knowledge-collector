@@ -67,6 +67,7 @@ public class App {
 
 	private void initContext() {
 		context = new AppContext(rootUI,scriptsService);	
+		AppContext.put(rootUI, context);
 	}
 	
 	private void addCodeDirs(ScriptsService scriptsService) {

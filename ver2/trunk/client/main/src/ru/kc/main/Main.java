@@ -10,7 +10,8 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		
-		Platform.setSystemLookAndFeel();
+		Platform.trySetSystemLookAndFeel();
+		Platform.trySetNimbusLookAndFeel();
 		Platform.setDataDir(new File("./data"));
 		Platform.enableLogFile();
 		

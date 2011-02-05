@@ -22,7 +22,6 @@ public abstract class Controller<T> {
 	private void setAppContext(AppContext appContext) {
 		this.appContext = appContext;
 		//appContext.getEventManager().addObjectMethodListeners(this);
-		//appContext.getMsgManager().addObjectMethodListeners(this, appContext.getAppClient(), appContext.getLog());
 	}
 
 }
