@@ -1,6 +1,8 @@
 package ru.kc.main.dashboard;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -17,6 +19,7 @@ public class DashboardController extends Controller<Dashboard>{
 		JPanel centerPanel = ui.centerPanel;
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.add(new TreeModule(),BorderLayout.CENTER);
+
 	}
 
 }

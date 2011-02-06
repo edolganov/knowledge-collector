@@ -1,4 +1,4 @@
-package ru.kc.main.tree.tools;
+package ru.kc.util.swing.tree;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;

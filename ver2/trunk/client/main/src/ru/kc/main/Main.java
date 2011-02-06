@@ -12,9 +12,9 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		
 		Laf.trySetSystemLookAndFeel();
-		Laf.trySetNimbusLookAndFeel();
-		Laf.setupEnterActionForAllButtons();
-		Laf.setupComboboxInputMap();
+		//Laf.trySetNimbusLookAndFeel();
+		//Laf.setupEnterActionForAllButtons();
+		//Laf.setupComboboxInputMap();
 		
 		Platform.setDataDir(new File("./data"));
 		Platform.enableLogFile();

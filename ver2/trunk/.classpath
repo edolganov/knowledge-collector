@@ -24,7 +24,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="thirdparty/groovy-all-1.7.4.jar" sourcepath="C:/chapaj/programs/_dev/eclipse-3.6/plugins/org.codehaus.groovy_1.7.5.xx-20101020-1000-e36-release/lib/groovy-all-1.7.5-sources.jar"/>
 	<classpathentry kind="lib" path="thirdparty/log4j.jar"/>
-	<classpathentry kind="lib" path="thirdparty/swingx-beaninfo-1.6.2-2.jar"/>
-	<classpathentry kind="lib" path="thirdparty/swingx-core-1.6.2-2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
