@@ -75,13 +75,17 @@ public class TreeTest extends Assert{
 		assertEquals(true, children2.size() == 2);
 		assertEquals(true, children2.get(0) == child);
 		assertEquals(true, children2.get(1) == child2);
-
-		//create many children
-//		for (int i = 0; i < 200; i++) {
-//			Node root = tree.getRoot();
-//			Link child = factory.createLink("test",null,null);
-//			tree.add(root, child);
-//		}
+	}
+	
+	@Test
+	public void getEmptyChildrenList()throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		PersistService ps = createService(2,10,10);
+		Tree tree = ps.tree();
+		Node root = tree.getRoot();
+		List<Node> children = root.getChildren();
+		assertEquals(0, children.size());
 	}
 	
 

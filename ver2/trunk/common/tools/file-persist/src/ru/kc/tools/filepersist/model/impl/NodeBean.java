@@ -110,6 +110,7 @@ public abstract class NodeBean implements Node {
 	}
 
 	public List<String> getChildrenIds() {
+		if(childrenIds == null) return new ArrayList<String>(0);
 		return childrenIds;
 	}
 

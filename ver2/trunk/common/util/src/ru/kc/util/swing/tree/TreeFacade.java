@@ -27,8 +27,8 @@ public class TreeFacade {
         return TreeUtil.getCurrentNode(tree);
     }
 
-    public void addChild(DefaultMutableTreeNode parent, Object userObject) {
-        TreeUtil.addChild(tree, parent, userObject);
+    public DefaultMutableTreeNode addChild(DefaultMutableTreeNode parent, Object userObject) {
+        return TreeUtil.addChild(tree, parent, userObject);
     }
 
     public Object getCurrentObject() {
