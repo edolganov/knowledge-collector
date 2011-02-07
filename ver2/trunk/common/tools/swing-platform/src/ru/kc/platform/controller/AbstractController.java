@@ -14,10 +14,13 @@ public abstract class AbstractController<T> {
 	public void init(AppContext appContext, T ui){
 		setAppContext(appContext);
 		this.ui = ui;
+		beforeInit();
 		init();
 	}
 	
-	public abstract void init();
+	protected void beforeInit(){ /* override if need */ };
+	
+	protected abstract void init();
 
 
 

@@ -37,6 +37,7 @@ public class Dashboard extends javax.swing.JPanel {
         centerPanel = new javax.swing.JPanel();
         rightPanel = new javax.swing.JPanel();
         toolbar = new javax.swing.JToolBar();
+        jButton1 = new javax.swing.JButton();
 
         jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(200);
@@ -92,6 +93,11 @@ public class Dashboard extends javax.swing.JPanel {
         toolbar.setFloatable(false);
         toolbar.setRollover(true);
 
+        jButton1.setText("jButton1");
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        toolbar.add(jButton1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -111,6 +117,7 @@ public class Dashboard extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel centerPanel;
+    public javax.swing.JButton jButton1;
     public javax.swing.JSplitPane jSplitPane1;
     public javax.swing.JSplitPane jSplitPane2;
     public javax.swing.JPanel leftPanel;
