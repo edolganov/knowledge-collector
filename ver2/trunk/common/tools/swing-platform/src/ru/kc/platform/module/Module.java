@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.actions.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
@@ -110,6 +111,14 @@ public abstract class Module<T extends Component> extends JPanel {
 			if(candidat.getClass().equals(clazz)) return (N)candidat;
 		}
 		return null;
+	}
+	
+	public List<MethodAction> getMethodActions(){
+		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
+		for (AbstractController<T> c : controllers) {
+			out.addAll(c.getMethodActions());
+		}
+		return out;
 	}
 
 

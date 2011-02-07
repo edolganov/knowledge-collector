@@ -7,12 +7,12 @@ import java.util.List;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 
 import ru.kc.main.Controller;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
+import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.tree.TreeTransferHandler;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -63,5 +63,12 @@ public class TreeController extends Controller<Tree>{
 			log.error("error init tree", e);
 		}
 	}
+	
+	
+	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
+	public void createDirRequest(){
+		System.out.println("create!");
+	}
+	
 
 }

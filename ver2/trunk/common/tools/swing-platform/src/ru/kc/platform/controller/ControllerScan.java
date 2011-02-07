@@ -1,6 +1,7 @@
 package ru.kc.platform.controller;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,7 +16,9 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import ru.kc.platform.actions.MethodAction;
 import ru.kc.platform.annotations.Dependence;
+import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.app.AppContext;
@@ -174,9 +177,8 @@ public class ControllerScan {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init(AbstractController c,Object initOb) {
-		//inject data
 		injectData(c);
-		//init
+		injectMethodActions(c);
 		c.init(appContext, initOb);
 	}
 
@@ -235,6 +237,29 @@ public class ControllerScan {
 		field.set(c, objectToInject);
 	}
 
+	
+
+	private void injectMethodActions(AbstractController<?> c) {
+		List<MethodAction> actions = findMethodActions(c);
+		c.setMethodActions(actions);
+	}
+
+
+	private List<MethodAction> findMethodActions(AbstractController<?> c) {
+		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
+		Class<?> curClass = c.getClass();
+		while(!curClass.equals(AbstractController.class)){
+			Method[] methods = curClass.getDeclaredMethods();
+			for(Method candidat : methods){
+				ExportAction annotation = candidat.getAnnotation(ExportAction.class);
+				if(annotation != null){
+					out.add(new MethodAction(candidat, annotation, c));
+				}
+			}
+			curClass = curClass.getSuperclass();
+		}
+		return out;
+	}
 
 
 
