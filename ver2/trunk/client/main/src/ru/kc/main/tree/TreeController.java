@@ -29,7 +29,7 @@ public class TreeController extends Controller<Tree>{
 		tree = ui.tree;
 		treeFacade = new TreeFacade(ui.tree);
 		
-		//tree.setRootVisible(false);
+		tree.setRootVisible(true);
 		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModel(TreeFacade.createNode("")));
@@ -67,7 +67,21 @@ public class TreeController extends Controller<Tree>{
 	
 	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
 	public void createDirRequest(){
-		System.out.println("create dir");
+		DefaultMutableTreeNode parentTreeNode = treeFacade.getCurrentNode();
+		if(parentTreeNode == null) return;
+		
+		Node parent = (Node) parentTreeNode.getUserObject();
+		//create object by dialog
+		Node child = persistFactory.createDir(""+System.currentTimeMillis(), null);
+		try {
+			persistTree.add(parent, child);
+		}catch (Exception e) {
+			log.error("error add", e);
+			return;
+		}
+		
+		treeFacade.addChild(parentTreeNode, child);
+		
 	}
 	
 	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")
