@@ -220,7 +220,7 @@ public class ControllerScan {
 	}
 	
 	private Object findObjectToInject(Field field) {
-		Class<?> declaringType = field.getDeclaringClass();
+		Class<?> declaringType = field.getType();
 		for (Object candidat : dataForInject) {
 			if(candidat.getClass().equals(declaringType)){
 				return candidat;
