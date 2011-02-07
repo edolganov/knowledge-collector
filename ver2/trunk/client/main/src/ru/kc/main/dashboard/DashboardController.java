@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import ru.kc.main.Controller;
 import ru.kc.main.dashboard.ui.Dashboard;
 import ru.kc.main.tree.TreeModule;
-import ru.kc.platform.actions.MethodAction;
+import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Mapping;
 
 @Mapping(Dashboard.class)

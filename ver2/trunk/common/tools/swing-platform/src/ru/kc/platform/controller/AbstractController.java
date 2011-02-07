@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.actions.MethodAction;
+import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.module.Module;
 

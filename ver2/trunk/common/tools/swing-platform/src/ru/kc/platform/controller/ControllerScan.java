@@ -16,7 +16,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import ru.kc.platform.actions.MethodAction;
+import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Inject;
