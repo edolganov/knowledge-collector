@@ -3,14 +3,14 @@ package ru.kc.main.tree;
 
 import javax.swing.JTree;
 
+import ru.kc.main.Controller;
 import ru.kc.main.tree.ui.Tree;
-import ru.kc.platform.controller.AbstractController;
-import ru.kc.platform.controller.annotations.Mapping;
+import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.tree.TreeTransferHandler;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class TreeController extends AbstractController<Tree>{
+public class TreeController extends Controller<Tree>{
 	
 	JTree tree;
 	TreeFacade treeFacade;
@@ -29,7 +29,7 @@ public class TreeController extends AbstractController<Tree>{
 	}
 
 	private void fillTree() {
-		
+		System.out.println("!!!! "+context);
 	}
 
 }

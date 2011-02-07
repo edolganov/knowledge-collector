@@ -1,11 +1,11 @@
 package ru.kc.main.dashboard.tools;
 
+import ru.kc.main.Controller;
 import ru.kc.main.dashboard.ui.Dashboard;
-import ru.kc.platform.controller.AbstractController;
-import ru.kc.platform.controller.annotations.Mapping;
+import ru.kc.platform.annotations.Mapping;
 
 @Mapping(Dashboard.class)
-public class CustomizeDashboard extends AbstractController<Dashboard>{
+public class CustomizeDashboard extends Controller<Dashboard>{
 	
 	@Override
 	public void init() {

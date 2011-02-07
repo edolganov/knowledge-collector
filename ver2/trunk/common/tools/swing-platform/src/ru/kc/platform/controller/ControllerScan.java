@@ -1,5 +1,6 @@
 package ru.kc.platform.controller;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,9 +15,10 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
+import ru.kc.platform.annotations.Dependence;
+import ru.kc.platform.annotations.Inject;
+import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.app.AppContext;
-import ru.kc.platform.controller.annotations.Dependence;
-import ru.kc.platform.controller.annotations.Mapping;
 import ru.kc.util.Check;
 
 public class ControllerScan {
@@ -39,11 +41,15 @@ public class ControllerScan {
 	}
 		
 	private AppContext appContext;
+	private ArrayList<Object> dataForInject = new ArrayList<Object>();
 
 	
 	
 	public ControllerScan(AppContext appContext) {
 		this.appContext = appContext;
+		if(appContext.dataForInject != null){
+			this.dataForInject.addAll(appContext.dataForInject);
+		}
 	}
 	
 
@@ -51,7 +57,7 @@ public class ControllerScan {
 		return scanAndInit(packagePreffix, initOb, null);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public List<AbstractController<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
 		
 		ArrayList<AbstractController<?>> out = new ArrayList<AbstractController<?>>();
@@ -138,8 +144,7 @@ public class ControllerScan {
 			try {
 				AbstractController c = (AbstractController<?>) node.controllerClass.newInstance();
 
-				//log.info("init controller: "+c.getClass().getName());
-				c.init(appContext, initOb);
+				init(c,initOb);
 				out.add(c);
 				
 				allNodes.remove(node.controllerClass);
@@ -165,6 +170,76 @@ public class ControllerScan {
 		
 		return out;
 	}
+
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void init(AbstractController c,Object initOb) {
+		//inject data
+		injectData(c);
+		//init
+		c.init(appContext, initOb);
+	}
+
+
+	private void injectData(AbstractController<?> c) {
+		if(dataForInject.size() == 0) return;
+		
+		List<Field> requiredField = getRequiredField(c);
+		if(requiredField.size() == 0) return;
+		for (Field field : requiredField) {
+			Object objectToInject = findObjectToInject(field);
+			if(objectToInject == null){
+				log.warn("can't find object to inject by "+field+" for controller "+c);
+				continue;
+			} else {
+				try {
+					inject(field, c, objectToInject);
+				}catch (Exception e) {
+					log.error("can't set value to "+field+" for controller "+c);
+				}
+
+			}
+		}
+		
+	}
+	
+	private List<Field> getRequiredField(AbstractController<?> c) {
+		ArrayList<Field> out = new ArrayList<Field>();
+		Class<?> curClass = c.getClass();
+		while(!curClass.equals(AbstractController.class)){
+			Field[] fields = curClass.getDeclaredFields();
+			for(Field candidat : fields){
+				Inject inject = candidat.getAnnotation(Inject.class);
+				if(inject != null){
+					out.add(candidat);
+				}
+			}
+			curClass = curClass.getSuperclass();
+		}
+		return out;
+	}
+	
+	private Object findObjectToInject(Field field) {
+		Class<?> declaringType = field.getDeclaringClass();
+		for (Object candidat : dataForInject) {
+			if(candidat.getClass().equals(declaringType)){
+				return candidat;
+			}
+		}
+		return null;
+	}
+
+
+	private void inject(Field field, AbstractController<?> c, Object objectToInject) throws Exception {
+		field.setAccessible(true);
+		field.set(c, objectToInject);
+	}
+
+
+
+
+
+
 	
 
 }

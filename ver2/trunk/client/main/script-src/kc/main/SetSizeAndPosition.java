@@ -3,7 +3,7 @@ package kc.main;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import ru.kc.platform.controller.annotations.Mapping;
+import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.scripts.controller.ScriptController;
 import ru.kc.platform.ui.tabbedform.MainForm;
 

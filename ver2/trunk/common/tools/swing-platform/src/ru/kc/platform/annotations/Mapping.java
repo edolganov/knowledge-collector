@@ -1,4 +1,4 @@
-package ru.kc.platform.controller.annotations;
+package ru.kc.platform.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

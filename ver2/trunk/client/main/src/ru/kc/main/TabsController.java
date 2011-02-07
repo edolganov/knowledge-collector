@@ -6,15 +6,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ru.kc.main.dashboard.DashboardModule;
+import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.controller.AbstractController;
-import ru.kc.platform.controller.annotations.Mapping;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.platform.ui.tabs.TabbedWrapper.TabsListener;
 
 @Mapping(MainForm.class)
-public class TabsController extends AbstractController<MainForm> {
+public class TabsController extends Controller<MainForm> {
 
 	@Override
 	public void init() {

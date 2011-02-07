@@ -24,6 +24,7 @@ public class Main {
 		app.addScriptsDevDir(new File("./client/main/script-src"));
 		app.addScriptsProdactionDir(new File("./data/scripts"));
 		app.addRootControllersPackage("ru.kc.main");
+		app.addContextData(new Context());
 		app.run();
 		
 	}

@@ -3,6 +3,7 @@ package ru.kc.platform.app;
 import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -27,6 +28,7 @@ public class App {
 	ArrayList<File> scriptsDevDirs = new ArrayList<File>();
 	ArrayList<File> scriptsProdactionDirs = new ArrayList<File>();
 	ArrayList<String> rootControllersPackages = new ArrayList<String>();
+	ArrayList<Object> dataForInject = new ArrayList<Object>();
 	Container rootUI;
 	
 	//app data
@@ -48,6 +50,10 @@ public class App {
 	
 	public void addRootControllersPackage(String packageName) {
 		rootControllersPackages.add(packageName);
+	}
+	
+	public void addContextData(Object data){
+		dataForInject.add(data);
 	}
 	
 	public void run() {
@@ -74,7 +80,7 @@ public class App {
 	}
 
 	private void initContext() {
-		context = new AppContext(rootUI,scriptsService);	
+		context = new AppContext(rootUI,scriptsService,dataForInject);	
 		AppContext.put(rootUI, context);
 	}
 	

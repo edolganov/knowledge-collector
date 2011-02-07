@@ -3,7 +3,7 @@ package ru.kc.platform.scripts.controller;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.controller.annotations.Mapping;
+import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceController;
 
