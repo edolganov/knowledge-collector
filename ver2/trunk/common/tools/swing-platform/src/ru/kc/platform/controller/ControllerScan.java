@@ -1,6 +1,5 @@
 package ru.kc.platform.controller;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +18,8 @@ import org.reflections.util.FilterBuilder;
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.ExportAction;
-import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.aop.AOPTool;
 import ru.kc.platform.app.AppContext;
 import ru.kc.util.Check;
 
@@ -44,15 +43,11 @@ public class ControllerScan {
 	}
 		
 	private AppContext appContext;
-	private ArrayList<Object> dataForInject = new ArrayList<Object>();
 
 	
 	
 	public ControllerScan(AppContext appContext) {
 		this.appContext = appContext;
-		if(appContext.dataForInject != null){
-			this.dataForInject.addAll(appContext.dataForInject);
-		}
 	}
 	
 
@@ -184,59 +179,8 @@ public class ControllerScan {
 
 
 	private void injectData(AbstractController<?> c) {
-		if(dataForInject.size() == 0) return;
-		
-		List<Field> requiredField = getRequiredField(c);
-		if(requiredField.size() == 0) return;
-		for (Field field : requiredField) {
-			Object objectToInject = findObjectToInject(field);
-			if(objectToInject == null){
-				log.warn("can't find object to inject by "+field+" for controller "+c);
-				continue;
-			} else {
-				try {
-					inject(field, c, objectToInject);
-				}catch (Exception e) {
-					log.error("can't set value to "+field+" for controller "+c);
-				}
-
-			}
-		}
-		
+		new AOPTool(appContext).injectData(c);
 	}
-	
-	private List<Field> getRequiredField(AbstractController<?> c) {
-		ArrayList<Field> out = new ArrayList<Field>();
-		Class<?> curClass = c.getClass();
-		while(!curClass.equals(AbstractController.class)){
-			Field[] fields = curClass.getDeclaredFields();
-			for(Field candidat : fields){
-				Inject inject = candidat.getAnnotation(Inject.class);
-				if(inject != null){
-					out.add(candidat);
-				}
-			}
-			curClass = curClass.getSuperclass();
-		}
-		return out;
-	}
-	
-	private Object findObjectToInject(Field field) {
-		Class<?> declaringType = field.getType();
-		for (Object candidat : dataForInject) {
-			if(candidat.getClass().equals(declaringType)){
-				return candidat;
-			}
-		}
-		return null;
-	}
-
-
-	private void inject(Field field, AbstractController<?> c, Object objectToInject) throws Exception {
-		field.setAccessible(true);
-		field.set(c, objectToInject);
-	}
-
 	
 
 	private void injectMethodActions(AbstractController<?> c) {

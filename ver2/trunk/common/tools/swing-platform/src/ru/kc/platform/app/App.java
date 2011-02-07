@@ -3,7 +3,6 @@ package ru.kc.platform.app;
 import java.awt.Container;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -11,6 +10,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.command.CommandService;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.module.ModuleScan;
@@ -33,6 +33,7 @@ public class App {
 	
 	//app data
 	ScriptsService scriptsService;
+	CommandService commandService;
 	AppContext context;
 	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
 	
@@ -77,10 +78,16 @@ public class App {
 	private void initServices() {
 		scriptsService = new ScriptsService(new ScriptServiceControlleImpl());
 		addCodeDirs(scriptsService);
+		
+		commandService = new CommandService();
 	}
 
 	private void initContext() {
-		context = new AppContext(rootUI,scriptsService,dataForInject);	
+		context = new AppContext(
+				rootUI,
+				scriptsService,
+				dataForInject,
+				commandService);	
 		AppContext.put(rootUI, context);
 	}
 	

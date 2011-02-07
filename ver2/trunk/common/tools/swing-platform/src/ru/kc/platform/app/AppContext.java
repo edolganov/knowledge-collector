@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import ru.kc.platform.command.CommandService;
 import ru.kc.tools.scriptengine.ScriptsService;
 
 public final class AppContext {
@@ -26,14 +27,18 @@ public final class AppContext {
 	public final Container rootUI;
 	public final ScriptsService scriptsService;
 	public final List<Object> dataForInject;
+	public final CommandService commandService;
 
 	public AppContext(Container rootUI, ScriptsService scriptsService,
-			List<Object> dataForInject) {
+			List<Object> dataForInject, CommandService commandService) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;
-		this.dataForInject = Collections.unmodifiableList(dataForInject);
+		this.dataForInject = dataForInject;
+		this.commandService = commandService;
 	}
+
+	
 	
 	
 	
