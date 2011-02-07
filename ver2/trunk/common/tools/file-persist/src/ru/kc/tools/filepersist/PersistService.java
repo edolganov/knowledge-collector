@@ -9,7 +9,7 @@ import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.impl.TreeImpl;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
-public class PeristService {
+public class PersistService {
 	
 	InitParams params;
 	Context context;

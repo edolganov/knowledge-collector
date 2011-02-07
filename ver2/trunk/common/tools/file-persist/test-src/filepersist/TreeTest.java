@@ -11,7 +11,7 @@ import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.InitParams;
-import ru.kc.tools.filepersist.PeristService;
+import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.util.file.FileUtil;
 import org.junit.Assert;
@@ -38,7 +38,7 @@ public class TreeTest extends Assert{
 	public void firstCreate() throws Exception {
 		FileUtil.deleteDirRecursive(dir);
 		InitParams init = new InitParams(dir, 10, 10, 10);
-		PeristService ps = new PeristService();
+		PersistService ps = new PersistService();
 		ps.init(init);
 		
 		File rootFile = new File(dir.getPath()+"/nodes/000.xml");
@@ -46,7 +46,7 @@ public class TreeTest extends Assert{
 		
 		long lastModified = rootFile.lastModified();
 		
-		PeristService ps2 = new PeristService();
+		PersistService ps2 = new PersistService();
 		ps2.init(init);
 		ps2.tree();
 		assertEquals(true, lastModified == rootFile.lastModified());
@@ -57,7 +57,7 @@ public class TreeTest extends Assert{
 	@Test
 	public void createNode() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
-		PeristService ps = createService(2,10,10);
+		PersistService ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -90,7 +90,7 @@ public class TreeTest extends Assert{
 		FileUtil.deleteDirRecursive(dir);
 		
 		//create data
-		PeristService ps_ = createService(2,2,2);
+		PersistService ps_ = createService(2,2,2);
 		Node root_ = ps_.tree().getRoot();
 		
 		int size = 8;
@@ -104,7 +104,7 @@ public class TreeTest extends Assert{
 		}
 		
 		//check data loading from fs
-		PeristService ps = createService(2,2,2);
+		PersistService ps = createService(2,2,2);
 		Node root = ps.tree().getRoot();
 		List<Node> children = root.getChildren();
 		assertEquals(true, children.size() == size);
@@ -115,10 +115,10 @@ public class TreeTest extends Assert{
 		
 	}
 	
-	private PeristService createService(int maxNodesInContainer,
+	private PersistService createService(int maxNodesInContainer,
 			int maxContainerFilesInFolder, int maxFoldersInLevel){
 		InitParams init = new InitParams(dir, maxNodesInContainer, maxContainerFilesInFolder, maxFoldersInLevel);
-		PeristService ps = new PeristService();
+		PersistService ps = new PersistService();
 		try {
 			ps.init(init);
 		} catch (Exception e) {
