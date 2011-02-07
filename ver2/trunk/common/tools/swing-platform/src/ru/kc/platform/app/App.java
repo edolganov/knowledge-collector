@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.controller.Controller;
+import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
@@ -32,7 +32,7 @@ public class App {
 	//app data
 	ScriptsService scriptsService;
 	AppContext context;
-	ArrayList<Controller<?>> rootControllers = new ArrayList<Controller<?>>();
+	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
 	
 	public void setRootUI(JFrame rootUI) {
 		this.rootUI = rootUI;

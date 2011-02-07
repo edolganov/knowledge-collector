@@ -8,11 +8,11 @@ import javax.swing.JPanel;
 
 import ru.kc.main.dashboard.ui.Dashboard;
 import ru.kc.main.tree.TreeModule;
-import ru.kc.platform.controller.Controller;
+import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.annotations.Mapping;
 
 @Mapping(Dashboard.class)
-public class DashboardController extends Controller<Dashboard>{
+public class DashboardController extends AbstractController<Dashboard>{
 
 	@Override
 	public void init() {

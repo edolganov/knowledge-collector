@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.app.AppContext;
 
-public abstract class Controller<T> {
+public abstract class AbstractController<T> {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	protected AppContext appContext;

@@ -14,7 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.app.AppContext;
-import ru.kc.platform.controller.Controller;
+import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.utils.AppUtils;
 
@@ -25,7 +25,7 @@ public abstract class Module<T extends Component> extends JPanel {
 	protected T ui;
 	protected AppContext appContext;
 	protected Log log = LogFactory.getLog(getClass());
-	protected List<Controller<T>> controllers = new ArrayList<Controller<T>>(0);
+	protected List<AbstractController<T>> controllers = new ArrayList<AbstractController<T>>(0);
 	
 	private boolean inited = false;
 	
@@ -105,8 +105,8 @@ public abstract class Module<T extends Component> extends JPanel {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <N extends Controller<T>> N getController(Class<N> clazz){
-		for (Controller<T> candidat : controllers) {
+	public <N extends AbstractController<T>> N getController(Class<N> clazz){
+		for (AbstractController<T> candidat : controllers) {
 			if(candidat.getClass().equals(clazz)) return (N)candidat;
 		}
 		return null;

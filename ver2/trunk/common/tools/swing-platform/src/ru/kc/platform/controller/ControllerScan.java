@@ -47,14 +47,14 @@ public class ControllerScan {
 	}
 	
 
-	public List<Controller<?>> scanAndInit(String packagePreffix, Object initOb){
+	public List<AbstractController<?>> scanAndInit(String packagePreffix, Object initOb){
 		return scanAndInit(packagePreffix, initOb, null);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<Controller<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
+	public List<AbstractController<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
 		
-		ArrayList<Controller<?>> out = new ArrayList<Controller<?>>();
+		ArrayList<AbstractController<?>> out = new ArrayList<AbstractController<?>>();
 		
 		if(packagePreffix == null) 
 			throw new IllegalArgumentException("packagePreffix is null");
@@ -82,7 +82,7 @@ public class ControllerScan {
 				continue;
 			}
 			
-			if(!Controller.class.isAssignableFrom(controller)){
+			if(!AbstractController.class.isAssignableFrom(controller)){
 				log.error("invalid controller's class:"+controller.getName());
 			}
 			
@@ -104,7 +104,7 @@ public class ControllerScan {
 				if(dependenceClass == null){
 					firstLevelNodes.add(node);
 				} else {
-					if(!Controller.class.isAssignableFrom(dependenceClass)){
+					if(!AbstractController.class.isAssignableFrom(dependenceClass)){
 						log.error("invalid controller's dependence class:"+dependenceClass.getName());
 					} else {
 						ArrayList<ControllerDependenceNode> list = dependenceNodes.get(dependenceClass);
@@ -136,7 +136,7 @@ public class ControllerScan {
 		while(!queue.isEmpty()){
 			ControllerDependenceNode node = queue.removeFirst();
 			try {
-				Controller c = (Controller<?>) node.controllerClass.newInstance();
+				AbstractController c = (AbstractController<?>) node.controllerClass.newInstance();
 
 				//log.info("init controller: "+c.getClass().getName());
 				c.init(appContext, initOb);
