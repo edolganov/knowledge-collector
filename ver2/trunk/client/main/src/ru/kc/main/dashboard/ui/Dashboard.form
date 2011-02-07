@@ -37,7 +37,7 @@
           <Border info="null"/>
         </Property>
         <Property name="dividerLocation" type="int" value="200"/>
-        <Property name="dividerSize" type="int" value="1"/>
+        <Property name="dividerSize" type="int" value="2"/>
         <Property name="oneTouchExpandable" type="boolean" value="true"/>
       </Properties>
 
@@ -69,8 +69,8 @@
               <Border info="null"/>
             </Property>
             <Property name="dividerLocation" type="int" value="300"/>
-            <Property name="dividerSize" type="int" value="1"/>
-            <Property name="oneTouchExpandable" type="boolean" value="true"/>
+            <Property name="dividerSize" type="int" value="2"/>
+            <Property name="autoscrolls" type="boolean" value="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
@@ -110,7 +110,7 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="840" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="838" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">

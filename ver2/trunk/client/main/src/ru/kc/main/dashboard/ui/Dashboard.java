@@ -40,7 +40,7 @@ public class Dashboard extends javax.swing.JPanel {
 
         jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(200);
-        jSplitPane1.setDividerSize(1);
+        jSplitPane1.setDividerSize(2);
         jSplitPane1.setOneTouchExpandable(true);
 
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
@@ -58,8 +58,8 @@ public class Dashboard extends javax.swing.JPanel {
 
         jSplitPane2.setBorder(null);
         jSplitPane2.setDividerLocation(300);
-        jSplitPane2.setDividerSize(1);
-        jSplitPane2.setOneTouchExpandable(true);
+        jSplitPane2.setDividerSize(2);
+        jSplitPane2.setAutoscrolls(true);
 
         javax.swing.GroupLayout centerPanelLayout = new javax.swing.GroupLayout(centerPanel);
         centerPanel.setLayout(centerPanelLayout);
@@ -78,7 +78,7 @@ public class Dashboard extends javax.swing.JPanel {
         rightPanel.setLayout(rightPanelLayout);
         rightPanelLayout.setHorizontalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 840, Short.MAX_VALUE)
+            .addGap(0, 838, Short.MAX_VALUE)
         );
         rightPanelLayout.setVerticalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
