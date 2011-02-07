@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.Controller;
+import ru.kc.main.command.AddChild;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
@@ -71,15 +72,19 @@ public class TreeController extends Controller<Tree>{
 		if(parentTreeNode == null) return;
 		
 		Node parent = (Node) parentTreeNode.getUserObject();
-		//create object by dialog
-		Node child = persistFactory.createDir(""+System.currentTimeMillis(), null);
+		//TODO create object by dialog
+		Node child = persistFactory.createDir("test-"+System.currentTimeMillis(), null);
+		
+		
+		
 		try {
-			persistTree.add(parent, child);
+			invoke(new AddChild(parent, child));
 		}catch (Exception e) {
 			log.error("error add", e);
 			return;
 		}
 		
+		//TODO remove
 		treeFacade.addChild(parentTreeNode, child);
 		
 	}

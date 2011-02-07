@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.module.Module;
 
 public abstract class AbstractController<T> {
@@ -68,6 +69,20 @@ public abstract class AbstractController<T> {
 		
 		return out;
 	}
+	
+	
+	
+	protected <N> N invoke(AbstractCommand<N> command) throws Exception {
+		return (N) appContext.commandService.invoke(command, appContext);
+	}
+	
+//	protected <N> N invokeSafe(AbstractCommand<N> command){
+//		try{
+//			invoke(command);
+//		}catch (Exception e) {
+//			log.error(e);
+//		}
+//	}
 	
 	
 
