@@ -67,7 +67,22 @@ public class TreeController extends Controller<Tree>{
 	
 	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
 	public void createDirRequest(){
-		System.out.println("create!");
+		System.out.println("create dir");
+	}
+	
+	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")
+	public void createLinkRequest(){
+		System.out.println("create link");
+	}
+	
+	@ExportAction(description="create text", icon="/ru/kc/main/img/createText.png")
+	public void createTextRequest(){
+		System.out.println("create text");
+	}
+	
+	@ExportAction(description="create file link", icon="/ru/kc/main/img/createFileLink.png")
+	public void createFileLinkRequest(){
+		System.out.println("create file link");
 	}
 	
 

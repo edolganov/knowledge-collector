@@ -1,6 +1,10 @@
 package ru.kc.platform.controller;
 
+import java.awt.Component;
+import java.awt.Container;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -8,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.actions.MethodAction;
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.module.Module;
 
 public abstract class AbstractController<T> {
 	
@@ -39,6 +44,29 @@ public abstract class AbstractController<T> {
 	private void setAppContext(AppContext appContext) {
 		this.appContext = appContext;
 		//appContext.getEventManager().addObjectMethodListeners(this);
+	}
+	
+	protected List<MethodAction> getSubActionsRecursive(){
+		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
+		
+		LinkedList<Container> queue = new LinkedList<Container>();
+		if(ui instanceof Container){
+			queue.addLast((Container)ui);
+		}
+		while(queue.size() > 0){
+			Container container = queue.removeFirst();
+			Component[] children = container.getComponents();
+			for (Component child : children) {
+				if(child instanceof Module<?>){
+					out.addAll(((Module<?>) child).getMethodActions());
+				}
+				if(child instanceof Container){
+					queue.addLast((Container)child);
+				}
+			}
+		}
+		
+		return out;
 	}
 
 }

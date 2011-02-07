@@ -49,7 +49,7 @@ public class IconUtil {
 		return resource;
 	}
 
-	private static ImageIcon unknowIcon(){
+	public static ImageIcon unknowIcon(){
 		URL resource = ImageIcon.class.getResource("/ru/kc/util/swing/icon/unknown.png");
 		return new ImageIcon(resource);
 	}

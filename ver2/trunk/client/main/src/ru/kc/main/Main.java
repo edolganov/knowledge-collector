@@ -15,8 +15,8 @@ public class Main {
 		
 		Laf.trySetSystemLookAndFeel();
 		//Laf.trySetNimbusLookAndFeel();
-		//Laf.setupEnterActionForAllButtons();
-		//Laf.setupComboboxInputMap();
+		Laf.setupEnterActionForAllButtons();
+		Laf.setupComboboxInputMap();
 		
 		File dataDir = new File("./data");
 		File scriptDir = new File(dataDir,"scripts");
