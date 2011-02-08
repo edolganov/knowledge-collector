@@ -104,5 +104,10 @@ public class TreeController extends Controller<Tree>{
 		System.out.println("create file link");
 	}
 	
+	@Override
+	protected void onChildAdded(Node parent, Node child) {
+		log.info("added parent:"+parent+", child:"+child);
+	}
+	
 
 }

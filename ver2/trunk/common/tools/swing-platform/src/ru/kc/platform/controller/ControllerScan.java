@@ -173,7 +173,8 @@ public class ControllerScan {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init(AbstractController c,Object initOb) {
 		injectData(c);
-		injectMethodActions(c);
+		scanForMethodActions(c);
+		scanForEventListenerMethods(c);
 		c.init(appContext, initOb);
 	}
 
@@ -183,7 +184,7 @@ public class ControllerScan {
 	}
 	
 
-	private void injectMethodActions(AbstractController<?> c) {
+	private void scanForMethodActions(AbstractController<?> c) {
 		List<MethodAction> actions = findMethodActions(c);
 		c.setMethodActions(actions);
 	}
@@ -206,6 +207,9 @@ public class ControllerScan {
 	}
 
 
+	private void scanForEventListenerMethods(AbstractController<?> c) {
+		appContext.eventManager.addObjectMethodListeners(c);
+	}
 
 
 

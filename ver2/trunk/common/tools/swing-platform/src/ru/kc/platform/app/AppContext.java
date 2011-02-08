@@ -5,7 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.event.Event;
+import ru.kc.platform.event.EventManager;
 import ru.kc.tools.scriptengine.ScriptsService;
 
 public final class AppContext {
@@ -28,18 +32,18 @@ public final class AppContext {
 	public final ScriptsService scriptsService;
 	public final List<Object> dataForInject;
 	public final CommandService commandService;
+	public final EventManager eventManager;
 
 	public AppContext(Container rootUI, ScriptsService scriptsService,
-			List<Object> dataForInject, CommandService commandService) {
+			List<Object> dataForInject, CommandService commandService,
+			EventManager eventManager) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;
 		this.dataForInject = dataForInject;
 		this.commandService = commandService;
+		this.eventManager = eventManager;
 	}
-
-	
-	
 	
 	
 	

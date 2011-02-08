@@ -11,5 +11,7 @@ public interface Tree {
 	List<Node> getChildren(Node node) throws Exception;
 	
 	void add(Node parent, Node node) throws Exception;
+	
+	void addListener(TreeListener listener);
 
 }

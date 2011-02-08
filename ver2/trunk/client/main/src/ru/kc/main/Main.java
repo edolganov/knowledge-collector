@@ -2,11 +2,17 @@ package ru.kc.main;
 
 import java.io.File;
 
+import ru.kc.main.event.ChildAdded;
+import ru.kc.model.Node;
 import ru.kc.platform.Platform;
 import ru.kc.platform.app.App;
+import ru.kc.platform.app.AppContext;
+import ru.kc.platform.event.EventManager;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.Tree;
+import ru.kc.tools.filepersist.TreeListener;
 import ru.kc.util.swing.laf.Laf;
 
 public class Main {
@@ -23,6 +29,7 @@ public class Main {
 		File scriptsDevDir = new File("./client/main/script-src");
 		File knowDir = new File(dataDir,"know");
 		Context context = createContext(knowDir);
+		String rootControllersPackage = "ru.kc.main";
 		
 		Platform.setDataDir(dataDir);
 		Platform.enableLogFile();
@@ -31,11 +38,15 @@ public class Main {
 		app.setRootUI(new MainForm());
 		app.addScriptsDevDir(scriptsDevDir);
 		app.addScriptsProdactionDir(scriptDir);
-		app.addRootControllersPackage("ru.kc.main");
+		app.addRootControllersPackage(rootControllersPackage);
 		app.addContextData(context);
+		app.init();
+		initPersistEvents(app,context);
 		app.run();
 		
 	}
+
+
 
 	private static Context createContext(File knowDir) throws Exception {
 		int maxNodesInContainer = 100;
@@ -46,6 +57,19 @@ public class Main {
 		ps.init(init);
 		
 		return new Context(ps);
+	}
+	
+	private static void initPersistEvents(App app, Context context) {
+		AppContext appContext = app.getInitedContext();
+		final EventManager eventManager = appContext.eventManager;
+		Tree tree = context.persistService.tree();
+		tree.addListener(new TreeListener() {
+			
+			@Override
+			public void onAdded(Node parent, Node child) {
+				eventManager.fireEventInEDT(this,new ChildAdded(parent, child));
+			}
+		});
 	}
 
 }

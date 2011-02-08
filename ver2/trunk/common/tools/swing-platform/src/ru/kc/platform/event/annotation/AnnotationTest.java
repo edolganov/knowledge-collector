@@ -17,7 +17,7 @@ public class AnnotationTest {
 		try {
 			EventManager eventManager = new EventManager();
 			eventManager.addObjectMethodListeners(new AnnotationTest());
-			eventManager.fireEvent(new Object(), new TestEvent("test"));
+			eventManager.fireEventInEDT(new Object(), new TestEvent("test"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

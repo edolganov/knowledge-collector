@@ -44,7 +44,6 @@ public abstract class AbstractController<T> {
 
 	private void setAppContext(AppContext appContext) {
 		this.appContext = appContext;
-		//appContext.getEventManager().addObjectMethodListeners(this);
 	}
 	
 	protected List<MethodAction> getSubActionsRecursive(){

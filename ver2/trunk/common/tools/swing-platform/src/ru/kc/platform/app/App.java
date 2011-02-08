@@ -13,6 +13,8 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
+import ru.kc.platform.event.EventManager;
+import ru.kc.platform.event.ListenerExceptionHandler;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
@@ -35,6 +37,7 @@ public class App {
 	ScriptsService scriptsService;
 	CommandService commandService;
 	AppContext context;
+	EventManager eventManager;
 	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
 	
 	public void setRootUI(JFrame rootUI) {
@@ -57,29 +60,44 @@ public class App {
 		dataForInject.add(data);
 	}
 	
+	public void init() throws Exception {
+		SwingUtilities.invokeAndWait(new Runnable() {
+			
+			@Override
+			public void run() {
+				initServices();
+				initContext();
+				initUI();
+			}
+		});
+	}
+	
 	public void run() {
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				init();
+				showUI();
 			}
 		});
 	}
 
-	private void init() {
-		initServices();
-		initContext();
-		initUI();
-		showUI();
-		
-	}
+
 
 	private void initServices() {
 		scriptsService = new ScriptsService(new ScriptServiceControlleImpl());
 		addCodeDirs(scriptsService);
 		
 		commandService = new CommandService();
+		eventManager = new EventManager();
+		eventManager.setContinueFiringAfterListenerException(true);
+		eventManager.setExceptionHandler(new ListenerExceptionHandler() {
+			
+			@Override
+			public void handle(Throwable e) {
+				log.error("error while fire event",e);
+			}
+		});
 	}
 
 	private void initContext() {
@@ -87,7 +105,8 @@ public class App {
 				rootUI,
 				scriptsService,
 				dataForInject,
-				commandService);	
+				commandService,
+				eventManager);	
 		AppContext.put(rootUI, context);
 	}
 	
@@ -134,6 +153,10 @@ public class App {
 
 	private void showUI() {
 		context.rootUI.setVisible(true);
+	}
+
+	public AppContext getInitedContext() {
+		return context;
 	}
 
 
