@@ -15,37 +15,43 @@ import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
 import ru.kc.platform.module.Module;
+import ru.kc.platform.runtimestorage.RuntimeStorageService;
 
 public abstract class AbstractController<T> {
 	
 	protected Log log = LogFactory.getLog(getClass());
-	protected AppContext appContext;
-	protected T ui;
 	private List<MethodAction> methodActions;
 	
-	void setMethodActions(List<MethodAction> actions){
-		methodActions = Collections.unmodifiableList(actions);
-	}
+	protected T ui;
+	protected AppContext appContext;
+	protected RuntimeStorageService runtimeStorage;
 	
 	void init(AppContext appContext, T ui){
-		setAppContext(appContext);
+		initContext(appContext);
 		this.ui = ui;
 		beforeInit();
 		init();
 	}
 	
+	private void initContext(AppContext appContext) {
+		this.appContext = appContext;
+		runtimeStorage = appContext.runtimeStorageService;
+	}
+	
 	protected void beforeInit(){ /* override if need */ };
 	
 	protected abstract void init();
+	
 
+	void setMethodActions(List<MethodAction> actions){
+		methodActions = Collections.unmodifiableList(actions);
+	}
 
 	public List<MethodAction> getMethodActions(){
 		return methodActions;
 	}
 
-	private void setAppContext(AppContext appContext) {
-		this.appContext = appContext;
-	}
+
 	
 	protected List<MethodAction> getSubActionsRecursive(){
 		ArrayList<MethodAction> out = new ArrayList<MethodAction>();

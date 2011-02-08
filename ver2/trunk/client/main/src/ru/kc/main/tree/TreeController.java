@@ -21,6 +21,8 @@ import ru.kc.util.swing.tree.TreeFacade;
 @Mapping(Tree.class)
 public class TreeController extends Controller<Tree>{
 	
+	private static final String TREE_NODE = "tree-node";
+	
 	JTree tree;
 	TreeFacade treeFacade;
 	DefaultTreeModel model;
@@ -33,7 +35,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setRootVisible(true);
 		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
-		tree.setModel(TreeFacade.createDefaultModel(TreeFacade.createNode("")));
+		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
 		
@@ -44,8 +46,10 @@ public class TreeController extends Controller<Tree>{
 	private void buildTree() {
 		try {
 			Node rootNode = persistTree.getRoot();
-			model = TreeFacade.createDefaultModel(rootNode);
+			DefaultMutableTreeNode treeRootNode = TreeFacade.createNode(rootNode);
+			model = TreeFacade.createDefaultModelByNode(treeRootNode);
 			tree.setModel(model);
+			runtimeStorage.putWithWeakReferenceDomain(rootNode, TREE_NODE, treeRootNode);
 			
 			LinkedList<DefaultMutableTreeNode> queue = new LinkedList<DefaultMutableTreeNode>();
 			queue.addLast(treeFacade.getRoot());

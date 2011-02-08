@@ -16,6 +16,7 @@ import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ListenerExceptionHandler;
 import ru.kc.platform.module.ModuleScan;
+import ru.kc.platform.runtimestorage.RuntimeStorageService;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptId;
@@ -32,13 +33,15 @@ public class App {
 	ArrayList<String> rootControllersPackages = new ArrayList<String>();
 	ArrayList<Object> dataForInject = new ArrayList<Object>();
 	Container rootUI;
+	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
 	
 	//app data
 	ScriptsService scriptsService;
 	CommandService commandService;
 	AppContext context;
 	EventManager eventManager;
-	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
+	RuntimeStorageService runtimeStorageService;
+
 	
 	public void setRootUI(JFrame rootUI) {
 		this.rootUI = rootUI;
@@ -98,6 +101,8 @@ public class App {
 				log.error("error while fire event",e);
 			}
 		});
+		
+		runtimeStorageService = new RuntimeStorageService();
 	}
 
 	private void initContext() {
@@ -106,7 +111,8 @@ public class App {
 				scriptsService,
 				dataForInject,
 				commandService,
-				eventManager);	
+				eventManager,
+				runtimeStorageService);	
 		AppContext.put(rootUI, context);
 	}
 	

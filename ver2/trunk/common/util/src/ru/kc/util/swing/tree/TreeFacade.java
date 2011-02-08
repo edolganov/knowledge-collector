@@ -85,15 +85,15 @@ public class TreeFacade {
         TreeUtil.removeNode(tree,node);
     }
     
-    public static TreeNode createNode(Object ob){
+    public static DefaultMutableTreeNode createNode(Object ob){
     	return new DefaultMutableTreeNode(ob);
     }
     
-    public static DefaultTreeModel createDefaultModel(Object rootObject){
+    public static DefaultTreeModel createDefaultModelByUserObject(Object rootObject){
     	return new DefaultTreeModel(createNode(rootObject));
     }
     
-    public static DefaultTreeModel createDefaultModel(TreeNode root){
+    public static DefaultTreeModel createDefaultModelByNode(DefaultMutableTreeNode root){
     	return new DefaultTreeModel(root);
     }
 
