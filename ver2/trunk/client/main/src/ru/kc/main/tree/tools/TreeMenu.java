@@ -12,9 +12,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.main.model.NodeIcon;
+import ru.kc.main.tree.TreeController;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
+import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -52,7 +54,9 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//CommandService.invoke(new DeleteCurrentTreeNode());
+				Node node = treeFacade.getCurrentObject(Node.class);
+				if(node == null) return;
+				
 			}
 			
 		});
@@ -159,20 +163,21 @@ public class TreeMenu extends JPopupMenu {
 		
 		add(addMenu);
 		
-		if(currentNode.isRoot()) parent.setEnabled(false);
-		else parent.setEnabled(true);
+		boolean isRootNode = currentNode.isRoot();
+		parent.setEnabled(!isRootNode);
 		add(parent);
 		
 		if(showInfo){
 			showHideInfo.setText("hide info panel");
 			showHideInfo.setIcon(rightIcon);
-		}
-		else {
+		} else {
 			showHideInfo.setText("show info panel");
 			showHideInfo.setIcon(leftIcon);
 		}
 		add(showHideInfo);
 		addSeparator();
+		
+		delete.setEnabled(!isRootNode);
 		add(delete);
 		
 		

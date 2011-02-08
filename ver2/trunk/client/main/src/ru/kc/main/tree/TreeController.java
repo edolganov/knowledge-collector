@@ -100,6 +100,11 @@ public class TreeController extends Controller<Tree>{
 		System.out.println("create file link");
 	}
 	
+	public void deleteNodeRequest(){
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node == null) return;
+	}
+	
 	@Override
 	protected void onChildAdded(Node parent, Node child) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
