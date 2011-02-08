@@ -56,6 +56,9 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
+				if(treeNode.isRoot()) return;
+				
 				Node node = treeFacade.getCurrentObject(Node.class);
 				commandService.invokeSafe(new DeleteNode(node));
 			}

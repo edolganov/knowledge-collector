@@ -21,6 +21,7 @@ public abstract class AbstractController<T> {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	private List<MethodAction> methodActions;
+	private ControllersPool controllersPool;
 	
 	protected T ui;
 	protected AppContext appContext;
@@ -42,9 +43,15 @@ public abstract class AbstractController<T> {
 	
 	protected abstract void init();
 	
+	protected void afterAllInited(){ /* override if need */ };
+	
 
 	void setMethodActions(List<MethodAction> actions){
 		methodActions = Collections.unmodifiableList(actions);
+	}
+	
+	void setControllersPool(ControllersPool pool){
+		controllersPool = pool;
 	}
 
 	public List<MethodAction> getMethodActions(){
@@ -84,6 +91,12 @@ public abstract class AbstractController<T> {
 	
 	protected <N> Answer<N> invokeSafe(AbstractCommand<N> command){
 		return (Answer<N>) appContext.commandService.invokeSafe(command);
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public <N extends AbstractController<T>> N getController(Class<N> clazz){
+		if(controllersPool == null) throw new IllegalStateException("controllersPool is null");
+		return (N) controllersPool.getController(clazz);
 	}
 	
 	

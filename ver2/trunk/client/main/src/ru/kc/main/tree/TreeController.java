@@ -42,14 +42,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
 		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService));
-		tree.addKeyListener(new DeleteKey() {
-			
-			@Override
-			protected void doAction() {
-				deleteNodeRequest();
-			}
-			
-		});
+
 		
 		
 		
@@ -112,6 +105,9 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	public void deleteNodeRequest(){
+		DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
+		if(treeNode.isRoot()) return;
+		
 		Node node = treeFacade.getCurrentObject(Node.class);
 		invokeSafe(new DeleteNode(node));
 	}

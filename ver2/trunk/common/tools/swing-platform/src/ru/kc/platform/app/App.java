@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
+import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ListenerExceptionHandler;
 import ru.kc.platform.module.ModuleScan;
@@ -33,7 +34,7 @@ public class App {
 	ArrayList<String> rootControllersPackages = new ArrayList<String>();
 	ArrayList<Object> dataForInject = new ArrayList<Object>();
 	Container rootUI;
-	ArrayList<AbstractController<?>> rootControllers = new ArrayList<AbstractController<?>>();
+	ControllersPool rootControllers = new ControllersPool();
 	
 	//app data
 	ScriptsService scriptsService;

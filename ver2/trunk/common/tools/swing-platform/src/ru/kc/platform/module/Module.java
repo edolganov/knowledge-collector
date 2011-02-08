@@ -17,6 +17,7 @@ import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
+import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.utils.AppUtils;
 
 public abstract class Module<T extends Component> extends JPanel {
@@ -26,7 +27,7 @@ public abstract class Module<T extends Component> extends JPanel {
 	protected T ui;
 	protected AppContext appContext;
 	protected Log log = LogFactory.getLog(getClass());
-	protected List<AbstractController<T>> controllers = new ArrayList<AbstractController<T>>(0);
+	protected ControllersPool controllers;
 	
 	private boolean inited = false;
 	
@@ -86,7 +87,6 @@ public abstract class Module<T extends Component> extends JPanel {
 	}
 	
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized void setAppContext(AppContext context) {
 		if(inited) return;
 		
@@ -94,7 +94,7 @@ public abstract class Module<T extends Component> extends JPanel {
 			this.appContext = context;
 			
 			ControllerScan controllerScan = new ControllerScan(this.appContext);
-			controllers = (List)controllerScan.scanAndInit(this.getClass().getPackage().getName(), ui, getBlackList());
+			controllers = controllerScan.scanAndInit(this.getClass().getPackage().getName(), ui, getBlackList());
 			
 			afterInit();
 			inited = true;
@@ -107,15 +107,12 @@ public abstract class Module<T extends Component> extends JPanel {
 	
 	@SuppressWarnings("unchecked")
 	public <N extends AbstractController<T>> N getController(Class<N> clazz){
-		for (AbstractController<T> candidat : controllers) {
-			if(candidat.getClass().equals(clazz)) return (N)candidat;
-		}
-		return null;
+		return (N)controllers.getController(clazz);
 	}
 	
 	public List<MethodAction> getMethodActions(){
 		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
-		for (AbstractController<T> c : controllers) {
+		for (AbstractController<?> c : controllers) {
 			out.addAll(c.getMethodActions());
 		}
 		return out;

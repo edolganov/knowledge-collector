@@ -51,14 +51,14 @@ public class ControllerScan {
 	}
 	
 
-	public List<AbstractController<?>> scanAndInit(String packagePreffix, Object initOb){
+	public ControllersPool scanAndInit(String packagePreffix, Object initOb){
 		return scanAndInit(packagePreffix, initOb, null);
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public List<AbstractController<?>> scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
+	public ControllersPool scanAndInit(String packagePreffix, Object initOb, Class<?>[] blackList){
 		
-		ArrayList<AbstractController<?>> out = new ArrayList<AbstractController<?>>();
+		ControllersPool out = new ControllersPool();
 		
 		if(packagePreffix == null) 
 			throw new IllegalArgumentException("packagePreffix is null");
@@ -153,7 +153,7 @@ public class ControllerScan {
 					}
 				}
 			}catch (Exception e) {
-				log.error(e);
+				log.error("error while init instance by "+node.controllerClass, e);
 			}
 		}
 		
@@ -165,6 +165,19 @@ public class ControllerScan {
 		firstLevelNodes.clear();
 		allNodes.clear();
 		dependenceNodes.clear();
+		
+
+		for(AbstractController<?> c : out){
+			c.setControllersPool(out);
+		}
+		//оповещаем контроллеры, что все заиничены
+		for(AbstractController<?> c : out){
+			try{
+				c.afterAllInited();
+			}catch (Exception e) {
+				log.error("error while invoke method of "+c);
+			}
+		}
 		
 		return out;
 	}
