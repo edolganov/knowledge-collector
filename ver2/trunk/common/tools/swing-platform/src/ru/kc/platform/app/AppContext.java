@@ -1,14 +1,10 @@
 package ru.kc.platform.app;
 
 import java.awt.Container;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.SwingUtilities;
-
 import ru.kc.platform.command.CommandService;
-import ru.kc.platform.event.Event;
 import ru.kc.platform.event.EventManager;
 import ru.kc.tools.scriptengine.ScriptsService;
 

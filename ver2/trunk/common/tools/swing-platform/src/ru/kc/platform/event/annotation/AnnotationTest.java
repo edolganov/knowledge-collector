@@ -43,6 +43,7 @@ public class AnnotationTest {
 		System.out.println("call f4");
 	}
 	
+	@SuppressWarnings("unused")
 	@EventListener(TestEvent.class)
 	private void f5(){
 		System.out.println("call f5");
