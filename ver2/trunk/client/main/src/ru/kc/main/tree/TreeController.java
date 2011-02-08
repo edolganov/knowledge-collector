@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import ru.kc.main.Controller;
 import ru.kc.main.command.AddChild;
 import ru.kc.main.tree.tools.CellRender;
+import ru.kc.main.tree.tools.TreeMenu;
 import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.ExportAction;
@@ -38,6 +39,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
+		treeFacade.setPopupMenu(new TreeMenu(tree));
 		
 		
 		buildTree();

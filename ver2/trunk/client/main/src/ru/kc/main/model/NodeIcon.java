@@ -13,21 +13,25 @@ public class NodeIcon {
 	
 	private static final Icon unknowType = IconUtil.get("/ru/kc/main/img/node.png");
 	private static final Icon dir = IconUtil.get("/ru/kc/main/img/dir.png");
-	private static final Icon localLink = IconUtil.get("/ru/kc/main/img/localLink.png");
-	private static final Icon netLink = IconUtil.get("/ru/kc/main/img/netLink.png");
-	private static final Icon note = IconUtil.get("/ru/kc/main/img/note.png");
+	private static final Icon fileLink = IconUtil.get("/ru/kc/main/img/fileLink.png");
+	private static final Icon link = IconUtil.get("/ru/kc/main/img/link.png");
+	private static final Icon text = IconUtil.get("/ru/kc/main/img/text.png");
 	
 	
 	public static Icon getIcon(Node node){
+		return getIcon(node.getClass());
+	}
+	
+	public static Icon getIcon(Class<? extends Node> type){
 		
-		if(node instanceof Dir)
+		if(Dir.class.isAssignableFrom(type))
 			return dir;
-		if(node instanceof Text)
-			return note;
-		if(node instanceof Link)
-			return netLink;
-		if(node instanceof FileLink)
-			return localLink;
+		if(Text.class.isAssignableFrom(type))
+			return text;
+		if(Link.class.isAssignableFrom(type))
+			return link;
+		if(FileLink.class.isAssignableFrom(type))
+			return fileLink;
 		
 		return unknowType;
 	}
