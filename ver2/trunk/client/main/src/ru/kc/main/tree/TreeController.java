@@ -68,25 +68,12 @@ public class TreeController extends Controller<Tree>{
 	
 	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
 	public void createDirRequest(){
-		DefaultMutableTreeNode parentTreeNode = treeFacade.getCurrentNode();
-		if(parentTreeNode == null) return;
+		Node parent = treeFacade.getCurrentObject(Node.class);
+		if(parent == null) return;
 		
-		Node parent = (Node) parentTreeNode.getUserObject();
 		//TODO create object by dialog
 		Node child = persistFactory.createDir("test-"+System.currentTimeMillis(), null);
-		
-		
-		
-		try {
-			invoke(new AddChild(parent, child));
-		}catch (Exception e) {
-			log.error("error add", e);
-			return;
-		}
-		
-		//TODO remove
-		treeFacade.addChild(parentTreeNode, child);
-		
+		invokeSafe(new AddChild(parent, child));
 	}
 	
 	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")
@@ -106,7 +93,7 @@ public class TreeController extends Controller<Tree>{
 	
 	@Override
 	protected void onChildAdded(Node parent, Node child) {
-		log.info("added parent:"+parent+", child:"+child);
+		//treeFacade.addChild(parentTreeNode, child);
 	}
 	
 

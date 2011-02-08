@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
+import ru.kc.platform.data.Answer;
 import ru.kc.platform.module.Module;
 
 public abstract class AbstractController<T> {
@@ -75,13 +76,15 @@ public abstract class AbstractController<T> {
 		return (N) appContext.commandService.invoke(command, appContext);
 	}
 	
-//	protected <N> N invokeSafe(AbstractCommand<N> command){
-//		try{
-//			invoke(command);
-//		}catch (Exception e) {
-//			log.error(e);
-//		}
-//	}
+	protected <N> Answer<N> invokeSafe(AbstractCommand<N> command){
+		try{
+			N result = (N)invoke(command);
+			return new Answer<N>(result, false, null);
+		}catch (Exception e) {
+			log.error(e);
+			return new Answer<N>(null, true, e);
+		}
+	}
 	
 	
 
