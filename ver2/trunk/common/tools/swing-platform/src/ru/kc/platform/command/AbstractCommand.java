@@ -1,5 +1,7 @@
 package ru.kc.platform.command;
 
+import java.awt.Container;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -10,9 +12,12 @@ public abstract class AbstractCommand<T> {
 	
 	protected Log log = LogFactory.getLog(getClass());
 	protected AppContext appContext;
+	protected Container rootUI;
 	
 	void init(AppContext context){
 		this.appContext = context;
+		rootUI = appContext.rootUI;
+		
 		new AOPTool(appContext).injectData(this);
 	}
 	

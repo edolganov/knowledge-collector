@@ -79,17 +79,11 @@ public abstract class AbstractController<T> {
 	
 	
 	protected <N> N invoke(AbstractCommand<N> command) throws Exception {
-		return (N) appContext.commandService.invoke(command, appContext);
+		return (N) appContext.commandService.invoke(command);
 	}
 	
 	protected <N> Answer<N> invokeSafe(AbstractCommand<N> command){
-		try{
-			N result = (N)invoke(command);
-			return new Answer<N>(result, false, null);
-		}catch (Exception e) {
-			log.error("error while invoke "+command,e);
-			return new Answer<N>(null, true, e);
-		}
+		return (Answer<N>) appContext.commandService.invokeSafe(command);
 	}
 	
 	

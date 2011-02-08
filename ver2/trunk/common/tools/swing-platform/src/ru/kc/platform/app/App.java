@@ -114,6 +114,8 @@ public class App {
 				eventManager,
 				runtimeStorageService);	
 		AppContext.put(rootUI, context);
+		
+		commandService.init(context);
 	}
 	
 	private void addCodeDirs(ScriptsService scriptsService) {

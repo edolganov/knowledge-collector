@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import ru.kc.main.command.DeleteNode;
 import ru.kc.main.model.NodeIcon;
 import ru.kc.main.tree.TreeController;
 import ru.kc.model.Dir;
@@ -18,6 +19,7 @@ import ru.kc.model.FileLink;
 import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
+import ru.kc.platform.command.CommandService;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -47,7 +49,7 @@ public class TreeMenu extends JPopupMenu {
 	
 	TreeFacade treeFacade;
 	
-	public TreeMenu(JTree tree) {
+	public TreeMenu(JTree tree, final CommandService commandService) {
 		treeFacade = new TreeFacade(tree);
 		
 		delete.addActionListener(new ActionListener(){
@@ -55,8 +57,7 @@ public class TreeMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
-				if(node == null) return;
-				
+				commandService.invokeSafe(new DeleteNode(node));
 			}
 			
 		});

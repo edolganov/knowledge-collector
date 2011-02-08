@@ -19,13 +19,13 @@ public class Laf {
 	
 	public static void trySetNimbusLookAndFeel() {
 		try {
-			UIManager.put("control", new Color(212, 208, 200));
+			//UIManager.put("control", new Color(212, 208, 200));
 //			UIManager.put("nimbusBase", new Color(129, 136, 143));
 ////			UIManager.put("nimbusBase", new Color(115, 163, 212));
 //			UIManager.put("nimbusFocus", new Color(28, 28, 31));
 //			UIManager.put("nimbusInfoBlue", new Color(28, 30, 33));
 ////			UIManager.put("nimbusSelectionBackground", new Color(61, 63, 68));
-			UIManager.put("nimbusSelectionBackground", new Color(10, 35, 107));
+			//UIManager.put("nimbusSelectionBackground", new Color(10, 35, 107));
 	        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 	            if ("Nimbus".equals(info.getName())) {
 	            	UIManager.setLookAndFeel(info.getClassName());

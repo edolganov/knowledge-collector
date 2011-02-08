@@ -39,7 +39,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
-		treeFacade.setPopupMenu(new TreeMenu(tree));
+		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService));
 		
 		
 		buildTree();
