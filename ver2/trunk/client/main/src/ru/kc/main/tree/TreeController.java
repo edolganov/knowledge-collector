@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.command.AddChild;
+import ru.kc.main.command.DeleteNode;
 import ru.kc.main.common.Controller;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.tools.TreeMenu;
@@ -16,6 +17,7 @@ import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.tree.TreeTransferHandler;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -40,6 +42,15 @@ public class TreeController extends Controller<Tree>{
 		tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
 		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService));
+		tree.addKeyListener(new DeleteKey() {
+			
+			@Override
+			protected void doAction() {
+				deleteNodeRequest();
+			}
+			
+		});
+		
 		
 		
 		buildTree();
@@ -102,7 +113,7 @@ public class TreeController extends Controller<Tree>{
 	
 	public void deleteNodeRequest(){
 		Node node = treeFacade.getCurrentObject(Node.class);
-		if(node == null) return;
+		invokeSafe(new DeleteNode(node));
 	}
 	
 	@Override
