@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import ru.kc.main.Controller;
+import ru.kc.main.common.Controller;
 import ru.kc.main.dashboard.ui.Dashboard;
 import ru.kc.main.tree.TreeModule;
 import ru.kc.platform.action.MethodAction;

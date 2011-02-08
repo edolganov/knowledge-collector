@@ -1,4 +1,4 @@
-package ru.kc.main;
+package ru.kc.main.common;
 
 import ru.kc.tools.filepersist.PersistService;
 

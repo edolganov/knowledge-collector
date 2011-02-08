@@ -1,4 +1,4 @@
-package ru.kc.main;
+package ru.kc.main.common;
 
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.command.AbstractCommand;

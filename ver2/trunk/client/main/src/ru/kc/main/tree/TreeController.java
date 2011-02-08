@@ -8,8 +8,8 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import ru.kc.main.Controller;
 import ru.kc.main.command.AddChild;
+import ru.kc.main.common.Controller;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.tools.TreeMenu;
 import ru.kc.main.tree.ui.Tree;

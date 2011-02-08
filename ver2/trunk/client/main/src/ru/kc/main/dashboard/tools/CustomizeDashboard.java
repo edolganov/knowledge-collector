@@ -1,6 +1,6 @@
 package ru.kc.main.dashboard.tools;
 
-import ru.kc.main.Controller;
+import ru.kc.main.common.Controller;
 import ru.kc.main.dashboard.ui.Dashboard;
 import ru.kc.platform.annotations.Mapping;
 

@@ -1,6 +1,6 @@
 package ru.kc.main.command;
 
-import ru.kc.main.RollbackableCommand;
+import ru.kc.main.common.RollbackableCommand;
 import ru.kc.model.Node;
 
 public class AddChild extends RollbackableCommand<Void> {
