@@ -21,7 +21,7 @@ import ru.kc.util.swing.tree.TreeFacade;
 @Mapping(Tree.class)
 public class TreeController extends Controller<Tree>{
 	
-	private static final String TREE_NODE = "tree-node";
+	private static final String TREE_NODE_KEY = "tree-node-key";
 	
 	JTree tree;
 	TreeFacade treeFacade;
@@ -47,9 +47,11 @@ public class TreeController extends Controller<Tree>{
 		try {
 			Node rootNode = persistTree.getRoot();
 			DefaultMutableTreeNode treeRootNode = TreeFacade.createNode(rootNode);
+			addToStorage(rootNode,treeRootNode);
 			model = TreeFacade.createDefaultModelByNode(treeRootNode);
 			tree.setModel(model);
-			runtimeStorage.putWithWeakReferenceDomain(rootNode, TREE_NODE, treeRootNode);
+
+			
 			
 			LinkedList<DefaultMutableTreeNode> queue = new LinkedList<DefaultMutableTreeNode>();
 			queue.addLast(treeFacade.getRoot());
@@ -58,7 +60,7 @@ public class TreeController extends Controller<Tree>{
 				Node node = (Node)treeNode.getUserObject();
 				List<Node> children = node.getChildren();
 				for(Node child : children){
-					DefaultMutableTreeNode treeChild = treeFacade.addChild(treeNode, child);
+					DefaultMutableTreeNode treeChild = addChildToTree(treeNode, child);
 					queue.addLast(treeChild);
 				}
 			}
@@ -68,8 +70,9 @@ public class TreeController extends Controller<Tree>{
 			log.error("error init tree", e);
 		}
 	}
-	
-	
+
+
+
 	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
 	public void createDirRequest(){
 		Node parent = treeFacade.getCurrentObject(Node.class);
@@ -97,7 +100,29 @@ public class TreeController extends Controller<Tree>{
 	
 	@Override
 	protected void onChildAdded(Node parent, Node child) {
-		//treeFacade.addChild(parentTreeNode, child);
+		DefaultMutableTreeNode parentNode = getFromStorage(parent);
+		if(parentNode == null){
+			log.error("can't find tree node by "+parent);
+			return;
+		}
+		addChildToTree(parentNode, child);
+	}
+	
+	
+	
+	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
+		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
+		addToStorage(child,treeChild);
+		return treeChild;
+	}
+	
+	
+	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
+		runtimeStorage.putWithWeakReferenceDomain(node, TREE_NODE_KEY, treeNode);
+	}
+	
+	private DefaultMutableTreeNode getFromStorage(Node node){
+		return runtimeStorage.get(node, TREE_NODE_KEY);
 	}
 	
 

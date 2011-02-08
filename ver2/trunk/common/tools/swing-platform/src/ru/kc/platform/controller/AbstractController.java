@@ -87,7 +87,7 @@ public abstract class AbstractController<T> {
 			N result = (N)invoke(command);
 			return new Answer<N>(result, false, null);
 		}catch (Exception e) {
-			log.error(e);
+			log.error("error while invoke "+command,e);
 			return new Answer<N>(null, true, e);
 		}
 	}
