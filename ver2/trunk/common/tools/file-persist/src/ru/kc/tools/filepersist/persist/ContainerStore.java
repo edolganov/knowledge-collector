@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.reflections.Reflections;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -44,9 +45,14 @@ public class ContainerStore {
 	};
 	
 	private FSContext c;
+	private CopyOnWriteArrayList<ContainerListener> listeners = new CopyOnWriteArrayList<ContainerListener>();
 	
 	public void init(FSContext c){
 		this.c = c;
+	}
+	
+	public void addListener(ContainerListener listener){
+		listeners.add(listener);
 	}
 	
 	
@@ -55,6 +61,7 @@ public class ContainerStore {
 		createHistoryFile(container);
 		container.setRevision(container.getRevision()+1);
 		xmlStore.saveFile(container.getFile(), container);
+		for (ContainerListener l : listeners) l.onSaved(container);
 	}
 
 

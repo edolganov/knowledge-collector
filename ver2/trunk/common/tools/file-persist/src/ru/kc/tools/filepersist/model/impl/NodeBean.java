@@ -49,6 +49,15 @@ public abstract class NodeBean implements Node {
 		return childId;
 	}
 	
+	public List<String> getChildrenIds() {
+		if(childrenIds == null) return new ArrayList<String>(0);
+		return childrenIds;
+	}
+
+	public void setChildrenIds(List<String> childrenIds) {
+		this.childrenIds = childrenIds;
+	}
+	
 	public Pair<String, String> parse(String path) {
 		String filePath = "";
 		String childId = null;
@@ -107,15 +116,6 @@ public abstract class NodeBean implements Node {
 	@Override
 	public List<Node> getChildren() throws Exception {
 		return container.getContext().tree.getChildren(this);
-	}
-
-	public List<String> getChildrenIds() {
-		if(childrenIds == null) return new ArrayList<String>(0);
-		return childrenIds;
-	}
-
-	public void setChildrenIds(List<String> childrenIds) {
-		this.childrenIds = childrenIds;
 	}
 
 	@Override

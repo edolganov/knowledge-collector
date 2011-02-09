@@ -9,6 +9,7 @@ import org.junit.Test;
 import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.impl.InitContextExt;
+import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.TransactionsJournal;
@@ -25,9 +26,12 @@ public class TransactionsJournalTest extends Assert {
 	public void init() throws Exception{
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
+		
 		Context c = new Context(init, null, null, null);
 		journal = new TransactionsJournal();
-		context = new FSContext(null, null, c,journal);
+		ContainerStore store = new ContainerStore();
+		context = new FSContext(null, store, c,journal);
+		store.init(context);
 		journal.init(context);
 	}
 	
@@ -75,6 +79,10 @@ public class TransactionsJournalTest extends Assert {
 		}catch (IllegalStateException e) {
 			//good
 		}
+	}
+	
+	public void addNodeTest(){
+		
 	}
 
 }
