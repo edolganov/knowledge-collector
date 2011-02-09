@@ -10,8 +10,12 @@ public interface Node {
 	
 	String getDescription();
 	
+	Long getCreateDate();
+	
+	Node getParent() throws Exception;
+	
 	List<Node> getChildren() throws Exception;
 	
-	Long getCreateDate();
+
 
 }

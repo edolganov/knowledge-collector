@@ -58,8 +58,115 @@ public class TreeListenerTest extends Assert{
 		Node root = tree.getRoot();
 		tree.add(root, child);
 		assertEquals(true, added[0]);
-		assertEquals(root,parentInListener[0]);
-		assertEquals(child,childInListener[0]);
+		assertEquals(root, parentInListener[0]);
+		assertEquals(child, childInListener[0]);
+		
+	}
+	
+	
+	@Test
+	public void rootNodeDeleted() throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		final Boolean[] deleted = new Boolean[]{false};
+		final Node[] parentInListener = new Node[]{null};
+		final Node[] childInListener = new Node[]{null};
+		
+		PersistService ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		tree.addListener(new TreeAdapter() {
+			
+			@Override
+			public void onDeletedRecursive(Node parent, Node deletedChild) {
+				deleted[0] = true;
+				parentInListener[0] = parent;
+				childInListener[0] = deletedChild;
+			}
+		});
+		
+		Dir child = factory.createDir("child", null);
+		Node root = tree.getRoot();
+		tree.add(root, child);
+		tree.deleteRecursive(child);
+		assertEquals(true, deleted[0]);
+		assertEquals(root, parentInListener[0]);
+		assertEquals(child, childInListener[0]);
+		
+	}
+	
+	
+	@Test
+	public void subNodeDeleted() throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		final Boolean[] deleted = new Boolean[]{false};
+		final Node[] parentInListener = new Node[]{null};
+		final Node[] childInListener = new Node[]{null};
+		
+		PersistService ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		tree.addListener(new TreeAdapter() {
+			
+			@Override
+			public void onDeletedRecursive(Node parent, Node deletedChild) {
+				deleted[0] = true;
+				parentInListener[0] = parent;
+				childInListener[0] = deletedChild;
+			}
+		});
+		
+		Dir child = factory.createDir("child", null);
+		Node root = tree.getRoot();
+		tree.add(root, child);
+		
+		Dir subChild = factory.createDir("subChild", null);
+		tree.add(child, subChild);
+		
+		tree.deleteRecursive(subChild);
+		assertEquals(true, deleted[0]);
+		assertEquals(child, parentInListener[0]);
+		assertEquals(subChild, childInListener[0]);
+		
+	}
+	
+	@Test
+	public void subNodeDeletedForNewServiceInstance() throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		final Boolean[] deleted = new Boolean[]{false};
+		final Node[] parentInListener = new Node[]{null};
+		final Node[] childInListener = new Node[]{null};
+		
+		PersistService oldPs = createService(2,2,2);
+		Tree oldTree = oldPs.tree();
+		Factory oldFactory = oldPs.factory();
+
+		Dir child = oldFactory.createDir("child", null);
+		Node root = oldTree.getRoot();
+		oldTree.add(root, child);
+		
+		Dir subChild = oldFactory.createDir("subChild", null);
+		oldTree.add(child, subChild);
+		
+		PersistService ps = createService(2, 2, 2);
+		Tree tree = ps.tree();
+		tree.addListener(new TreeAdapter() {
+			
+			@Override
+			public void onDeletedRecursive(Node parent, Node deletedChild) {
+				deleted[0] = true;
+				parentInListener[0] = parent;
+				childInListener[0] = deletedChild;
+			}
+		});
+		
+		Node toDelete = tree.getRoot().getChildren().get(0).getChildren().get(0);
+		tree.deleteRecursive(toDelete);
+		assertEquals(true, deleted[0]);
+		assertEquals(child, parentInListener[0]);
+		assertEquals(subChild, childInListener[0]);
 		
 	}
 	

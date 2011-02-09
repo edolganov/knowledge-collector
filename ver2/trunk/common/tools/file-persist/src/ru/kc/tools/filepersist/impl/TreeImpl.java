@@ -42,8 +42,13 @@ public class TreeImpl implements Tree {
 	public Node getRoot() throws Exception{
 		return fs.getRoot();
 	}
+	
+	public Node getParent(Node node) throws Exception {
+		if(node == null) throw new NullPointerException("node");
+		return fs.getParent(convert(node));
+	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Node> getChildren(Node node)throws Exception {
 		if(node == null) throw new NullPointerException("node");
@@ -51,18 +56,34 @@ public class TreeImpl implements Tree {
 	}
 	
 	@Override
-	public void add(Node parent, Node node) throws Exception {
+	public void add(Node parent, Node child) throws Exception {
 		if(parent == null) throw new NullPointerException("parent");
+		if(child == null) throw new NullPointerException("child");
+		fs.create(convert(parent), convert(child));
+		fireAddedEvent(parent,child);
+	}
+	
+	@Override
+	public void deleteRecursive(Node node) throws Exception {
 		if(node == null) throw new NullPointerException("node");
-		fs.create(convert(parent), convert(node));
-		fireAddedEvent(parent,node);
+		if(node.equals(getRoot())) throw new IllegalArgumentException("can't delete root"); 
+		
+		Node parent = getParent(node);
+		if(parent == null) 
+			throw new IllegalStateException("parent is null for "+node);
+		fs.deleteRecursive(convert(node));
+		fireDeletedEvent(parent,node);
 	}
 	
 	
-	
 
-	private void fireAddedEvent(Node parent, Node node) {
-		for(TreeListener l : listeners)l.onAdded(parent, node);
+
+	private void fireAddedEvent(Node parent, Node child) {
+		for(TreeListener l : listeners)l.onAdded(parent, child);
+	}
+
+	private void fireDeletedEvent(Node parent, Node child) {
+		for(TreeListener l : listeners)l.onDeletedRecursive(parent, child);
 	}
 
 	private NodeBean convert(Node node) {
@@ -75,6 +96,10 @@ public class TreeImpl implements Tree {
 		}
 
 	}
+
+
+
+
 
 
 

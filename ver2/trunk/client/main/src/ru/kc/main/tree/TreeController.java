@@ -116,20 +116,42 @@ public class TreeController extends Controller<Tree>{
 	protected void onChildAdded(Node parent, Node child) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
 		if(parentNode == null){
-			log.error("can't find tree node by "+parent);
+			log.error("can't find parent tree node by "+parent);
 			return;
 		}
 		addChildToTree(parentNode, child);
 	}
 	
+	@Override
+	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
+		DefaultMutableTreeNode parentNode = getFromStorage(parent);
+		if(parentNode == null){
+			log.error("can't find child tree node by "+parent);
+			return;
+		}
+		
+		DefaultMutableTreeNode deletedChildNode = getFromStorage(deletedChild);
+		if(deletedChildNode == null){
+			log.error("can't find tree node by "+deletedChildNode);
+			return;
+		}
+		
+		removeChild(deletedChildNode,deletedChild);
+		
+	}
 	
-	
+
+
 	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
 		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
 		addToStorage(child,treeChild);
 		return treeChild;
 	}
 	
+	private void removeChild(DefaultMutableTreeNode treeNode, Node deletedNode) {
+		treeFacade.removeNode(treeNode);
+		removeFromStorage(deletedNode);
+	}
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
 		runtimeStorage.putWithWeakReferenceDomain(node, TREE_NODE_KEY, treeNode);
@@ -137,6 +159,10 @@ public class TreeController extends Controller<Tree>{
 	
 	private DefaultMutableTreeNode getFromStorage(Node node){
 		return runtimeStorage.get(node, TREE_NODE_KEY);
+	}
+	
+	private DefaultMutableTreeNode removeFromStorage(Node node){
+		return runtimeStorage.remove(node, TREE_NODE_KEY);
 	}
 	
 

@@ -20,6 +20,7 @@ public class AddChild extends AtomicAction<Void>{
 		if(node.getContainer() == null) throw new IllegalStateException("child must contains container: "+node);
 		
 		parent.addChildId(node);
+		node.setParent(parent);
 		return null;
 	}
 
@@ -29,6 +30,7 @@ public class AddChild extends AtomicAction<Void>{
 		if(node.getContainer() == null) throw new IllegalStateException("child must contains container: "+node);
 		
 		parent.removeChildId(node);
+		node.setParent(null);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.File;
 
 import ru.kc.main.common.Context;
 import ru.kc.main.event.ChildAdded;
+import ru.kc.main.event.ChildDeletedRecursive;
 import ru.kc.model.Node;
 import ru.kc.platform.Platform;
 import ru.kc.platform.app.App;
@@ -69,6 +70,11 @@ public class Main {
 			@Override
 			public void onAdded(Node parent, Node child) {
 				eventManager.fireEventInEDT(this,new ChildAdded(parent, child));
+			}
+			
+			@Override
+			public void onDeletedRecursive(Node parent, Node deletedChild) {
+				eventManager.fireEventInEDT(this, new ChildDeletedRecursive(parent, deletedChild));
 			}
 		});
 	}

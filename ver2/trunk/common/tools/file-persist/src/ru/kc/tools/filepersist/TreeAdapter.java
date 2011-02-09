@@ -7,4 +7,7 @@ public class TreeAdapter implements TreeListener {
 	@Override
 	public void onAdded(Node parent, Node child) {}
 
+	@Override
+	public void onDeletedRecursive(Node parent, Node deletedChild) {}
+
 }

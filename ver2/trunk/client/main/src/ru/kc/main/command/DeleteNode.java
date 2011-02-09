@@ -27,7 +27,8 @@ public class DeleteNode extends RollbackableCommand<Void> {
 			boolean confirm = Dialogs.confirmByDialog(rootUI, "Подтверждение удаления", "Удалить "+node.getName()+"?");
 			if(!confirm) return null;
 		}
-		System.out.println("delete!");
+		
+		persistTree.deleteRecursive(node);
 		return null;
 	}
 

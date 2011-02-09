@@ -23,5 +23,18 @@ public class RuntimeStorageService {
 		if(data == null) return null;
 		return (T) data.get(key);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public synchronized <T> T remove(Object domain, Object key){
+		HashMap<Object, Object> data = storage.get(domain);
+		if(data == null) return null;
+		
+		T out = (T) data.remove(key);
+		if(data.size() == 0){
+			storage.remove(domain);
+		}
+		
+		return out;
+	}
 
 }

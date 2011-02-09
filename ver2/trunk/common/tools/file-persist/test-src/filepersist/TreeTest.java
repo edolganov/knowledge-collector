@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ru.kc.model.Dir;
 import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
@@ -35,7 +36,7 @@ public class TreeTest extends Assert{
 	
 	
 	@Test
-	public void firstCreate() throws Exception {
+	public void firstCreateDataStructure() throws Exception {
 		FileUtil.deleteDirRecursive(dir);
 		InitParams init = new InitParams(dir, 10, 10, 10);
 		PersistService ps = new PersistService();
@@ -53,9 +54,20 @@ public class TreeTest extends Assert{
 		
 
 	}
+	
+	@Test
+	public void getEmptyChildrenList()throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		PersistService ps = createService(2,10,10);
+		Tree tree = ps.tree();
+		Node root = tree.getRoot();
+		List<Node> children = root.getChildren();
+		assertEquals(0, children.size());
+	}
 
 	@Test
-	public void createNode() throws Exception{
+	public void addNode() throws Exception{
 		FileUtil.deleteDirRecursive(dir);
 		PersistService ps = createService(2,10,10);
 		Tree tree = ps.tree();
@@ -75,17 +87,6 @@ public class TreeTest extends Assert{
 		assertEquals(true, children2.size() == 2);
 		assertEquals(true, children2.get(0) == child);
 		assertEquals(true, children2.get(1) == child2);
-	}
-	
-	@Test
-	public void getEmptyChildrenList()throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
-		PersistService ps = createService(2,10,10);
-		Tree tree = ps.tree();
-		Node root = tree.getRoot();
-		List<Node> children = root.getChildren();
-		assertEquals(0, children.size());
 	}
 	
 
@@ -117,6 +118,21 @@ public class TreeTest extends Assert{
 		for(int i=0; i<size; ++i) assertEquals(size, children.get(1).getChildren().size());
 		
 		
+	}
+	
+	@Test 
+	public void removeNode() throws Exception{
+		FileUtil.deleteDirRecursive(dir);
+		
+		PersistService ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		Dir child = factory.createDir("test", null);
+		
+		tree.add(root, child);
+		tree.deleteRecursive(child);
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import ru.kc.exception.BaseException;
+import ru.kc.model.Node;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -15,6 +16,7 @@ import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
@@ -124,6 +126,16 @@ public class FileSystemImpl {
 			}
 		}.start();
 	}
+	
+	public Node getParent(final NodeBean node) throws Exception {
+		return new Transaction<NodeBean>(c) {
+
+			@Override
+			protected NodeBean body() throws Throwable {
+				return invoke(new GetParent(node));
+			}
+		}.start();
+	}
 
 	public void update(NodeBean node)throws Exception {
 		
@@ -138,6 +150,8 @@ public class FileSystemImpl {
 	public void moveRecursive(NodeBean node, NodeBean newParent)throws Exception{
 		//TODO
 	}
+
+
 
 
 

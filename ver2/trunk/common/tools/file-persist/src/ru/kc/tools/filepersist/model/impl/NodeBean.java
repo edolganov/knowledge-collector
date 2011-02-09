@@ -18,25 +18,38 @@ public abstract class NodeBean implements Node {
 	
 	@XStreamOmitField
 	protected Container container;
+
+	protected String parentId;
 	protected List<String> childrenIds;
 	
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
 	
+	public void setParent(NodeBean parent) {
+		setParentId(generateNodeIdWithContainerPath(parent));
+	}
+
 	public void addChildId(NodeBean node) {
-		String childId = generateChildId(node);
+		String childId = generateNodeIdWithContainerPath(node);
 		if(childrenIds == null) childrenIds = new ArrayList<String>();
 		childrenIds.add(childId);
 	}
 	
 	public void removeChildId(NodeBean node) {
 		if(childrenIds == null) return;
-		String childId = generateChildId(node);
+		String childId = generateNodeIdWithContainerPath(node);
 		childrenIds.remove(childId);
 	}
 	
-	private String generateChildId(NodeBean node){
-		if(container == null) throw new IllegalStateException("parent must contains container: "+this);
+	private String generateNodeIdWithContainerPath(NodeBean node){
+		if(container == null) throw new IllegalStateException(this+" must contains container");
 		Container otherContainer = node.getContainer();
-		if(otherContainer == null) throw new IllegalStateException("child must contains container: "+node);
+		if(otherContainer == null) throw new IllegalStateException(node+" must contains container");
 		
 		String childId = null;
 		String nodeId = node.getId();
@@ -67,7 +80,8 @@ public abstract class NodeBean implements Node {
 			filePath = filePath + split[i];
 		}
 		childId = split[lastIndex];
-		if(filePath.equals("")) filePath = container.getFileSimplePath();
+		if(filePath.equals("")) 
+			filePath = container.getFileSimplePath();
 		
 		return new Pair<String, String>(filePath, childId);
 	}
@@ -117,11 +131,42 @@ public abstract class NodeBean implements Node {
 	public List<Node> getChildren() throws Exception {
 		return container.getContext().tree.getChildren(this);
 	}
+	
+	public Node getParent() throws Exception {
+		return container.getContext().tree.getParent(this);
+	}
+	
 
 	@Override
 	public String toString() {
 		return getClass().getSimpleName()+" [id=" + id + ", name=" + name + ", description="
 				+ description + ", createDate=" + createDate + "]";
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeBean other = (NodeBean) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 
