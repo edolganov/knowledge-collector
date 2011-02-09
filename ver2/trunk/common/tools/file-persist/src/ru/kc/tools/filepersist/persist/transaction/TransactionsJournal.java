@@ -13,6 +13,17 @@ import ru.kc.tools.filepersist.persist.transaction.model.JournalRecord;
 import ru.kc.util.xml.ObjectToXMLConverter;
 import ru.kc.util.xml.XmlStore;
 
+/**
+ * Не ясно как использовать журнал. Потому что полноценный откат с оповещением
+ * подписчиков является трудоемкой для тулзы задачей - надо хранить в журнале 
+ * специфические данные для каждого типа операции, надо валидно востанавливать 
+ * состояние дерева объектов, надо добавлять поддержку откатов в самом журнале.
+ * 
+ * Гораздо проще - если клиент журнала сам будет хранить старые данные необходимые
+ * для отката и будет вызывать заново стандартное API по CRUD нод.
+ *
+ */
+@Deprecated
 public class TransactionsJournal {
 	
 	private static Log log = LogFactory.getLog(TransactionsJournal.class);
@@ -32,7 +43,7 @@ public class TransactionsJournal {
 		journalDir.mkdirs();
 		
 		sessionId = "session-"+System.currentTimeMillis();
-		sessionDir = new File(rootDir,sessionId);
+		sessionDir = new File(journalDir,sessionId);
 		if(sessionDir.exists())
 			throw new IllegalStateException("session dir "+sessionDir+" already exist");
 		sessionDir.mkdir();
@@ -58,6 +69,10 @@ public class TransactionsJournal {
 				}
 			}
 		});
+	}
+	
+	public File getSessionDir(){
+		return sessionDir;
 	}
 
 	public File getJournalDir(){
