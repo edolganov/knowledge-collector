@@ -133,6 +133,14 @@ public class TreeTest extends Assert{
 		
 		tree.add(root, child);
 		tree.deleteRecursive(child);
+		
+		PersistService newPs = createService(2,2,2);
+		Tree newTree = newPs.tree();
+		
+		Node newRoot = newTree.getRoot();
+		List<Node> children = newRoot.getChildren();
+		assertEquals(0, children.size());
+		
 	}
 	
 	
