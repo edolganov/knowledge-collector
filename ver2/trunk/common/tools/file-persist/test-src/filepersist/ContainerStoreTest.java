@@ -15,6 +15,7 @@ import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
+import ru.kc.tools.filepersist.persist.transaction.TransactionsJournal;
 import ru.kc.util.file.FileUtil;
 
 public class ContainerStoreTest extends Assert  {
@@ -88,7 +89,10 @@ public class ContainerStoreTest extends Assert  {
 		InitParams params = new InitParams(dir, 10, 10, 10);
 		InitContextExt init = new InitContextExt(params, dir, dir);
 		Context c = new Context(init, null, null, null);
-		return new FSContext(null, null, c);
+		TransactionsJournal journal = new TransactionsJournal();
+		FSContext fsContext = new FSContext(null, null, c, journal);
+		journal.init(fsContext);
+		return fsContext;
 	}
 	
 }

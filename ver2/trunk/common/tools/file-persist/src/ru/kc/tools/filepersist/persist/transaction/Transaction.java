@@ -12,6 +12,7 @@ public abstract class Transaction<T> {
 	private static Log log = LogFactory.getLog(Transaction.class);
 	
 	private final FSContext c;
+	private TransactionsJournal journal;
 	
 	ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	
@@ -19,14 +20,19 @@ public abstract class Transaction<T> {
 	public Transaction(FSContext c) {
 		super();
 		this.c = c;
+		this.journal = c.journal;
 	}
 	
 	protected abstract T body() throws Throwable;
 	
 	public T start() throws Exception {
 		try{
-			return body();
+			startJournalRecord();
+			T out = body();
+			finishJournalRecord();
+			return out;
 		} catch (Throwable e) {
+			rollbackJournalRecord();
 			roolback();
 			if(e instanceof Exception) throw (Exception)e;
 			if(e instanceof Error) throw (Error)e;
@@ -34,11 +40,12 @@ public abstract class Transaction<T> {
 		}
 	}
 	
-	
+
 	public <O> O invoke(AtomicAction<O> action) throws Throwable {
 		action.init(this,c);
 		O out = action.invoke();
 		done.add(action);
+		invokedActionJournalRecord(action);
 		return (O) out;
 	}
 	
@@ -53,5 +60,26 @@ public abstract class Transaction<T> {
 			log.error("can't rollback transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);
 		}
 	}
+	
+	private void startJournalRecord() {
+		journal.start(this);
+	}
+	
+	private void invokedActionJournalRecord(AtomicAction<?> action){
+		journal.invoked(this,action);
+	}
+	
+	
+	private void finishJournalRecord() {
+		journal.finish(this);
+	}
+	
+	private void rollbackJournalRecord() {
+		journal.rollback(this);
+	}
+
+
+	
+
 	
 }

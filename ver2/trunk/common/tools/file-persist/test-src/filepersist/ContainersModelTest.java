@@ -2,6 +2,7 @@ package filepersist;
 
 import java.io.File;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,6 +13,8 @@ import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
+import ru.kc.tools.filepersist.persist.transaction.TransactionsJournal;
+import ru.kc.util.file.FileUtil;
 
 import junit.framework.Assert;
 
@@ -25,9 +28,15 @@ public class ContainersModelTest extends Assert {
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
 		Context c = new Context(init, null, null, null);
-		context = new FSContext(null, null, c);
+		TransactionsJournal journal = new TransactionsJournal();
+		context = new FSContext(null, null, c,journal);
+		journal.init(context);
 	}
 	
+	@After
+	public void deleteDir() {
+		FileUtil.deleteDirRecursive(dir);
+	}
 	
 	@Test
 	public void createTree(){

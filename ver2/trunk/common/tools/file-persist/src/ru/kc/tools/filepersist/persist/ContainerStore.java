@@ -115,8 +115,9 @@ public class ContainerStore {
 			throw e;
 		}
 		
-		//delete old history file
-		File toDelete = getHistoryFile(resourse,revision-1);
+		//delete old history files
+		long revisionToDelete = revision - 1;
+		File toDelete = getHistoryFile(resourse,revisionToDelete);
 		toDelete.delete();
 	}
 	
