@@ -167,8 +167,8 @@ public class FileSystemImpl {
 					NodeBean parent = invoke(new GetParent(toDelete));
 					Container container = toDelete.getContainer();
 					
-					invoke(new RemoveChild(parent, node));
-					invoke(new RemoveNodeFromContainer(node));
+					invoke(new RemoveChild(parent, toDelete));
+					invoke(new RemoveNodeFromContainer(toDelete));
 					containersToSave.add(container);
 				}
 				

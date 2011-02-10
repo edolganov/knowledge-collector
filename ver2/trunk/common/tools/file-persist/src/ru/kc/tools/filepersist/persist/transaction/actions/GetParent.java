@@ -19,6 +19,8 @@ public class GetParent extends AtomicAction<NodeBean>{
 	@Override
 	protected NodeBean invoke() throws Throwable {
 		String parentPathAndId = child.getParentId();
+		if(parentPathAndId == null) return null;
+		
 		Pair<String, String> data = child.parse(parentPathAndId);
 		String simpleFilePath = data.getFirst();
 		Container container = c.containerModel.getContainer(simpleFilePath);
