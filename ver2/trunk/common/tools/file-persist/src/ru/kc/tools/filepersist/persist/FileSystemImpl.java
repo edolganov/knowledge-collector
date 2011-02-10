@@ -185,7 +185,7 @@ public class FileSystemImpl {
 	
 
 	
-	public void moveRecursive(NodeBean node, NodeBean newParent)throws Exception{
+	public void move(NodeBean node, NodeBean newParent)throws Exception{
 		//TODO
 	}
 

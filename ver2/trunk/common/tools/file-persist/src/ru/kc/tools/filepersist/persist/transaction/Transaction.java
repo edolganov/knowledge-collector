@@ -11,7 +11,7 @@ public abstract class Transaction<T> {
 	
 	private static Log log = LogFactory.getLog(Transaction.class);
 	
-	private final FSContext c;
+	protected final FSContext c;
 	
 	ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	
