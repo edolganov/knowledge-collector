@@ -37,7 +37,6 @@ public class TreeTest extends Assert{
 	
 	@Test
 	public void firstCreateDataStructure() throws Exception {
-		FileUtil.deleteDirRecursive(dir);
 		InitParams init = new InitParams(dir, 10, 10, 10);
 		PersistService ps = new PersistService();
 		ps.init(init);
@@ -57,8 +56,6 @@ public class TreeTest extends Assert{
 	
 	@Test
 	public void getEmptyChildrenList()throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		PersistService ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Node root = tree.getRoot();
@@ -68,7 +65,6 @@ public class TreeTest extends Assert{
 
 	@Test
 	public void addNode() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
 		PersistService ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
@@ -92,8 +88,6 @@ public class TreeTest extends Assert{
 
 	@Test
 	public void loadNodes() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		//create data
 		PersistService ps_ = createService(2,2,2);
 		Node root_ = ps_.tree().getRoot();
@@ -122,8 +116,6 @@ public class TreeTest extends Assert{
 	
 	@Test 
 	public void removeNode() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		PersistService ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();

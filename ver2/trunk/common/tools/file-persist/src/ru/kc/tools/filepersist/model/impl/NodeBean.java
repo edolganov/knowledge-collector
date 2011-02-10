@@ -33,14 +33,18 @@ public abstract class NodeBean implements Node {
 	public void setParent(NodeBean parent) {
 		setParentId(generateNodeIdWithContainerPath(parent));
 	}
+	
+	public void removeParent(){
+		setParentId(null);
+	}
 
-	public void addChildId(NodeBean node) {
+	public void addChild(NodeBean node) {
 		String childId = generateNodeIdWithContainerPath(node);
 		if(childrenIds == null) childrenIds = new ArrayList<String>();
 		childrenIds.add(childId);
 	}
 	
-	public void removeChildId(NodeBean node) {
+	public void removeChild(NodeBean node) {
 		if(childrenIds == null) return;
 		String childId = generateNodeIdWithContainerPath(node);
 		childrenIds.remove(childId);

@@ -35,8 +35,6 @@ public class TreeListenerTest extends Assert{
 
 	@Test
 	public void nodeAdded() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		final Boolean[] added = new Boolean[]{false};
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
@@ -66,8 +64,6 @@ public class TreeListenerTest extends Assert{
 	
 	@Test
 	public void rootNodeDeleted() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		final Boolean[] deleted = new Boolean[]{false};
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
@@ -98,8 +94,6 @@ public class TreeListenerTest extends Assert{
 	
 	@Test
 	public void subNodeDeleted() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		final Boolean[] deleted = new Boolean[]{false};
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
@@ -133,8 +127,6 @@ public class TreeListenerTest extends Assert{
 	
 	@Test
 	public void subNodeDeletedForNewServiceInstance() throws Exception{
-		FileUtil.deleteDirRecursive(dir);
-		
 		final Boolean[] deleted = new Boolean[]{false};
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};

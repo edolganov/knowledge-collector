@@ -2,6 +2,8 @@ package ru.kc.tools.filepersist.persist;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import ru.kc.exception.BaseException;
@@ -11,12 +13,13 @@ import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
-import ru.kc.tools.filepersist.persist.transaction.TransactionsJournal;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
+import ru.kc.tools.filepersist.persist.transaction.actions.RemoveChild;
+import ru.kc.tools.filepersist.persist.transaction.actions.RemoveNodeFromContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
@@ -27,16 +30,13 @@ public class FileSystemImpl {
 	public void init(Context context) throws IOException{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
-		TransactionsJournal journal = new TransactionsJournal();
 		
 		c = new FSContext(
 				containerModel, 
 				containerStore,
-				context,
-				journal);
+				context);
 		containerStore.init(c);
 		containerModel.init(c);
-		journal.init(c);
 		
 		initFolders();
 		initRootContainer();
@@ -141,8 +141,46 @@ public class FileSystemImpl {
 		
 	}
 	
-	public void deleteRecursive(NodeBean node)throws Exception{
-		//TODO
+	public void deleteRecursive(final NodeBean node)throws Exception{
+		new Transaction<Void>(c) {
+
+			@Override
+			protected Void body() throws Throwable {
+				//собираем список нод на удаление
+				LinkedList<NodeBean> toDeleteQueue = new LinkedList<NodeBean>();
+				LinkedList<NodeBean> nodesQueue = new LinkedList<NodeBean>();
+				nodesQueue.addLast(node);
+				while(nodesQueue.size() > 0){
+					NodeBean curNode = nodesQueue.removeFirst();
+					toDeleteQueue.addFirst(curNode);
+					
+					List<NodeBean> children = invoke(new GetChildren(curNode));
+					for(NodeBean child : children){
+						nodesQueue.addLast(child);
+					}
+				}
+				
+				//удаляем ноды, собирая список контейнеров на сохранение
+				HashSet<Container> containersToSave = new HashSet<Container>();
+				while(toDeleteQueue.size() > 0){
+					NodeBean toDelete = toDeleteQueue.removeFirst();
+					NodeBean parent = invoke(new GetParent(toDelete));
+					Container container = toDelete.getContainer();
+					
+					invoke(new RemoveChild(parent, node));
+					invoke(new RemoveNodeFromContainer(node));
+					containersToSave.add(container);
+				}
+				
+				//сохраняем контейнеры
+				for (Container container : containersToSave) {
+					invoke(new SaveContainer(container));
+				}
+				
+				return null;
+			}
+			
+		}.start();
 	}
 	
 

@@ -90,11 +90,9 @@ public class ContainerStoreTest extends Assert  {
 		InitContextExt init = new InitContextExt(params, dir, dir);
 		Context c = new Context(init, null, null, null);
 		
-		TransactionsJournal journal = new TransactionsJournal();
 		ContainerStore store = new ContainerStore();
-		FSContext fsContext = new FSContext(null, store, c, journal);
+		FSContext fsContext = new FSContext(null, store, c);
 		store.init(fsContext);
-		journal.init(fsContext);
 		return fsContext;
 	}
 	

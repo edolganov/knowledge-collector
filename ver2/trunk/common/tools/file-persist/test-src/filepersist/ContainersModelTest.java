@@ -30,11 +30,9 @@ public class ContainersModelTest extends Assert {
 		InitContextExt init = new InitContextExt(params, dir, null);
 		Context c = new Context(init, null, null, null);
 		
-		TransactionsJournal journal = new TransactionsJournal();
 		ContainerStore store = new ContainerStore();
-		context = new FSContext(null, store, c,journal);
+		context = new FSContext(null, store, c);
 		store.init(context);
-		journal.init(context);
 	}
 	
 	@After

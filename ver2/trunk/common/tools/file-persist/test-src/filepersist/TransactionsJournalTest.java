@@ -30,13 +30,15 @@ public class TransactionsJournalTest extends Assert {
 	
 	@Before
 	public void init() throws Exception{
+		dir.mkdirs();
+		
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
 		
 		c = new Context(init, null, null, null);
 		journal = new TransactionsJournal();
 		ContainerStore store = new ContainerStore();
-		context = new FSContext(null, store, c,journal);
+		//context = new FSContext(null, store, c,journal);
 		store.init(context);
 		journal.init(context);
 		sessionDir = journal.getSessionDir();
