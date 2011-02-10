@@ -9,10 +9,18 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 import ru.kc.main.model.NodeIcon;
 import ru.kc.model.Node;
+import ru.kc.util.swing.tree.TreeFacade;
 
 
 public class CellRender extends DefaultTreeCellRenderer {
 	
+	TreeFacade treeFacade;
+	
+	public CellRender(JTree tree) {
+		super();
+		this.treeFacade = new TreeFacade(tree);
+	}
+
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean sel, boolean expanded, boolean leaf, int row,
@@ -30,6 +38,33 @@ public class CellRender extends DefaultTreeCellRenderer {
 		}
 		return this;
 		
+	}
+	
+	@Override
+	public Icon getLeafIcon() {
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node != null){
+			return NodeIcon.getIcon(node);
+		}
+		return super.getLeafIcon();
+	}
+	
+	@Override
+	public Icon getOpenIcon() {
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node != null){
+			return NodeIcon.getIcon(node);
+		}
+		return super.getOpenIcon();
+	}
+	
+	@Override
+	public Icon getClosedIcon() {
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node != null){
+			return NodeIcon.getIcon(node);
+		}
+		return super.getClosedIcon();
 	}
 
 }

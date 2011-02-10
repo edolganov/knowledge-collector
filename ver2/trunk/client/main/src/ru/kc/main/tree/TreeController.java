@@ -4,13 +4,18 @@ package ru.kc.main.tree;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellEditor;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.command.AddChild;
 import ru.kc.main.command.DeleteNode;
 import ru.kc.main.common.Controller;
+import ru.kc.main.tree.tools.CellEditor;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.tools.TreeMenu;
 import ru.kc.main.tree.ui.Tree;
@@ -39,7 +44,15 @@ public class TreeController extends Controller<Tree>{
 		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
-		tree.setCellRenderer(new CellRender());
+		CellRender renderer = new CellRender(tree);
+		tree.setCellRenderer(renderer);
+		//tree.setCellEditor(new CellEditor());
+		tree.setRowHeight(0);
+		tree.setCellEditor(new DefaultTreeCellEditor(tree,renderer,
+				new CellEditor()));
+		tree.setEditable(true);
+		
+		
 		treeFacade.setSingleSelection();
 		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService));
 
