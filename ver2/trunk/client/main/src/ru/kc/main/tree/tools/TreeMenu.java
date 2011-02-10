@@ -10,6 +10,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreePath;
 
 import ru.kc.main.command.DeleteNode;
 import ru.kc.main.model.NodeIcon;
@@ -28,6 +30,8 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem delete = new JMenuItem("delete",IconUtil.get("/ru/kc/main/img/delete.png"));
 	
 	JMenuItem info = new JMenuItem();
+	
+	JMenuItem rename = new JMenuItem("rename");
 	
 	JMenu addMenu = new JMenu("add");
 	JMenuItem dir = new JMenuItem("dir",NodeIcon.getIcon(Dir.class));
@@ -51,6 +55,21 @@ public class TreeMenu extends JPopupMenu {
 	
 	public TreeMenu(JTree tree, final CommandService commandService) {
 		treeFacade = new TreeFacade(tree);
+		
+		rename.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JTree tree = treeFacade.tree;
+				TreeCellEditor treeCellEditor = tree.getCellEditor();
+				if(treeCellEditor instanceof CellEditor){
+					CellEditor cellEditor = (CellEditor)treeCellEditor;
+					cellEditor.setEnabledRequest();
+					TreePath selectionPath = tree.getSelectionPath();
+					tree.startEditingAtPath(selectionPath);
+				}
+			}
+		});
 		
 		delete.addActionListener(new ActionListener(){
 
@@ -164,6 +183,8 @@ public class TreeMenu extends JPopupMenu {
 		if(currentNode == null) return;
 		
 		removeAll();
+		
+		add(rename);
 		
 		add(addMenu);
 		

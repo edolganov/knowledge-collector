@@ -3,65 +3,90 @@ package ru.kc.main.tree.tools;
 import java.awt.Component;
 import java.util.EventObject;
 
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.tree.TreeCellEditor;
 
+import ru.kc.main.model.NodeIcon;
 import ru.kc.main.tree.ui.CellPanel;
+import ru.kc.model.Node;
+import ru.kc.util.Check;
+import ru.kc.util.swing.tree.TreeFacade;
 
 public class CellEditor implements TreeCellEditor {
 	
-	CellPanel cellPanel = new CellPanel();
+	private TreeFacade treeFacade;
+	private CellPanel cellPanel;
+	private JTextField text;
+	private JLabel label;
+	private boolean enabledRequest;
 	
-	public CellEditor() {
+	public CellEditor(JTree tree) {
+		treeFacade = new TreeFacade(tree);
+		initRender();
+
+	}
+
+	private void initRender() {
+		cellPanel = new CellPanel();
 		cellPanel.setOpaque(false);
+		text = cellPanel.textF;
+		label = cellPanel.label;
+		
+		label.setText("");
+		text.setText("");
+	}
+	
+	public void setEnabledRequest() {
+		this.enabledRequest = true;
 	}
 
 	@Override
 	public Object getCellEditorValue() {
-		System.out.println("getCellEditorValue");
-		return "test";
+		return text.getText();
 	}
 
 	@Override
 	public boolean isCellEditable(EventObject anEvent) {
-		System.out.println("isCellEditable");
-		return true;
+		return enabledRequest;
 	}
 
 	@Override
 	public boolean shouldSelectCell(EventObject anEvent) {
-		System.out.println("shouldSelectCell");
-		return true;
+		return enabledRequest;
 	}
 
 	@Override
 	public boolean stopCellEditing() {
-		System.out.println("stopCellEditing");
-		return false;
+		String name = label.getText();
+		boolean empty = Check.isEmpty(name);
+		return !empty;
 	}
 
 	@Override
 	public void cancelCellEditing() {
-		System.out.println("cancelCellEditing");
-		
+		enabledRequest = false;
 	}
 
 	@Override
-	public void addCellEditorListener(CellEditorListener l) {
-		// TODO Auto-generated method stub
-	}
+	public void addCellEditorListener(CellEditorListener l) {}
 
 	@Override
-	public void removeCellEditorListener(CellEditorListener l) {
-		// TODO Auto-generated method stub
-	}
+	public void removeCellEditorListener(CellEditorListener l) {}
 
 	@Override
 	public Component getTreeCellEditorComponent(JTree tree, Object value,
 			boolean isSelected, boolean expanded, boolean leaf, int row) {
-		System.out.println("getTreeCellEditorComponent");
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node == null) 
+			throw new IllegalStateException("expected "+Node.class);
+		label.setIcon(NodeIcon.getIcon(node));
+		text.setText(node.getName());
 		return cellPanel;
 	}
+
+
 
 }

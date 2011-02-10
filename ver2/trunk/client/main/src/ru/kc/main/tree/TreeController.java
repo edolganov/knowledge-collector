@@ -44,12 +44,9 @@ public class TreeController extends Controller<Tree>{
 		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
-		CellRender renderer = new CellRender(tree);
-		tree.setCellRenderer(renderer);
-		//tree.setCellEditor(new CellEditor());
+		tree.setCellRenderer(new CellRender(tree));
+		tree.setCellEditor(new CellEditor(tree));
 		tree.setRowHeight(0);
-		tree.setCellEditor(new DefaultTreeCellEditor(tree,renderer,
-				new CellEditor()));
 		tree.setEditable(true);
 		
 		
