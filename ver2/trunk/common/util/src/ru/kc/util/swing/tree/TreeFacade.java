@@ -15,6 +15,7 @@ public class TreeFacade {
 
 	public final JTree tree;
 	private JPopupMenu treeMenu;
+	private MenuController menuController;
 
     public TreeFacade(JTree tree) {
         this.tree = tree;
@@ -108,6 +109,11 @@ public class TreeFacade {
 	}
 	
 	public void setPopupMenu(JPopupMenu menu){
+		setPopupMenu(menu, null);
+	}
+	
+	
+	public void setPopupMenu(JPopupMenu menu, MenuController controller){
 		if(treeMenu == null){
 			tree.addMouseListener(new MouseAdapter(){
 				
@@ -126,7 +132,10 @@ public class TreeFacade {
 								//показываем меню в удобном месте - либо в конце ноды, либо на растоянии right
 								int right = 100;
 								int x_ = rec.x+rec.width > rec.x + right ? rec.x + right : rec.x + rec.width;
-								treeMenu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
+								if(menuController != null && menuController.canShow()){
+									treeMenu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
+								}
+
 							}
 						}
 					}
@@ -145,13 +154,16 @@ public class TreeFacade {
 							Rectangle rec = tree.getRowBounds(row);
 							int right = 100;
 							int x_ = rec.x+rec.width > rec.x + right ? rec.x + right : rec.x + rec.width;
-							treeMenu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
+							if(menuController != null && menuController.canShow()){
+								treeMenu.show( (JComponent)e.getSource(),x_ , rec.y + 5 );
+							}
 						}
 					}
 				}
 			});
 		}
 		this.treeMenu = menu;
+		this.menuController = controller;
 		
 	}
 }

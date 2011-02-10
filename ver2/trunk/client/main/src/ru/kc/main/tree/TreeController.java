@@ -23,6 +23,7 @@ import ru.kc.model.Node;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.keyboard.DeleteKey;
+import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeTransferHandler;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -45,13 +46,20 @@ public class TreeController extends Controller<Tree>{
 		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender(tree));
-		tree.setCellEditor(new CellEditor(tree));
+		final CellEditor cellEditor = new CellEditor(tree);
+		tree.setCellEditor(cellEditor);
 		tree.setRowHeight(0);
 		tree.setEditable(true);
 		
 		
 		treeFacade.setSingleSelection();
-		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService));
+		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService), new MenuController() {
+			
+			@Override
+			public boolean canShow() {
+				return ! cellEditor.isEnabled();
+			}
+		});
 
 		
 		

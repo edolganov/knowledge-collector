@@ -22,6 +22,7 @@ public class CellEditor implements TreeCellEditor {
 	private JTextField text;
 	private JLabel label;
 	private boolean enabledRequest;
+	private boolean enabled;
 	
 	public CellEditor(JTree tree) {
 		treeFacade = new TreeFacade(tree);
@@ -57,6 +58,16 @@ public class CellEditor implements TreeCellEditor {
 	public boolean shouldSelectCell(EventObject anEvent) {
 		return enabledRequest;
 	}
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
+	@Override
+	public void cancelCellEditing() {
+		enabledRequest = false;
+		enabled = false;
+	}
 
 	@Override
 	public boolean stopCellEditing() {
@@ -65,10 +76,7 @@ public class CellEditor implements TreeCellEditor {
 		return !empty;
 	}
 
-	@Override
-	public void cancelCellEditing() {
-		enabledRequest = false;
-	}
+
 
 	@Override
 	public void addCellEditorListener(CellEditorListener l) {}
@@ -84,8 +92,11 @@ public class CellEditor implements TreeCellEditor {
 			throw new IllegalStateException("expected "+Node.class);
 		label.setIcon(NodeIcon.getIcon(node));
 		text.setText(node.getName());
+		enabled = true;
 		return cellPanel;
 	}
+
+
 
 
 
