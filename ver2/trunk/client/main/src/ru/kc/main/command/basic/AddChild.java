@@ -1,4 +1,4 @@
-package ru.kc.main.command;
+package ru.kc.main.command.basic;
 
 import ru.kc.main.common.RollbackableCommand;
 import ru.kc.model.Node;

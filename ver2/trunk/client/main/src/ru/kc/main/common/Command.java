@@ -1,5 +1,7 @@
 package ru.kc.main.common;
 
+import java.awt.Frame;
+
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.tools.filepersist.Factory;
@@ -13,12 +15,14 @@ public abstract class Command<T> extends AbstractCommand<T> {
 	protected PersistService persist;
 	protected Tree persistTree;
 	protected Factory persistFactory;
+	protected Frame rootUI;
 	
 	@Override
 	protected void beforeInvoke() {
 		persist = context.persistService;
 		persistTree = persist.tree();
 		persistFactory = persist.factory();
+		rootUI = (Frame)appContext.rootUI;
 	}
 
 }

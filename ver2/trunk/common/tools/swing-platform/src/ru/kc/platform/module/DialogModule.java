@@ -96,6 +96,10 @@ public abstract class DialogModule<T extends JDialog>{
 		}
 		
 		if(context == null) return;
+		setAppContext(context);
+	}
+	
+	public void setAppContext(AppContext context){
 		controller.setAppContext(context, getClass().getPackage().getName());
 	}
 	

@@ -8,8 +8,9 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import ru.kc.main.command.AddChild;
-import ru.kc.main.command.DeleteNode;
+import ru.kc.main.command.CreateDirRequest;
+import ru.kc.main.command.basic.AddChild;
+import ru.kc.main.command.basic.DeleteNode;
 import ru.kc.main.common.Controller;
 import ru.kc.main.node.CreateDirModule;
 import ru.kc.main.tree.tools.CellEditor;
@@ -94,15 +95,7 @@ public class TreeController extends Controller<Tree>{
 	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
 	public void createDirRequest(){
 		Node parent = treeFacade.getCurrentObject(Node.class);
-		if(parent == null) return;
-		
-		CreateDirModule module = new CreateDirModule();
-		module.createAndShow(rootUI, true);
-		Node child = module.getDir();
-		if(child != null){
-			invokeSafe(new AddChild(parent, child));
-		}
-
+		invokeSafe(new CreateDirRequest(parent));
 	}
 	
 	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")

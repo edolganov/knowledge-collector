@@ -79,7 +79,7 @@ public abstract class Module<T extends Component> extends JPanel {
 		}
 		
 		if(context == null) return;
-		controller.setAppContext(context, getClass().getPackage().getName());
+		setAppContext(context);
 		
 	}
 	

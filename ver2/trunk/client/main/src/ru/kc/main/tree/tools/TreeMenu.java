@@ -13,9 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
-import ru.kc.main.command.DeleteNode;
+import ru.kc.main.command.CreateDirRequest;
+import ru.kc.main.command.basic.DeleteNode;
 import ru.kc.main.model.NodeIcon;
-import ru.kc.main.tree.TreeController;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
@@ -88,7 +88,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//CommandService.invoke(new AddTreeNode(DialogOps.newDir()));
+				Node parent = treeFacade.getCurrentObject(Node.class);
+				commandService.invokeSafe(new CreateDirRequest(parent));
 			}
 			
 		});
@@ -120,8 +121,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Node parent = tree.getParentObject(tree.getCurrentNode(), Node.class);
-				//CommandService.invoke(new AddTreeNode(parent,DialogOps.newDir()));
+				Node parent = getParentOfCurrentNode();
+				commandService.invokeSafe(new CreateDirRequest(parent));
 			}
 			
 		});
@@ -174,6 +175,20 @@ public class TreeMenu extends JPopupMenu {
 //		});
 		
 		
+	}
+	
+	protected Node getParentOfCurrentNode() {
+		DefaultMutableTreeNode currentNode = treeFacade.getCurrentNode();
+		if(currentNode != null){
+			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)currentNode.getParent();
+			if(parent != null){
+				Object ob = parent.getUserObject();
+				if(ob instanceof Node){
+					return (Node)ob;
+				}
+			}
+		}
+		return null;
 	}
 
 
