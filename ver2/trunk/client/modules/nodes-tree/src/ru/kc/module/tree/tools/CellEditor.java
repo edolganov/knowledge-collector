@@ -1,18 +1,21 @@
 package ru.kc.module.tree.tools;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.EventObject;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.tree.TreeCellEditor;
 
 import ru.kc.main.model.NodeIcon;
 import ru.kc.model.Node;
 import ru.kc.module.tree.ui.CellPanel;
 import ru.kc.util.Check;
+import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 public class CellEditor implements TreeCellEditor {
@@ -23,6 +26,8 @@ public class CellEditor implements TreeCellEditor {
 	private JLabel label;
 	private boolean enabledRequest;
 	private boolean enabled;
+	private ArrayList<CellEditorListener> customListeners = new ArrayList<CellEditorListener>();
+	private ArrayList<CellEditorListener> swingListeners = new ArrayList<CellEditorListener>();
 	
 	public CellEditor(JTree tree) {
 		treeFacade = new TreeFacade(tree);
@@ -38,6 +43,14 @@ public class CellEditor implements TreeCellEditor {
 		
 		label.setText("");
 		text.setText("");
+		
+		text.addKeyListener(new EnterKey() {
+			
+			@Override
+			protected void doAction() {
+				stopCellEditing();
+			}
+		});
 	}
 	
 	public void setEnabledRequest() {
@@ -67,22 +80,40 @@ public class CellEditor implements TreeCellEditor {
 	public void cancelCellEditing() {
 		enabledRequest = false;
 		enabled = false;
+		
+		for (CellEditorListener l : customListeners)l.editingCanceled(new ChangeEvent(this));
+		for (CellEditorListener l : swingListeners)l.editingCanceled(new ChangeEvent(this));
 	}
 
 	@Override
 	public boolean stopCellEditing() {
-		String name = label.getText();
+		String name = text.getText();
 		boolean empty = Check.isEmpty(name);
-		return !empty;
+		if(empty) return false;
+		
+		
+		enabledRequest = false;
+		enabled = false;
+		
+		for (CellEditorListener l : customListeners)l.editingStopped(new ChangeEvent(this));
+		for (CellEditorListener l : swingListeners)l.editingCanceled(new ChangeEvent(this));
+		return true;
 	}
 
 
+	public void addCustomListener(CellEditorListener l) {
+		customListeners.add(l);
+	}
 
 	@Override
-	public void addCellEditorListener(CellEditorListener l) {}
+	public void addCellEditorListener(CellEditorListener l) {
+		swingListeners.add(l);
+	}
 
 	@Override
-	public void removeCellEditorListener(CellEditorListener l) {}
+	public void removeCellEditorListener(CellEditorListener l) {
+		swingListeners.remove(l);
+	}
 
 	@Override
 	public Component getTreeCellEditorComponent(JTree tree, Object value,

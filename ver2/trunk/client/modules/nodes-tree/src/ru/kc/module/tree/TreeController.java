@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JTree;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -42,6 +44,16 @@ public class TreeController extends Controller<Tree>{
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender(tree));
 		final CellEditor cellEditor = new CellEditor(tree);
+		cellEditor.addCustomListener(new CellEditorListener() {
+			
+			@Override
+			public void editingStopped(ChangeEvent e) {
+				System.out.println("save!");
+			}
+			
+			@Override
+			public void editingCanceled(ChangeEvent e) {}
+		});
 		tree.setCellEditor(cellEditor);
 		tree.setRowHeight(0);
 		tree.setEditable(true);
