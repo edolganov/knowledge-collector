@@ -8,6 +8,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.controller.AbstractController;
 import ru.kc.util.swing.dialog.DialogUtil;
 
 public abstract class DialogModule<T extends JDialog>{
@@ -20,7 +21,7 @@ public abstract class DialogModule<T extends JDialog>{
 	
 	public T createDialog(Frame owner, boolean modal){
 		T ui = createUI(owner,modal);
-		controller = new ModuleController<T>(this,ui) {
+		controller = new ModuleController<T>(DialogModule.this, ui) {
 
 			@Override
 			protected void afterInit() {
@@ -48,7 +49,7 @@ public abstract class DialogModule<T extends JDialog>{
 		return ui;
 	}
 	
-	protected abstract T createUI(Frame owner, boolean modal);
+	protected abstract T createUI(Frame parent, boolean modal);
 	
 	protected void afterInit(){ /*override if need*/}
 	
@@ -96,6 +97,10 @@ public abstract class DialogModule<T extends JDialog>{
 		
 		if(context == null) return;
 		controller.setAppContext(context, getClass().getPackage().getName());
+	}
+	
+	public <N extends AbstractController<T>> N getController(Class<N> clazz){
+		return (N)controller.getController(clazz);
 	}
 
 }

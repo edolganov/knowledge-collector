@@ -1,6 +1,5 @@
 package ru.kc.platform.module;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public abstract class ModuleController<T> {
 	private boolean inited = false;
 	protected AppContext appContext;
 	
-	protected Log log = LogFactory.getLog(getClass());
+	protected Log log;
 	protected ControllersPool controllers;
 
 	
@@ -31,6 +30,7 @@ public abstract class ModuleController<T> {
 		this.owner = owner;
 		this.ui = ui;
 		if(ui == null) throw new IllegalStateException("ui component is null");
+		log = LogFactory.getLog(owner.getClass());
 	}
 	
 	protected abstract void afterInit();

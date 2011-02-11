@@ -137,10 +137,10 @@ public class NodeDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancelButton;
+    public javax.swing.JButton cancelButton;
     private ru.kc.main.node.ui.dialog.NodePanel nodePanel1;
-    private javax.swing.JButton okButton;
-    private javax.swing.JPanel rootPanel;
+    public javax.swing.JButton okButton;
+    public javax.swing.JPanel rootPanel;
     // End of variables declaration//GEN-END:variables
 
     private int returnStatus = RET_CANCEL;

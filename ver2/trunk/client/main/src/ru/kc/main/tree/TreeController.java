@@ -11,6 +11,7 @@ import javax.swing.tree.DefaultTreeModel;
 import ru.kc.main.command.AddChild;
 import ru.kc.main.command.DeleteNode;
 import ru.kc.main.common.Controller;
+import ru.kc.main.node.CreateDirModule;
 import ru.kc.main.tree.tools.CellEditor;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.tools.TreeMenu;
@@ -95,9 +96,13 @@ public class TreeController extends Controller<Tree>{
 		Node parent = treeFacade.getCurrentObject(Node.class);
 		if(parent == null) return;
 		
-		//TODO create object by dialog
-		Node child = persistFactory.createDir("test-"+System.currentTimeMillis(), null);
-		invokeSafe(new AddChild(parent, child));
+		CreateDirModule module = new CreateDirModule();
+		module.createAndShow(rootUI, true);
+		Node child = module.getDir();
+		if(child != null){
+			invokeSafe(new AddChild(parent, child));
+		}
+
 	}
 	
 	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")

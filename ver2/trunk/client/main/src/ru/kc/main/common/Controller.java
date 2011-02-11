@@ -1,5 +1,7 @@
 package ru.kc.main.common;
 
+import java.awt.Frame;
+
 import ru.kc.main.event.ChildAdded;
 import ru.kc.main.event.ChildDeletedRecursive;
 import ru.kc.model.Node;
@@ -17,12 +19,14 @@ public abstract class Controller<T> extends AbstractController<T>{
 	protected PersistService persist;
 	protected Tree persistTree;
 	protected Factory persistFactory;
+	protected Frame rootUI;
 	
 	@Override
 	protected void beforeInit() {
 		persist = context.persistService;
 		persistTree = persist.tree();
 		persistFactory = persist.factory();
+		rootUI = (Frame)appContext.rootUI;
 	}
 	
 	protected void onChildAdded(Node parent, Node child){ /* override if need */ }
