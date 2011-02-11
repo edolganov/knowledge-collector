@@ -6,9 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ru.kc.main.common.Controller;
-import ru.kc.main.dashboard.DashboardModule;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
@@ -24,7 +22,8 @@ public class TabsController extends Controller<MainForm> {
 		root.tabs.remove(root.testTab2);
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
-		tabs.addTab(new DashboardModule(), "dashboard", false);
+		Component dashboard = (Component)instanceForName("ru.kc.main.dashboard.DashboardModule");
+		tabs.addTab(dashboard, "dashboard", false);
 		tabs.addTab(new JPanel(), "test tab");
 		
 		tabs.addListener(new TabsListener() {

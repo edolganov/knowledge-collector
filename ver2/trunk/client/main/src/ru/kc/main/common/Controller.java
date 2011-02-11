@@ -45,5 +45,15 @@ public abstract class Controller<T> extends AbstractController<T>{
 		onChildDeletedRecursive(event.parent, event.deletedChild);
 	}
 	
+	
+	@SuppressWarnings("unchecked")
+	protected <N> N instanceForName(String className){
+		try {
+			return (N) Class.forName(className).newInstance();
+		} catch (Exception e) {
+			throw new IllegalStateException(e);
+		} 
+	}
+	
 
 }

@@ -1,13 +1,13 @@
 package ru.kc.main.dashboard;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import ru.kc.main.common.Controller;
 import ru.kc.main.dashboard.ui.Dashboard;
-import ru.kc.main.tree.TreeModule;
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Mapping;
 
@@ -18,7 +18,8 @@ public class DashboardController extends Controller<Dashboard>{
 	public void init() {
 		JPanel centerPanel = ui.centerPanel;
 		centerPanel.setLayout(new BorderLayout());
-		centerPanel.add(new TreeModule(),BorderLayout.CENTER);
+		Component tree = instanceForName("ru.kc.main.tree.TreeModule");
+		centerPanel.add(tree,BorderLayout.CENTER);
 
 		refreshToolbar();
 	}
