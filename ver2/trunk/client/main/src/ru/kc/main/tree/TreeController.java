@@ -9,10 +9,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.command.CreateDirRequest;
-import ru.kc.main.command.basic.AddChild;
 import ru.kc.main.command.basic.DeleteNode;
 import ru.kc.main.common.Controller;
-import ru.kc.main.node.CreateDirModule;
 import ru.kc.main.tree.tools.CellEditor;
 import ru.kc.main.tree.tools.CellRender;
 import ru.kc.main.tree.tools.TreeMenu;
@@ -161,8 +159,13 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	private void removeChild(DefaultMutableTreeNode treeNode, Node deletedNode) {
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
 		treeFacade.removeNode(treeNode);
 		removeFromStorage(deletedNode);
+		if(parent != null){
+			treeFacade.setSelection(parent);
+			tree.requestFocus();
+		}
 	}
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
