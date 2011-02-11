@@ -9,20 +9,20 @@
  * Created on Feb 11, 2011, 11:05:24 AM
  */
 
-package ru.kc.main.node.ui.dialog;
+package ru.kc.platform.ui.dialog;
 
 /**
  *
  * @author EDolganov
  */
-public class NodeDialog extends javax.swing.JDialog {
+public class OkCancelDialog extends javax.swing.JDialog {
     /** A return status code - returned if Cancel button has been pressed */
     public static final int RET_CANCEL = 0;
     /** A return status code - returned if OK button has been pressed */
     public static final int RET_OK = 1;
 
     /** Creates new form CreateNode */
-    public NodeDialog(java.awt.Frame parent, boolean modal) {
+    public OkCancelDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
@@ -44,7 +44,6 @@ public class NodeDialog extends javax.swing.JDialog {
         okButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         rootPanel = new javax.swing.JPanel();
-        nodePanel1 = new ru.kc.main.node.ui.dialog.NodePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -69,7 +68,6 @@ public class NodeDialog extends javax.swing.JDialog {
         });
 
         rootPanel.setLayout(new java.awt.BorderLayout());
-        rootPanel.add(nodePanel1, java.awt.BorderLayout.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,7 +124,7 @@ public class NodeDialog extends javax.swing.JDialog {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                NodeDialog dialog = new NodeDialog(new javax.swing.JFrame(), true);
+                OkCancelDialog dialog = new OkCancelDialog(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     public void windowClosing(java.awt.event.WindowEvent e) {
                         System.exit(0);
@@ -139,7 +137,6 @@ public class NodeDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton cancelButton;
-    private ru.kc.main.node.ui.dialog.NodePanel nodePanel1;
     public javax.swing.JButton okButton;
     public javax.swing.JPanel rootPanel;
     // End of variables declaration//GEN-END:variables
