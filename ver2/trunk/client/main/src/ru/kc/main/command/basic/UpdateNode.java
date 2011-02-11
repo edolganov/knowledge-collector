@@ -7,6 +7,7 @@ import ru.kc.model.Node;
 public class UpdateNode extends RollbackableCommand<Void>{
 	
 	Node node;
+	
 
 	@Override
 	protected Void invoke() throws Exception {

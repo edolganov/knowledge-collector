@@ -49,6 +49,7 @@ public class TreeController extends Controller<Tree>{
 			@Override
 			public void editingStopped(ChangeEvent e) {
 				String newName = cellEditor.getCellEditorValue();
+				
 			}
 			
 			@Override
