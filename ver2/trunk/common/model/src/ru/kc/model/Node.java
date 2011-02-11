@@ -15,7 +15,6 @@ public interface Node {
 	Node getParent() throws Exception;
 	
 	List<Node> getChildren() throws Exception;
-	
 
 
 }

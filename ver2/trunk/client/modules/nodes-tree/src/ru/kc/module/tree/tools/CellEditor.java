@@ -58,7 +58,7 @@ public class CellEditor implements TreeCellEditor {
 	}
 
 	@Override
-	public Object getCellEditorValue() {
+	public String getCellEditorValue() {
 		return text.getText();
 	}
 
