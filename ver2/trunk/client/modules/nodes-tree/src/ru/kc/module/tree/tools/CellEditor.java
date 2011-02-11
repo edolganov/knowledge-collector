@@ -1,4 +1,4 @@
-package ru.kc.main.tree.tools;
+package ru.kc.module.tree.tools;
 
 import java.awt.Component;
 import java.util.EventObject;
@@ -10,8 +10,8 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.tree.TreeCellEditor;
 
 import ru.kc.main.model.NodeIcon;
-import ru.kc.main.tree.ui.CellPanel;
 import ru.kc.model.Node;
+import ru.kc.module.tree.ui.CellPanel;
 import ru.kc.util.Check;
 import ru.kc.util.swing.tree.TreeFacade;
 

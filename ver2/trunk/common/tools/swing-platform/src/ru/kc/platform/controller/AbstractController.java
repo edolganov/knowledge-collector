@@ -100,5 +100,10 @@ public abstract class AbstractController<T> {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	protected <N> N instanceByMapping(String mapping){
+		return (N) appContext.globalObjects.instanceByMapping(mapping);
+	}
+	
 
 }

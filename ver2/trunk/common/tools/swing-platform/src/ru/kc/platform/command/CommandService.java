@@ -12,7 +12,7 @@ public class CommandService {
 	
 	AppContext context;
 	
-	public void init(AppContext context){
+	public void setContext(AppContext context){
 		this.context = context;
 	}
 	

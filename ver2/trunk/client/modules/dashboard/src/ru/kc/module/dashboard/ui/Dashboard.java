@@ -9,7 +9,7 @@
  * Created on 04.02.2011, 23:27:56
  */
 
-package ru.kc.main.dashboard.ui;
+package ru.kc.module.dashboard.ui;
 
 /**
  *

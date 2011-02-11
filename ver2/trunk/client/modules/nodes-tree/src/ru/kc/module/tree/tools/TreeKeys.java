@@ -1,10 +1,10 @@
-package ru.kc.main.tree.tools;
+package ru.kc.module.tree.tools;
 
 import javax.swing.JTree;
 
 import ru.kc.main.common.Controller;
-import ru.kc.main.tree.TreeController;
-import ru.kc.main.tree.ui.Tree;
+import ru.kc.module.tree.TreeController;
+import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.keyboard.DeleteKey;
 

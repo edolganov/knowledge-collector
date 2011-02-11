@@ -1,7 +1,7 @@
-package ru.kc.main.dashboard.tools;
+package ru.kc.module.dashboard.tools;
 
 import ru.kc.main.common.Controller;
-import ru.kc.main.dashboard.ui.Dashboard;
+import ru.kc.module.dashboard.ui.Dashboard;
 import ru.kc.platform.annotations.Mapping;
 
 @Mapping(Dashboard.class)

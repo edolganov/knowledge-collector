@@ -22,7 +22,7 @@ public class TabsController extends Controller<MainForm> {
 		root.tabs.remove(root.testTab2);
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
-		Component dashboard = (Component)instanceForName("ru.kc.main.dashboard.DashboardModule");
+		Component dashboard = (Component)instanceByMapping("dashboard");
 		tabs.addTab(dashboard, "dashboard", false);
 		tabs.addTab(new JPanel(), "test tab");
 		

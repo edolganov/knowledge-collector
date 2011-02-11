@@ -1,4 +1,4 @@
-package ru.kc.main.tree.tools;
+package ru.kc.module.tree.tools;
 
 import java.awt.Component;
 

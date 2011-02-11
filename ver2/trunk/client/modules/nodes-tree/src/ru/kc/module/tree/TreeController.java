@@ -1,4 +1,4 @@
-package ru.kc.main.tree;
+package ru.kc.module.tree;
 
 
 import java.util.LinkedList;
@@ -11,11 +11,11 @@ import javax.swing.tree.DefaultTreeModel;
 import ru.kc.main.command.CreateDirRequest;
 import ru.kc.main.command.basic.DeleteNode;
 import ru.kc.main.common.Controller;
-import ru.kc.main.tree.tools.CellEditor;
-import ru.kc.main.tree.tools.CellRender;
-import ru.kc.main.tree.tools.TreeMenu;
-import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
+import ru.kc.module.tree.tools.CellEditor;
+import ru.kc.module.tree.tools.CellRender;
+import ru.kc.module.tree.tools.TreeMenu;
+import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.tree.MenuController;

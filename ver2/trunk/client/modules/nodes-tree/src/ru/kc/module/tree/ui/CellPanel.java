@@ -9,7 +9,7 @@
  * Created on Feb 10, 2011, 6:02:01 PM
  */
 
-package ru.kc.main.tree.ui;
+package ru.kc.module.tree.ui;
 
 /**
  *

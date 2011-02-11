@@ -6,6 +6,7 @@ import java.util.List;
 
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.event.EventManager;
+import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.runtimestorage.RuntimeStorageService;
 import ru.kc.tools.scriptengine.ScriptsService;
 
@@ -31,11 +32,13 @@ public final class AppContext {
 	public final CommandService commandService;
 	public final EventManager eventManager;
 	public final RuntimeStorageService runtimeStorageService;
+	public final GlobalObjects globalObjects;
 
 	public AppContext(Container rootUI, ScriptsService scriptsService,
 			List<Object> dataForInject, CommandService commandService,
 			EventManager eventManager,
-			RuntimeStorageService runtimeStorageService) {
+			RuntimeStorageService runtimeStorageService,
+			GlobalObjects globalObjects) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;
@@ -43,7 +46,10 @@ public final class AppContext {
 		this.commandService = commandService;
 		this.eventManager = eventManager;
 		this.runtimeStorageService = runtimeStorageService;
+		this.globalObjects = globalObjects;
 	}
+
+
 
 
 	

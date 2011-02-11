@@ -16,6 +16,7 @@ import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ListenerExceptionHandler;
+import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.runtimestorage.RuntimeStorageService;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
@@ -42,6 +43,7 @@ public class App {
 	AppContext context;
 	EventManager eventManager;
 	RuntimeStorageService runtimeStorageService;
+	GlobalObjects globalObjects;
 
 	
 	public void setRootUI(JFrame rootUI) {
@@ -104,6 +106,9 @@ public class App {
 		});
 		
 		runtimeStorageService = new RuntimeStorageService();
+		
+		globalObjects = new GlobalObjects();
+		globalObjects.scan("ru.kc");
 	}
 
 	private void initContext() {
@@ -113,10 +118,11 @@ public class App {
 				dataForInject,
 				commandService,
 				eventManager,
-				runtimeStorageService);	
+				runtimeStorageService,
+				globalObjects);	
 		AppContext.put(rootUI, context);
 		
-		commandService.init(context);
+		commandService.setContext(context);
 	}
 	
 	private void addCodeDirs(ScriptsService scriptsService) {
