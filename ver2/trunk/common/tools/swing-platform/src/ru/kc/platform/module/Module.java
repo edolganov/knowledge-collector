@@ -17,7 +17,7 @@ public abstract class Module<T extends Component> extends JPanel {
 
 	private static final long serialVersionUID = 3201710095656034030L;
 	
-	private ModuleController<T> controller;
+	protected ModuleController<T> controller;
 	
 	public Module() {
 		super();
@@ -61,26 +61,26 @@ public abstract class Module<T extends Component> extends JPanel {
 	
 	public void tryInit() {
 		if(controller.isInited()) return;
-		else {
-			AppContext context = null;
-			Container parent = getParent();
-			
-			Object key = null;
-			while(parent != null) {
-				if(parent instanceof Module<?>){
-					context = ((Module<?>)parent).controller.getAppContext();
-					if(context != null) break;
-				}
-				key = parent;
-				parent = parent.getParent();
+
+		AppContext context = null;
+		Container parent = getParent();
+		
+		Object key = null;
+		while(parent != null) {
+			if(parent instanceof Module<?>){
+				context = ((Module<?>)parent).controller.getAppContext();
+				if(context != null) break;
 			}
-			if(context == null && key != null){
-				context = AppContext.get(key);
-			}
-			
-			if(context == null) return;
-			controller.setAppContext(context, getClass().getPackage().getName());
+			key = parent;
+			parent = parent.getParent();
 		}
+		if(context == null && key != null){
+			context = AppContext.get(key);
+		}
+		
+		if(context == null) return;
+		controller.setAppContext(context, getClass().getPackage().getName());
+		
 	}
 	
 	

@@ -1,5 +1,6 @@
 package ru.kc.platform.module;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public abstract class ModuleController<T> {
 	protected Object owner;
 	protected T ui;
 	private boolean inited = false;
-	private AppContext appContext;
+	protected AppContext appContext;
 	
 	protected Log log = LogFactory.getLog(getClass());
 	protected ControllersPool controllers;
@@ -74,6 +75,10 @@ public abstract class ModuleController<T> {
 	public boolean isInited() {
 		return inited;
 	}
+	
+	public T getUI() {
+		return ui;
+	}
 
 
 	@Override
@@ -81,6 +86,8 @@ public abstract class ModuleController<T> {
 		return owner.getClass().getSimpleName() + " [inited=" + inited + ", ui=" + AppUtils.toStringLikeObject(ui) + ", controllers="
 				+ controllers + "]";
 	}
+
+
 
 
 
