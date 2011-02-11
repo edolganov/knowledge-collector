@@ -47,6 +47,7 @@ public class NodeDialog extends javax.swing.JDialog {
         nodePanel1 = new ru.kc.main.node.ui.dialog.NodePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);

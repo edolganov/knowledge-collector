@@ -4,24 +4,20 @@ import java.awt.Component;
 import java.awt.Container;
 import java.util.LinkedList;
 
+import ru.kc.platform.controller.AbstractController;
+import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
 
 public class ModuleUtil {
 	
 	public static void removeAllLisreners(DialogModule<?> module){
 		EventManager eventManager = module.controller.appContext.eventManager;
-		//MsgManager msgManager = module.appContext.getMsgManager();
-		
 		eventManager.removeObjectMethodListener(module);
-		//msgManager.removeObjectMethodListener(module);
 		
-		//TODO было неожиданное удаление контроллера, когда найдем причину вернуть обратно
-		//Controller.removeAll(module.ui);
-		
-		//process child
+		removeAllListeners(eventManager,module.controller.controllers);
 		removeAllLisreners(module.controller.ui);
 	}
-	
+
 	public static void removeAllLisreners(Component root){
 		LinkedList<Component> modulesQueue = new LinkedList<Component>();
 		modulesQueue.addLast(root);
@@ -29,21 +25,12 @@ public class ModuleUtil {
 		while(!modulesQueue.isEmpty()){
 			Component candidat = modulesQueue.removeFirst();
 			if(candidat instanceof Module){
-				//process module
 				Module<?> module = (Module<?>)candidat;
-				//System.out.println("ModuleUtil: clear " + module);
 				EventManager eventManager = module.controller.appContext.eventManager;
-				//MsgManager msgManager = module.controller.appContext.getMsgManager();
-				
 				eventManager.removeObjectMethodListener(module);
-				//msgManager.removeObjectMethodListener(module);
-				
-				//Component ui = module.controller.ui;
-				//TODO было неожиданное удаление контроллера, когда найдем причину вернуть обратно
-				//Controller.removeAll(module.ui);
+				removeAllListeners(eventManager,module.controller.controllers);
 			}
 
-			//add children
 			if(candidat instanceof Container){
 				Component[] children = ((Container)candidat).getComponents();
 				if(children != null){
@@ -53,6 +40,15 @@ public class ModuleUtil {
 				}
 			}
 		}
+	}
+	
+	private static void removeAllListeners(EventManager eventManager, ControllersPool controllers) {
+		if(controllers != null){
+			for(AbstractController<?> c : controllers){
+				eventManager.removeObjectMethodListener(c);
+			}
+		}
+		
 	}
 	
 	

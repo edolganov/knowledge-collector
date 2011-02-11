@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import ru.kc.platform.event.annotation.LastEventListener;
 import ru.kc.util.swing.SwingUtil;
 
@@ -66,6 +69,8 @@ public class EventManager {
 			}
 		}
 	}
+	
+	private static final Log log = LogFactory.getLog(EventManager.class);
 	
 	private Map<Class<?>, ListenerList> listeners = new HashMap<Class<?>, ListenerList>();
 	private ListenerExceptionHandler exceptionHandler;
@@ -273,7 +278,7 @@ public class EventManager {
 		}
 		
 		if(found){
-			//System.out.println("EventManager: unSubscribe " + ob);
+			log.info("unsubscribed " + ob);
 		}
 	}
 	

@@ -1,27 +1,15 @@
 package ru.kc.util.swing.dialog;
 
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Window;
-import java.awt.event.KeyAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.KeyStroke;
 
 public class DialogUtil {
-	
-	public static void addKeyAndContainerListenerRecursively(Component c,KeyListener keyListener){
-        c.addKeyListener(keyListener);
-        if(c instanceof Container) {
-             Container cont = (Container)c;
-             //cont.addContainerListener(new ContainerListener);
-             Component[] children = cont.getComponents();
-             for(int i = 0; i < children.length; i++){
-                  addKeyAndContainerListenerRecursively(children[i],keyListener);
-             }
-        }
-	}
 	
 	
 	public static <T extends JDialog> T init(final T dialog){
@@ -30,20 +18,26 @@ public class DialogUtil {
 		if(owner != null){
 			dialog.setLocationRelativeTo(owner);
 		}
-		
-		addKeyAndContainerListenerRecursively(dialog, new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-		          int code = e.getKeyCode();
-		          if(code == KeyEvent.VK_ESCAPE){
-		        	  dialog.setVisible(false);
-		        	  dialog.dispose();
-		          }
-			}
-		});
+		addEscapeListener(dialog);
 		
 		return dialog;
 	}
+	
+	public static void addEscapeListener(final JDialog dialog) {
+	    ActionListener escListener = new ActionListener() {
+
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            dialog.dispose();
+	        }
+	    };
+
+	    dialog.getRootPane().registerKeyboardAction(escListener,
+	            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+	            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+	}
+
 	
 	
 }
