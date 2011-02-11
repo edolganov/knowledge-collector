@@ -154,6 +154,9 @@ public class TreeController extends Controller<Tree>{
 	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
 		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
 		addToStorage(child,treeChild);
+		treeFacade.setSelection(treeChild);
+		tree.requestFocus();
+
 		return treeChild;
 	}
 	

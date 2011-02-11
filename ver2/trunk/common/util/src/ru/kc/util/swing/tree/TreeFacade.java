@@ -166,4 +166,12 @@ public class TreeFacade {
 		this.menuController = controller;
 		
 	}
+	
+	public void expand(DefaultMutableTreeNode node) {
+		tree.expandPath(new TreePath(node.getPath()));
+	}
+	
+	public void setSelection(DefaultMutableTreeNode node){
+		tree.setSelectionPath(new TreePath(node.getPath()));
+	}
 }
