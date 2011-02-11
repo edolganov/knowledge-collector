@@ -4,12 +4,8 @@ package ru.kc.main.tree;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellEditor;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.command.AddChild;
@@ -22,10 +18,9 @@ import ru.kc.main.tree.ui.Tree;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.tree.MenuController;
-import ru.kc.util.swing.tree.TreeTransferHandler;
 import ru.kc.util.swing.tree.TreeFacade;
+import ru.kc.util.swing.tree.TreeTransferHandler;
 
 @Mapping(Tree.class)
 public class TreeController extends Controller<Tree>{
@@ -50,8 +45,6 @@ public class TreeController extends Controller<Tree>{
 		tree.setCellEditor(cellEditor);
 		tree.setRowHeight(0);
 		tree.setEditable(true);
-		
-		
 		treeFacade.setSingleSelection();
 		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService), new MenuController() {
 			

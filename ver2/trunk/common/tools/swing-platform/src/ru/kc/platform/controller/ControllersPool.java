@@ -1,5 +1,6 @@
 package ru.kc.platform.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -31,5 +32,12 @@ public class ControllersPool implements Iterable<AbstractController<?>>{
 	public int size() {
 		return map.size();
 	}
+
+	@Override
+	public String toString() {
+		return "ControllersPool " + new ArrayList<AbstractController<?>>(map.values()) + "";
+	}
+	
+	
 
 }
