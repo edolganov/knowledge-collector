@@ -9,6 +9,7 @@ import ru.kc.main.node.ui.dialog.NodePanel;
 import ru.kc.model.Dir;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.Check;
+import ru.kc.util.swing.keyboard.EnterKey;
 
 @Mapping(NodeDialog.class)
 public class CreateDirController extends Controller<NodeDialog>{
@@ -18,6 +19,8 @@ public class CreateDirController extends Controller<NodeDialog>{
 	
 	@Override
 	protected void init() {
+		ui.setTitle("Create dir");
+		
 		ui.rootPanel.removeAll();
 		panel = new NodePanel();
 		ui.rootPanel.add(panel);
@@ -28,6 +31,13 @@ public class CreateDirController extends Controller<NodeDialog>{
 			public void actionPerformed(ActionEvent e) {
 				createDirRequest();
 
+			}
+		});
+		panel.name.addKeyListener(new EnterKey() {
+			
+			@Override
+			protected void doAction() {
+				createDirRequest();
 			}
 		});
 	}
