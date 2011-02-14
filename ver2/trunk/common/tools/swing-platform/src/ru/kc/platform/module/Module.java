@@ -95,6 +95,14 @@ public abstract class Module<T extends Component> extends JPanel {
 	public void setAppContext(AppContext context) {
 		controller.setAppContext(context, getClass().getPackage().getName());
 	}
+	
+	public void removeAllListneres() {
+		removeAllListneres(this);
+	}
+	
+	public static void removeAllListneres(Component component){
+		ModuleUtil.removeAllLisreners(component);
+	}
 
 
 	@Override

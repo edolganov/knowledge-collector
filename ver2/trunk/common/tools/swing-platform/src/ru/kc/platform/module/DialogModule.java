@@ -62,7 +62,7 @@ public abstract class DialogModule<T extends JDialog>{
 		return controller.getUI();
 	}
 	
-	private void removeAllListneres() {
+	public void removeAllListneres() {
 		ModuleUtil.removeAllLisreners(this);
 	}
 

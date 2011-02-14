@@ -14,6 +14,7 @@ import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
+import ru.kc.platform.event.Event;
 import ru.kc.platform.module.Module;
 import ru.kc.platform.runtimestorage.RuntimeStorageService;
 
@@ -103,6 +104,10 @@ public abstract class AbstractController<T> {
 	@SuppressWarnings("unchecked")
 	protected <N> N instanceByMapping(String mapping){
 		return (N) appContext.globalObjects.instanceByMapping(mapping);
+	}
+	
+	protected void fireEventInEDT(Event event){
+		appContext.eventManager.fireEventInEDT(this, event);
 	}
 	
 

@@ -9,7 +9,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.keyboard.DeleteKey;
 
 @Mapping(Tree.class)
-public class TreeKeys extends Controller<Tree>{
+public class TreeKeysController extends Controller<Tree>{
 
 	@Override
 	public void init() {}
