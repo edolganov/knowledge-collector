@@ -193,8 +193,6 @@ public class ServiceListenerTest extends Assert{
 		assertEquals(newName, updatedNode[0].getName());
 		assertEquals(oldName, root.getName());
 		
-		
-		
 	}
 	
 	
@@ -217,12 +215,11 @@ public class ServiceListenerTest extends Assert{
 			
 		});
 		
-		String oldName = "child";
+		String oldName = "oldName";
+		String newName = "newName";
 		Dir child = factory.createDir(oldName, null);
 		Node root = tree.getRoot();
 		tree.add(root, child);
-		
-		String newName = "newName";
 		updater.updateName(child, newName);
 		
 		assertEquals(child, updatedNode[0]);
@@ -231,6 +228,28 @@ public class ServiceListenerTest extends Assert{
 		assertEquals(newName, updatedNode[0].getName());
 		assertEquals(oldName, child.getName());
 		
+	}
+	
+	
+	@Test
+	public void nodeUpdatedForNewServiceInstance() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		Updater updater = ps.updater();
+		
+		String oldName = "oldName";
+		String newName = "newName";
+		Dir child = factory.createDir(oldName, null);
+		Node root = tree.getRoot();
+		tree.add(root, child);
+		updater.updateName(child, newName);
+		
+		PersistServiceImpl newPs = createService(2,2,2);
+		Tree newTree = newPs.tree();
+		Node newChild = newTree.getRoot().getChildren().get(0);
+		
+		assertEquals(newName, newChild.getName());
 	}
 	
 	

@@ -20,6 +20,7 @@ import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveNodeFromContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.ReplaceNodeInContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.SaveContainers;
 
@@ -137,8 +138,17 @@ public class FileSystemImpl {
 		}.start();
 	}
 
-	public void replace(NodeBean old, NodeBean node)throws Exception {
-		
+	public void replace(final NodeBean old, final NodeBean newNode)throws Exception {
+		new Transaction<Void>(c) {
+
+			@Override
+			protected Void body() throws Throwable {
+				invoke(new ReplaceNodeInContainer(old, newNode));
+				Container container = newNode.getContainer();
+				invoke(new SaveContainer(container));
+				return null;
+			}
+		}.start();
 	}
 	
 	public void deleteRecursive(final NodeBean node)throws Exception{

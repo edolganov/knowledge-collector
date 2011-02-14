@@ -32,16 +32,26 @@ public class UpdaterImpl implements Updater {
 	}
 	
 	@Override
-	public void updateDescription(Node node, String description)
-			throws Exception {
-		// TODO Auto-generated method stub
+	public void updateDescription(Node node, String description)throws Exception {
+		NodeBean old = convert(node);
+		NodeBean clone = (NodeBean)old.clone();
+		clone.setDescription(description);
 		
+		fs.replace(old,clone);
+		listeners.fireUpdatedEvent(old, clone);
 	}
 
 	@Override
-	public void update(Node node, String name, String description) {
-		// TODO Auto-generated method stub
+	public void update(Node node, String name, String description) throws Exception {
+		checkName(name);
+		
+		NodeBean old = convert(node);
+		NodeBean clone = (NodeBean)old.clone();
+		clone.setName(name);
+		clone.setDescription(description);
 
+		fs.replace(old,clone);
+		listeners.fireUpdatedEvent(old, clone);
 	}
 	
 
