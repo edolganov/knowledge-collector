@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.main.command.CreateDirRequest;
 import ru.kc.main.command.basic.DeleteNode;
+import ru.kc.main.command.basic.RenameNode;
 import ru.kc.main.common.Controller;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
@@ -48,8 +49,9 @@ public class TreeController extends Controller<Tree>{
 			
 			@Override
 			public void editingStopped(ChangeEvent e) {
+				Node node = treeFacade.getCurrentObject(Node.class);
 				String newName = cellEditor.getCellEditorValue();
-				
+				invokeSafe(new RenameNode(node, newName));
 			}
 			
 			@Override
@@ -160,6 +162,16 @@ public class TreeController extends Controller<Tree>{
 		
 	}
 	
+	@Override
+	protected void onNodeUpdated(Node old, Node updatedNode) {
+		DefaultMutableTreeNode oldNode = getFromStorage(old);
+		if(oldNode == null){
+			log.error("can't find tree node by "+old);
+			return;
+		}
+		
+		updateNode(oldNode, old, updatedNode);
+	}
 
 
 	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
@@ -179,6 +191,13 @@ public class TreeController extends Controller<Tree>{
 			treeFacade.setSelection(parent);
 			tree.requestFocus();
 		}
+	}
+	
+	private void updateNode(DefaultMutableTreeNode treeNode, Node old, Node updatedNode) {
+		treeNode.setUserObject(updatedNode);
+		removeFromStorage(old);
+		addToStorage(updatedNode, treeNode);
+		model.reload(treeNode);
 	}
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {

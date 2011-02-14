@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import ru.kc.main.event.ChildAdded;
 import ru.kc.main.event.ChildDeletedRecursive;
+import ru.kc.main.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.controller.AbstractController;
@@ -36,6 +37,8 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	protected void onChildDeletedRecursive(Node parent, Node deletedChild){ /* override if need */ }
 	
+	protected void onNodeUpdated(Node old, Node updatedNode){ /* override if need */ }
+	
 	
 	
 	@EventListener(ChildAdded.class)
@@ -46,6 +49,11 @@ public abstract class Controller<T> extends AbstractController<T>{
 	@EventListener(ChildDeletedRecursive.class)
 	public void _onChildDeletedRecursive(ChildDeletedRecursive event){
 		onChildDeletedRecursive(event.parent, event.deletedChild);
+	}
+	
+	@EventListener(NodeUpdated.class)
+	public void _onNodeUpdated(NodeUpdated event){
+		onNodeUpdated(event.old, event.node);
 	}
 	
 
