@@ -1,0 +1,23 @@
+        RuntimeConfig runtimeConfig = new RuntimeConfig();
+        runtimeConfig.addListener(new UIComponentsConfig());
+        appContext.setRuntimeConfig(runtimeConfig);
+
+
+
+
+public class UIComponentsConfig extends ObjectHandler {
+	
+
+	@Override
+	public void process(Object ob) {
+		if(ob instanceof JSplitPane){
+			JSplitPane p = ((JSplitPane)ob);
+			p.setDividerSize(4);
+			
+		} else if(ob instanceof JTable){
+			JTable table = (JTable)ob;
+			TableUtil.init(table);
+		}
+	}
+
+}
