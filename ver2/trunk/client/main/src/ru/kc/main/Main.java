@@ -11,8 +11,8 @@ import ru.kc.platform.app.App;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.ui.tabbedform.MainForm;
-import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.ServiceListener;
+import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.util.swing.laf.Laf;
 

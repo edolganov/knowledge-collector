@@ -4,7 +4,6 @@ import java.io.File;
 
 import ru.kc.exception.BaseException;
 import ru.kc.tools.filepersist.Factory;
-import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.ServiceListener;
 import ru.kc.tools.filepersist.Tree;

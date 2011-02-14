@@ -10,9 +10,9 @@ import org.junit.Test;
 import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
-import ru.kc.tools.filepersist.InitParams;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.TreeAdapter;
+import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.util.file.FileUtil;
 

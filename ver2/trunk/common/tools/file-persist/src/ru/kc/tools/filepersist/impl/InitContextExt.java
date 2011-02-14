@@ -2,7 +2,6 @@ package ru.kc.tools.filepersist.impl;
 
 import java.io.File;
 
-import ru.kc.tools.filepersist.InitParams;
 
 public class InitContextExt {
 	
