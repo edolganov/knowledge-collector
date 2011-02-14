@@ -1,8 +1,7 @@
-package ru.kc.main.command;
+package ru.kc.common.node.command;
 
 import ru.kc.common.command.Command;
 import ru.kc.common.node.CreateDirModule;
-import ru.kc.main.command.basic.AddChild;
 import ru.kc.model.Node;
 
 public class CreateDirRequest extends Command<Void>{

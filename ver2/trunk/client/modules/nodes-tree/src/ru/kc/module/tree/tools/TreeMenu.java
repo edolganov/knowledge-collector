@@ -14,8 +14,8 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 import ru.kc.common.node.NodeIcon;
-import ru.kc.main.command.CreateDirRequest;
-import ru.kc.main.command.basic.DeleteNode;
+import ru.kc.common.node.command.CreateDirRequest;
+import ru.kc.common.node.command.DeleteNode;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;

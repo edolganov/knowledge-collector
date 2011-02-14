@@ -11,9 +11,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.common.controller.Controller;
-import ru.kc.main.command.CreateDirRequest;
-import ru.kc.main.command.basic.DeleteNode;
-import ru.kc.main.command.basic.RenameNode;
+import ru.kc.common.node.command.CreateDirRequest;
+import ru.kc.common.node.command.DeleteNode;
+import ru.kc.common.node.command.RenameNode;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
