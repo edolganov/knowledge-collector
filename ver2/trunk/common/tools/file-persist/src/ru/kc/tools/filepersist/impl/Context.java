@@ -8,15 +8,22 @@ public class Context {
 	public final FactoryImpl factory;
 	public final TreeImpl tree;
 	public final FileSystemImpl fs;
+	public final UpdaterImpl updater;
+	public final Listeners listeners;
 	
 	public Context(InitContextExt init, FactoryImpl factory, TreeImpl tree,
-			FileSystemImpl fs) {
+			FileSystemImpl fs, UpdaterImpl updater, Listeners listeners) {
 		super();
 		this.init = init;
 		this.factory = factory;
 		this.tree = tree;
 		this.fs = fs;
+		this.updater = updater;
+		this.listeners = listeners;
 	}
+	
+
+	
 	
 
 	

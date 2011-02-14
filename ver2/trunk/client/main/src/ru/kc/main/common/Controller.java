@@ -11,6 +11,7 @@ import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.Tree;
+import ru.kc.tools.filepersist.Updater;
 
 public abstract class Controller<T> extends AbstractController<T>{
 	
@@ -20,6 +21,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	protected Tree persistTree;
 	protected Factory persistFactory;
 	protected Frame rootUI;
+	protected Updater updater;
 	
 	@Override
 	protected void beforeInit() {
@@ -27,6 +29,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 		persistTree = persist.tree();
 		persistFactory = persist.factory();
 		rootUI = (Frame)appContext.rootUI;
+		updater = persist.updater();
 	}
 	
 	protected void onChildAdded(Node parent, Node child){ /* override if need */ }

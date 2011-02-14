@@ -11,13 +11,14 @@ import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.TreeAdapter;
+import ru.kc.tools.filepersist.ServiceAdapter;
+import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.util.file.FileUtil;
 
 
-public class TreeListenerTest extends Assert{
+public class ServiceListenerTest extends Assert{
 	
 	File dir = new File("./test_data");
 	
@@ -42,7 +43,7 @@ public class TreeListenerTest extends Assert{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		ps.addListener(new TreeAdapter() {
+		ps.addListener(new ServiceAdapter() {
 			
 			@Override
 			public void onAdded(Node parent, Node child) {
@@ -71,7 +72,7 @@ public class TreeListenerTest extends Assert{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		ps.addListener(new TreeAdapter() {
+		ps.addListener(new ServiceAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -101,7 +102,7 @@ public class TreeListenerTest extends Assert{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		ps.addListener(new TreeAdapter() {
+		ps.addListener(new ServiceAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -143,8 +144,7 @@ public class TreeListenerTest extends Assert{
 		oldTree.add(child, subChild);
 		
 		PersistServiceImpl ps = createService(2, 2, 2);
-		Tree tree = ps.tree();
-		ps.addListener(new TreeAdapter() {
+		ps.addListener(new ServiceAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -154,6 +154,7 @@ public class TreeListenerTest extends Assert{
 			}
 		});
 		
+		Tree tree = ps.tree();
 		Node toDelete = tree.getRoot().getChildren().get(0).getChildren().get(0);
 		tree.deleteRecursive(toDelete);
 		assertEquals(true, deleted[0]);
@@ -161,6 +162,71 @@ public class TreeListenerTest extends Assert{
 		assertEquals(subChild, childInListener[0]);
 		
 	}
+	
+	@Test
+	public void rootUpdated() throws Exception{
+		final Node[] updatedNode = new Node[]{null};
+		
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Updater updater = ps.updater();
+		ps.addListener(new ServiceAdapter(){
+			
+			@Override
+			public void onNodeUpdated(Node node) {
+				updatedNode[0] = node;
+			}
+			
+		});
+		
+		String newName = "newName";
+		Node root = tree.getRoot();
+		updater.updateNode(root, newName);
+		
+		assertEquals(root, updatedNode[0]);
+		assertEquals(newName, updatedNode[0].getName());
+		assertEquals(newName, root.getName());
+		
+		
+		
+	}
+	
+	
+	@Test
+	public void nodeUpdated() throws Exception{
+		final Node[] updatedNode = new Node[]{null};
+		
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		Updater updater = ps.updater();
+		ps.addListener(new ServiceAdapter(){
+			
+			@Override
+			public void onNodeUpdated(Node node) {
+				updatedNode[0] = node;
+			}
+			
+		});
+		
+		
+		Dir child = factory.createDir("child", null);
+		Node root = tree.getRoot();
+		tree.add(root, child);
+		
+		String newName = "newName";
+		updater.updateNode(child, newName);
+		
+		assertEquals(child, updatedNode[0]);
+		assertEquals(newName, updatedNode[0].getName());
+		assertEquals(newName, child.getName());
+		
+	}
+	
+	
+	
+	
+	
 	
 	private PersistServiceImpl createService(int maxNodesInContainer,
 			int maxContainerFilesInFolder, int maxFoldersInLevel){

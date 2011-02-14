@@ -25,12 +25,15 @@ public class PersistServiceImpl implements PersistService {
 		FactoryImpl factory = new FactoryImpl();
 		TreeImpl tree = new TreeImpl();		
 		FileSystemImpl fs = new FileSystemImpl();
+		UpdaterImpl updater = new UpdaterImpl();
+		Listeners listeners = new Listeners();
 
 		
-		context = new Context(init, factory, tree, fs);
+		context = new Context(init, factory, tree, fs, updater, listeners);
 		fs.init(context);
 		tree.init(context);
 		factory.init(context);
+		updater.init(context);
 		
 	}
 	
@@ -43,7 +46,7 @@ public class PersistServiceImpl implements PersistService {
 	
 	@Override
 	public void addListener(ServiceListener listener) {
-		context.tree.addListener(listener);
+		context.listeners.addListener(listener);
 	}
 	
 	public Tree tree(){
@@ -56,8 +59,7 @@ public class PersistServiceImpl implements PersistService {
 
 	@Override
 	public Updater updater() {
-		// TODO Auto-generated method stub
-		return null;
+		return context.updater;
 	}
 
 }

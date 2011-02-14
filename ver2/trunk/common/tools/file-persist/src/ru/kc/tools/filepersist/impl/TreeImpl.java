@@ -1,12 +1,10 @@
 package ru.kc.tools.filepersist.impl;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.ServiceListener;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
@@ -14,12 +12,13 @@ public class TreeImpl implements Tree {
 	
 	private Context c;
 	private FileSystemImpl fs;
-	private CopyOnWriteArrayList<ServiceListener> listeners = new CopyOnWriteArrayList<ServiceListener>();
+	private Listeners listeners;
 	
 	
 	public void init(Context c) throws Exception{
 		this.c = c;
 		this.fs = c.fs;
+		this.listeners = c.listeners;
 		createOrLoadData();
 	}
 
@@ -30,11 +29,6 @@ public class TreeImpl implements Tree {
 			NodeBean root = convert(dir);
 			fs.createRoot(root);
 		}
-	}
-	
-
-	public void addListener(ServiceListener listener) {
-		listeners.add(listener);
 	}
 	
 	@Override
@@ -59,7 +53,7 @@ public class TreeImpl implements Tree {
 		if(parent == null) throw new NullPointerException("parent");
 		if(child == null) throw new NullPointerException("child");
 		fs.create(convert(parent), convert(child));
-		fireAddedEvent(parent,child);
+		listeners.fireAddedEvent(parent,child);
 	}
 	
 	@Override
@@ -71,18 +65,7 @@ public class TreeImpl implements Tree {
 		if(parent == null) 
 			throw new IllegalStateException("parent is null for "+node);
 		fs.deleteRecursive(convert(node));
-		fireDeletedEvent(parent,node);
-	}
-	
-	
-
-
-	private void fireAddedEvent(Node parent, Node child) {
-		for(ServiceListener l : listeners)l.onAdded(parent, child);
-	}
-
-	private void fireDeletedEvent(Node parent, Node child) {
-		for(ServiceListener l : listeners)l.onDeletedRecursive(parent, child);
+		listeners.fireDeletedEvent(parent,node);
 	}
 
 	private NodeBean convert(Node node) {

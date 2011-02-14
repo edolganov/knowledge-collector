@@ -12,6 +12,7 @@ import org.junit.Test;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.impl.InitParams;
+import ru.kc.tools.filepersist.impl.Listeners;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
@@ -87,7 +88,7 @@ public class ContainerStoreTest extends Assert  {
 	public FSContext testContext(){
 		InitParams params = new InitParams(dir, 10, 10, 10);
 		InitContextExt init = new InitContextExt(params, dir, dir);
-		Context c = new Context(init, null, null, null);
+		Context c = new Context(init, null, null, null, null, new Listeners());
 		
 		ContainerStore store = new ContainerStore();
 		FSContext fsContext = new FSContext(null, store, c);
