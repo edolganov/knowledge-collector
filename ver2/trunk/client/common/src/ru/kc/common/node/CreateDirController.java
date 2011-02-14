@@ -1,11 +1,11 @@
-package ru.kc.main.node;
+package ru.kc.common.node;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import ru.kc.main.common.Controller;
-import ru.kc.main.node.ui.dialog.DirDialog;
-import ru.kc.main.node.ui.dialog.NodePanel;
+import ru.kc.common.controller.Controller;
+import ru.kc.common.node.ui.DirDialog;
+import ru.kc.common.node.ui.NodePanel;
 import ru.kc.model.Dir;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.Check;

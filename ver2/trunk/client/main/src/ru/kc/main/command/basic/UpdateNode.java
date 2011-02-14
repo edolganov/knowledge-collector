@@ -1,7 +1,7 @@
 package ru.kc.main.command.basic;
 
-import ru.kc.main.common.Command;
-import ru.kc.main.common.RollbackableCommand;
+import ru.kc.common.command.Command;
+import ru.kc.common.command.RollbackableCommand;
 import ru.kc.model.Node;
 
 public class UpdateNode extends RollbackableCommand<Void>{

@@ -10,10 +10,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import ru.kc.common.controller.Controller;
 import ru.kc.main.command.CreateDirRequest;
 import ru.kc.main.command.basic.DeleteNode;
 import ru.kc.main.command.basic.RenameNode;
-import ru.kc.main.common.Controller;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
@@ -105,23 +105,23 @@ public class TreeController extends Controller<Tree>{
 
 
 
-	@ExportAction(description="create dir", icon="/ru/kc/main/img/createDir.png")
+	@ExportAction(description="create dir", icon="/ru/kc/common/img/createDir.png")
 	public void createDirRequest(){
 		Node parent = treeFacade.getCurrentObject(Node.class);
 		invokeSafe(new CreateDirRequest(parent));
 	}
 	
-	@ExportAction(description="create link", icon="/ru/kc/main/img/createLink.png")
+	@ExportAction(description="create link", icon="/ru/kc/common/img/createLink.png")
 	public void createLinkRequest(){
 		System.out.println("create link");
 	}
 	
-	@ExportAction(description="create text", icon="/ru/kc/main/img/createText.png")
+	@ExportAction(description="create text", icon="/ru/kc/common/img/createText.png")
 	public void createTextRequest(){
 		System.out.println("create text");
 	}
 	
-	@ExportAction(description="create file link", icon="/ru/kc/main/img/createFileLink.png")
+	@ExportAction(description="create file link", icon="/ru/kc/common/img/createFileLink.png")
 	public void createFileLinkRequest(){
 		System.out.println("create file link");
 	}

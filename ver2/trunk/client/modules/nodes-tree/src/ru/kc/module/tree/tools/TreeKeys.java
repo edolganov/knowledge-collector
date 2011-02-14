@@ -2,7 +2,7 @@ package ru.kc.module.tree.tools;
 
 import javax.swing.JTree;
 
-import ru.kc.main.common.Controller;
+import ru.kc.common.controller.Controller;
 import ru.kc.module.tree.TreeController;
 import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.Mapping;

@@ -9,7 +9,7 @@
  * Created on Feb 11, 2011, 11:09:14 AM
  */
 
-package ru.kc.main.node.ui.dialog;
+package ru.kc.common.node.ui;
 
 /**
  *

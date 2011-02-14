@@ -13,9 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+import ru.kc.common.node.NodeIcon;
 import ru.kc.main.command.CreateDirRequest;
 import ru.kc.main.command.basic.DeleteNode;
-import ru.kc.main.model.NodeIcon;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
@@ -27,7 +27,7 @@ import ru.kc.util.swing.tree.TreeFacade;
 
 public class TreeMenu extends JPopupMenu {
 	
-	JMenuItem delete = new JMenuItem("delete",IconUtil.get("/ru/kc/main/img/delete.png"));
+	JMenuItem delete = new JMenuItem("delete",IconUtil.get("/ru/kc/common/img/delete.png"));
 	
 	JMenuItem info = new JMenuItem();
 	
@@ -46,8 +46,8 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem fileLinkToParent = new JMenuItem("file link",NodeIcon.getIcon(FileLink.class));
 	
 	JMenuItem showHideInfo = new JMenuItem("");
-	ImageIcon leftIcon = IconUtil.get("/ru/kc/main/img/left.png");
-	ImageIcon rightIcon = IconUtil.get("/ru/kc/main/img/right.png");
+	ImageIcon leftIcon = IconUtil.get("/ru/kc/common/img/left.png");
+	ImageIcon rightIcon = IconUtil.get("/ru/kc/common/img/right.png");
 	
 	boolean showInfo = true;
 	

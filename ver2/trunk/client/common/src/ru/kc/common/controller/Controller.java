@@ -1,10 +1,11 @@
-package ru.kc.main.common;
+package ru.kc.common.controller;
 
 import java.awt.Frame;
 
-import ru.kc.main.event.ChildAdded;
-import ru.kc.main.event.ChildDeletedRecursive;
-import ru.kc.main.event.NodeUpdated;
+import ru.kc.common.Context;
+import ru.kc.common.node.event.ChildAdded;
+import ru.kc.common.node.event.ChildDeletedRecursive;
+import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.controller.AbstractController;

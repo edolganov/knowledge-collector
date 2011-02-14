@@ -1,7 +1,7 @@
 package ru.kc.main.command.basic;
 
-import ru.kc.main.common.Dialogs;
-import ru.kc.main.common.RollbackableCommand;
+import ru.kc.common.command.RollbackableCommand;
+import ru.kc.common.dialog.Dialogs;
 import ru.kc.model.Node;
 
 public class DeleteNode extends RollbackableCommand<Void> {

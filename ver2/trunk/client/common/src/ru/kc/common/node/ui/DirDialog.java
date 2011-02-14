@@ -1,4 +1,4 @@
-package ru.kc.main.node.ui.dialog;
+package ru.kc.common.node.ui;
 
 import java.awt.Frame;
 

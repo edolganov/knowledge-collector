@@ -1,4 +1,4 @@
-package ru.kc.main.event;
+package ru.kc.common.node.event;
 
 import ru.kc.model.Node;
 import ru.kc.platform.event.Event;

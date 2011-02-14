@@ -2,10 +2,10 @@ package ru.kc.main;
 
 import java.io.File;
 
-import ru.kc.main.common.Context;
-import ru.kc.main.event.ChildAdded;
-import ru.kc.main.event.ChildDeletedRecursive;
-import ru.kc.main.event.NodeUpdated;
+import ru.kc.common.Context;
+import ru.kc.common.node.event.ChildAdded;
+import ru.kc.common.node.event.ChildDeletedRecursive;
+import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.Platform;
 import ru.kc.platform.app.App;

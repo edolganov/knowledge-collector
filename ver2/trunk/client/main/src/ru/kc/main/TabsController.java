@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import ru.kc.main.common.Controller;
+import ru.kc.common.controller.Controller;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;

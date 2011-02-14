@@ -1,4 +1,4 @@
-package ru.kc.main.common;
+package ru.kc.common.command;
 
 import ru.kc.platform.command.Rollbackable;
 

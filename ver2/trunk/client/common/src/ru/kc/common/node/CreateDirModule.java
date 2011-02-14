@@ -1,9 +1,9 @@
-package ru.kc.main.node;
+package ru.kc.common.node;
 
 import java.awt.Frame;
 
 import ru.kc.platform.ui.dialog.OkCancelDialog;
-import ru.kc.main.node.ui.dialog.DirDialog;
+import ru.kc.common.node.ui.DirDialog;
 import ru.kc.model.Dir;
 import ru.kc.platform.module.DialogModule;
 

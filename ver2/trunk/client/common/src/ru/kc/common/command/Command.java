@@ -1,7 +1,8 @@
-package ru.kc.main.common;
+package ru.kc.common.command;
 
 import java.awt.Frame;
 
+import ru.kc.common.Context;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.tools.filepersist.Factory;

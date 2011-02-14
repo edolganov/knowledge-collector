@@ -7,7 +7,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import ru.kc.main.model.NodeIcon;
+import ru.kc.common.node.NodeIcon;
 import ru.kc.model.Node;
 import ru.kc.util.swing.tree.TreeFacade;
 

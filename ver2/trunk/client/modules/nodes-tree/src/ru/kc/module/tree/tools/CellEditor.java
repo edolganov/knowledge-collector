@@ -11,7 +11,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.TreeCellEditor;
 
-import ru.kc.main.model.NodeIcon;
+import ru.kc.common.node.NodeIcon;
 import ru.kc.model.Node;
 import ru.kc.module.tree.ui.CellPanel;
 import ru.kc.util.Check;

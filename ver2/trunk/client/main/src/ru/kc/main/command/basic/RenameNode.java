@@ -1,6 +1,6 @@
 package ru.kc.main.command.basic;
 
-import ru.kc.main.common.RollbackableCommand;
+import ru.kc.common.command.RollbackableCommand;
 import ru.kc.model.Node;
 import ru.kc.util.Check;
 
