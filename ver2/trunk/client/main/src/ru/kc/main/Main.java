@@ -12,9 +12,8 @@ import ru.kc.platform.app.AppContext;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.tools.filepersist.InitParams;
-import ru.kc.tools.filepersist.PersistService;
-import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.TreeListener;
+import ru.kc.tools.filepersist.PersistServiceImpl;
+import ru.kc.tools.filepersist.ServiceListener;
 import ru.kc.util.swing.laf.Laf;
 
 public class Main {
@@ -55,7 +54,7 @@ public class Main {
 		int maxContainerFilesInFolder = 100;
 		int maxFoldersInLevel = 100;
 		InitParams init = new InitParams(knowDir, maxNodesInContainer, maxContainerFilesInFolder, maxFoldersInLevel);
-		PersistService ps = new PersistService();
+		PersistServiceImpl ps = new PersistServiceImpl();
 		ps.init(init);
 		
 		return new Context(ps);
@@ -64,8 +63,7 @@ public class Main {
 	private static void initPersistEvents(App app, Context context) {
 		AppContext appContext = app.getInitedContext();
 		final EventManager eventManager = appContext.eventManager;
-		Tree tree = context.persistService.tree();
-		tree.addListener(new TreeListener() {
+		context.persistService.addListener(new ServiceListener() {
 			
 			@Override
 			public void onAdded(Node parent, Node child) {

@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Tree;
-import ru.kc.tools.filepersist.TreeListener;
+import ru.kc.tools.filepersist.ServiceListener;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 
@@ -14,7 +14,7 @@ public class TreeImpl implements Tree {
 	
 	private Context c;
 	private FileSystemImpl fs;
-	private CopyOnWriteArrayList<TreeListener> listeners = new CopyOnWriteArrayList<TreeListener>();
+	private CopyOnWriteArrayList<ServiceListener> listeners = new CopyOnWriteArrayList<ServiceListener>();
 	
 	
 	public void init(Context c) throws Exception{
@@ -33,8 +33,7 @@ public class TreeImpl implements Tree {
 	}
 	
 
-	@Override
-	public void addListener(TreeListener listener) {
+	public void addListener(ServiceListener listener) {
 		listeners.add(listener);
 	}
 	
@@ -79,11 +78,11 @@ public class TreeImpl implements Tree {
 
 
 	private void fireAddedEvent(Node parent, Node child) {
-		for(TreeListener l : listeners)l.onAdded(parent, child);
+		for(ServiceListener l : listeners)l.onAdded(parent, child);
 	}
 
 	private void fireDeletedEvent(Node parent, Node child) {
-		for(TreeListener l : listeners)l.onDeletedRecursive(parent, child);
+		for(ServiceListener l : listeners)l.onDeletedRecursive(parent, child);
 	}
 
 	private NodeBean convert(Node node) {

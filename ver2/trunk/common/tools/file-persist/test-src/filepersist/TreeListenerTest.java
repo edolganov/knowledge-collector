@@ -11,7 +11,7 @@ import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.InitParams;
-import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.PersistServiceImpl;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.TreeAdapter;
 import ru.kc.util.file.FileUtil;
@@ -39,10 +39,10 @@ public class TreeListenerTest extends Assert{
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
 		
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		tree.addListener(new TreeAdapter() {
+		ps.addListener(new TreeAdapter() {
 			
 			@Override
 			public void onAdded(Node parent, Node child) {
@@ -68,10 +68,10 @@ public class TreeListenerTest extends Assert{
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
 		
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		tree.addListener(new TreeAdapter() {
+		ps.addListener(new TreeAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -98,10 +98,10 @@ public class TreeListenerTest extends Assert{
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
 		
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
-		tree.addListener(new TreeAdapter() {
+		ps.addListener(new TreeAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -131,7 +131,7 @@ public class TreeListenerTest extends Assert{
 		final Node[] parentInListener = new Node[]{null};
 		final Node[] childInListener = new Node[]{null};
 		
-		PersistService oldPs = createService(2,2,2);
+		PersistServiceImpl oldPs = createService(2,2,2);
 		Tree oldTree = oldPs.tree();
 		Factory oldFactory = oldPs.factory();
 
@@ -142,9 +142,9 @@ public class TreeListenerTest extends Assert{
 		Dir subChild = oldFactory.createDir("subChild", null);
 		oldTree.add(child, subChild);
 		
-		PersistService ps = createService(2, 2, 2);
+		PersistServiceImpl ps = createService(2, 2, 2);
 		Tree tree = ps.tree();
-		tree.addListener(new TreeAdapter() {
+		ps.addListener(new TreeAdapter() {
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild) {
@@ -162,10 +162,10 @@ public class TreeListenerTest extends Assert{
 		
 	}
 	
-	private PersistService createService(int maxNodesInContainer,
+	private PersistServiceImpl createService(int maxNodesInContainer,
 			int maxContainerFilesInFolder, int maxFoldersInLevel){
 		InitParams init = new InitParams(dir, maxNodesInContainer, maxContainerFilesInFolder, maxFoldersInLevel);
-		PersistService ps = new PersistService();
+		PersistServiceImpl ps = new PersistServiceImpl();
 		try {
 			ps.init(init);
 		} catch (Exception e) {

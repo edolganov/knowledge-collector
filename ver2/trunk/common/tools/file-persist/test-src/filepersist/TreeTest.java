@@ -12,7 +12,7 @@ import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.InitParams;
-import ru.kc.tools.filepersist.PersistService;
+import ru.kc.tools.filepersist.PersistServiceImpl;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -40,7 +40,7 @@ public class TreeTest extends Assert{
 	@Test
 	public void firstCreateDataStructure() throws Exception {
 		InitParams init = new InitParams(dir, 10, 10, 10);
-		PersistService ps = new PersistService();
+		PersistServiceImpl ps = new PersistServiceImpl();
 		ps.init(init);
 		
 		File rootFile = new File(dir.getPath()+"/nodes/000.xml");
@@ -48,7 +48,7 @@ public class TreeTest extends Assert{
 		
 		long lastModified = rootFile.lastModified();
 		
-		PersistService ps2 = new PersistService();
+		PersistServiceImpl ps2 = new PersistServiceImpl();
 		ps2.init(init);
 		ps2.tree();
 		assertEquals(true, lastModified == rootFile.lastModified());
@@ -58,7 +58,7 @@ public class TreeTest extends Assert{
 	
 	@Test
 	public void getEmptyChildrenList()throws Exception{
-		PersistService ps = createService(2,10,10);
+		PersistServiceImpl ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Node root = tree.getRoot();
 		List<Node> children = root.getChildren();
@@ -67,7 +67,7 @@ public class TreeTest extends Assert{
 
 	@Test
 	public void addNode() throws Exception{
-		PersistService ps = createService(2,10,10);
+		PersistServiceImpl ps = createService(2,10,10);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -91,7 +91,7 @@ public class TreeTest extends Assert{
 	@Test
 	public void loadNodes() throws Exception{
 		//create data
-		PersistService ps_ = createService(2,2,2);
+		PersistServiceImpl ps_ = createService(2,2,2);
 		Node root_ = ps_.tree().getRoot();
 		
 		int size = 8;
@@ -105,7 +105,7 @@ public class TreeTest extends Assert{
 		}
 		
 		//check data loading from fs
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Node root = ps.tree().getRoot();
 		List<Node> children = root.getChildren();
 		assertEquals(true, children.size() == size);
@@ -119,7 +119,7 @@ public class TreeTest extends Assert{
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void tryRemoveRoot() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		
 		Node root = tree.getRoot();
@@ -129,7 +129,7 @@ public class TreeTest extends Assert{
 	
 	@Test(expected=IllegalStateException.class)
 	public void tryDeletedNodeWithoutParent() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -140,7 +140,7 @@ public class TreeTest extends Assert{
 	
 	@Test 
 	public void removeNode() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -150,7 +150,7 @@ public class TreeTest extends Assert{
 		tree.add(root, child);
 		tree.deleteRecursive(child);
 		
-		PersistService newPs = createService(2,2,2);
+		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();
 		
 		Node newRoot = newTree.getRoot();
@@ -161,7 +161,7 @@ public class TreeTest extends Assert{
 	
 	@Test 
 	public void removeNodeRecursive() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -180,7 +180,7 @@ public class TreeTest extends Assert{
 		tree.add(subChild2, subSubChild2);
 		tree.deleteRecursive(child);
 		
-		PersistService newPs = createService(2,2,2);
+		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();
 		
 		Node newRoot = newTree.getRoot();
@@ -192,7 +192,7 @@ public class TreeTest extends Assert{
 	
 	@Test
 	public void nullContainerAfterDelete() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -209,7 +209,7 @@ public class TreeTest extends Assert{
 	
 	@Test 
 	public void addNodeAfterDelete() throws Exception{
-		PersistService ps = createService(2,2,2);
+		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		
@@ -234,10 +234,10 @@ public class TreeTest extends Assert{
 	
 
 
-	private PersistService createService(int maxNodesInContainer,
+	private PersistServiceImpl createService(int maxNodesInContainer,
 			int maxContainerFilesInFolder, int maxFoldersInLevel){
 		InitParams init = new InitParams(dir, maxNodesInContainer, maxContainerFilesInFolder, maxFoldersInLevel);
-		PersistService ps = new PersistService();
+		PersistServiceImpl ps = new PersistServiceImpl();
 		try {
 			ps.init(init);
 		} catch (Exception e) {
