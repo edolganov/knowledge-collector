@@ -10,7 +10,6 @@ import org.junit.Test;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.impl.InitParams;
-import ru.kc.tools.filepersist.impl.Listeners;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
@@ -36,7 +35,7 @@ public class TransactionsJournalTest extends Assert {
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
 		
-		c = new Context(init, null, null, null,null, new Listeners());
+		c = new Context(init, null, null, null,null);
 		journal = new TransactionsJournal();
 		ContainerStore store = new ContainerStore();
 		//context = new FSContext(null, store, c,journal);

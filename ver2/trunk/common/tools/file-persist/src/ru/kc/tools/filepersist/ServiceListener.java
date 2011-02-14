@@ -8,6 +8,6 @@ public interface ServiceListener {
 
 	void onDeletedRecursive(Node parent, Node deletedChild);
 	
-	void onNodeUpdated(Node node);
+	void onNodeUpdated(Node old, Node updated);
 
 }

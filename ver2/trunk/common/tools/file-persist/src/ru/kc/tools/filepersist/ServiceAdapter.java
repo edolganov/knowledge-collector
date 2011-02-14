@@ -11,6 +11,6 @@ public class ServiceAdapter implements ServiceListener {
 	public void onDeletedRecursive(Node parent, Node deletedChild) {}
 	
 	@Override
-	public void onNodeUpdated(Node node) {}
+	public void onNodeUpdated(Node old, Node updated) {}
 
 }

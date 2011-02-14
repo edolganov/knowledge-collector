@@ -77,8 +77,8 @@ public class Main {
 			}
 			
 			@Override
-			public void onNodeUpdated(Node node) {
-				eventManager.fireEventInEDT(this, new NodeUpdated(node));
+			public void onNodeUpdated(Node old, Node node) {
+				eventManager.fireEventInEDT(this, new NodeUpdated(old, node));
 			}
 		});
 	}

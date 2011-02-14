@@ -137,7 +137,7 @@ public class FileSystemImpl {
 		}.start();
 	}
 
-	public void update(NodeBean node)throws Exception {
+	public void replace(NodeBean old, NodeBean node)throws Exception {
 		
 	}
 	

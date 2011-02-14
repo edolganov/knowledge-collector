@@ -21,8 +21,8 @@ public class Listeners {
 		for(ServiceListener l : listeners) l.onDeletedRecursive(parent, child);
 	}
 	
-	public void fireUpdatedEvent(Node node) {
-		for(ServiceListener l : listeners) l.onNodeUpdated(node);
+	public void fireUpdatedEvent(Node old, Node updated) {
+		for(ServiceListener l : listeners) l.onNodeUpdated(old, updated);
 	}
 
 }

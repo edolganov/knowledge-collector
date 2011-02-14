@@ -26,10 +26,8 @@ public class PersistServiceImpl implements PersistService {
 		TreeImpl tree = new TreeImpl();		
 		FileSystemImpl fs = new FileSystemImpl();
 		UpdaterImpl updater = new UpdaterImpl();
-		Listeners listeners = new Listeners();
-
 		
-		context = new Context(init, factory, tree, fs, updater, listeners);
+		context = new Context(init, factory, tree, fs, updater);
 		fs.init(context);
 		tree.init(context);
 		factory.init(context);

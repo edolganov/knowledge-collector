@@ -157,6 +157,7 @@ public class ServiceListenerTest extends Assert{
 		Tree tree = ps.tree();
 		Node toDelete = tree.getRoot().getChildren().get(0).getChildren().get(0);
 		tree.deleteRecursive(toDelete);
+		
 		assertEquals(true, deleted[0]);
 		assertEquals(child, parentInListener[0]);
 		assertEquals(subChild, childInListener[0]);
@@ -165,6 +166,7 @@ public class ServiceListenerTest extends Assert{
 	
 	@Test
 	public void rootUpdated() throws Exception{
+		final Node[] oldNode = new Node[]{null};
 		final Node[] updatedNode = new Node[]{null};
 		
 		PersistServiceImpl ps = createService(2,2,2);
@@ -173,19 +175,23 @@ public class ServiceListenerTest extends Assert{
 		ps.addListener(new ServiceAdapter(){
 			
 			@Override
-			public void onNodeUpdated(Node node) {
-				updatedNode[0] = node;
+			public void onNodeUpdated(Node old, Node updated) {
+				oldNode[0] = old;
+				updatedNode[0] = updated;
 			}
 			
 		});
 		
-		String newName = "newName";
 		Node root = tree.getRoot();
-		updater.updateNode(root, newName);
+		String newName = "newName";
+		String oldName = root.getName();
+		updater.updateName(root, newName);
 		
 		assertEquals(root, updatedNode[0]);
+		assertEquals(false, root == updatedNode[0]);
+		assertEquals(true, root == oldNode[0]);
 		assertEquals(newName, updatedNode[0].getName());
-		assertEquals(newName, root.getName());
+		assertEquals(oldName, root.getName());
 		
 		
 		
@@ -194,6 +200,7 @@ public class ServiceListenerTest extends Assert{
 	
 	@Test
 	public void nodeUpdated() throws Exception{
+		final Node[] oldNode = new Node[]{null};
 		final Node[] updatedNode = new Node[]{null};
 		
 		PersistServiceImpl ps = createService(2,2,2);
@@ -203,23 +210,26 @@ public class ServiceListenerTest extends Assert{
 		ps.addListener(new ServiceAdapter(){
 			
 			@Override
-			public void onNodeUpdated(Node node) {
-				updatedNode[0] = node;
+			public void onNodeUpdated(Node old, Node updated) {
+				oldNode[0] = old;
+				updatedNode[0] = updated;
 			}
 			
 		});
 		
-		
-		Dir child = factory.createDir("child", null);
+		String oldName = "child";
+		Dir child = factory.createDir(oldName, null);
 		Node root = tree.getRoot();
 		tree.add(root, child);
 		
 		String newName = "newName";
-		updater.updateNode(child, newName);
+		updater.updateName(child, newName);
 		
 		assertEquals(child, updatedNode[0]);
+		assertEquals(false, child == updatedNode[0]);
+		assertEquals(true, child == oldNode[0]);
 		assertEquals(newName, updatedNode[0].getName());
-		assertEquals(newName, child.getName());
+		assertEquals(oldName, child.getName());
 		
 	}
 	

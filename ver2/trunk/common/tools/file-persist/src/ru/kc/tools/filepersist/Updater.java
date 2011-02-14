@@ -4,9 +4,11 @@ import ru.kc.model.Node;
 
 public interface Updater {
 	
-	void updateNode(Node node, String name);
+	void updateName(Node node, String name) throws Exception;
 	
-	void updateNode(Node node, String name, String description);
+	void updateDescription(Node node, String description) throws Exception;
+	
+	void update(Node node, String name, String description) throws Exception;
 	
 	
 

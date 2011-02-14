@@ -69,14 +69,7 @@ public class TreeImpl implements Tree {
 	}
 
 	private NodeBean convert(Node node) {
-		if(node != null){
-			if(node instanceof NodeBean) return (NodeBean) node;
-			//else
-			throw new IllegalArgumentException("unknow node type: "+node.getClass());
-		} else {
-			throw new IllegalArgumentException("node is null");
-		}
-
+		return c.converter.convert(node);
 	}
 
 

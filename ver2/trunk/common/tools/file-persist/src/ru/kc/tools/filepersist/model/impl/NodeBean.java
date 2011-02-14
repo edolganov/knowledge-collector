@@ -9,7 +9,7 @@ import ru.kc.util.collection.Pair;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 
-public abstract class NodeBean implements Node {
+public abstract class NodeBean implements Node, Cloneable {
 	
 	protected String id;
 	protected String name;
@@ -173,7 +173,14 @@ public abstract class NodeBean implements Node {
 		return true;
 	}
 
-
+	@Override
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 
 
 
