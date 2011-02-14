@@ -5,10 +5,12 @@ import ru.kc.platform.event.EventManager;
 
 public class AnnotationTest {
 	
-	static class TestEvent extends Event<String>{
+	static class TestEvent extends Event{
+		
+		String data;
 
 		public TestEvent(String data) {
-			super(data);
+			this.data = data;
 		}
 		
 	}

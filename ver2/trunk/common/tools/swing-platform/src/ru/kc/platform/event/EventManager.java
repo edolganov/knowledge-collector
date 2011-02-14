@@ -19,7 +19,7 @@ import ru.kc.util.swing.SwingUtil;
 
 public class EventManager {
 	
-	private static class ListenerObject<T extends Event<?>> {
+	private static class ListenerObject<T extends Event> {
 		EventListener<T> eventListener;
 		Method method;
 		WeakReference<Object> methodObj;
@@ -93,7 +93,7 @@ public class EventManager {
 
 
 
-	public void fireEventInEDT(final Object source, final Event<?> event){
+	public void fireEventInEDT(final Object source, final Event event){
 		Runnable runnable = new Runnable() {
 			
 			@Override
@@ -105,7 +105,7 @@ public class EventManager {
 	}
 	
 	@SuppressWarnings({ "rawtypes" })
-	private void fireEvent(Object source, Event<?> event){
+	private void fireEvent(Object source, Event event){
 		ListenerList listeners = getListeners(event.getClass(), false);
 		if(listeners != null){
 			List<ListenerObject> toDeleteFromUnsorted = new ArrayList<ListenerObject>();
@@ -154,7 +154,7 @@ public class EventManager {
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void invokeListenerObject(Object source, Event<?> event,
+	private void invokeListenerObject(Object source, Event event,
 			ListenerObject listenerObject,List<ListenerObject> toDelete) throws Throwable {
 		//это класс слушатель
 		if(listenerObject.eventListener != null){
@@ -218,11 +218,11 @@ public class EventManager {
 	}
 
 
-	public <T extends Event<?>> void addListener(EventListener<T> listener) {
+	public <T extends Event> void addListener(EventListener<T> listener) {
 		getListeners(listener.clazz,true).unsorted.add(new ListenerObject<T>(listener));
 	}
 	
-	public <T extends Event<?>> void addLastListener(EventListener<T> listener) {
+	public <T extends Event> void addLastListener(EventListener<T> listener) {
 		getListeners(listener.clazz,true).last.add(new ListenerObject<T>(listener));
 	}
 	
@@ -236,14 +236,14 @@ public class EventManager {
 				if(el != null){
 					Class<?> eventClass = findEventClass(candidat,el.value());
 					if(eventClass != null){
-						getListeners(eventClass, true).unsorted.add(new ListenerObject<Event<?>>(ob,candidat));
+						getListeners(eventClass, true).unsorted.add(new ListenerObject<Event>(ob,candidat));
 					}
 				}
 				LastEventListener lel = candidat.getAnnotation(LastEventListener.class);
 				if(lel != null){
 					Class<?> eventClass = findEventClass(candidat,lel.value());
 					if(eventClass != null){
-						getListeners(eventClass, true).last.add(new ListenerObject<Event<?>>(ob,candidat));
+						getListeners(eventClass, true).last.add(new ListenerObject<Event>(ob,candidat));
 					}
 				}
 			}

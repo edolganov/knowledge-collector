@@ -1,7 +1,7 @@
 package ru.kc.platform.event;
 
 
-public abstract class EventListener<T extends Event<?>> {
+public abstract class EventListener<T extends Event> {
 	
 	Class<T> clazz;
 	
