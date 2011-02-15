@@ -41,7 +41,6 @@ public class EmptyTextAreaDecorator {
 		} else {
 			setNotEmptyBackground();
 		}
-		textArea.getParent().repaint();
 	}
 	
 	protected void setEmptyBackground(){
