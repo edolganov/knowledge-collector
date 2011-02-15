@@ -52,7 +52,6 @@ public class PropsController extends Controller<PropsPanel> {
 
 
 	private void showProps(Dir node) {
-		clearOld();
 		nodePropsModule.setNode(node);
 		nodePropsModule.enableUpdateMode();
 		show(nodePropsModule);
@@ -82,6 +81,7 @@ public class PropsController extends Controller<PropsPanel> {
 	private void show(Component component){
 		ui.add(component);
 		ui.revalidate();
+		ui.repaint();
 	}
 	
 	@Override

@@ -28,7 +28,7 @@ public class NodeEditionsAggregator {
 		String edition = event.newName;
 		getOrCreate(node).addEdition(NAME, edition);
 		
-		System.out.println(getOrCreate(node));
+		//System.out.println(getOrCreate(node));
 	}
 	
 	@EventListener(DescriptionChanged.class)
@@ -37,7 +37,7 @@ public class NodeEditionsAggregator {
 		String edition = event.newDescription;
 		getOrCreate(node).addEdition(DESCRIPTION, edition);
 		
-		System.out.println(getOrCreate(node));
+		//System.out.println(getOrCreate(node));
 	}
 	
 	

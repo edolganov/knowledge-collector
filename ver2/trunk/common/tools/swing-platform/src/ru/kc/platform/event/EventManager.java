@@ -106,49 +106,55 @@ public class EventManager {
 	
 	@SuppressWarnings({ "rawtypes" })
 	private void fireEvent(Object source, Event event){
-		ListenerList listeners = getListeners(event.getClass(), false);
-		if(listeners != null){
-			List<ListenerObject> toDeleteFromUnsorted = new ArrayList<ListenerObject>();
-			List<ListenerObject> toDeleteFromLast = new ArrayList<ListenerObject>();
-			try {
-				for(ListenerObject listenerObject : listeners.unsorted){
-					try {
-						invokeListenerObject(source, event, listenerObject,toDeleteFromUnsorted);
-					}catch (Exception e) {
-						handleListenerException(e);
+		Class exitClass = Event.class.getSuperclass();
+		Class curClass = event.getClass();
+		while(curClass != exitClass){
+			ListenerList listeners = getListeners(curClass, false);
+			if(listeners != null){
+				List<ListenerObject> toDeleteFromUnsorted = new ArrayList<ListenerObject>();
+				List<ListenerObject> toDeleteFromLast = new ArrayList<ListenerObject>();
+				try {
+					for(ListenerObject listenerObject : listeners.unsorted){
+						try {
+							invokeListenerObject(source, event, listenerObject,toDeleteFromUnsorted);
+						}catch (Exception e) {
+							handleListenerException(e);
+						}
+					}
+					
+					for(ListenerObject listenerObject : listeners.last){
+						try {
+							invokeListenerObject(source, event, listenerObject,toDeleteFromLast);
+						}catch (Exception e) {
+							handleListenerException(e);
+						}
 					}
 				}
-				
-				for(ListenerObject listenerObject : listeners.last){
-					try {
-						invokeListenerObject(source, event, listenerObject,toDeleteFromLast);
-					}catch (Exception e) {
-						handleListenerException(e);
+				catch (StopEventException e) {
+					//TODO
+					e.printStackTrace();
+				}
+				catch (Throwable e) {
+					if(exceptionHandler != null){
+						exceptionHandler.handle(e);
+					}
+					else {
+						throw new FireEventException(e);
+					}
+				}
+				finally {
+					for (ListenerObject listenerObject : toDeleteFromUnsorted) {
+						//System.out.println("EventManager: clean data for deleted object " + listenerObject.objectId);
+						listeners.unsorted.remove(listenerObject);
+					}
+					for (ListenerObject listenerObject : toDeleteFromLast) {
+						//System.out.println("EventManager: clean data for deleted object " + listenerObject.objectId);
+						listeners.last.remove(listenerObject);
 					}
 				}
 			}
-			catch (StopEventException e) {
-				//TODO
-				e.printStackTrace();
-			}
-			catch (Throwable e) {
-				if(exceptionHandler != null){
-					exceptionHandler.handle(e);
-				}
-				else {
-					throw new FireEventException(e);
-				}
-			}
-			finally {
-				for (ListenerObject listenerObject : toDeleteFromUnsorted) {
-					//System.out.println("EventManager: clean data for deleted object " + listenerObject.objectId);
-					listeners.unsorted.remove(listenerObject);
-				}
-				for (ListenerObject listenerObject : toDeleteFromLast) {
-					//System.out.println("EventManager: clean data for deleted object " + listenerObject.objectId);
-					listeners.last.remove(listenerObject);
-				}
-			}
+			
+			curClass = curClass.getSuperclass();
 		}
 	}
 
@@ -178,7 +184,7 @@ public class EventManager {
 				}
 				else if(parameterTypes.length == 1){
 					Class<?> clazz = parameterTypes[0];
-					if(event.getClass().isAssignableFrom(clazz)){
+					if(clazz.isAssignableFrom(event.getClass())){
 						method.invoke(ob, event);
 					}
 					else if(clazz.equals(Object.class)){

@@ -14,6 +14,7 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.RenameNode;
+import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
@@ -21,6 +22,7 @@ import ru.kc.module.tree.tools.TreeMenu;
 import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeFacade;
 import ru.kc.util.swing.tree.TreeTransferHandler;
@@ -171,6 +173,11 @@ public class TreeController extends Controller<Tree>{
 		}
 		
 		updateNode(oldNode, old, updatedNode);
+	}
+	
+	@EventListener(NodeChanged.class)
+	public void onNodeChanged(NodeChanged event){
+		System.out.println(event);
 	}
 
 
