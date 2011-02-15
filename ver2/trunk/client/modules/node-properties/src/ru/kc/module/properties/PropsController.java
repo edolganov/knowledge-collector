@@ -19,6 +19,7 @@ import ru.kc.platform.event.annotation.EventListener;
 public class PropsController extends Controller<PropsPanel> {
 
 	NodePropsModule nodePropsModule;
+	Node currentNode;
 	
 	@Override
 	protected void init() {
@@ -31,21 +32,21 @@ public class PropsController extends Controller<PropsPanel> {
 	
 	@EventListener(NodeSelected.class)
 	public void onNodeSelected(NodeSelected event){
-		Node node = event.node;
-		showProps(node);
+		currentNode = event.node;
+		showProps();
 	}
 
-	private void showProps(Node node) {
-		if(node instanceof Dir){
-			showProps((Dir)node);
-		} else if(node instanceof Link){
-			showProps((Link)node);
-		} else if(node instanceof FileLink){
-			showProps((FileLink)node);
-		} else if(node instanceof Text){
-			showProps((Text)node);
+	private void showProps() {
+		if(currentNode instanceof Dir){
+			showProps((Dir)currentNode);
+		} else if(currentNode instanceof Link){
+			showProps((Link)currentNode);
+		} else if(currentNode instanceof FileLink){
+			showProps((FileLink)currentNode);
+		} else if(currentNode instanceof Text){
+			showProps((Text)currentNode);
 		} else {
-			showPropsForUnknowType(node);
+			showPropsForUnknowType(currentNode);
 		}
 	}
 
@@ -85,6 +86,20 @@ public class PropsController extends Controller<PropsPanel> {
 
 	private void clearOld() {
 		ui.removeAll();
+	}
+	
+	
+	@Override
+	protected void onNodeUpdated(Node old, Node updatedNode) {
+		if(currentNode.equals(old)){
+			onNodeSelected(new NodeSelected(updatedNode));
+		}
+	}
+	
+	@Override
+	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
+		currentNode = null;
+		clearOld();
 	}
 
 }
