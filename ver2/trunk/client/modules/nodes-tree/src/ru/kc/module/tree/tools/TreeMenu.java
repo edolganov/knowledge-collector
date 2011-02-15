@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
@@ -60,14 +61,20 @@ public class TreeMenu extends JPopupMenu {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JTree tree = treeFacade.tree;
-				TreeCellEditor treeCellEditor = tree.getCellEditor();
-				if(treeCellEditor instanceof CellEditor){
-					CellEditor cellEditor = (CellEditor)treeCellEditor;
-					cellEditor.setEnabledRequest();
-					TreePath selectionPath = tree.getSelectionPath();
-					tree.startEditingAtPath(selectionPath);
-				}
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+						JTree tree = treeFacade.tree;
+						TreeCellEditor treeCellEditor = tree.getCellEditor();
+						if(treeCellEditor instanceof CellEditor){
+							CellEditor cellEditor = (CellEditor)treeCellEditor;
+							cellEditor.setEnabledRequest();
+							TreePath selectionPath = tree.getSelectionPath();
+							tree.startEditingAtPath(selectionPath);
+						}
+					}
+				});
 			}
 		});
 		

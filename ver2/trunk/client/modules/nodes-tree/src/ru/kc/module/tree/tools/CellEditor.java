@@ -1,6 +1,7 @@
 package ru.kc.module.tree.tools;
 
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
 
@@ -47,8 +48,8 @@ public class CellEditor implements TreeCellEditor {
 		text.addKeyListener(new EnterKey() {
 			
 			@Override
-			protected void doAction() {
-				stopCellEditing();
+			protected void doAction(KeyEvent e) {
+
 			}
 		});
 	}

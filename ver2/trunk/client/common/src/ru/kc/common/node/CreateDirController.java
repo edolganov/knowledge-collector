@@ -2,6 +2,7 @@ package ru.kc.common.node;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.ui.DirDialog;
@@ -33,7 +34,7 @@ public class CreateDirController extends Controller<DirDialog>{
 		panel.name.addKeyListener(new EnterKey() {
 			
 			@Override
-			protected void doAction() {
+			protected void doAction(KeyEvent e) {
 				createDirRequest();
 			}
 		});

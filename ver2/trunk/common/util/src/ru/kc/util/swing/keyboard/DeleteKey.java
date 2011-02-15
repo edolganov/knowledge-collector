@@ -8,9 +8,9 @@ public abstract class DeleteKey extends KeyAdapter{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_DELETE){
-			doAction();
+			doAction(null);
 		}
 	}
 	
-	protected abstract void doAction();
+	protected abstract void doAction(KeyEvent e);
 }

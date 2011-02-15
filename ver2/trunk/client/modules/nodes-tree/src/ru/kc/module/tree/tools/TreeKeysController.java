@@ -1,5 +1,7 @@
 package ru.kc.module.tree.tools;
 
+import java.awt.event.KeyEvent;
+
 import javax.swing.JTree;
 
 import ru.kc.common.controller.Controller;
@@ -22,7 +24,7 @@ public class TreeKeysController extends Controller<Tree>{
 		tree.addKeyListener(new DeleteKey() {
 			
 			@Override
-			protected void doAction() {
+			protected void doAction(KeyEvent e) {
 				treeController.deleteNodeRequest();
 			}
 			

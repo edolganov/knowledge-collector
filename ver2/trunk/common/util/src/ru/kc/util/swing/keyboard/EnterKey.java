@@ -8,9 +8,9 @@ public abstract class EnterKey extends KeyAdapter{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_ENTER){
-			doAction();
+			doAction(e);
 		}
 	}
 	
-	protected abstract void doAction();
+	protected abstract void doAction(KeyEvent e);
 }
