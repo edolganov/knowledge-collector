@@ -1,6 +1,8 @@
 package ru.kc.module.tree.tools;
 
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.EventObject;
@@ -52,6 +54,14 @@ public class CellEditor implements TreeCellEditor {
 				stopCellEditing();
 			}
 		});
+		
+		text.addFocusListener(new FocusAdapter() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				cancelCellEditing();
+			}
+		});
 	}
 	
 	public void setEnabledRequest() {
@@ -79,6 +89,8 @@ public class CellEditor implements TreeCellEditor {
 	
 	@Override
 	public void cancelCellEditing() {
+		if(!enabled) return;
+		
 		enabledRequest = false;
 		enabled = false;
 		

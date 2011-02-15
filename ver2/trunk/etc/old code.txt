@@ -1,0 +1,39 @@
+	Color empty = new Color(212,208,200);
+	Color active = Color.WHITE;
+
+	void initArea(final PropertyTextAreaPanel area){
+		area.textArea.setBackground(empty);
+
+		area.textArea.addFocusListener(new FocusAdapter(){
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				area.textArea.setBackground(active);
+				//не делаем автосохранения текста
+//				synchronized (timerSync) {
+//					if(!timerActive){
+//						//System.out.println("start timer");
+//						currentBigText = getBigText();
+//						timer = new Timer("info-controller-timer");
+//						timer.schedule(new TimerTask(){
+//
+//							@Override
+//							public void run() {
+//								doTimerSaveTask();
+//							}
+//							
+//						}, 4000, 4000);
+//						timerActive = true;
+//					}
+//				}
+			}
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				//не делаем автосохранения текста
+				//stopSaveTimer();
+				checkEmptyArea(area);
+			}
+		});
+	}
+}
