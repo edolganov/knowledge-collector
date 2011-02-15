@@ -17,7 +17,7 @@ import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ListenerExceptionHandler;
 import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.module.ModuleScan;
-import ru.kc.platform.runtimestorage.RuntimeStorageService;
+import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptId;
@@ -43,11 +43,11 @@ public class App {
 	
 	
 	//app data
+	AppContext context;
 	ScriptsService scriptsService;
 	CommandService commandService;
-	AppContext context;
 	EventManager eventManager;
-	RuntimeStorageService runtimeStorageService;
+	RuntimeStorage runtimeStorageService;
 	GlobalObjects globalObjects;
 	ComponentScanner componentScanner;
 
@@ -119,7 +119,7 @@ public class App {
 			}
 		});
 		
-		runtimeStorageService = new RuntimeStorageService();
+		runtimeStorageService = new RuntimeStorage();
 		
 		globalObjects = new GlobalObjects();
 		for(String preffix : globalObjectPackages){
@@ -131,21 +131,7 @@ public class App {
 			componentScanner.addHandler(handler);
 		}
 	}
-
-	private void initContext() {
-		context = new AppContext(
-				rootUI,
-				scriptsService,
-				dataForInject,
-				commandService,
-				eventManager,
-				runtimeStorageService,
-				globalObjects,
-				componentScanner);	
-		AppContext.put(rootUI, context);
-		
-		commandService.setContext(context);
-	}
+	
 	
 	private void addCodeDirs(ScriptsService scriptsService) {
 		boolean added = false;
@@ -170,6 +156,24 @@ public class App {
 		//unknow
 		log.warn("can't find scripts files");
 	}
+	
+
+	private void initContext() {
+		context = new AppContext(
+				rootUI,
+				scriptsService,
+				dataForInject,
+				commandService,
+				eventManager,
+				runtimeStorageService,
+				globalObjects,
+				componentScanner);	
+		AppContext.put(rootUI, context);
+		
+		commandService.setContext(context);
+	}
+	
+
 
 	private void initUI() {
         //init modules

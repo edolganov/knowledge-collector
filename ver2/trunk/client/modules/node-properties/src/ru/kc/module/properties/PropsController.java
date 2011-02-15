@@ -52,7 +52,9 @@ public class PropsController extends Controller<PropsPanel> {
 
 
 	private void showProps(Dir node) {
+		clearOld();
 		nodePropsModule.setNode(node);
+		nodePropsModule.enableUpdateMode();
 		show(nodePropsModule);
 	}
 	
@@ -78,16 +80,9 @@ public class PropsController extends Controller<PropsPanel> {
 	
 	
 	private void show(Component component){
-		clearOld();
 		ui.add(component);
 		ui.revalidate();
 	}
-
-
-	private void clearOld() {
-		ui.removeAll();
-	}
-	
 	
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode) {
@@ -101,5 +96,18 @@ public class PropsController extends Controller<PropsPanel> {
 		currentNode = null;
 		clearOld();
 	}
+	
+
+	private void clearOld() {
+		for(Component c : ui.getComponents()){
+			if(c instanceof PropsUpdater){
+				((PropsUpdater) c).disableUpdateMode();
+			}
+		}
+		ui.removeAll();
+	}
+
+
+
 
 }

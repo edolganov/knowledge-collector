@@ -3,7 +3,7 @@ package ru.kc.platform.runtimestorage;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
-public class RuntimeStorageService {
+public class RuntimeStorage {
 
 	private WeakHashMap<Object, HashMap<Object, Object>> storage = new WeakHashMap<Object, HashMap<Object,Object>>();
 	

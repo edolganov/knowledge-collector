@@ -3,6 +3,7 @@ package ru.kc.main;
 import java.io.File;
 
 import ru.kc.common.Context;
+import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
 import ru.kc.common.node.event.NodeUpdated;
@@ -61,7 +62,9 @@ public class Main {
 		PersistServiceImpl ps = new PersistServiceImpl();
 		ps.init(init);
 		
-		return new Context(ps);
+		NodeEditionsAggregator nodeEditionsAggregator = new NodeEditionsAggregator();
+		
+		return new Context(ps,nodeEditionsAggregator);
 	}
 	
 	private static void initPersistEvents(App app, Context context) {
@@ -84,6 +87,8 @@ public class Main {
 				eventManager.fireEventInEDT(this, new NodeUpdated(old, node));
 			}
 		});
+		
+		context.nodeEditionsAggregator.init(appContext);
 	}
 
 }

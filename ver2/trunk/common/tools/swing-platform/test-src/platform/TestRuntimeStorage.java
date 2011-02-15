@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import ru.kc.platform.runtimestorage.RuntimeStorageService;
+import ru.kc.platform.runtimestorage.RuntimeStorage;
 
 import junit.framework.Assert;
 
@@ -12,7 +12,7 @@ public class TestRuntimeStorage extends Assert{
 	
 	@Test
 	public void autoRemoveUnusedDataFromStorage(){
-		RuntimeStorageService storage = new RuntimeStorageService();
+		RuntimeStorage storage = new RuntimeStorage();
 		for (int i = 0; i < 100; i++) {
 			Integer domain = new Integer(i);
 			for (int j = 0; j < 100; j++) {
@@ -39,7 +39,7 @@ public class TestRuntimeStorage extends Assert{
 	public void dontRemoveUsedData(){
 		ArrayList<Integer> usedData = new ArrayList<Integer>();
 		
-		RuntimeStorageService storage = new RuntimeStorageService();
+		RuntimeStorage storage = new RuntimeStorage();
 		for (int i = 0; i < 100; i++) {
 			Integer domain = new Integer(i);
 			usedData.add(domain);

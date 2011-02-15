@@ -48,11 +48,13 @@ public class EmptyTextAreaDecorator {
 		if(parent != null){
 			Color emptyColor = new Color(UIManager.getDefaults().getColor("Panel.background").getRGB());
 			textArea.setBackground(emptyColor);
+			textArea.repaint();
 		}
 	}
 	
 	protected void setNotEmptyBackground() {
 		textArea.setBackground(initBackground);
+		textArea.repaint();
 	}
 
 }

@@ -16,7 +16,7 @@ import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.module.Module;
-import ru.kc.platform.runtimestorage.RuntimeStorageService;
+import ru.kc.platform.runtimestorage.RuntimeStorage;
 
 public abstract class AbstractController<T> {
 	
@@ -26,7 +26,7 @@ public abstract class AbstractController<T> {
 	
 	protected T ui;
 	protected AppContext appContext;
-	protected RuntimeStorageService runtimeStorage;
+	protected RuntimeStorage runtimeStorage;
 	
 	void init(AppContext appContext, T ui){
 		initContext(appContext);
@@ -37,7 +37,7 @@ public abstract class AbstractController<T> {
 	
 	private void initContext(AppContext appContext) {
 		this.appContext = appContext;
-		runtimeStorage = appContext.runtimeStorageService;
+		runtimeStorage = appContext.runtimeStorage;
 	}
 	
 	protected void beforeInit(){ /* override if need */ };
