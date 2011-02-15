@@ -49,7 +49,7 @@ public class CellEditor implements TreeCellEditor {
 			
 			@Override
 			protected void doAction(KeyEvent e) {
-
+				stopCellEditing();
 			}
 		});
 	}
@@ -89,6 +89,12 @@ public class CellEditor implements TreeCellEditor {
 	@Override
 	public boolean stopCellEditing() {
 		String name = text.getText();
+		
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node != null && node.getName().equals(name)){
+			return false;
+		}
+			
 		boolean empty = Check.isEmpty(name);
 		if(empty) return false;
 		
