@@ -231,28 +231,6 @@ public class ServiceListenerTest extends Assert{
 	}
 	
 	
-	@Test
-	public void nodeUpdatedForNewServiceInstance() throws Exception{
-		PersistServiceImpl ps = createService(2,2,2);
-		Tree tree = ps.tree();
-		Factory factory = ps.factory();
-		Updater updater = ps.updater();
-		
-		String oldName = "oldName";
-		String newName = "newName";
-		Dir child = factory.createDir(oldName, null);
-		Node root = tree.getRoot();
-		tree.add(root, child);
-		updater.updateName(child, newName);
-		
-		PersistServiceImpl newPs = createService(2,2,2);
-		Tree newTree = newPs.tree();
-		Node newChild = newTree.getRoot().getChildren().get(0);
-		
-		assertEquals(newName, newChild.getName());
-	}
-	
-	
 	
 	
 	

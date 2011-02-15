@@ -32,6 +32,7 @@ public class Main {
 		File knowDir = new File(dataDir,"know");
 		Context context = createContext(knowDir);
 		String rootControllersPackage = "ru.kc.main";
+		String globalPackagePreffix = "ru.kc";
 		
 		Platform.setDataDir(dataDir);
 		Platform.enableLogFile();
@@ -42,6 +43,8 @@ public class Main {
 		app.addScriptsProdactionDir(scriptDir);
 		app.addRootControllersPackage(rootControllersPackage);
 		app.addContextData(context);
+		app.addGlobalObjectsPackagePreffix(globalPackagePreffix);
+		app.addUIObjectHandler(new UIConfig());
 		app.init();
 		initPersistEvents(app,context);
 		app.run();

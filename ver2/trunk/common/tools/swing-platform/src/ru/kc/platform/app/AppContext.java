@@ -9,6 +9,7 @@ import ru.kc.platform.event.EventManager;
 import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.runtimestorage.RuntimeStorageService;
 import ru.kc.tools.scriptengine.ScriptsService;
+import ru.kc.util.swing.config.ComponentScanner;
 
 public final class AppContext {
 	
@@ -33,12 +34,13 @@ public final class AppContext {
 	public final EventManager eventManager;
 	public final RuntimeStorageService runtimeStorageService;
 	public final GlobalObjects globalObjects;
+	public final ComponentScanner componentScanner;
 
 	public AppContext(Container rootUI, ScriptsService scriptsService,
 			List<Object> dataForInject, CommandService commandService,
 			EventManager eventManager,
 			RuntimeStorageService runtimeStorageService,
-			GlobalObjects globalObjects) {
+			GlobalObjects globalObjects, ComponentScanner componentScanner) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;
@@ -47,7 +49,10 @@ public final class AppContext {
 		this.eventManager = eventManager;
 		this.runtimeStorageService = runtimeStorageService;
 		this.globalObjects = globalObjects;
+		this.componentScanner = componentScanner;
 	}
+
+
 
 
 

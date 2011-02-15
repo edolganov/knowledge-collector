@@ -1,5 +1,6 @@
 package ru.kc.platform.module;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,10 @@ public abstract class ModuleController<T> {
 		
     	try {
 			this.appContext = context;
+			
+			if(ui instanceof Component){
+				appContext.componentScanner.scanAndInit((Component)ui);
+			}
 			
 			ControllerScan controllerScan = new ControllerScan(this.appContext);
 			controllers = controllerScan.scanAndInit(packagePreffix, ui, getBlackList());

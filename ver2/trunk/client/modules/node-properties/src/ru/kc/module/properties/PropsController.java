@@ -14,14 +14,18 @@ import ru.kc.module.properties.node.NodePropsModule;
 import ru.kc.module.properties.ui.PropsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
-import ru.kc.platform.module.Module;
 
 @Mapping(PropsPanel.class)
 public class PropsController extends Controller<PropsPanel> {
 
+	NodePropsModule nodePropsModule;
+	
 	@Override
 	protected void init() {
 		ui.setLayout(new BorderLayout());
+		
+		nodePropsModule = new NodePropsModule();
+		nodePropsModule.setAppContext(appContext);
 	}
 	
 	
@@ -47,10 +51,8 @@ public class PropsController extends Controller<PropsPanel> {
 
 
 	private void showProps(Dir node) {
-		NodePropsModule module = new NodePropsModule();
-		module.setAppContext(appContext);
-		module.setNode(node);
-		show(module);
+		nodePropsModule.setNode(node);
+		show(nodePropsModule);
 	}
 	
 	private void showProps(Link node) {
@@ -82,10 +84,6 @@ public class PropsController extends Controller<PropsPanel> {
 
 
 	private void clearOld() {
-		Component[] old = ui.getComponents();
-		for(Component c : old){
-			Module.removeAllListneres(c);
-		}
 		ui.removeAll();
 	}
 

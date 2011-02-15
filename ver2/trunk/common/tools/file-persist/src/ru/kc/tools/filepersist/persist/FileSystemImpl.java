@@ -82,7 +82,7 @@ public class FileSystemImpl {
 	
 	public NodeBean getRoot(){
 		Container container = c.containerModel.getRoot();
-		return container.getFirst();
+		return container.getRoot();
 	}
 	
 	public void createRoot(final NodeBean node)throws Exception{

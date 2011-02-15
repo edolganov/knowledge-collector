@@ -86,6 +86,16 @@ public class Container {
 		}
 	}
 	
+	public NodeBean getRoot() {
+		for (NodeBean node : nodes) {
+			if(node.getParentId() == null){
+				return node;
+			}
+		}
+		
+		return null;
+	}
+	
 	public NodeBean find(String childId) {
 		for (NodeBean node : nodes) {
 			if(node.getId().equals(childId)) return node;
@@ -160,6 +170,8 @@ public class Container {
 		container.init(file,c);
 		return container;
 	}
+
+
 
 
 

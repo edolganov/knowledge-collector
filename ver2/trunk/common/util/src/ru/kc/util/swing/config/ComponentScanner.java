@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ComponentScan {
+public class ComponentScanner {
 	
 	// p2ch = parent to child
-	private ArrayList<ObjectHandler> p2chListeners = new ArrayList<ObjectHandler>();
-	private ArrayList<ObjectHandler> ch2pListeners = new ArrayList<ObjectHandler>();
+	private ArrayList<ObjectHandler> parentTochildrenHandlers = new ArrayList<ObjectHandler>();
+	private ArrayList<ObjectHandler> childrenToParentHandlers = new ArrayList<ObjectHandler>();
 	
 	//already inited objects
 	private HashMap<Integer, WeakReference<Object>> initedObjects = new HashMap<Integer, WeakReference<Object>>();
 	
-	public void addListener(ObjectHandler l){
+	public void addHandler(ObjectHandler l){
 		ProcessPhase phase = l.getPhase();
 		if(phase == ProcessPhase.FROM_CHILD_TO_PARENT){
-			ch2pListeners.add(l);
+			childrenToParentHandlers.add(l);
 		}else if(phase == ProcessPhase.FROM_PARENT_TO_CHILD){
-			p2chListeners.add(l);
+			parentTochildrenHandlers.add(l);
 		}else throw new IllegalArgumentException("ConfigListener phase is null for "+l);
 	}
 	
@@ -35,7 +35,7 @@ public class ComponentScan {
 			Component candidat = queue.removeFirst();
 			
 			if(alreadyInited(candidat)) continue;
-			for (ObjectHandler l : p2chListeners) l.process(candidat);
+			for (ObjectHandler l : parentTochildrenHandlers) l.process(candidat);
 			
 			revertComponentStack.addFirst(candidat);
 			
@@ -52,7 +52,7 @@ public class ComponentScan {
 		
 		while(!revertComponentStack.isEmpty()){
 			Component component = revertComponentStack.removeFirst();
-			for (ObjectHandler l : ch2pListeners) l.process(component);
+			for (ObjectHandler l : childrenToParentHandlers) l.process(component);
 		}
 		
 		addToInited(root);

@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.command.CommandService;
-import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
@@ -24,6 +23,8 @@ import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
 import ru.kc.tools.scriptengine.ScriptId;
 import ru.kc.tools.scriptengine.ScriptServiceListener;
 import ru.kc.tools.scriptengine.ScriptsService;
+import ru.kc.util.swing.config.ComponentScanner;
+import ru.kc.util.swing.config.ObjectHandler;
 
 public class App {
 	
@@ -34,8 +35,12 @@ public class App {
 	ArrayList<File> scriptsProdactionDirs = new ArrayList<File>();
 	ArrayList<String> rootControllersPackages = new ArrayList<String>();
 	ArrayList<Object> dataForInject = new ArrayList<Object>();
+	ArrayList<String> globalObjectPackages = new ArrayList<String>();
+	ArrayList<ObjectHandler> uiObjectHandlers = new ArrayList<ObjectHandler>();
+	
 	Container rootUI;
 	ControllersPool rootControllers = new ControllersPool();
+	
 	
 	//app data
 	ScriptsService scriptsService;
@@ -44,6 +49,7 @@ public class App {
 	EventManager eventManager;
 	RuntimeStorageService runtimeStorageService;
 	GlobalObjects globalObjects;
+	ComponentScanner componentScanner;
 
 	
 	public void setRootUI(JFrame rootUI) {
@@ -64,6 +70,14 @@ public class App {
 	
 	public void addContextData(Object data){
 		dataForInject.add(data);
+	}
+	
+	public void addGlobalObjectsPackagePreffix(String preffix){
+		globalObjectPackages.add(preffix);
+	}
+	
+	public void addUIObjectHandler(ObjectHandler handler){
+		uiObjectHandlers.add(handler);
 	}
 	
 	public void init() throws Exception {
@@ -108,7 +122,14 @@ public class App {
 		runtimeStorageService = new RuntimeStorageService();
 		
 		globalObjects = new GlobalObjects();
-		globalObjects.scan("ru.kc");
+		for(String preffix : globalObjectPackages){
+			globalObjects.scan(preffix);
+		}
+
+		componentScanner = new ComponentScanner();
+		for (ObjectHandler handler : uiObjectHandlers) {
+			componentScanner.addHandler(handler);
+		}
 	}
 
 	private void initContext() {
@@ -119,7 +140,8 @@ public class App {
 				commandService,
 				eventManager,
 				runtimeStorageService,
-				globalObjects);	
+				globalObjects,
+				componentScanner);	
 		AppContext.put(rootUI, context);
 		
 		commandService.setContext(context);

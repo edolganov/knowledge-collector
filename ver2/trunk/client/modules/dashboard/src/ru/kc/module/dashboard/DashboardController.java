@@ -17,19 +17,24 @@ public class DashboardController extends Controller<Dashboard>{
 
 	@Override
 	public void init() {
-		JPanel centerPanel = ui.centerPanel;
-		centerPanel.setLayout(new BorderLayout());
-		Component tree = instanceByMapping("nodes-tree");
-		centerPanel.add(tree,BorderLayout.CENTER);
 		
 		JPanel rightPanel = ui.rightPanel;
 		rightPanel.setLayout(new BorderLayout());
 		Component props = instanceByMapping("props");
 		rightPanel.add(props,BorderLayout.CENTER);
 		rightPanel.setMinimumSize(new Dimension(0,0));
+		
+		JPanel centerPanel = ui.centerPanel;
+		centerPanel.setLayout(new BorderLayout());
+		Component tree = instanceByMapping("nodes-tree");
+		centerPanel.add(tree,BorderLayout.CENTER);
+		
 
 		refreshToolbar();
+		setDividersSize();
 	}
+
+
 
 	private void refreshToolbar() {
 		ui.toolbar.removeAll();
@@ -37,6 +42,10 @@ public class DashboardController extends Controller<Dashboard>{
 		for (MethodAction action : acitons) {
 			ui.toolbar.add(action.createButton(true));
 		}
+	}
+	
+	private void setDividersSize() {
+		ui.jSplitPane2.setDividerLocation(500);
 	}
 
 }
