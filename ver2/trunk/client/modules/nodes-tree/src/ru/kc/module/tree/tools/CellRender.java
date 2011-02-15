@@ -8,6 +8,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import ru.kc.common.node.NodeIcon;
+import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.model.Node;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -15,10 +16,12 @@ import ru.kc.util.swing.tree.TreeFacade;
 public class CellRender extends DefaultTreeCellRenderer {
 	
 	TreeFacade treeFacade;
+	NodeEditionsAggregator nodeEditionsAggregator;
 	
-	public CellRender(JTree tree) {
+	public CellRender(JTree tree, NodeEditionsAggregator nodeEditionsAggregator) {
 		super();
 		this.treeFacade = new TreeFacade(tree);
+		this.nodeEditionsAggregator = nodeEditionsAggregator;
 	}
 
 	@Override
@@ -30,8 +33,16 @@ public class CellRender extends DefaultTreeCellRenderer {
 		Object ob = ((DefaultMutableTreeNode)value).getUserObject();
 		if(ob instanceof Node){
 			Node node = (Node) ob;
-			Icon icon = NodeIcon.getIcon(node);
-			String text = node.getName();
+			Icon icon = null;
+			String text = null;
+			if(! nodeEditionsAggregator.hasEditions(node)){
+				icon = NodeIcon.getIcon(node);
+				text = node.getName();
+			} else {
+				icon = NodeIcon.getIcon(node);
+				text = "* "+node.getName();
+			}
+
 			
 			setIcon(icon);
 			setText(text);

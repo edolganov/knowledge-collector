@@ -14,6 +14,10 @@ public class NodeEditions {
 	public Map<String, Object> editionsByType(){
 		return editionsByType;
 	}
+	
+	public int count(){
+		return editionsByType.size();
+	}
 
 	@Override
 	public String toString() {

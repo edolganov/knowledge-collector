@@ -87,7 +87,6 @@ public class App {
 			public void run() {
 				initServices();
 				initContext();
-				initUI();
 			}
 		});
 	}
@@ -97,6 +96,7 @@ public class App {
 			
 			@Override
 			public void run() {
+				initUI();
 				showUI();
 			}
 		});

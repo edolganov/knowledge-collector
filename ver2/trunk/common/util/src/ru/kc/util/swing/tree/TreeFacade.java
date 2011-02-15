@@ -46,7 +46,7 @@ public class TreeFacade {
         return (T) TreeUtil.getCurrentObject(tree, clazz);
     }
 
-    public void update(DefaultMutableTreeNode node) {
+    public void reload(DefaultMutableTreeNode node) {
         DefaultTreeModel model = ((DefaultTreeModel) tree.getModel());
         model.reload(node);
     }
@@ -55,7 +55,7 @@ public class TreeFacade {
         DefaultTreeModel model = ((DefaultTreeModel) tree.getModel());
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
         root.removeAllChildren();
-        update(root);
+        reload(root);
     }
 
     public DefaultMutableTreeNode[] getCurrentNodes() {

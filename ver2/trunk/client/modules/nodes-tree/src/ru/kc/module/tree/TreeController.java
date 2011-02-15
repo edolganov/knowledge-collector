@@ -45,7 +45,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setTransferHandler(new TreeTransferHandler());
 		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
-		tree.setCellRenderer(new CellRender(tree));
+		tree.setCellRenderer(new CellRender(tree, context.nodeEditionsAggregator));
 		final CellEditor cellEditor = new CellEditor(tree);
 		cellEditor.addCustomListener(new CellEditorListener() {
 			
@@ -177,7 +177,11 @@ public class TreeController extends Controller<Tree>{
 	
 	@EventListener(NodeChanged.class)
 	public void onNodeChanged(NodeChanged event){
-		System.out.println(event);
+		Node node = event.node;
+		DefaultMutableTreeNode treeNode = getFromStorage(node);
+		if(treeNode != null){
+			treeFacade.reload(treeNode);
+		}
 	}
 
 
@@ -204,7 +208,7 @@ public class TreeController extends Controller<Tree>{
 		treeNode.setUserObject(updatedNode);
 		removeFromStorage(old);
 		addToStorage(updatedNode, treeNode);
-		model.reload(treeNode);
+		treeFacade.reload(treeNode);
 	}
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
