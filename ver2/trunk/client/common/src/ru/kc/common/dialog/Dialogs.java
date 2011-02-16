@@ -2,36 +2,55 @@ package ru.kc.common.dialog;
 
 import java.awt.Component;
 
-import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+
+import ru.kc.util.swing.config.ComponentScanner;
+
+
 
 public class Dialogs {
 	
-	public static boolean confirmByDialog(Component parent){
+	
+	public void init(final ComponentScanner componentScanner){
+		JOptionPaneExt.setListener(new JOptionPaneExt.InitListener() {
+			
+			@Override
+			public void onInit(JDialog dilaog) {
+				componentScanner.scanAndInit(dilaog);
+			}
+		});
+		
+	}
+	
+	
+	
+	
+	public boolean confirmByDialog(Component parent){
 		int n = confirmByDialog(parent, "Подтверждение операции", "Подтвердить операцию?", 1, "Ок", "Отмена");
 		return n == 0;
 	}
-	public static boolean confirmByDialog(Component parent,String text){
+	public boolean confirmByDialog(Component parent,String text){
 		int n = confirmByDialog(parent, "Подтверждение операции", text, 1, "Ок", "Отмена");
 		return n == 0;
 	}
 	
-	public static boolean confirmByDialog(Component parent, String title, String text){
+	public boolean confirmByDialog(Component parent, String title, String text){
 		int n = confirmByDialog(parent, title, text, 1, "Ок", "Отмена");
 		return n == 0;
 	}
 	
-	public static int confirmByDialog(Component parent, String title, String text, int initialOption, Object... options){
+	public int confirmByDialog(Component parent, String title, String text, int initialOption, Object... options){
 		if(options == null){
 			options = new String[]{"Ок", "Отмена"};
 			initialOption = 1;
 		}
 		
 
-		int n = JOptionPane.showOptionDialog(parent,
+		int n = JOptionPaneExt.showOptionDialog(parent,
 			text,
 		    title,
-		    JOptionPane.YES_NO_CANCEL_OPTION,
-		    JOptionPane.QUESTION_MESSAGE,
+		    JOptionPaneExt.YES_NO_CANCEL_OPTION,
+		    JOptionPaneExt.QUESTION_MESSAGE,
 		    null,
 		    options,
 		    options[initialOption]);
@@ -44,32 +63,32 @@ public class Dialogs {
 	
 	
 	
-	public static void errorDialog(Component parent, Object message){
+	public void errorDialog(Component parent, Object message){
 		errorDialog(parent, "Системная ошибка",message);
 	}
 	
-	public static void errorDialog(Component parent, String title, Object message){
-		showDialog(parent, title, message, JOptionPane.ERROR_MESSAGE);
+	public void errorDialog(Component parent, String title, Object message){
+		showDialog(parent, title, message, JOptionPaneExt.ERROR_MESSAGE);
 	}
 	
-	public static void warnDialog(Component parent, Object message) {
+	public void warnDialog(Component parent, Object message) {
 		warnDialog(parent,"Внимание",message);
 	}
 	
-	public static void warnDialog(Component parent, String title, Object message) {
-		showDialog(parent, title, message, JOptionPane.WARNING_MESSAGE);
+	public void warnDialog(Component parent, String title, Object message) {
+		showDialog(parent, title, message, JOptionPaneExt.WARNING_MESSAGE);
 	}
 	
-	public static void infoDialog(Component parent, Object message){
+	public void infoDialog(Component parent, Object message){
 		infoDialog(parent, "",message);
 	}
 	
-	public static void infoDialog(Component parent, String title, Object message){
-		showDialog(parent, title, message, JOptionPane.INFORMATION_MESSAGE);
+	public void infoDialog(Component parent, String title, Object message){
+		showDialog(parent, title, message, JOptionPaneExt.INFORMATION_MESSAGE);
 	}
 	
-	public static void showDialog(Component parent, String title, Object message, int optionPane) {
-		JOptionPane.showMessageDialog(parent,
+	public void showDialog(Component parent, String title, Object message, int optionPane) {
+		JOptionPaneExt.showMessageDialog(parent,
 				message,
 			    title,
 			    optionPane);

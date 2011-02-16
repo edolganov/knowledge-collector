@@ -1,7 +1,6 @@
 package ru.kc.common.node.command;
 
 import ru.kc.common.command.RollbackableCommand;
-import ru.kc.common.dialog.Dialogs;
 import ru.kc.model.Node;
 
 public class DeleteNode extends RollbackableCommand<Void> {
@@ -24,7 +23,7 @@ public class DeleteNode extends RollbackableCommand<Void> {
 		if(node == null) return null;
 		
 		if(showConfirmDialog){
-			boolean confirm = Dialogs.confirmByDialog(rootUI, "Подтверждение удаления", "Удалить "+node.getName()+"?");
+			boolean confirm = dialogs.confirmByDialog(rootUI, "Подтверждение удаления", "Удалить "+node.getName()+"?");
 			if(!confirm) return null;
 		}
 		

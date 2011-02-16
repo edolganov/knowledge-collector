@@ -3,6 +3,7 @@ package ru.kc.main;
 import java.io.File;
 
 import ru.kc.common.Context;
+import ru.kc.common.dialog.Dialogs;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
@@ -63,8 +64,9 @@ public class Main {
 		ps.init(init);
 		
 		NodeEditionsAggregator nodeEditionsAggregator = new NodeEditionsAggregator();
+		Dialogs dialogs = new Dialogs();
 		
-		return new Context(ps,nodeEditionsAggregator);
+		return new Context(ps,nodeEditionsAggregator,dialogs);
 	}
 	
 	private static void initPersistEvents(App app, Context context) {
@@ -89,6 +91,8 @@ public class Main {
 		});
 		
 		context.nodeEditionsAggregator.init(appContext);
+		
+		context.dialogs.init(appContext.componentScanner);
 	}
 
 }

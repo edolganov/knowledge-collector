@@ -3,6 +3,7 @@ package ru.kc.common.command;
 import java.awt.Frame;
 
 import ru.kc.common.Context;
+import ru.kc.common.dialog.Dialogs;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.tools.filepersist.Factory;
@@ -19,6 +20,7 @@ public abstract class Command<T> extends AbstractCommand<T> {
 	protected Factory persistFactory;
 	protected Frame rootUI;
 	protected Updater updater;
+	protected Dialogs dialogs;
 	
 	@Override
 	protected void beforeInvoke() {
@@ -27,6 +29,7 @@ public abstract class Command<T> extends AbstractCommand<T> {
 		persistFactory = persist.factory();
 		rootUI = (Frame)appContext.rootUI;
 		updater = persist.updater();
+		dialogs = context.dialogs;
 	}
 
 }
