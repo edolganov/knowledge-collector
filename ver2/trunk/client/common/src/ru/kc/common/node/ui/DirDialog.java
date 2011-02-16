@@ -4,6 +4,7 @@ import java.awt.Frame;
 
 import ru.kc.platform.ui.dialog.OkCancelDialog;
 
+@SuppressWarnings("serial")
 public class DirDialog extends OkCancelDialog{
 
 	public NodePanel panel = new NodePanel();

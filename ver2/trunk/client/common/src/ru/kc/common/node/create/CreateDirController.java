@@ -1,4 +1,4 @@
-package ru.kc.common.node;
+package ru.kc.common.node.create;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

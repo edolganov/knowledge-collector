@@ -12,6 +12,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.CreateDirRequest;
+import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.RenameNode;
 import ru.kc.common.node.edit.event.NodeChanged;
@@ -116,7 +117,8 @@ public class TreeController extends Controller<Tree>{
 	
 	@ExportAction(description="create link", icon="/ru/kc/common/img/createLink.png")
 	public void createLinkRequest(){
-		System.out.println("create link");
+		Node parent = treeFacade.getCurrentObject(Node.class);
+		invokeSafe(new CreateLinkRequest(parent));
 	}
 	
 	@ExportAction(description="create text", icon="/ru/kc/common/img/createText.png")

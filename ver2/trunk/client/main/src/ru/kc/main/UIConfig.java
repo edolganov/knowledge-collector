@@ -23,6 +23,7 @@ public class UIConfig extends ObjectHandler {
 		}
 		else if(ob instanceof JButton){
 			Laf.setFocusForLeftRightArrowKeys((JButton)ob);
+			Laf.setFocusForUpDownArrowKeys((JButton)ob);
 		}
 		else if(ob instanceof JTextField){
 			Laf.setFocusForUpDownArrowKeys((JTextField)ob);

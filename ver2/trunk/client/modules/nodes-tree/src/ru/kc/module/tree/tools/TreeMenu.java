@@ -16,6 +16,7 @@ import javax.swing.tree.TreePath;
 
 import ru.kc.common.node.NodeIcon;
 import ru.kc.common.node.command.CreateDirRequest;
+import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
@@ -26,6 +27,7 @@ import ru.kc.platform.command.CommandService;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
+@SuppressWarnings("serial")
 public class TreeMenu extends JPopupMenu {
 	
 	JMenuItem delete = new JMenuItem("delete",IconUtil.get("/ru/kc/common/img/delete.png"));
@@ -114,7 +116,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//CommandService.invoke(new AddTreeNode(DialogOps.newLink()));
+				Node parent = treeFacade.getCurrentObject(Node.class);
+				commandService.invokeSafe(new CreateLinkRequest(parent));
 			}
 			
 		});
@@ -148,8 +151,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//Node parent = tree.getParentObject(tree.getCurrentNode(), Node.class);
-				//CommandService.invoke(new AddTreeNode(parent,DialogOps.newLink()));
+				Node parent = getParentOfCurrentNode();
+				commandService.invokeSafe(new CreateLinkRequest(parent));
 			}
 			
 		});
