@@ -36,8 +36,6 @@ public class Dashboard extends javax.swing.JPanel {
         jSplitPane2 = new javax.swing.JSplitPane();
         centerPanel = new javax.swing.JPanel();
         rightPanel = new javax.swing.JPanel();
-        toolbar = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
 
         jSplitPane1.setBorder(null);
         jSplitPane1.setDividerLocation(200);
@@ -52,7 +50,7 @@ public class Dashboard extends javax.swing.JPanel {
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(leftPanel);
@@ -70,7 +68,7 @@ public class Dashboard extends javax.swing.JPanel {
         );
         centerPanelLayout.setVerticalGroup(
             centerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
 
         jSplitPane2.setLeftComponent(centerPanel);
@@ -83,46 +81,32 @@ public class Dashboard extends javax.swing.JPanel {
         );
         rightPanelLayout.setVerticalGroup(
             rightPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
+            .addGap(0, 427, Short.MAX_VALUE)
         );
 
         jSplitPane2.setRightComponent(rightPanel);
 
         jSplitPane1.setRightComponent(jSplitPane2);
 
-        toolbar.setFloatable(false);
-        toolbar.setRollover(true);
-
-        jButton1.setText("jButton1");
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        toolbar.add(jButton1);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(toolbar, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE)
             .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 846, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(toolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE))
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JPanel centerPanel;
-    public javax.swing.JButton jButton1;
     public javax.swing.JSplitPane jSplitPane1;
     public javax.swing.JSplitPane jSplitPane2;
     public javax.swing.JPanel leftPanel;
     public javax.swing.JPanel rightPanel;
-    public javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
 
 }
