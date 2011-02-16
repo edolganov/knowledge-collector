@@ -15,6 +15,7 @@ import ru.kc.model.Node;
 import ru.kc.util.swing.tree.TreeFacade;
 
 
+@SuppressWarnings("serial")
 public class CellRender extends DefaultTreeCellRenderer {
 	
 	TreeFacade treeFacade;

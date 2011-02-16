@@ -19,10 +19,9 @@ public class RenameNode extends RollbackableCommand<Void> {
 
 	@Override
 	protected Void invoke() throws Exception {
-		if(Check.isEmpty(newName)){
-			
+		if(Check.isEmpty(newName))
 			throw new IllegalArgumentException("name is empty");
-		}
+		
 		updater.updateName(node, newName);
 		return null;
 	}

@@ -8,6 +8,7 @@ import javax.swing.event.DocumentListener;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeConstants;
+import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.NodeEditions;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.DescriptionChanged;
@@ -19,6 +20,7 @@ import ru.kc.module.properties.PropsUpdater;
 import ru.kc.module.properties.tools.EmptyTextAreaDecorator;
 import ru.kc.module.properties.ui.NodeProps;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.Check;
 
 @Mapping(NodeProps.class)
 public class NodePropsController extends Controller<NodeProps> implements PropsUpdater {
@@ -80,8 +82,16 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 				
 			}
 		});
+		
+		ui.save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
 	}
-	
+
 
 	@Override
 	public void enableUpdateMode() {
@@ -115,6 +125,7 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		
 		boolean changedData = name != null || description != null;
 		setButtonsEnabled(changedData);
+		checkSaveButton();
 		
 		enabledUpdateMode = oldValue;
 		
@@ -124,14 +135,17 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		if(!enabledUpdateMode) return;
 		
 		setButtonsEnabled(true);
+		checkSaveButton();
 		String newName = ui.name.getText();
 		fireEventInEDT(new NameChanged(node, newName));
 	}
-	
+
+
 	private void decriptionChanged() {
 		if(!enabledUpdateMode) return;
 		
 		setButtonsEnabled(true);
+		checkSaveButton();
 		String description = ui.description.getText();
 		fireEventInEDT(new DescriptionChanged(node, description));
 	}
@@ -139,6 +153,13 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 	private void setButtonsEnabled(boolean value){
 		ui.save.setEnabled(value);
 		ui.revert.setEnabled(value);
+	}
+	
+	private void checkSaveButton() {
+		String newName = ui.name.getText();
+		if(Check.isEmpty(newName)){
+			ui.save.setEnabled(false);
+		}
 	}
 
 	private void revert() {
@@ -149,8 +170,21 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		fireEventInEDT(new NameReverted(node));
 		editions.remove(nodeConstants.DESCRIPTION);
 		fireEventInEDT(new DescriptionReverted(node));
+		ui.name.requestFocus();
 		
 		fillData();
+	}
+	
+	protected void save() {
+		if(!enabledUpdateMode) return;
+		
+		String newName = ui.name.getText();
+		String newDesctiption = ui.description.getText();
+		invokeSafe(new UpdateNode(node, newName, newDesctiption));
+		ui.name.requestFocus();
+		
+		fillData();
+		
 	}
 
 
