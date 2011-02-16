@@ -1,6 +1,10 @@
 package ru.kc.util.swing.laf;
 
-import java.awt.Color;
+import java.awt.Component;
+import java.awt.KeyboardFocusManager;
+import java.awt.event.KeyEvent;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
@@ -78,6 +82,35 @@ public class Laf {
 			Object object = im.get(ks);
 			System.out.println(ks + " - " + object);
     	}
+    }
+    
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void setFocusForLeftRightArrowKeys(Component component){
+    	Set forwardKeys = component.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
+    	Set newForwardKeys = new HashSet(forwardKeys);
+    	newForwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0));
+    	component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newForwardKeys);
+    	
+    	Set backforwardKeys = component.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS);
+    	Set newBackforwardKeys = new HashSet(backforwardKeys);
+    	newBackforwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0));
+    	component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, newBackforwardKeys);
+
+    }
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void setFocusForUpDownArrowKeys(Component component){
+    	Set forwardKeys = component.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS);
+    	Set newForwardKeys = new HashSet(forwardKeys);
+    	newForwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0));
+    	component.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, newForwardKeys);
+    	
+    	Set backforwardKeys = component.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS);
+    	Set newBackforwardKeys = new HashSet(backforwardKeys);
+    	newBackforwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0));
+    	component.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, newBackforwardKeys);
+
     }
 
 }
