@@ -39,6 +39,7 @@ public class LinkPanel extends javax.swing.JPanel {
 
         jLabel1.setText("name:");
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/web.png"))); // NOI18N
         jLabel2.setText("url:");
 
         replace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/exchange.png"))); // NOI18N
@@ -55,8 +56,8 @@ public class LinkPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(url, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                    .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
+                    .addComponent(url, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                    .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(replace, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())

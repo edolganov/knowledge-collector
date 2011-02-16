@@ -24,8 +24,8 @@
               </Group>
               <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="url" pref="268" max="32767" attributes="2"/>
-                  <Component id="name" pref="268" max="32767" attributes="2"/>
+                  <Component id="url" pref="266" max="32767" attributes="2"/>
+                  <Component id="name" pref="266" max="32767" attributes="2"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="replace" min="-2" pref="36" max="-2" attributes="0"/>
@@ -72,6 +72,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/ru/kc/common/img/web.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="url:"/>
       </Properties>
     </Component>
