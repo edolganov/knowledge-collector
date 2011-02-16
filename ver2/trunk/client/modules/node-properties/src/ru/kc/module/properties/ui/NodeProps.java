@@ -37,6 +37,7 @@ public class NodeProps extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         description = new javax.swing.JTextArea();
         save = new javax.swing.JButton();
+        revert = new javax.swing.JButton();
 
         jLabel1.setText("name:");
 
@@ -51,7 +52,11 @@ public class NodeProps extends javax.swing.JPanel {
         description.setMinimumSize(new java.awt.Dimension(0, 0));
         jScrollPane1.setViewportView(description);
 
-        save.setText("save");
+        save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/save.png"))); // NOI18N
+        save.setText("Save");
+
+        revert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/revert.png"))); // NOI18N
+        revert.setText("Revert");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,7 +69,10 @@ public class NodeProps extends javax.swing.JPanel {
                     .addComponent(name, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                    .addComponent(save))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(revert)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(save)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -78,8 +86,10 @@ public class NodeProps extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(save)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(save)
+                    .addComponent(revert, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(115, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -90,6 +100,7 @@ public class NodeProps extends javax.swing.JPanel {
     public javax.swing.JLabel jLabel2;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField name;
+    public javax.swing.JButton revert;
     public javax.swing.JButton save;
     // End of variables declaration//GEN-END:variables
 

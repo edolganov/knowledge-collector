@@ -90,7 +90,7 @@ public class Main {
 			}
 		});
 		
-		context.nodeEditionsAggregator.init(appContext);
+		context.nodeEditionsAggregator.init(appContext, context.nodeConstants);
 		
 		context.dialogs.init(appContext.componentScanner);
 	}

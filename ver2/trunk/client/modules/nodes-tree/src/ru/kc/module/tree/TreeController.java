@@ -15,6 +15,7 @@ import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.RenameNode;
 import ru.kc.common.node.edit.event.NodeChanged;
+import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
@@ -177,6 +178,15 @@ public class TreeController extends Controller<Tree>{
 	
 	@EventListener(NodeChanged.class)
 	public void onNodeChanged(NodeChanged event){
+		Node node = event.node;
+		DefaultMutableTreeNode treeNode = getFromStorage(node);
+		if(treeNode != null){
+			treeFacade.reload(treeNode);
+		}
+	}
+	
+	@EventListener(NodeReverted.class)
+	public void onNodeReverted(NodeReverted event){
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
 		if(treeNode != null){

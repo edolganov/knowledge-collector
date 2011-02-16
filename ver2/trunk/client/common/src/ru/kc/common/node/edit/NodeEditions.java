@@ -11,8 +11,17 @@ public class NodeEditions {
 		editionsByType.put(type, value);
 	}
 	
-	public Map<String, Object> editionsByType(){
+	Map<String, Object> editionsByType(){
 		return editionsByType;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> T get(String type){
+		return (T)editionsByType.get(type);
+	}
+	
+	public void remove(String type){
+		editionsByType.remove(type);
 	}
 	
 	public int count(){

@@ -1,8 +1,10 @@
 package ru.kc.module.tree.tools;
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.Icon;
+import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -17,11 +19,17 @@ public class CellRender extends DefaultTreeCellRenderer {
 	
 	TreeFacade treeFacade;
 	NodeEditionsAggregator nodeEditionsAggregator;
+	Font standartFont;
+	Font boldFont;
 	
 	public CellRender(JTree tree, NodeEditionsAggregator nodeEditionsAggregator) {
 		super();
 		this.treeFacade = new TreeFacade(tree);
 		this.nodeEditionsAggregator = nodeEditionsAggregator;
+		putClientProperty("html.disable", Boolean.TRUE);
+		standartFont = new JLabel().getFont();
+		boldFont = new Font(standartFont.getName(), Font.BOLD, standartFont.getSize());
+
 	}
 
 	@Override
@@ -33,14 +41,13 @@ public class CellRender extends DefaultTreeCellRenderer {
 		Object ob = ((DefaultMutableTreeNode)value).getUserObject();
 		if(ob instanceof Node){
 			Node node = (Node) ob;
-			Icon icon = null;
-			String text = null;
-			if(! nodeEditionsAggregator.hasEditions(node)){
-				icon = NodeIcon.getIcon(node);
-				text = node.getName();
+			Icon icon = NodeIcon.getIcon(node);;
+			String text = node.getName();
+			if(nodeEditionsAggregator.hasEditions(node)){
+				text = "* "+text;
+				setFont(boldFont);
 			} else {
-				icon = NodeIcon.getIcon(node);
-				text = "* "+node.getName();
+				setFont(standartFont);
 			}
 
 			
