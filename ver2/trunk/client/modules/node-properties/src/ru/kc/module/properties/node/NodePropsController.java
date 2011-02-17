@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeConstants;
@@ -15,11 +16,13 @@ import ru.kc.common.node.edit.event.DescriptionChanged;
 import ru.kc.common.node.edit.event.DescriptionReverted;
 import ru.kc.common.node.edit.event.NameChanged;
 import ru.kc.common.node.edit.event.NameReverted;
+import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.model.Node;
 import ru.kc.module.properties.PropsUpdater;
 import ru.kc.module.properties.tools.EmptyTextAreaDecorator;
 import ru.kc.module.properties.ui.NodeProps;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.Check;
 
 @Mapping(NodeProps.class)
@@ -185,6 +188,13 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		
 		fillData();
 		
+	}
+	
+	@EventListener(NodeChanged.class)
+	public void onNodeChanged(NodeChanged event){
+		if(event.getSender() != this){
+			System.out.println("!!!!");
+		}
 	}
 
 

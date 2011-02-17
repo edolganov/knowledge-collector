@@ -11,7 +11,7 @@ import ru.kc.platform.runtimestorage.RuntimeStorage;
 
 public class NodeEditionsAggregator {
 	
-	private static final String KEY = "NodeEditionsAggregator";
+	private final String storageKey = "NodeEditionsAggregator-"+hashCode();
 	
 	RuntimeStorage runtimeStorage;
 	NodeConstants nodeConstants;
@@ -57,20 +57,20 @@ public class NodeEditionsAggregator {
 	}
 	
 	private NodeEditions get(Node node){
-		return runtimeStorage.get(node, KEY);
+		return runtimeStorage.get(node, storageKey);
 	}
 	
 	private NodeEditions getOrCreate(Node node){
-		NodeEditions out = runtimeStorage.get(node, KEY);
+		NodeEditions out = runtimeStorage.get(node, storageKey);
 		if(out == null){
 			out = new NodeEditions();
-			runtimeStorage.putWithWeakReferenceDomain(node, KEY, out);
+			runtimeStorage.putWithWeakReferenceDomain(node, storageKey, out);
 		}
 		return out;
 	}
 	
 	private void clearEditions(Node node){
-		runtimeStorage.remove(node, KEY);
+		runtimeStorage.remove(node, storageKey);
 	}
 
 }

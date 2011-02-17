@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import ru.kc.common.controller.Controller;
 import ru.kc.main.tab.TabModule;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.module.Module;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
@@ -24,12 +25,14 @@ public class TabsController extends Controller<MainForm> {
 		
 		TabbedWrapper tabs = new TabbedWrapper(root.tabs);
 		tabs.addTab(createTab("dashboard"), "dashboard", false);
-		tabs.addTab(createTab(new JPanel()), "test tab");
+		tabs.addTab(createTab("dashboard"), "test concurrent modification");
 		
 		tabs.addListener(new TabsListener() {
 			
 			@Override
-			public void onClosed(Component comp, int index, String text) {}
+			public void onClosed(Component comp, int index, String text) {
+				Module.removeAllListneres(comp);
+			}
 			
 			@Override
 			public boolean canClose(Component comp, int index, String text) {

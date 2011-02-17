@@ -32,7 +32,7 @@ import ru.kc.util.swing.tree.TreeTransferHandler;
 @Mapping(Tree.class)
 public class TreeController extends Controller<Tree>{
 	
-	private static final String TREE_NODE_KEY = "tree-node-key";
+	private final String treeNodeKey = "tree-node-key-"+hashCode();
 	
 	JTree tree;
 	TreeFacade treeFacade;
@@ -224,15 +224,15 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
-		runtimeStorage.putWithWeakReferenceDomain(node, TREE_NODE_KEY, treeNode);
+		runtimeStorage.putWithWeakReferenceDomain(node, treeNodeKey, treeNode);
 	}
 	
 	private DefaultMutableTreeNode getFromStorage(Node node){
-		return runtimeStorage.get(node, TREE_NODE_KEY);
+		return runtimeStorage.get(node, treeNodeKey);
 	}
 	
 	private DefaultMutableTreeNode removeFromStorage(Node node){
-		return runtimeStorage.remove(node, TREE_NODE_KEY);
+		return runtimeStorage.remove(node, treeNodeKey);
 	}
 	
 

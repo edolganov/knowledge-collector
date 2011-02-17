@@ -106,6 +106,7 @@ public class EventManager {
 	
 	@SuppressWarnings({ "rawtypes" })
 	private void fireEvent(Object source, Event event){
+		event.setSender(source);
 		Class exitClass = Event.class.getSuperclass();
 		Class curClass = event.getClass();
 		while(curClass != exitClass){
