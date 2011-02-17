@@ -174,4 +174,12 @@ public class TreeFacade {
 	public void setSelection(DefaultMutableTreeNode node){
 		tree.setSelectionPath(new TreePath(node.getPath()));
 	}
+	
+	public boolean isSelectedNode(DefaultMutableTreeNode node){
+		DefaultMutableTreeNode selected = getCurrentNode();
+		if(selected != null && selected.equals(node)){
+			return true;
+		}
+		return false;
+	}
 }

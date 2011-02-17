@@ -17,11 +17,13 @@ import ru.kc.common.node.edit.event.DescriptionReverted;
 import ru.kc.common.node.edit.event.NameChanged;
 import ru.kc.common.node.edit.event.NameReverted;
 import ru.kc.common.node.edit.event.NodeChanged;
+import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.model.Node;
 import ru.kc.module.properties.PropsUpdater;
 import ru.kc.module.properties.tools.EmptyTextAreaDecorator;
 import ru.kc.module.properties.ui.NodeProps;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.Check;
 
@@ -192,9 +194,20 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 	
 	@EventListener(NodeChanged.class)
 	public void onNodeChanged(NodeChanged event){
-		if(event.getSender() != this){
-			System.out.println("!!!!");
-		}
+		processNodeEvent(event, event.node);
+	}
+	
+	@EventListener(NodeReverted.class)
+	public void onNodeChanged(NodeReverted event){
+		processNodeEvent(event, event.node);
+	}
+	
+	private void processNodeEvent(Event event, Node eventNode){
+		if(!enabledUpdateMode) return;
+		if(event.getSender() == this) return;
+		if(!eventNode.equals(node)) return;
+		
+		setNode(eventNode);
 	}
 
 

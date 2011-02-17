@@ -143,7 +143,7 @@ public class TreeController extends Controller<Tree>{
 	protected void onChildAdded(Node parent, Node child) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
 		if(parentNode == null){
-			log.error("can't find parent tree node by "+parent);
+			log.info("can't find parent tree node by "+parent);
 			return;
 		}
 		addChildToTree(parentNode, child);
@@ -153,13 +153,13 @@ public class TreeController extends Controller<Tree>{
 	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
 		if(parentNode == null){
-			log.error("can't find child tree node by "+parent);
+			log.info("can't find child tree node by "+parent);
 			return;
 		}
 		
 		DefaultMutableTreeNode deletedChildNode = getFromStorage(deletedChild);
 		if(deletedChildNode == null){
-			log.error("can't find tree node by "+deletedChildNode);
+			log.info("can't find tree node by "+deletedChildNode);
 			return;
 		}
 		
@@ -171,7 +171,7 @@ public class TreeController extends Controller<Tree>{
 	protected void onNodeUpdated(Node old, Node updatedNode) {
 		DefaultMutableTreeNode oldNode = getFromStorage(old);
 		if(oldNode == null){
-			log.error("can't find tree node by "+old);
+			log.info("can't find tree node by "+old);
 			return;
 		}
 		
@@ -198,21 +198,27 @@ public class TreeController extends Controller<Tree>{
 
 
 	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
+		boolean selectChild = treeFacade.isSelectedNode(parentTreeNode);
 		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
 		addToStorage(child,treeChild);
-		treeFacade.setSelection(treeChild);
-		tree.requestFocus();
+		if(selectChild){
+			treeFacade.setSelection(treeChild);
+			tree.requestFocus();
+		}
 
 		return treeChild;
 	}
 	
 	private void removeChild(DefaultMutableTreeNode treeNode, Node deletedNode) {
+		boolean selectParent = treeFacade.isSelectedNode(treeNode);
 		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
 		treeFacade.removeNode(treeNode);
 		removeFromStorage(deletedNode);
 		if(parent != null){
-			treeFacade.setSelection(parent);
-			tree.requestFocus();
+			if(selectParent){
+				treeFacade.setSelection(parent);
+				tree.requestFocus();
+			}
 		}
 	}
 	
