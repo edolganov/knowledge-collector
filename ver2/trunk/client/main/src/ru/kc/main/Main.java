@@ -23,8 +23,10 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		
+		boolean useNimbusLaf = hasParam(args,"nimbus-laf");
+		
 		Laf.trySetSystemLookAndFeel();
-		//Laf.trySetNimbusLookAndFeel();
+		if(useNimbusLaf) Laf.trySetNimbusLookAndFeel();
 		Laf.setupEnterActionForAllButtons();
 		Laf.setupComboboxInputMap();
 		
@@ -51,6 +53,16 @@ public class Main {
 		initPersistEvents(app,context);
 		app.run();
 		
+	}
+
+
+
+	private static boolean hasParam(String[] args, String value) {
+		if(args == null) return false;
+		for(String arg : args){
+			if(arg.equals(value)) return true;
+		}
+		return false;
 	}
 
 
