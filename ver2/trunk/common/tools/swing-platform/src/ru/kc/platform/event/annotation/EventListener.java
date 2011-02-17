@@ -12,7 +12,6 @@ import ru.kc.platform.event.Event;
 @Target(ElementType.METHOD)
 public @interface EventListener {
 	
-	@SuppressWarnings("rawtypes")
 	Class<? extends Event> value() default Event.class;
 
 }

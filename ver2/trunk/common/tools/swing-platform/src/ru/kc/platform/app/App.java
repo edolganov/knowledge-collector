@@ -110,7 +110,6 @@ public class App {
 		
 		commandService = new CommandService();
 		eventManager = new EventManager();
-		eventManager.setContinueFiringAfterListenerException(true);
 		eventManager.setExceptionHandler(new ListenerExceptionHandler() {
 			
 			@Override

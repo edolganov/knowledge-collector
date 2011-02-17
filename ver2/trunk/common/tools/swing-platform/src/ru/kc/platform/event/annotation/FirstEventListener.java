@@ -12,7 +12,7 @@ import ru.kc.platform.event.Event;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface LastEventListener {
+public @interface FirstEventListener {
 	
 	Class<? extends Event> value() default Event.class;
 
