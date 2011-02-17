@@ -12,8 +12,11 @@ import javax.swing.JPanel;
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.DomainUtil;
+import ru.kc.platform.domain.annotation.Domain;
 
-public abstract class Module<T extends Component> extends JPanel {
+public abstract class Module<T extends Component> extends JPanel implements DomainMember {
 
 	private static final long serialVersionUID = 3201710095656034030L;
 	
@@ -102,6 +105,19 @@ public abstract class Module<T extends Component> extends JPanel {
 	
 	public static void removeAllListneres(Component component){
 		ModuleUtil.removeAllLisreners(component);
+	}
+	
+	@Override
+	public Object getDomainKey() {
+		Domain domainFlag = this.getClass().getAnnotation(Domain.class);
+		if(domainFlag != null){
+			return this;
+		}
+		
+		if(controller.ui instanceof Component){
+			return DomainUtil.findDomainKey((Component)controller.ui);
+		}
+		return DomainMember.ROOT_DOMAIN;
 	}
 
 

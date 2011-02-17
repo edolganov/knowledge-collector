@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.event.annotation.LastEventListener;
 import ru.kc.util.swing.SwingUtil;
 
@@ -107,6 +110,17 @@ public class EventManager {
 	@SuppressWarnings({ "rawtypes" })
 	private void fireEvent(Object source, Event event){
 		event.setSender(source);
+		
+		Object domainKey = DomainMember.ROOT_DOMAIN;
+		if(DomainUtil.isDomainSpecific(event)){
+			if(source instanceof DomainMember){
+				domainKey = ((DomainMember) source).getDomainKey();
+			} else {
+				throw new IllegalStateException(source+" should be a DomainMember for firing domain specific "+event);
+			}
+			
+		}
+		
 		Class exitClass = Event.class.getSuperclass();
 		Class curClass = event.getClass();
 		while(curClass != exitClass){

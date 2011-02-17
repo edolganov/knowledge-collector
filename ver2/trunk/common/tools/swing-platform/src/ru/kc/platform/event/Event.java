@@ -15,6 +15,11 @@ public class Event {
 	void setSender(Object sender) {
 		this.sender = sender;
 	}
+
+	@Override
+	public String toString() {
+		return "Event [sender=" + sender + "]";
+	}
 	
 	
 
