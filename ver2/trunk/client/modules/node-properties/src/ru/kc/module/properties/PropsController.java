@@ -37,7 +37,9 @@ public class PropsController extends Controller<PropsPanel> {
 	}
 
 	private void showProps() {
-		if(currentNode instanceof Dir){
+		if(currentNode == null){
+			showEmpty();
+		} else if(currentNode instanceof Dir){
 			showProps((Dir)currentNode);
 		} else if(currentNode instanceof Link){
 			showProps((Link)currentNode);
@@ -48,6 +50,11 @@ public class PropsController extends Controller<PropsPanel> {
 		} else {
 			showPropsForUnknowType(currentNode);
 		}
+	}
+
+
+	private void showEmpty() {
+		clearOld();
 	}
 
 
