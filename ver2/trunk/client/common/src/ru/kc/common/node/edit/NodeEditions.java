@@ -1,36 +1,39 @@
 package ru.kc.common.node.edit;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
+
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public class NodeEditions {
 	
-	private HashMap<String, Object> editionsByType = new HashMap<String, Object>();
+	private HashMap<Class<?>, UpdateRequest> updatesByType = new HashMap<Class<?>, UpdateRequest>();
 	
-	public void addEdition(String type, Object value){
-		editionsByType.put(type, value);
-	}
-	
-	Map<String, Object> editionsByType(){
-		return editionsByType;
+	public void add(UpdateRequest updateRequest){
+		updatesByType.put(updateRequest.getClass(), updateRequest);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> T get(String type){
-		return (T)editionsByType.get(type);
+	public <T> T get(Class<? extends UpdateRequest> type){
+		return (T)updatesByType.get(type).value();
 	}
 	
-	public void remove(String type){
-		editionsByType.remove(type);
+	public void remove(Class<? extends UpdateRequest> type){
+		updatesByType.remove(type);
+	}
+	
+	public Collection<UpdateRequest> all(){
+		return  updatesByType.values();
 	}
 	
 	public int count(){
-		return editionsByType.size();
+		return updatesByType.size();
 	}
+	
 
 	@Override
 	public String toString() {
-		return "NodeEditions [byType=" + editionsByType + "]";
+		return "NodeEditions [byType=" + updatesByType + "]";
 	}
 	
 	

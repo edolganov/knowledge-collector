@@ -1,25 +1,33 @@
 package ru.kc.common.node.edit;
 
-import ru.kc.common.node.NodeConstants;
+import java.util.Collection;
+
+import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.DescriptionChanged;
 import ru.kc.common.node.edit.event.NameChanged;
+import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.command.CommandService;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
+import ru.kc.tools.filepersist.update.UpdateDescription;
+import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdateRequest;
+import ru.kc.util.Check;
 
 public class NodeEditionsAggregator {
 	
 	private final String storageKey = "NodeEditionsAggregator-"+hashCode();
 	
 	RuntimeStorage runtimeStorage;
-	NodeConstants nodeConstants;
+	CommandService commandService;
 	
-	public void init(AppContext appContext, NodeConstants nodeConstants){
+	public void init(AppContext appContext){
 		appContext.eventManager.addObjectMethodListeners(this);
 		runtimeStorage = appContext.runtimeStorage;
-		this.nodeConstants = nodeConstants;
+		commandService = appContext.commandService;
 	}
 	
 	
@@ -27,7 +35,7 @@ public class NodeEditionsAggregator {
 	public void onEditing(NameChanged event){
 		Node node = event.node;
 		String edition = event.newName;
-		getOrCreate(node).addEdition(nodeConstants.NAME, edition);
+		getOrCreate(node).add(new UpdateName(edition));
 		//System.out.println(getOrCreate(node));
 	}
 	
@@ -35,14 +43,26 @@ public class NodeEditionsAggregator {
 	public void onEditing(DescriptionChanged event){
 		Node node = event.node;
 		String edition = event.newDescription;
-		getOrCreate(node).addEdition(nodeConstants.DESCRIPTION, edition);
+		getOrCreate(node).add(new UpdateDescription(edition));
 		//System.out.println(getOrCreate(node));
+	}
+	
+	@EventListener(UpdateNodeRequest.class)
+	public void onUpdateRequest(UpdateNodeRequest event){
+		Node node = event.node;
+		NodeEditions editions = get(node);
+		if(editions != null){
+			Collection<UpdateRequest> updates = editions.all();
+			if(Check.isEmpty(updates)) return;
+			commandService.invokeSafe(new UpdateNode(node, updates));
+		}
 	}
 	
 	@EventListener(NodeUpdated.class)
 	public void onUpdated(NodeUpdated event){
 		clearEditions(event.old);
 	}
+	
 
 
 	public boolean hasEditions(Node node) {

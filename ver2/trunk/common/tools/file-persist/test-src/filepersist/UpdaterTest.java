@@ -15,6 +15,7 @@ import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
+import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.util.file.FileUtil;
 
 public class UpdaterTest extends Assert {
@@ -44,7 +45,7 @@ public class UpdaterTest extends Assert {
 		Node root = tree.getRoot();
 		tree.add(root, factory.createDir("child1", null));
 		tree.add(root, factory.createDir("child2", null));
-		updater.updateName(root, newName);
+		updater.update(root, new UpdateName(newName));
 		
 		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();
@@ -67,7 +68,7 @@ public class UpdaterTest extends Assert {
 		Dir child = factory.createDir(oldName, null);
 		Node root = tree.getRoot();
 		tree.add(root, child);
-		updater.updateName(child, newName);
+		updater.update(child, new UpdateName(newName));
 		
 		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();

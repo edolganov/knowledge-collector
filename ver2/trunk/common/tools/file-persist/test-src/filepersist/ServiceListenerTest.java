@@ -15,6 +15,7 @@ import ru.kc.tools.filepersist.ServiceAdapter;
 import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
+import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.util.file.FileUtil;
 
 
@@ -185,7 +186,7 @@ public class ServiceListenerTest extends Assert{
 		Node root = tree.getRoot();
 		String newName = "newName";
 		String oldName = root.getName();
-		updater.updateName(root, newName);
+		updater.update(root, new UpdateName(newName));
 		
 		assertEquals(root, updatedNode[0]);
 		assertEquals(false, root == updatedNode[0]);
@@ -220,7 +221,7 @@ public class ServiceListenerTest extends Assert{
 		Dir child = factory.createDir(oldName, null);
 		Node root = tree.getRoot();
 		tree.add(root, child);
-		updater.updateName(child, newName);
+		updater.update(child, new UpdateName(newName));
 		
 		assertEquals(child, updatedNode[0]);
 		assertEquals(false, child == updatedNode[0]);

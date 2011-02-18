@@ -5,10 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
-import ru.kc.common.node.NodeConstants;
 import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.NodeEditions;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
@@ -25,6 +23,8 @@ import ru.kc.module.properties.ui.NodeProps;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
+import ru.kc.tools.filepersist.update.UpdateDescription;
+import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.util.Check;
 
 @Mapping(NodeProps.class)
@@ -35,12 +35,10 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 	Node node;
 	
 	NodeEditionsAggregator nodeEditionsAggregator;
-	NodeConstants nodeConstants;
 	
 	@Override
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
-		nodeConstants = context.nodeConstants;
 		
 		desctiptionDecorator = new EmptyTextAreaDecorator(ui.description);
 		ui.name.getDocument().addDocumentListener(new DocumentListener() {
@@ -121,8 +119,8 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		enabledUpdateMode = false;
 		
 		NodeEditions editions = nodeEditionsAggregator.getEditions(node);
-		String name = editions.get(nodeConstants.NAME);
-		String description = editions.get(nodeConstants.DESCRIPTION);
+		String name = editions.get(UpdateName.class);
+		String description = editions.get(UpdateDescription.class);
 		
 		ui.name.setText(name == null? node.getName() : name);
 		ui.description.setText(description == null? node.getDescription() : description);
@@ -171,21 +169,23 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		if(!enabledUpdateMode) return;
 		
 		NodeEditions editions = nodeEditionsAggregator.getEditions(node);
-		editions.remove(nodeConstants.NAME);
+		editions.remove(UpdateName.class);
 		fireEventInEDT(new NameReverted(node));
-		editions.remove(nodeConstants.DESCRIPTION);
+		editions.remove(UpdateDescription.class);
 		fireEventInEDT(new DescriptionReverted(node));
 		ui.name.requestFocus();
 		
 		fillData();
 	}
 	
-	protected void save() {
+	private void save() {
 		if(!enabledUpdateMode) return;
 		
 		String newName = ui.name.getText();
 		String newDesctiption = ui.description.getText();
-		invokeSafe(new UpdateNode(node, newName, newDesctiption));
+		invokeSafe(new UpdateNode(node, 
+				new UpdateName(newName), 
+				new UpdateDescription(newDesctiption)));
 		ui.name.requestFocus();
 		
 		fillData();

@@ -14,7 +14,7 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.DeleteNode;
-import ru.kc.common.node.command.RenameNode;
+import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.model.Node;
@@ -25,6 +25,7 @@ import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
+import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeFacade;
 import ru.kc.util.swing.tree.TreeTransferHandler;
@@ -55,7 +56,7 @@ public class TreeController extends Controller<Tree>{
 			public void editingStopped(ChangeEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				String newName = cellEditor.getCellEditorValue();
-				invokeSafe(new RenameNode(node, newName));
+				invokeSafe(new UpdateNode(node, new UpdateName(newName)));
 			}
 			
 			@Override
@@ -65,7 +66,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setRowHeight(0);
 		tree.setEditable(true);
 		treeFacade.setSingleSelection();
-		treeFacade.setPopupMenu(new TreeMenu(tree, appContext.commandService), new MenuController() {
+		treeFacade.setPopupMenu(new TreeMenu(tree, appContext), new MenuController() {
 			
 			@Override
 			public boolean canShow() {

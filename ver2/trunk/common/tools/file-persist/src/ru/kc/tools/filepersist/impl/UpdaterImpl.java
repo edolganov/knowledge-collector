@@ -1,9 +1,16 @@
 package ru.kc.tools.filepersist.impl;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ru.kc.model.Node;
+import ru.kc.tools.filepersist.UpdateBuilder;
 import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
+import ru.kc.tools.filepersist.update.UpdateDescription;
+import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public class UpdaterImpl implements Updater {
 	
@@ -20,35 +27,22 @@ public class UpdaterImpl implements Updater {
 	}
 
 	@Override
-	public void updateName(Node node, String name) throws Exception {
-		checkName(name);
-
-		NodeBean old = convert(node);
-		NodeBean clone = (NodeBean)old.clone();
-		clone.setName(name);
-		
-		fs.replace(old,clone);
-		listeners.fireUpdatedEvent(old, clone);
+	public UpdateBuilder builder() {
+		return new UpdateBuilderImpl();
 	}
 	
 	@Override
-	public void updateDescription(Node node, String description)throws Exception {
-		NodeBean old = convert(node);
-		NodeBean clone = (NodeBean)old.clone();
-		clone.setDescription(description);
-		
-		fs.replace(old,clone);
-		listeners.fireUpdatedEvent(old, clone);
+	public void update(Node node, UpdateRequest... updates) throws Exception {
+		if(updates != null){
+			update(node, Arrays.asList(updates));
+		}
 	}
 
 	@Override
-	public void update(Node node, String name, String description) throws Exception {
-		checkName(name);
-		
+	public void update(Node node, Collection<UpdateRequest> updates) throws Exception {
 		NodeBean old = convert(node);
 		NodeBean clone = (NodeBean)old.clone();
-		clone.setName(name);
-		clone.setDescription(description);
+		applyUpdates(clone, updates);
 
 		fs.replace(old,clone);
 		listeners.fireUpdatedEvent(old, clone);
@@ -57,13 +51,26 @@ public class UpdaterImpl implements Updater {
 
 
 	
+	private void applyUpdates(NodeBean clone, Collection<UpdateRequest> updates) {
+		for (UpdateRequest update : updates) {
+			if(update instanceof UpdateName){
+				String name = ((UpdateName) update).value;
+				clone.setName(name);
+			} 
+			else if(update instanceof UpdateDescription){
+				String description = ((UpdateDescription) update).value;
+				clone.setDescription(description);
+			}
+		}
+	}
+
+
 	private NodeBean convert(Node node) {
 		return c.converter.convert(node);
 	}
-	
-	private void checkName(String name) {
-		if(name == null) throw new IllegalArgumentException("name is null");
-	}
+
+
+
 
 
 
