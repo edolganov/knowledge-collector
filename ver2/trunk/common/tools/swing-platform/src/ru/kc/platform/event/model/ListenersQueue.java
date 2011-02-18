@@ -63,10 +63,10 @@ public class ListenersQueue implements Iterable<MethodListener>{
 		return list.iterator();
 	}
 
-
-
-
-
+	@Override
+	public String toString() {
+		return "ListenersQueue [list=" + list + "]";
+	}
 
 
 }

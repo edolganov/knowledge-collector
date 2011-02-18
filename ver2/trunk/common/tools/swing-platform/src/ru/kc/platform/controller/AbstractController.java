@@ -117,7 +117,7 @@ public abstract class AbstractController<T> implements DomainMember {
 		if(ui instanceof Component){
 			return DomainUtil.findDomainKey((Component)ui);
 		}
-		return DomainMember.ROOT_DOMAIN;
+		return DomainMember.ROOT_DOMAIN_KEY;
 	}
 
 }

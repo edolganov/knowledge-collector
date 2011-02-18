@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.event.model.ListenersQueue;
 import ru.kc.platform.event.model.MethodListener;
 
@@ -54,6 +56,7 @@ public class Listeners {
 
 	public void processEvent(Object source, Event event) {
 		event.setSender(source);
+		Object domianKey = getDomianKey(source, event);
 		
 		Class<?> exitClass = Event.class.getSuperclass();
 		Class<?> curClass = event.getClass();
@@ -62,10 +65,12 @@ public class Listeners {
 			if(queue != null){
 				queue.removeInvalidListeners();
 				for(MethodListener listener : queue){
-					try {
-						listener.process(event);
-					}catch (Throwable e) {
-						handleListenerException(e);
+					if(listener.belongsTo(domianKey)){
+						try {
+							listener.process(event);
+						}catch (Throwable e) {
+							handleListenerException(e);
+						}
 					}
 				}
 			}
@@ -75,6 +80,19 @@ public class Listeners {
 		
 	}
 
+	private Object getDomianKey(Object source, Event event) {
+		Object domainKey = DomainMember.ROOT_DOMAIN_KEY;
+		if(DomainUtil.isDomainSpecific(event)){
+			if(source instanceof DomainMember){
+				domainKey = ((DomainMember) source).getDomainKey();
+			} else {
+				throw new IllegalStateException(source+" should be a DomainMember for firing domain specific "+event);
+			}
+			
+		}
+		return domainKey;
+	}
+
 	private void handleListenerException(Throwable e) {
 		if(exceptionHandler != null) exceptionHandler.handle(e);
 		else throw new ProcessEventException(e);
@@ -82,8 +100,18 @@ public class Listeners {
 
 	@Override
 	public String toString() {
-		return "Listeners [listeners=" + listeners + ", exceptionHandler="
-				+ exceptionHandler + "]";
+		StringBuilder sb = new StringBuilder();
+		sb.append("Listeners [ \n");
+		for(Class<?> type : listeners.keySet()){
+			ListenersQueue queue = listeners.get(type);
+			sb.append("\t type=").append(type).append("\n");
+			sb.append("\t listeners=").append(type).append("\n");
+			for(MethodListener listener : queue){
+				sb.append("\t\t").append(listener).append("\n");
+			}
+		}
+		sb.append(", exceptionHandler=").append(exceptionHandler).append("]");
+		return sb.toString();
 	}
 	
 	

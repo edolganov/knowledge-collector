@@ -21,7 +21,7 @@ public class DomainUtil {
 		if(parentMember != null){
 			return parentMember.getDomainKey();
 		} else {
-			return DomainMember.ROOT_DOMAIN;
+			return DomainMember.ROOT_DOMAIN_KEY;
 		}
 		
 	}

@@ -4,8 +4,10 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.event.annotation.FirstEventListener;
@@ -16,13 +18,34 @@ public class MethodListener {
 	private Class<? extends Event> eventType;
 	private WeakReference<Object> listenerObjectRef;
 	private Method method;
+	private ArrayList<WeakReference<Object>> domainKeys = new ArrayList<WeakReference<Object>>();
 	
 	private MethodListener(Class<? extends Event> eventType,
 			Object ob, Method method) {
 		super();
 		this.eventType = eventType;
-		this.listenerObjectRef = new WeakReference<Object>(ob);
 		this.method = method;
+		listenerObjectRef = new WeakReference<Object>(ob);
+		initDomainKeys(ob);
+
+		
+	}
+
+	private void initDomainKeys(Object ob) {
+		if(ob instanceof DomainMember){
+			Object domainKey = ((DomainMember)ob).getDomainKey();
+			domainKeys.add(new WeakReference<Object>(domainKey));
+		}
+		addRootDomainKeyIfNeed();
+	}
+
+	private void addRootDomainKeyIfNeed() {
+		for(WeakReference<Object> ref : domainKeys){
+			if(DomainMember.ROOT_DOMAIN_KEY.equals(ref.get())){
+				return;
+			}
+		}
+		domainKeys.add(new WeakReference<Object>(DomainMember.ROOT_DOMAIN_KEY));
 	}
 
 
@@ -54,6 +77,22 @@ public class MethodListener {
 
 	public boolean isValid() {
 		return listenerObjectRef.get() != null;
+	}
+	
+	
+	public boolean belongsTo(Object domianKey) {
+		Iterator<WeakReference<Object>> it = domainKeys.iterator();
+		while(it.hasNext()){
+			WeakReference<Object> ref = it.next();
+			Object key = ref.get();
+			if(key == null){
+				it.remove();
+			} else {
+				if(key.equals(domianKey)) return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public void process(Event event) throws Throwable {
@@ -131,19 +170,21 @@ public class MethodListener {
 		return null;
 	}
 
-
-
 	@Override
 	public String toString() {
-		return "MethodListener [eventType=" + eventType
-				+ ", listenerObjectRef=" + listenerObjectRef + ", method="
-				+ method + "]";
+		StringBuilder sb = new StringBuilder();
+		sb.append("MethodListener [eventType=" + eventType + ", domainKeys=[");
+		
+		int lastDomainKeyIndex = domainKeys.size()-1;
+		for(int i = 0; i < lastDomainKeyIndex; i++){
+			WeakReference<Object> ref = domainKeys.get(i);
+			sb.append(ref.get()).append(", ");
+		}
+		sb.append(domainKeys.get(lastDomainKeyIndex).get());
+		
+		sb.append("], listenerObjectRef=" + listenerObjectRef.get()+ ", method=" + method + "]");
+		return sb.toString();
 	}
-
-
-
-
-
 
 
 
