@@ -15,7 +15,10 @@ public class NodeEditions {
 	
 	@SuppressWarnings("unchecked")
 	public <T> T get(Class<? extends UpdateRequest> type){
-		return (T)updatesByType.get(type).value();
+		UpdateRequest updateRequest = updatesByType.get(type);
+		if(updateRequest == null) 
+			return null;
+		return (T)updateRequest.value();
 	}
 	
 	public void remove(Class<? extends UpdateRequest> type){

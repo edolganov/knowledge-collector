@@ -66,7 +66,7 @@ public class TreeController extends Controller<Tree>{
 		tree.setRowHeight(0);
 		tree.setEditable(true);
 		treeFacade.setSingleSelection();
-		treeFacade.setPopupMenu(new TreeMenu(tree, appContext), new MenuController() {
+		treeFacade.setPopupMenu(new TreeMenu(tree, appContext, context), new MenuController() {
 			
 			@Override
 			public boolean canShow() {

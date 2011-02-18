@@ -35,7 +35,9 @@ public class NodeEditionsAggregator {
 	public void onEditing(NameChanged event){
 		Node node = event.node;
 		String edition = event.newName;
-		getOrCreate(node).add(new UpdateName(edition));
+		if(!Check.isEmpty(edition)){
+			getOrCreate(node).add(new UpdateName(edition));
+		}
 		//System.out.println(getOrCreate(node));
 	}
 	

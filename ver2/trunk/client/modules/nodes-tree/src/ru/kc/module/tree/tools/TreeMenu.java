@@ -14,10 +14,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
+import ru.kc.common.Context;
 import ru.kc.common.node.NodeIcon;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.DeleteNode;
+import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
@@ -33,25 +35,25 @@ import ru.kc.util.swing.tree.TreeFacade;
 @SuppressWarnings("serial")
 public class TreeMenu extends JPopupMenu {
 
-	JMenuItem delete = new JMenuItem("delete", IconUtil.get("/ru/kc/common/img/delete.png"));
+	JMenuItem delete = new JMenuItem("Delete", IconUtil.get("/ru/kc/common/img/delete.png"));
 
 	JMenuItem info = new JMenuItem();
 
-	JMenuItem rename = new JMenuItem("rename", IconUtil.get("/ru/kc/common/img/rename.png"));
-	JMenuItem save = new JMenuItem("save", IconUtil.get("/ru/kc/common/img/save.png"));
+	JMenuItem rename = new JMenuItem("Rename", IconUtil.get("/ru/kc/common/img/rename.png"));
+	JMenuItem save = new JMenuItem("Save", IconUtil.get("/ru/kc/common/img/save.png"));
 
-	JMenu addMenu = new JMenu("add");
-	JMenuItem dir = new JMenuItem("dir", NodeIcon.getIcon(Dir.class));
-	JMenuItem text = new JMenuItem("text", NodeIcon.getIcon(Text.class));
-	JMenuItem link = new JMenuItem("link", NodeIcon.getIcon(Link.class));
-	JMenuItem fileLink = new JMenuItem("file link",
+	JMenu addMenu = new JMenu("Add");
+	JMenuItem dir = new JMenuItem("Dir", NodeIcon.getIcon(Dir.class));
+	JMenuItem text = new JMenuItem("Text", NodeIcon.getIcon(Text.class));
+	JMenuItem link = new JMenuItem("Link", NodeIcon.getIcon(Link.class));
+	JMenuItem fileLink = new JMenuItem("File link",
 			NodeIcon.getIcon(FileLink.class));
 
-	JMenu parent = new JMenu("parent ops");
-	JMenuItem dirToParent = new JMenuItem("dir", NodeIcon.getIcon(Dir.class));
-	JMenuItem textToParent = new JMenuItem("text", NodeIcon.getIcon(Text.class));
-	JMenuItem linkToParent = new JMenuItem("link", NodeIcon.getIcon(Link.class));
-	JMenuItem fileLinkToParent = new JMenuItem("file link",
+	JMenu parent = new JMenu("Parent ops");
+	JMenuItem dirToParent = new JMenuItem("Dir", NodeIcon.getIcon(Dir.class));
+	JMenuItem textToParent = new JMenuItem("Text", NodeIcon.getIcon(Text.class));
+	JMenuItem linkToParent = new JMenuItem("Link", NodeIcon.getIcon(Link.class));
+	JMenuItem fileLinkToParent = new JMenuItem("File link",
 			NodeIcon.getIcon(FileLink.class));
 
 	JMenuItem showHideInfo = new JMenuItem("");
@@ -61,12 +63,14 @@ public class TreeMenu extends JPopupMenu {
 	boolean showInfo = true;
 
 	TreeFacade treeFacade;
+	NodeEditionsAggregator nodeEditionsAggregator;
 
-	public TreeMenu(JTree tree, AppContext context) {
+	public TreeMenu(JTree tree, AppContext appContext, Context context) {
 		treeFacade = new TreeFacade(tree);
 
-		final CommandService commandService = context.commandService;
-		final EventManager events = context.eventManager;
+		final CommandService commandService = appContext.commandService;
+		final EventManager events = appContext.eventManager;
+		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		
 		rename.addActionListener(new ActionListener() {
 
@@ -230,8 +234,17 @@ public class TreeMenu extends JPopupMenu {
 		DefaultMutableTreeNode currentNode = treeFacade.getCurrentNode();
 		if (currentNode == null)
 			return;
+		Object userObject = currentNode.getUserObject();
+		if( ! (userObject instanceof Node))
+			return;
+		
+		Node node = (Node) userObject;
 
 		removeAll();
+		
+		if(nodeEditionsAggregator.hasEditions(node)){
+			add(save);
+		}
 
 		add(rename);
 
@@ -242,10 +255,10 @@ public class TreeMenu extends JPopupMenu {
 		add(parent);
 
 		if (showInfo) {
-			showHideInfo.setText("hide info panel");
+			showHideInfo.setText("Hide info panel");
 			showHideInfo.setIcon(rightIcon);
 		} else {
-			showHideInfo.setText("show info panel");
+			showHideInfo.setText("Show info panel");
 			showHideInfo.setIcon(leftIcon);
 		}
 		add(showHideInfo);
