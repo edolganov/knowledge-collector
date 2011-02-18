@@ -5,11 +5,14 @@ import java.util.Collection;
 import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.DescriptionChanged;
 import ru.kc.common.node.edit.event.NameChanged;
+import ru.kc.common.node.edit.event.NodeReverted;
+import ru.kc.common.node.edit.event.RevertNodeRequest;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.tools.filepersist.update.UpdateDescription;
@@ -23,11 +26,13 @@ public class NodeEditionsAggregator {
 	
 	RuntimeStorage runtimeStorage;
 	CommandService commandService;
+	EventManager eventManager;
 	
 	public void init(AppContext appContext){
 		appContext.eventManager.addObjectMethodListeners(this);
 		runtimeStorage = appContext.runtimeStorage;
 		commandService = appContext.commandService;
+		eventManager = appContext.eventManager;
 	}
 	
 	
@@ -57,6 +62,16 @@ public class NodeEditionsAggregator {
 			Collection<UpdateRequest> updates = editions.all();
 			if(Check.isEmpty(updates)) return;
 			commandService.invokeSafe(new UpdateNode(node, updates));
+		}
+	}
+	
+	@EventListener(RevertNodeRequest.class)
+	public void onRevertRequest(RevertNodeRequest event){
+		Node node = event.node;
+		NodeEditions editions = get(node);
+		if(editions != null){
+			editions.removeAll();
+			eventManager.fireEventInEDT(this, new NodeReverted(node));
 		}
 	}
 	

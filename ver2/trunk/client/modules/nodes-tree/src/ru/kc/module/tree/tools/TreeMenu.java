@@ -21,6 +21,7 @@ import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
+import ru.kc.common.node.edit.event.RevertNodeRequest;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
@@ -39,8 +40,10 @@ public class TreeMenu extends JPopupMenu {
 
 	JMenuItem info = new JMenuItem();
 
-	JMenuItem rename = new JMenuItem("Rename", IconUtil.get("/ru/kc/common/img/rename.png"));
 	JMenuItem save = new JMenuItem("Save", IconUtil.get("/ru/kc/common/img/save.png"));
+	JMenuItem revert = new JMenuItem("Revert", IconUtil.get("/ru/kc/common/img/revert.png"));
+	
+	JMenuItem rename = new JMenuItem("Rename", IconUtil.get("/ru/kc/common/img/rename.png"));
 
 	JMenu addMenu = new JMenu("Add");
 	JMenuItem dir = new JMenuItem("Dir", NodeIcon.getIcon(Dir.class));
@@ -100,6 +103,17 @@ public class TreeMenu extends JPopupMenu {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
 					events.fireEventInEDT(this, new UpdateNodeRequest(node));
+				}
+			}
+		});
+		
+		revert.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Node node = treeFacade.getCurrentObject(Node.class);
+				if(node != null){
+					events.fireEventInEDT(this, new RevertNodeRequest(node));
 				}
 			}
 		});
@@ -243,7 +257,9 @@ public class TreeMenu extends JPopupMenu {
 		removeAll();
 		
 		if(nodeEditionsAggregator.hasEditions(node)){
+			add(revert);
 			add(save);
+			addSeparator();
 		}
 
 		add(rename);

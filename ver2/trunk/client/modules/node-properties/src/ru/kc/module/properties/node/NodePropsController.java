@@ -173,6 +173,7 @@ public class NodePropsController extends Controller<NodeProps> implements PropsU
 		fireEventInEDT(new NameReverted(node));
 		editions.remove(UpdateDescription.class);
 		fireEventInEDT(new DescriptionReverted(node));
+		
 		ui.name.requestFocus();
 		
 		fillData();

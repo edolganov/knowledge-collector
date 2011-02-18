@@ -25,6 +25,10 @@ public class NodeEditions {
 		updatesByType.remove(type);
 	}
 	
+	public void removeAll() {
+		updatesByType.clear();
+	}
+	
 	public Collection<UpdateRequest> all(){
 		return  updatesByType.values();
 	}
@@ -38,6 +42,8 @@ public class NodeEditions {
 	public String toString() {
 		return "NodeEditions [byType=" + updatesByType + "]";
 	}
+
+
 	
 	
 
