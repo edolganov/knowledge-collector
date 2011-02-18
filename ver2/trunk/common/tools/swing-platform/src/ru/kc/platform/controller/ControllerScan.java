@@ -185,10 +185,11 @@ public class ControllerScan {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void init(AbstractController c,Object initOb) {
+		c.setUIObject(initOb);
 		injectData(c);
 		scanForMethodActions(c);
 		scanForEventListenerMethods(c);
-		c.init(appContext, initOb);
+		c.init(appContext);
 	}
 
 

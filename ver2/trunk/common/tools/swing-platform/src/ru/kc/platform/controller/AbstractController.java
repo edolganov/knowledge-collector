@@ -30,9 +30,12 @@ public abstract class AbstractController<T> implements DomainMember {
 	protected AppContext appContext;
 	protected RuntimeStorage runtimeStorage;
 	
-	void init(AppContext appContext, T ui){
-		initContext(appContext);
+	void setUIObject(T ui){
 		this.ui = ui;
+	}
+	
+	void init(AppContext appContext){
+		initContext(appContext);
 		beforeInit();
 		init();
 	}
