@@ -1,6 +1,6 @@
 package ru.kc.platform.event;
 
-public interface ListenerExceptionHandler {
+public interface ExceptionHandler {
 	
 	void handle(Throwable e) throws RuntimeException;
 

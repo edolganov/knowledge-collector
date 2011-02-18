@@ -12,7 +12,7 @@ public class Event {
 		return sender;
 	}
 
-	public void setSender(Object sender) {
+	void setSender(Object sender) {
 		this.sender = sender;
 	}
 

@@ -3,7 +3,6 @@ package ru.kc.platform.event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.event.model.Listeners;
 import ru.kc.util.swing.SwingUtil;
 
 
@@ -14,7 +13,7 @@ public class EventManager {
 	private Listeners listeners = new Listeners();
 	
 	
-	public void setExceptionHandler(ListenerExceptionHandler exceptionHandler) {
+	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
 		listeners.setExceptionHandler(exceptionHandler);
 	}
 	

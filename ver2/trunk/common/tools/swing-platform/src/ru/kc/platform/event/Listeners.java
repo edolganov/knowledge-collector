@@ -1,19 +1,18 @@
-package ru.kc.platform.event.model;
+package ru.kc.platform.event;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.kc.platform.event.Event;
-import ru.kc.platform.event.FireEventException;
-import ru.kc.platform.event.ListenerExceptionHandler;
+import ru.kc.platform.event.model.ListenersQueue;
+import ru.kc.platform.event.model.MethodListener;
 
 public class Listeners {
 	
-	private ListenerExceptionHandler exceptionHandler;
+	private ExceptionHandler exceptionHandler;
 	private Map<Class<?>, ListenersQueue> listeners = new HashMap<Class<?>, ListenersQueue>();
 	
-	public void setExceptionHandler(ListenerExceptionHandler exceptionHandler) {
+	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
 	}
 
@@ -78,8 +77,16 @@ public class Listeners {
 
 	private void handleListenerException(Throwable e) {
 		if(exceptionHandler != null) exceptionHandler.handle(e);
-		else throw new FireEventException(e);
+		else throw new ProcessEventException(e);
 	}
+
+	@Override
+	public String toString() {
+		return "Listeners [listeners=" + listeners + ", exceptionHandler="
+				+ exceptionHandler + "]";
+	}
+	
+	
 
 
 }

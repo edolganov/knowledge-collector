@@ -14,7 +14,7 @@ import ru.kc.platform.command.CommandService;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
-import ru.kc.platform.event.ListenerExceptionHandler;
+import ru.kc.platform.event.ExceptionHandler;
 import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
@@ -110,7 +110,7 @@ public class App {
 		
 		commandService = new CommandService();
 		eventManager = new EventManager();
-		eventManager.setExceptionHandler(new ListenerExceptionHandler() {
+		eventManager.setExceptionHandler(new ExceptionHandler() {
 			
 			@Override
 			public void handle(Throwable e) {
