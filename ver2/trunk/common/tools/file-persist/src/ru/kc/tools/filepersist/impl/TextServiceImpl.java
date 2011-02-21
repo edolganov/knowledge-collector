@@ -21,8 +21,7 @@ public class TextServiceImpl implements TextService {
 	@Override
 	public String getText(Text text) throws Exception {
 		TextBean textBean = convert(text);
-		
-		return null;
+		return fs.getText(text);
 	}
 	
 	
