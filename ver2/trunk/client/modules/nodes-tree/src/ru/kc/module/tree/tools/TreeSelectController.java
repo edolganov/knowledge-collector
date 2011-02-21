@@ -27,6 +27,8 @@ public class TreeSelectController extends Controller<Tree> {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
 					fireEventInEDT(new NodeSelected(node));
+				} else {
+					fireEventInEDT(new NodeSelected(null));
 				}
 			}
 			

@@ -28,7 +28,7 @@ public class CreateLinkController extends Controller<LinkDialog>{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				createDirRequest();
+				createNodeRequest();
 
 			}
 		});
@@ -36,7 +36,7 @@ public class CreateLinkController extends Controller<LinkDialog>{
 			
 			@Override
 			protected void doAction(KeyEvent e) {
-				createDirRequest();
+				createNodeRequest();
 			}
 		});
 	}
@@ -55,12 +55,15 @@ public class CreateLinkController extends Controller<LinkDialog>{
 		});
 	}
 
-	protected void createDirRequest() {
+	protected void createNodeRequest() {
 		String name = panel.name.getText();
 		String url = panel.url.getText();
 		
-		if(Check.isEmpty(name)){
+		if(Check.isEmpty(name) && !Check.isEmpty(url)){
 			name = new String(url);
+		} 
+		else if( !Check.isEmpty(name) && Check.isEmpty(url)){
+			url = new String(name);
 		}
 		
 		if(!Check.isEmpty(name)){
