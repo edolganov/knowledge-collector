@@ -8,6 +8,7 @@ import java.util.List;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
+import ru.kc.model.Text;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -197,6 +198,11 @@ public class FileSystemImpl {
 	
 	public void move(NodeBean node, NodeBean newParent)throws Exception{
 		//TODO
+	}
+
+	public String getText(Text text) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

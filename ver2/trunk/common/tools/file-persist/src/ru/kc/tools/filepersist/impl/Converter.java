@@ -5,9 +5,10 @@ import ru.kc.tools.filepersist.model.impl.NodeBean;
 
 public class Converter {
 	
-	public NodeBean convert(Node node) {
+	@SuppressWarnings("unchecked")
+	public <T extends NodeBean> T convert(Node node) {
 		if(node != null){
-			if(node instanceof NodeBean) return (NodeBean) node;
+			if(node instanceof NodeBean) return (T) node;
 			//else
 			throw new IllegalArgumentException("unknow node type: "+node.getClass());
 		} else {
