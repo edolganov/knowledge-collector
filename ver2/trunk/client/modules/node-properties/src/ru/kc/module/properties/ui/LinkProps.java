@@ -38,9 +38,9 @@ public class LinkProps extends javax.swing.JPanel {
         description = new javax.swing.JTextArea();
         save = new javax.swing.JButton();
         revert = new javax.swing.JButton();
-        name1 = new javax.swing.JTextField();
+        url = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        open = new javax.swing.JButton();
 
         jLabel1.setText("name:");
 
@@ -56,18 +56,17 @@ public class LinkProps extends javax.swing.JPanel {
         jScrollPane1.setViewportView(description);
 
         save.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/save.png"))); // NOI18N
-        save.setText("Save");
+        save.setToolTipText("Save");
 
         revert.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/revert.png"))); // NOI18N
-        revert.setText("Revert");
+        revert.setToolTipText("Revert");
 
-        name1.setMinimumSize(new java.awt.Dimension(0, 0));
+        url.setMinimumSize(new java.awt.Dimension(0, 0));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/web.png"))); // NOI18N
         jLabel3.setText("url:");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/go.png"))); // NOI18N
-        jButton1.setToolTipText("open");
+        open.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/web.png"))); // NOI18N
+        open.setToolTipText("Open");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -77,18 +76,17 @@ public class LinkProps extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                    .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                     .addComponent(jLabel2)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addComponent(url, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(open)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(revert)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(save))
-                    .addComponent(jLabel3)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(name1, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(save)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -100,17 +98,17 @@ public class LinkProps extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(name1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(url, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(save)
-                    .addComponent(revert, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(open, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                        .addComponent(save, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(revert, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(68, 68, 68))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -118,15 +116,15 @@ public class LinkProps extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextArea description;
-    public javax.swing.JButton jButton1;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField name;
-    public javax.swing.JTextField name1;
+    public javax.swing.JButton open;
     public javax.swing.JButton revert;
     public javax.swing.JButton save;
+    public javax.swing.JTextField url;
     // End of variables declaration//GEN-END:variables
 
 }

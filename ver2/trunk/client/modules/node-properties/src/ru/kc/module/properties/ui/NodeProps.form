@@ -44,9 +44,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="120" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="save" alignment="3" min="-2" max="-2" attributes="1"/>
-                  <Component id="revert" alignment="3" max="32767" attributes="1"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="revert" max="32767" attributes="1"/>
+                  <Component id="save" alignment="0" max="32767" attributes="1"/>
               </Group>
               <EmptySpace pref="115" max="32767" attributes="0"/>
           </Group>
@@ -99,7 +99,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/ru/kc/common/img/save.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="toolTipText" type="java.lang.String" value="Save"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="revert">
@@ -107,7 +107,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/ru/kc/common/img/revert.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Revert"/>
+        <Property name="toolTipText" type="java.lang.String" value="Revert"/>
       </Properties>
     </Component>
   </SubComponents>

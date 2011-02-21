@@ -4,6 +4,7 @@ import ru.kc.module.properties.ui.PropsPanel;
 import ru.kc.platform.annotations.GlobalMapping;
 import ru.kc.platform.module.Module;
 
+@SuppressWarnings("serial")
 @GlobalMapping("props")
 public class PropsModule extends Module<PropsPanel> {
 

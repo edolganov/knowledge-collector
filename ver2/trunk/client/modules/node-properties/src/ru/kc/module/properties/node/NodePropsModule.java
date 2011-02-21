@@ -6,6 +6,7 @@ import ru.kc.module.properties.ui.NodeProps;
 import ru.kc.platform.module.Module;
 
 
+@SuppressWarnings("serial")
 public class NodePropsModule extends Module<NodeProps> implements PropsUpdater{
 
 	@Override

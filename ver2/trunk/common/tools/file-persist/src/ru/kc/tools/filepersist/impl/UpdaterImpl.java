@@ -3,16 +3,24 @@ package ru.kc.tools.filepersist.impl;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.UpdateBuilder;
 import ru.kc.tools.filepersist.Updater;
+import ru.kc.tools.filepersist.model.impl.LinkBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
+import ru.kc.tools.filepersist.update.UpdateUrl;
 
 public class UpdaterImpl implements Updater {
+	
+	private static Log log = LogFactory.getLog(UpdaterImpl.class);
 	
 	Context c;
 	TreeImpl tree;
@@ -51,15 +59,23 @@ public class UpdaterImpl implements Updater {
 
 
 	
-	private void applyUpdates(NodeBean clone, Collection<UpdateRequest> updates) {
+	private void applyUpdates(NodeBean node, Collection<UpdateRequest> updates) {
 		for (UpdateRequest update : updates) {
 			if(update instanceof UpdateName){
 				String name = ((UpdateName) update).value;
-				clone.setName(name);
+				node.setName(name);
 			} 
 			else if(update instanceof UpdateDescription){
 				String description = ((UpdateDescription) update).value;
-				clone.setDescription(description);
+				node.setDescription(description);
+			}
+			else if(update instanceof UpdateUrl){
+				if(node instanceof LinkBean){
+					String url = ((UpdateUrl) update).value;
+					((LinkBean)node).setUrl(url);
+				} else {
+					log.error("can't update url for "+node);
+				}
 			}
 		}
 	}

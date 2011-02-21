@@ -8,6 +8,7 @@ import ru.kc.common.node.edit.event.NameChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.common.node.edit.event.RevertNodeRequest;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
+import ru.kc.common.node.edit.event.UrlChanged;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.app.AppContext;
@@ -18,6 +19,7 @@ import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
+import ru.kc.tools.filepersist.update.UpdateUrl;
 import ru.kc.util.Check;
 
 public class NodeEditionsAggregator {
@@ -43,7 +45,6 @@ public class NodeEditionsAggregator {
 		if(!Check.isEmpty(edition)){
 			getOrCreate(node).add(new UpdateName(edition));
 		}
-		//System.out.println(getOrCreate(node));
 	}
 	
 	@EventListener(DescriptionChanged.class)
@@ -51,8 +52,17 @@ public class NodeEditionsAggregator {
 		Node node = event.node;
 		String edition = event.newDescription;
 		getOrCreate(node).add(new UpdateDescription(edition));
-		//System.out.println(getOrCreate(node));
 	}
+	
+	@EventListener(UrlChanged.class)
+	public void onEditing(UrlChanged event){
+		Node node = event.node;
+		String edition = event.newUrl;
+		getOrCreate(node).add(new UpdateUrl(edition));
+	}
+	
+	
+	
 	
 	@EventListener(UpdateNodeRequest.class)
 	public void onUpdateRequest(UpdateNodeRequest event){

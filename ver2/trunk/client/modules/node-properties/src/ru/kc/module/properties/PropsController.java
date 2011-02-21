@@ -12,6 +12,7 @@ import ru.kc.model.FileLink;
 import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
+import ru.kc.module.properties.link.LinkPropsModule;
 import ru.kc.module.properties.node.NodePropsModule;
 import ru.kc.module.properties.ui.PropsPanel;
 import ru.kc.platform.annotations.Mapping;
@@ -21,6 +22,7 @@ import ru.kc.platform.event.annotation.EventListener;
 public class PropsController extends Controller<PropsPanel> {
 
 	NodePropsModule nodePropsModule;
+	LinkPropsModule linkPropsModule;
 	Node currentNode;
 	
 	@Override
@@ -29,6 +31,9 @@ public class PropsController extends Controller<PropsPanel> {
 		
 		nodePropsModule = new NodePropsModule();
 		nodePropsModule.setAppContext(appContext);
+		
+		linkPropsModule = new LinkPropsModule();
+		linkPropsModule.setAppContext(appContext);
 	}
 	
 	
@@ -65,7 +70,8 @@ public class PropsController extends Controller<PropsPanel> {
 	}
 	
 	private void showProps(Link node) {
-		showPropsForAbstractNode(node);
+		linkPropsModule.setNode(node);
+		replace(linkPropsModule);
 	}
 	
 	private void showProps(FileLink node) {
@@ -110,22 +116,35 @@ public class PropsController extends Controller<PropsPanel> {
 		for(Component c : components){
 			if(c == newComponent){
 				exist = true;
-				if(c instanceof PropsUpdater){
-					((PropsUpdater) c).enableUpdateMode();
-				}
+				enableUpdateMode(c);
 			} else {
 				ui.remove(c);
-				if(c instanceof PropsUpdater){
-					((PropsUpdater) c).disableUpdateMode();
-				}
+				disableUpdateMode(c);
 			}
 		}
-		if(!exist && newComponent != null) 
+		if(!exist && newComponent != null){
+			enableUpdateMode(newComponent);
 			ui.add(newComponent);
+		}
+			
 		
 		ui.revalidate();
 		ui.repaint();
 
+	}
+
+
+	private void disableUpdateMode(Component c) {
+		if(c instanceof PropsUpdater){
+			((PropsUpdater) c).disableUpdateMode();
+		}
+	}
+
+
+	private void enableUpdateMode(Component c) {
+		if(c instanceof PropsUpdater){
+			((PropsUpdater) c).enableUpdateMode();
+		}
 	}
 
 
