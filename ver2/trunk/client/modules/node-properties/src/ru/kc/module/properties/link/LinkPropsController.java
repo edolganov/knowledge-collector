@@ -1,5 +1,7 @@
 package ru.kc.module.properties.link;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -15,6 +17,8 @@ import ru.kc.module.properties.ui.LinkProps;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateUrl;
+import ru.kc.util.Check;
+import ru.kc.util.swing.os.OSUtil;
 
 @Mapping(LinkProps.class)
 public class LinkPropsController extends AbstractNodePropsController<Link, LinkProps> {
@@ -38,6 +42,21 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				urlChanged();
+			}
+		});
+		
+		ui.open.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String text = ui.url.getText();
+					if(!Check.isEmpty(text)){
+						OSUtil.openUrl(text);
+					}
+				}catch (Exception ex) {
+					log.error("can't open url", ex);
+				}
 			}
 		});
 	}
