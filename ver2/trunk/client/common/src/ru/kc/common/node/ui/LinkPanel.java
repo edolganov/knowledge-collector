@@ -87,7 +87,7 @@ public class LinkPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     public javax.swing.JTextField name;
-    private javax.swing.JButton replace;
+    public javax.swing.JButton replace;
     public javax.swing.JTextField url;
     // End of variables declaration//GEN-END:variables
 

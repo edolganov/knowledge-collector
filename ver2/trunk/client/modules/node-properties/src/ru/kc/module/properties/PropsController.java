@@ -2,6 +2,8 @@ package ru.kc.module.properties;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.Arrays;
+import java.util.List;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.tree.event.NodeSelected;
@@ -54,42 +56,35 @@ public class PropsController extends Controller<PropsPanel> {
 
 
 	private void showEmpty() {
-		clearOld();
+		clearAll();
 	}
 
 
 	private void showProps(Dir node) {
-		nodePropsModule.setNode(node);
-		nodePropsModule.enableUpdateMode();
-		show(nodePropsModule);
+		showPropsForAbstractNode(node);
 	}
 	
 	private void showProps(Link node) {
-		// TODO Auto-generated method stub
-		
+		showPropsForAbstractNode(node);
 	}
 	
 	private void showProps(FileLink node) {
-		// TODO Auto-generated method stub
-		
+		showPropsForAbstractNode(node);
 	}
 	
 	private void showProps(Text node) {
-		// TODO Auto-generated method stub
-		
+		showPropsForAbstractNode(node);
 	}
 	
 	private void showPropsForUnknowType(Node node) {
-		// TODO Auto-generated method stub
-		
+		showPropsForAbstractNode(node);
 	}
 	
-	
-	private void show(Component component){
-		ui.add(component);
-		ui.revalidate();
-		ui.repaint();
+	private void showPropsForAbstractNode(Node node){
+		nodePropsModule.setNode(node);
+		replace(nodePropsModule);
 	}
+	
 	
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode) {
@@ -101,17 +96,36 @@ public class PropsController extends Controller<PropsPanel> {
 	@Override
 	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
 		currentNode = null;
-		clearOld();
+		clearAll();
 	}
 	
 
-	private void clearOld() {
-		for(Component c : ui.getComponents()){
-			if(c instanceof PropsUpdater){
-				((PropsUpdater) c).disableUpdateMode();
+	private void clearAll(){
+		replace(null);
+	}
+	
+	private void replace(Component newComponent){
+		List<Component> components = Arrays.asList(ui.getComponents());
+		boolean exist = false;
+		for(Component c : components){
+			if(c == newComponent){
+				exist = true;
+				if(c instanceof PropsUpdater){
+					((PropsUpdater) c).enableUpdateMode();
+				}
+			} else {
+				ui.remove(c);
+				if(c instanceof PropsUpdater){
+					((PropsUpdater) c).disableUpdateMode();
+				}
 			}
 		}
-		ui.removeAll();
+		if(!exist && newComponent != null) 
+			ui.add(newComponent);
+		
+		ui.revalidate();
+		ui.repaint();
+
 	}
 
 

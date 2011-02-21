@@ -14,7 +14,7 @@ public class CreateLinkModule extends DialogModule<LinkDialog>{
 	}
 
 	public Link getLink() {
-		return null;//getController(CreateDirController.class).getDir();
+		return getController(CreateLinkController.class).getNode();
 	}
 	
 	
