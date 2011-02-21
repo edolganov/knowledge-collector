@@ -29,7 +29,18 @@ public class TreeSelectController extends Controller<Tree> {
 					fireEventInEDT(new NodeSelected(node));
 				}
 			}
+			
 		});
+		
+
+	}
+	
+	@Override
+	protected void onNodeUpdated(Node old, Node updatedNode) {
+		Node node = treeFacade.getCurrentObject(Node.class);
+		if(node == null){
+			fireEventInEDT(new NodeSelected(null));
+		}
 	}
 
 }

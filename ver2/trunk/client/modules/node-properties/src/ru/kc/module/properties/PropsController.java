@@ -93,7 +93,7 @@ public class PropsController extends Controller<PropsPanel> {
 	
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode) {
-		if(currentNode.equals(old)){
+		if(old.equals(currentNode)){
 			onNodeSelected(new NodeSelected(updatedNode));
 		}
 	}
