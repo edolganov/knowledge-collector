@@ -6,7 +6,6 @@ import java.util.Collection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.UpdateBuilder;
 import ru.kc.tools.filepersist.Updater;
@@ -23,13 +22,11 @@ public class UpdaterImpl implements Updater {
 	private static Log log = LogFactory.getLog(UpdaterImpl.class);
 	
 	Context c;
-	TreeImpl tree;
 	FileSystemImpl fs;
 	Listeners listeners;
 	
 	public void init(Context context){
 		c = context;
-		tree = context.tree;
 		fs = context.fs;
 		listeners = c.listeners;
 	}

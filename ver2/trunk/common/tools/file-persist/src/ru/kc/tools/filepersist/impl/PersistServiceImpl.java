@@ -6,6 +6,7 @@ import ru.kc.exception.BaseException;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.ServiceListener;
+import ru.kc.tools.filepersist.TextService;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
@@ -26,12 +27,14 @@ public class PersistServiceImpl implements PersistService {
 		TreeImpl tree = new TreeImpl();		
 		FileSystemImpl fs = new FileSystemImpl();
 		UpdaterImpl updater = new UpdaterImpl();
+		TextServiceImpl textService = new TextServiceImpl();
 		
-		context = new Context(init, factory, tree, fs, updater);
+		context = new Context(init, factory, tree, fs, updater, textService);
 		fs.init(context);
 		tree.init(context);
 		factory.init(context);
 		updater.init(context);
+		textService.init(context);
 		
 	}
 	
@@ -58,6 +61,12 @@ public class PersistServiceImpl implements PersistService {
 	@Override
 	public Updater updater() {
 		return context.updater;
+	}
+
+	@Override
+	public TextService textService() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

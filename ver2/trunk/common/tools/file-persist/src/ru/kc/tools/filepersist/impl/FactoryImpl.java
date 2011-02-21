@@ -43,10 +43,9 @@ public class FactoryImpl implements Factory {
 	}
 
 	@Override
-	public Text createText(String name, String txt) {
+	public Text createText(String name, String description) {
 		TextBean text = new TextBean();
-		init(text, name, null);
-		text.setTextToSave(txt);
+		init(text, name, description);
 		return text;
 	}
 	

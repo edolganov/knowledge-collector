@@ -28,7 +28,7 @@ public class ContainersModelTest extends Assert {
 	public void init() throws Exception{
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
-		Context c = new Context(init, null, null, null, null);
+		Context c = new Context(init, null, null, null, null, null);
 		
 		ContainerStore store = new ContainerStore();
 		context = new FSContext(null, store, c);

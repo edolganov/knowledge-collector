@@ -2,6 +2,6 @@ package ru.kc.model;
 
 public interface Text extends Node {
 	
-	String getText();
+	String getText() throws Exception;
 
 }

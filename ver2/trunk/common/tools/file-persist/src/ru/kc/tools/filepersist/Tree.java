@@ -14,6 +14,5 @@ public interface Tree {
 
 	void deleteRecursive(Node node)throws Exception;
 	
-	
 
 }

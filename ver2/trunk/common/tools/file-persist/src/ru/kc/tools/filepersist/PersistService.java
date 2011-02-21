@@ -10,6 +10,6 @@ public interface PersistService {
 	
 	Updater updater();
 	
-	
+	TextService textService();
 
 }
