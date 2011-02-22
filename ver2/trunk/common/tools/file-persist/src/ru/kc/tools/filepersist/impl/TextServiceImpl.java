@@ -21,12 +21,28 @@ public class TextServiceImpl implements TextService {
 	@Override
 	public String getText(Text text) throws Exception {
 		TextBean textBean = convert(text);
-		return fs.getText(text);
+		if(textBean.getContainer() == null) 
+			throw new IllegalArgumentException("not saved node");
+		return fs.getText(textBean);
+	}
+	
+	@Override
+	public void setText(Text text, String content) throws Exception {
+		if(content == null)
+			throw new IllegalArgumentException("null content");
+		
+		TextBean textBean = convert(text);
+		if(textBean.getContainer() == null) 
+			throw new IllegalArgumentException("not saved node");
+		
+		fs.setText(textBean, content);
 	}
 	
 	
 	private TextBean convert(Text node) {
 		return c.converter.convert(node);
 	}
+
+
 
 }

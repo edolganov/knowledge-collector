@@ -8,7 +8,6 @@ import java.util.List;
 
 import ru.kc.exception.BaseException;
 import ru.kc.model.Node;
-import ru.kc.model.Text;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -32,13 +31,16 @@ public class FileSystemImpl {
 	public void init(Context context) throws IOException{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
+		Blobs blobs = new Blobs();
 		
 		c = new FSContext(
 				containerModel, 
 				containerStore,
-				context);
+				context,
+				blobs);
 		containerStore.init(c);
 		containerModel.init(c);
+		blobs.init(c);
 		
 		initFolders();
 		initRootContainer();
@@ -77,8 +79,6 @@ public class FileSystemImpl {
 		}
 		
 	}
-	
-	
 	
 	
 	public NodeBean getRoot(){
@@ -200,9 +200,12 @@ public class FileSystemImpl {
 		//TODO
 	}
 
-	public String getText(Text text) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getText(NodeBean node)throws Exception {
+		return c.blobs.getText(node);
+	}
+	
+	public void setText(NodeBean node, String text)throws Exception {
+		c.blobs.setText(node, text);
 	}
 
 

@@ -9,7 +9,7 @@ public interface Factory {
 	
 	Dir createDir(String name, String description);
 	
-	Text createText(String name, String text);
+	Text createText(String name, String description);
 	
 	Link createLink(String name, String url, String description);
 	

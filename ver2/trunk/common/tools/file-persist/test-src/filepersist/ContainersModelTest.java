@@ -30,7 +30,7 @@ public class ContainersModelTest extends Assert {
 		Context c = new Context(init, null, null, null, null, null);
 		
 		ContainerStore store = new ContainerStore();
-		context = new FSContext(null, store, c);
+		context = new FSContext(null, store, c, null);
 		store.init(context);
 	}
 	

@@ -65,8 +65,7 @@ public class PersistServiceImpl implements PersistService {
 
 	@Override
 	public TextService textService() {
-		// TODO Auto-generated method stub
-		return null;
+		return context.textService;
 	}
 
 }
