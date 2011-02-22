@@ -18,6 +18,7 @@ import ru.kc.common.Context;
 import ru.kc.common.node.NodeIcon;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateLinkRequest;
+import ru.kc.common.node.command.CreateTextRequest;
 import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
@@ -146,7 +147,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// CommandService.invoke(new AddTreeNode(DialogOps.newText()));
+				Node parent = treeFacade.getCurrentObject(Node.class);
+				commandService.invokeSafe(new CreateTextRequest(parent));
 			}
 
 		});
@@ -157,6 +159,16 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node parent = treeFacade.getCurrentObject(Node.class);
 				commandService.invokeSafe(new CreateLinkRequest(parent));
+			}
+
+		});
+		
+		fileLink.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Node parent = treeFacade.getCurrentObject(Node.class);
+				//commandService.invokeSafe(new CreateLinkRequest(parent));
 			}
 
 		});
@@ -180,10 +192,8 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Node parent = tree.getParentObject(tree.getCurrentNode(),
-				// Node.class);
-				// CommandService.invoke(new
-				// AddTreeNode(parent,DialogOps.newText()));
+				Node parent = getParentOfCurrentNode();
+				commandService.invokeSafe(new CreateTextRequest(parent));
 			}
 
 		});
@@ -194,6 +204,16 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node parent = getParentOfCurrentNode();
 				commandService.invokeSafe(new CreateLinkRequest(parent));
+			}
+
+		});
+		
+		fileLinkToParent.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Node parent = getParentOfCurrentNode();
+				//commandService.invokeSafe(new CreateLinkRequest(parent));
 			}
 
 		});
