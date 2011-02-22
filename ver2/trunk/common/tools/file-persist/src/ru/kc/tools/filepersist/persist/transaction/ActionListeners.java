@@ -30,12 +30,12 @@ public class ActionListeners {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void fireCommit(AtomicAction<?> action) throws Throwable{
+	public void fireTransactionCommited(AtomicAction<?> action){
 		Class<?> type = action.getClass();
 		ArrayList<AtomicActionListener> list = map.get(type);
 		if(list != null){
 			for(AtomicActionListener l : list){
-				l.onCommit(action);
+				l.onTransactionCommitted(action);
 			}
 		}
 	}

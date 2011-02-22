@@ -7,7 +7,7 @@ import ru.kc.tools.filepersist.persist.transaction.AtomicAction;
 public class RemoveNodeFromContainer extends AtomicAction<Void>{
 	
 	public final NodeBean node;
-	Container container;
+	public final Container container;
 
 	public RemoveNodeFromContainer(NodeBean node) {
 		super();

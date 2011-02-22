@@ -80,6 +80,9 @@ public class FileSystemImpl {
 		
 	}
 	
+	public FSContext getContext(){
+		return c;
+	}
 	
 	public NodeBean getRoot(){
 		Container container = c.containerModel.getRoot();

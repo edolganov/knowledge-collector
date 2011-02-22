@@ -15,6 +15,8 @@ import ru.kc.tools.filepersist.TextService;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
+import ru.kc.tools.filepersist.model.impl.NodeBean;
+import ru.kc.tools.filepersist.persist.Blobs;
 import ru.kc.util.file.FileUtil;
 
 public class TextBlobsTest extends Assert {
@@ -125,6 +127,56 @@ public class TextBlobsTest extends Assert {
 		textService.setText(text, "суб тест");
 		String savedContent = textService.getText(text);
 		assertEquals("суб тест", savedContent);
+	}
+	
+	
+	
+	@Test
+	public void deleteTextWithNodes() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		TextService textService = ps.textService();
+		Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		Text child = factory.createText("child", null);
+		tree.add(root, child);
+		//add many other child
+		for(int i =2; i < 13; i++){
+			tree.add(root, factory.createDir("child"+i, null));
+		}
+		Text subChild = factory.createText("subChild", null);
+		tree.add(child, subChild);
+		Text subSubChild = factory.createText("test", null);
+		tree.add(subChild, subSubChild);
+		
+		textService.setText(child, "тест1");
+		textService.setText(subChild, "тест2");
+		textService.setText(subSubChild, "тест3");
+		
+		File text1 = getTextFile(child);
+		File text2 = getTextFile(subChild);
+		File text3 = getTextFile(subSubChild);
+		
+		assertEquals(true, text1.exists());
+		assertEquals(true, text2.exists());
+		assertEquals(true, text3.exists());
+		
+		tree.deleteRecursive(child);
+		
+		assertEquals(false, text1.exists());
+		assertEquals(false, text2.exists());
+		assertEquals(false, text3.exists());
+	}
+	
+	
+	
+
+	private File getTextFile(Text child) {
+		NodeBean bean = ((NodeBean)child);
+		Blobs blobs = bean.getContainer().getContext().fs.getContext().blobs;
+		File file = blobs.getTextPath(bean);
+		return file;
 	}
 
 	private PersistServiceImpl createService(int maxNodesInContainer,

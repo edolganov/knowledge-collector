@@ -19,23 +19,23 @@ public class Blobs {
 		InitContextExt init = c.c.init;
 		blobsDir = init.blobsDir;
 		nodesDir = init.nodesDir;
-//		c.actionListeners.addListener(RemoveNodeFromContainer.class, new AtomicActionListener<RemoveNodeFromContainer>() {
-//
-//			@Override
-//			public void onInvoke(RemoveNodeFromContainer action) throws Throwable {
-//				moveTextToTempDir(action.node);
-//			}
-//
-//			@Override
-//			public void onCommit(RemoveNodeFromContainer action) throws Throwable {
-//				deleteTextInTempDir(action.node);
-//			}
-//
-//			@Override
-//			public void onRollback(RemoveNodeFromContainer action) throws Throwable {
-//				restoreTextFromTempDir(action.node);
-//			}
-//		});
+		c.actionListeners.addListener(RemoveNodeFromContainer.class, new AtomicActionListener<RemoveNodeFromContainer>() {
+
+			@Override
+			public void onInvoke(RemoveNodeFromContainer action) throws Throwable {
+				moveTextToTempDir(action.container, action.node.getId());
+			}
+
+			@Override
+			public void onRollback(RemoveNodeFromContainer action) throws Throwable {
+				restoreTextFromTempDir(action.container, action.node.getId());
+			}
+			
+			@Override
+			public void onTransactionCommitted(RemoveNodeFromContainer action) {
+				deleteTextInTempDir(action.container, action.node.getId());
+			}
+		});
 		
 	}
 
@@ -62,9 +62,12 @@ public class Blobs {
 	}
 
 	private File getTextFile(NodeBean node){
-		String id = node.getId();
-		String containerSimplePath = getFileSimplePath(node.getContainer());
-		String path = blobsDir.getPath()+"/"+containerSimplePath+"/"+id+".txt";
+		return getTextFile(node.getContainer(), node.getId());
+	}
+	
+	private File getTextFile(Container container, String nodeId){
+		String containerSimplePath = getFileSimplePath(container);
+		String path = blobsDir.getPath()+"/"+containerSimplePath+"/"+nodeId+".txt";
 		path = normalizePath(path);
 		File file = new File(path);
 		return file;
@@ -99,10 +102,10 @@ public class Blobs {
 
 	
 	
-	protected void moveTextToTempDir(NodeBean node) {
-		File file = getTextFile(node);
+	protected void moveTextToTempDir(Container container, String nodeId) {
+		File file = getTextFile(container,nodeId);
 		if(file.exists()){
-			File tempFile = getTempFile(node);
+			File tempFile = getTempFile(container, nodeId);
 			tempFile.getParentFile().mkdir();
 			boolean success = file.renameTo(tempFile);
 			if(! success)
@@ -111,10 +114,10 @@ public class Blobs {
 	}
 
 
-	protected void restoreTextFromTempDir(NodeBean node) {
-		File tempFile = getTempFile(node);
+	protected void restoreTextFromTempDir(Container container, String nodeId) {
+		File tempFile = getTempFile(container, nodeId);
 		if(tempFile.exists()){
-			File file = getTextFile(node);
+			File file = getTextFile(container, nodeId);
 			boolean success = tempFile.renameTo(file);
 			if(! success)
 				throw new IllegalStateException("can't move "+tempFile+" to "+file);
@@ -122,15 +125,15 @@ public class Blobs {
 	}
 	
 
-	protected void deleteTextInTempDir(NodeBean node) {
-		File tempFile = getTempFile(node);
+	protected void deleteTextInTempDir(Container container, String nodeId) {
+		File tempFile = getTempFile(container, nodeId);
 		if(tempFile.exists()){
 			tempFile.delete();
 		}
 	}
 	
-	private File getTempFile(NodeBean node) {
-		File path = getTextPath(node);
+	private File getTempFile(Container container, String nodeId) {
+		File path = getTextFile(container,nodeId);
 		String name = path.getName();
 		File dir = path.getParentFile();
 		File tempDir = new File(dir,".hist");

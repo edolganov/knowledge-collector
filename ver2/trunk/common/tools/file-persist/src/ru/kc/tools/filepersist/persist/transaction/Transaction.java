@@ -26,7 +26,7 @@ public abstract class Transaction<T> {
 	public T start() throws Exception {
 		try{
 			T out = body();
-			commit();
+			transactionCommitedEvent();
 			return out;
 		} catch (Throwable e) {
 			roolback();
@@ -44,16 +44,15 @@ public abstract class Transaction<T> {
 		return (O) out;
 	}
 	
-	private void commit() {
+	private void transactionCommitedEvent() {
 		AtomicAction<?> action = null;
-		try{
-			for(AtomicAction<?> curAction : done){
-				action = curAction;
-				action.commit();
-				actionListeners.fireCommit(action);
+		for(AtomicAction<?> curAction : done){
+			action = curAction;
+			try{
+				actionListeners.fireTransactionCommited(action);
+			}catch (Throwable e) {
+				log.error("can't commit transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);
 			}
-		}catch (Throwable e) {
-			log.error("can't commit transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);
 		}
 	}
 	
