@@ -67,7 +67,7 @@ public class FileUtil {
 				w.write(buff, 0, i);
 			}
 			w.flush();
-			return out.toString();
+			return out.toString(charset);
 		}finally{
 			if(r != null) 
 				try {
@@ -95,7 +95,7 @@ public class FileUtil {
 		OutputStreamWriter w = null;
 				
 		try{
-			r = new InputStreamReader(new ByteArrayInputStream(text.getBytes()), charset);
+			r = new InputStreamReader(new ByteArrayInputStream(text.getBytes("UTF8")), charset);
 			w = new OutputStreamWriter(new FileOutputStream(file), charset);
 			char[] buff = new char[1024*4];
 			int i;
