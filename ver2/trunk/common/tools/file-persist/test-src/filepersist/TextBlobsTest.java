@@ -1,7 +1,6 @@
 package filepersist;
 
 import java.io.File;
-import java.io.IOException;
 
 import junit.framework.Assert;
 
@@ -99,6 +98,33 @@ public class TextBlobsTest extends Assert {
 		textService.setText(text, "тест");
 		String savedContent = textService.getText(text);
 		assertEquals("тест", savedContent);
+	}
+	
+	@Test
+	public void createTextSubNodes() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		TextService textService = ps.textService();
+		Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		Node child = factory.createDir("child", null);
+		tree.add(root, child);
+		//add many other child
+		for(int i =2; i < 13; i++){
+			tree.add(root, factory.createDir("child"+i, null));
+		}
+		
+		Node subChild = factory.createDir("subChild", null);
+		tree.add(child, subChild);
+		
+		
+		Text text = factory.createText("test", null);
+		tree.add(subChild, text);
+		
+		textService.setText(text, "суб тест");
+		String savedContent = textService.getText(text);
+		assertEquals("суб тест", savedContent);
 	}
 
 	private PersistServiceImpl createService(int maxNodesInContainer,

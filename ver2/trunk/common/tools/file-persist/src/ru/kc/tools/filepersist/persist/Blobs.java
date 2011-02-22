@@ -6,6 +6,8 @@ import java.io.IOException;
 import ru.kc.tools.filepersist.impl.InitContextExt;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
+import ru.kc.tools.filepersist.persist.transaction.AtomicActionListener;
+import ru.kc.tools.filepersist.persist.transaction.actions.RemoveNodeFromContainer;
 import ru.kc.util.file.FileUtil;
 
 public class Blobs {
@@ -17,8 +19,27 @@ public class Blobs {
 		InitContextExt init = c.c.init;
 		blobsDir = init.blobsDir;
 		nodesDir = init.nodesDir;
+//		c.actionListeners.addListener(RemoveNodeFromContainer.class, new AtomicActionListener<RemoveNodeFromContainer>() {
+//
+//			@Override
+//			public void onInvoke(RemoveNodeFromContainer action) throws Throwable {
+//				moveTextToTempDir(action.node);
+//			}
+//
+//			@Override
+//			public void onCommit(RemoveNodeFromContainer action) throws Throwable {
+//				deleteTextInTempDir(action.node);
+//			}
+//
+//			@Override
+//			public void onRollback(RemoveNodeFromContainer action) throws Throwable {
+//				restoreTextFromTempDir(action.node);
+//			}
+//		});
 		
 	}
+
+
 
 	public String getText(NodeBean node) throws Exception {
 		File path = getTextPath(node);
@@ -77,6 +98,45 @@ public class Blobs {
 	}
 
 	
+	
+	protected void moveTextToTempDir(NodeBean node) {
+		File file = getTextFile(node);
+		if(file.exists()){
+			File tempFile = getTempFile(node);
+			tempFile.getParentFile().mkdir();
+			boolean success = file.renameTo(tempFile);
+			if(! success)
+				throw new IllegalStateException("can't move "+file+" to "+tempFile);
+		}
+	}
+
+
+	protected void restoreTextFromTempDir(NodeBean node) {
+		File tempFile = getTempFile(node);
+		if(tempFile.exists()){
+			File file = getTextFile(node);
+			boolean success = tempFile.renameTo(file);
+			if(! success)
+				throw new IllegalStateException("can't move "+tempFile+" to "+file);
+		}
+	}
+	
+
+	protected void deleteTextInTempDir(NodeBean node) {
+		File tempFile = getTempFile(node);
+		if(tempFile.exists()){
+			tempFile.delete();
+		}
+	}
+	
+	private File getTempFile(NodeBean node) {
+		File path = getTextPath(node);
+		String name = path.getName();
+		File dir = path.getParentFile();
+		File tempDir = new File(dir,".hist");
+		File out = new File(tempDir,name);
+		return out;
+	}
 	
 
 }

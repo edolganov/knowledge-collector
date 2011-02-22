@@ -12,13 +12,13 @@ public abstract class Transaction<T> {
 	private static Log log = LogFactory.getLog(Transaction.class);
 	
 	protected final FSContext c;
-	
-	ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
-	
+	private ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
+	private ActionListeners actionListeners;
 
 	public Transaction(FSContext c) {
 		super();
 		this.c = c;
+		actionListeners = c.actionListeners;
 	}
 	
 	protected abstract T body() throws Throwable;
@@ -26,6 +26,7 @@ public abstract class Transaction<T> {
 	public T start() throws Exception {
 		try{
 			T out = body();
+			commit();
 			return out;
 		} catch (Throwable e) {
 			roolback();
@@ -34,13 +35,26 @@ public abstract class Transaction<T> {
 			else throw new IllegalStateException(e);
 		}
 	}
-	
 
 	public <O> O invoke(AtomicAction<O> action) throws Throwable {
 		action.init(this,c);
 		O out = action.invoke();
 		done.add(action);
+		actionListeners.fireInvoke(action);
 		return (O) out;
+	}
+	
+	private void commit() {
+		AtomicAction<?> action = null;
+		try{
+			for(AtomicAction<?> curAction : done){
+				action = curAction;
+				action.commit();
+				actionListeners.fireCommit(action);
+			}
+		}catch (Throwable e) {
+			log.error("can't commit transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);
+		}
 	}
 	
 	protected void roolback(){
@@ -49,6 +63,7 @@ public abstract class Transaction<T> {
 			for (int i = done.size()-1; i > -1; i--) {
 				action = done.remove(i);
 				action.rollback();
+				actionListeners.fireRollback(action);
 			}
 		}catch (Throwable e) {
 			log.error("can't rollback transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);

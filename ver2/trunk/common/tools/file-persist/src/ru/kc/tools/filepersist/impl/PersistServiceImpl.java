@@ -20,7 +20,7 @@ public class PersistServiceImpl implements PersistService {
 		this.params = params;
 		createRootDir();
 		File nodesDir = new File(params.rootDir,"nodes");
-		File blobsDir = new File(params.rootDir,"nodes-data");
+		File blobsDir = nodesDir;
 		
 		InitContextExt init = new InitContextExt(params,nodesDir,blobsDir);
 		FactoryImpl factory = new FactoryImpl();
