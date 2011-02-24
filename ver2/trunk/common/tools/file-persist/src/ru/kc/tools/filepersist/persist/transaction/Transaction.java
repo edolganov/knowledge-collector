@@ -14,22 +14,25 @@ public abstract class Transaction<T> {
 	protected final FSContext c;
 	private ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	private ActionListeners actionListeners;
+	private UserTransaction userTransaction;
 
 	public Transaction(FSContext c) {
 		super();
 		this.c = c;
 		actionListeners = c.actionListeners;
+		userTransaction = UserTransaction.getExistOrCreateAndBegin();
 	}
 	
 	protected abstract T body() throws Throwable;
 	
 	public T start() throws Exception {
+		userTransaction.add(this);
 		try{
 			T out = body();
-			transactionCommitedEvent();
+			userTransaction.commitIfSingleTransaction();
 			return out;
 		} catch (Throwable e) {
-			roolback();
+			userTransaction.rollback();
 			if(e instanceof Exception) throw (Exception)e;
 			if(e instanceof Error) throw (Error)e;
 			else throw new IllegalStateException(e);
@@ -37,22 +40,22 @@ public abstract class Transaction<T> {
 	}
 
 	public <O> O invoke(AtomicAction<O> action) throws Throwable {
-		action.init(this,c);
+		action.init(this, c);
 		O out = action.invoke();
 		done.add(action);
 		actionListeners.fireInvoke(action);
 		return (O) out;
 	}
 	
-	private void transactionCommitedEvent() {
-		AtomicAction<?> action = null;
-		for(AtomicAction<?> curAction : done){
-			action = curAction;
-			try{
-				actionListeners.fireTransactionCommited(action);
-			}catch (Throwable e) {
-				log.error("can't commit transaction. [unrollbacked-actions="+done+", exception-in-action="+action+"]", e);
-			}
+	void commit() throws Throwable {
+		for(AtomicAction<?> action : done){
+			action.commit();
+		}
+	}
+	
+	void fireTransactionCommitedForListeners(){
+		for(AtomicAction<?> action : done){
+			actionListeners.fireTransactionCommited(action);
 		}
 	}
 	

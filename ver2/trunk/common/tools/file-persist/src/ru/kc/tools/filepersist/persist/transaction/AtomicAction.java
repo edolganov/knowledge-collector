@@ -16,6 +16,10 @@ public abstract class AtomicAction<O> {
 	
 	protected abstract void rollback() throws Throwable;
 	
+	protected void commit()throws Throwable {
+		/* override if need */
+	}
+	
 	
 	public void init(Transaction<?> transaction,FSContext c) {
 		this.c = c;

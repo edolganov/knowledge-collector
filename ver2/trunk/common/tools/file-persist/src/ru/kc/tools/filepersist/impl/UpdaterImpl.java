@@ -10,6 +10,7 @@ import ru.kc.tools.filepersist.model.impl.LinkBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
+import ru.kc.tools.filepersist.persist.transaction.UserTransaction;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
@@ -46,14 +47,26 @@ public class UpdaterImpl implements Updater {
 		NodeBean old = convert(node);
 		NodeBean clone = (NodeBean)old.clone();
 		
-		applyUpdates(clone, updates);
-		fs.replace(old,clone);
-		
-		applyExternalUpdates(clone, updates);
+		UserTransaction userTransaction = new UserTransaction();
+		try {
+			userTransaction.begin();
+			
+			applyUpdates(clone, updates);
+			fs.replace(old,clone);
+			applyExternalUpdates(clone, updates);
+			
+			userTransaction.commit();
+		}catch (Throwable e) {
+			userTransaction.rollback();
+			throw convert(e);
+		}
+
 		
 		listeners.fireUpdatedEvent(old, clone);
 	}
 	
+
+
 
 	private void applyUpdates(NodeBean node, Collection<UpdateRequest> updates) {
 		for (UpdateRequest update : updates) {
@@ -99,7 +112,11 @@ public class UpdaterImpl implements Updater {
 		return c.converter.convert(node);
 	}
 
-
+	private Exception convert(Throwable e) {
+		if(e instanceof Exception) return (Exception)e;
+		if(e instanceof Error) throw (Error) e;
+		return new RuntimeException(e);
+	}
 
 
 
