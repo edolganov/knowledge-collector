@@ -15,5 +15,9 @@ public class TabModule extends Module<TabPanel>{
 	public void setComponent(Component component){
 		getController(TabController.class).setComponent(component);
 	}
+	
+	public Component getComponent(){
+		return getController(TabController.class).getComponent();
+	}
 
 }

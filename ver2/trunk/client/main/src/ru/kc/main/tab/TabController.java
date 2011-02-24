@@ -17,6 +17,7 @@ import ru.kc.util.swing.icon.IconUtil;
 public class TabController extends Controller<TabPanel>{
 
 	JToolBar toolbar;
+	Component component;
 	
 	
 	@Override
@@ -27,8 +28,14 @@ public class TabController extends Controller<TabPanel>{
 	}
 
 	public void setComponent(Component component) {
+		this.component = component;
 		ui.root.add(component);
 		refreshToolbar();
+	}
+	
+
+	public Component getComponent() {
+		return component;
 	}
 	
 	private void refreshToolbar() {
@@ -57,6 +64,7 @@ public class TabController extends Controller<TabPanel>{
 			toolbar.add(action.createButton(true));
 		}
 	}
+
 
 
 
