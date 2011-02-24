@@ -7,8 +7,10 @@ import ru.kc.common.node.edit.event.DescriptionChanged;
 import ru.kc.common.node.edit.event.NameChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.common.node.edit.event.RevertNodeRequest;
+import ru.kc.common.node.edit.event.TextChanged;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.common.node.edit.event.UrlChanged;
+import ru.kc.common.node.event.ChildDeletedRecursive;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.app.AppContext;
@@ -19,6 +21,7 @@ import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
+import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.tools.filepersist.update.UpdateUrl;
 import ru.kc.util.Check;
 
@@ -61,6 +64,13 @@ public class NodeEditionsAggregator {
 		getOrCreate(node).add(new UpdateUrl(edition));
 	}
 	
+	@EventListener(TextChanged.class)
+	public void onEditing(TextChanged event){
+		Node node = event.node;
+		String edition = event.newText;
+		getOrCreate(node).add(new UpdateText(edition));
+	}
+	
 	
 	
 	
@@ -88,6 +98,11 @@ public class NodeEditionsAggregator {
 	@EventListener(NodeUpdated.class)
 	public void onUpdated(NodeUpdated event){
 		clearEditions(event.old);
+	}
+	
+	@EventListener(ChildDeletedRecursive.class)
+	public void onDeleted(ChildDeletedRecursive event){
+		clearEditions(event.deletedChild);
 	}
 	
 

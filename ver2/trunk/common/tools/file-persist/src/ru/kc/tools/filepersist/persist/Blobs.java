@@ -52,8 +52,14 @@ public class Blobs {
 		setText(path, text);
 	}
 	
+	public void removeText(NodeBean node) {
+		File path = getTextPath(node);
+		removeText(path);
+	}
 	
-	
+
+
+
 
 	public File getTextPath(NodeBean node) {
 		File file = getTextFile(node);
@@ -99,6 +105,11 @@ public class Blobs {
 	private void setText(File path, String text) throws IOException {
 		FileUtil.writeFileUTF8(path, text);
 	}
+	
+	private void removeText(File path) {
+		boolean deleted = path.delete();
+		if(!deleted) throw new IllegalStateException("can't delete "+path);
+	}
 
 	
 	
@@ -140,6 +151,10 @@ public class Blobs {
 		File out = new File(tempDir,name);
 		return out;
 	}
+
+
+
+
 	
 
 }

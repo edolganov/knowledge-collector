@@ -8,15 +8,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import ru.kc.model.Dir;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.TextService;
 import ru.kc.tools.filepersist.Tree;
+import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.Blobs;
+import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.util.file.FileUtil;
 
 public class TextBlobsTest extends Assert {
@@ -102,6 +106,27 @@ public class TextBlobsTest extends Assert {
 		assertEquals("тест", savedContent);
 	}
 	
+	
+	@Test
+	public void deleteText() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		TextService textService = ps.textService();
+		Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		Text text = factory.createText("test", null);
+		tree.add(root, text);
+		
+		textService.setText(text, "тест");
+		String savedContent = textService.getText(text);
+		assertEquals("тест", savedContent);
+		
+		textService.removeText(text);
+		String nullContent = textService.getText(text);
+		assertEquals(null, nullContent);
+	}
+	
 	@Test
 	public void createTextSubNodes() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
@@ -169,7 +194,65 @@ public class TextBlobsTest extends Assert {
 		assertEquals(false, text3.exists());
 	}
 	
+	@Test
+	public void createTextWithUpdateInterface() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		Updater updater = ps.updater();
+		
+		Node root = tree.getRoot();
+		Text text = factory.createText("test", null);
+		tree.add(root, text);
+		
+		updater.update(text, new UpdateText("тест"));
+		
+		String savedContent = text.getText();
+		assertEquals("тест", savedContent);
+	}
 	
+	@Test
+	public void deleteTextWithUpdateInterface() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		Updater updater = ps.updater();
+		
+		Node root = tree.getRoot();
+		Text text = factory.createText("test", null);
+		tree.add(root, text);
+		
+		updater.update(text, new UpdateText("тест"));
+		
+		String savedContent = text.getText();
+		assertEquals("тест", savedContent);
+		
+		updater.update(text, new UpdateText(null));
+		String nullContent = text.getText();
+		assertEquals(null, nullContent);
+	}
+	
+	@Test
+	public void revertAllUpdatesWithBrokenTextUpdate() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		Updater updater = ps.updater();
+		
+		Node root = tree.getRoot();
+		Dir dir = factory.createDir("test", null);
+		tree.add(root, dir);
+		
+		try {
+			updater.update(dir, new UpdateName("renamed"), new UpdateText("тест"));
+			fail(IllegalArgumentException.class+" expected");
+		}catch (IllegalArgumentException e) {
+			//good
+		}
+		
+		dir = (Dir)root.getChildren().get(0);
+		assertEquals("test", dir.getName());
+	}
 	
 
 	private File getTextFile(Text child) {

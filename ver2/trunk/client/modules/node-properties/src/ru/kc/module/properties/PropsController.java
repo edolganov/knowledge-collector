@@ -14,6 +14,7 @@ import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.module.properties.link.LinkPropsModule;
 import ru.kc.module.properties.node.NodePropsModule;
+import ru.kc.module.properties.text.TextPropsModule;
 import ru.kc.module.properties.ui.PropsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
@@ -23,6 +24,7 @@ public class PropsController extends Controller<PropsPanel> {
 
 	NodePropsModule nodePropsModule;
 	LinkPropsModule linkPropsModule;
+	TextPropsModule textPropsModule;
 	Node currentNode;
 	
 	@Override
@@ -34,6 +36,9 @@ public class PropsController extends Controller<PropsPanel> {
 		
 		linkPropsModule = new LinkPropsModule();
 		linkPropsModule.setAppContext(appContext);
+		
+		textPropsModule = new TextPropsModule();
+		textPropsModule.setAppContext(appContext);
 	}
 	
 	
@@ -74,13 +79,16 @@ public class PropsController extends Controller<PropsPanel> {
 		replace(linkPropsModule);
 	}
 	
+	private void showProps(Text node) {
+		textPropsModule.setNode(node);
+		replace(textPropsModule);
+	}
+	
 	private void showProps(FileLink node) {
 		showPropsForAbstractNode(node);
 	}
 	
-	private void showProps(Text node) {
-		showPropsForAbstractNode(node);
-	}
+
 	
 	private void showPropsForUnknowType(Node node) {
 		showPropsForAbstractNode(node);

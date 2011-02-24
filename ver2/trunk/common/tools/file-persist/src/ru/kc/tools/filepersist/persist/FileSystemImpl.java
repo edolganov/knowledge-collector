@@ -11,6 +11,7 @@ import ru.kc.model.Node;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
+import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
@@ -209,6 +210,10 @@ public class FileSystemImpl {
 	
 	public void setText(NodeBean node, String text)throws Exception {
 		c.blobs.setText(node, text);
+	}
+
+	public void removeText(NodeBean node) {
+		c.blobs.removeText(node);
 	}
 
 

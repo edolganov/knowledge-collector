@@ -75,7 +75,8 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 		
 		ui.url.setText(url == null? node.getUrl() : url);
 		ui.url.setCaretPosition(0);
-		setButtonsEnabled(url != null);
+		if(url != null)
+			setButtonsEnabled(true);
 	}
 	
 	
