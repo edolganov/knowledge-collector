@@ -54,6 +54,7 @@ public class Blobs {
 	
 	public void removeText(NodeBean node) {
 		File path = getTextPath(node);
+		if(!path.exists()) return;
 		removeText(path);
 	}
 	
