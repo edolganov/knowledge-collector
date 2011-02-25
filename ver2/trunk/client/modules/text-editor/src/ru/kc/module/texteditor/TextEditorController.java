@@ -11,11 +11,13 @@ import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.common.node.edit.event.TextChanged;
-import ru.kc.common.tree.event.NodeSelected;
+import ru.kc.common.tab.TabFacade;
+import ru.kc.common.tab.TabFacadeStub;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.module.texteditor.ui.TextEditor;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.annotations.OptionalInject;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateText;
@@ -27,6 +29,9 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	private JEditorPane editor;
 	private boolean enabledUpdateMode = true;
 	private NodeEditionsAggregator nodeEditionsAggregator;
+	
+	@OptionalInject
+	private TabFacade tabFacade = new TabFacadeStub();
 	
 	@Override
 	protected void init() {
@@ -95,6 +100,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	public void onNodeReverted(NodeReverted event){
 		processNodeEvent(event, event.node);
 	}
+	
 	
 	private void processNodeEvent(Event event, Node eventNode){
 		if(!enabledUpdateMode) return;

@@ -15,8 +15,9 @@ import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.domain.annotation.Domain;
+import ru.kc.platform.service.ServiceContainer;
 
-public abstract class Module<T extends Component> extends JPanel implements DomainMember {
+public abstract class Module<T extends Component> extends JPanel implements DomainMember, ServiceContainer {
 
 	private static final long serialVersionUID = 3201710095656034030L;
 	
@@ -120,7 +121,23 @@ public abstract class Module<T extends Component> extends JPanel implements Doma
 		}
 		return DomainMember.ROOT_DOMAIN_KEY;
 	}
+	
 
+	@Override
+	public void addService(Class<?> type, Object ob) {
+		controller.getServiceContainer().addService(type, ob);
+	}
+	
+	@Override
+	public boolean containsService(Class<?> type) {
+		return controller.getServiceContainer().containsService(type);
+	}
+	
+	@Override
+	public Object getService(Class<?> type) {
+		return controller.getServiceContainer().getService(type);
+	}
+	
 
 	@Override
 	public String toString() {

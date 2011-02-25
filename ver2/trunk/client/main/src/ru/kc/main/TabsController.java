@@ -172,6 +172,7 @@ public class TabsController extends Controller<MainForm> {
 		TabModule tab = new TabModule();
 		tab.setAppContext(appContext);
 		tab.setComponent(component);
+		tab.setTabWrapper(tabsWrapper);
 		return tab;
 	}
 	

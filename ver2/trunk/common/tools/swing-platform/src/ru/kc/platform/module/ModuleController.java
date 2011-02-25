@@ -12,6 +12,8 @@ import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
+import ru.kc.platform.service.ServiceContainer;
+import ru.kc.platform.service.ServiceContainerImpl;
 import ru.kc.platform.utils.AppUtils;
 
 public abstract class ModuleController<T> {
@@ -23,6 +25,7 @@ public abstract class ModuleController<T> {
 	
 	protected Log log;
 	protected ControllersPool controllers;
+	protected ServiceContainerImpl serviceContainer = new ServiceContainerImpl();
 
 	
 	
@@ -83,6 +86,10 @@ public abstract class ModuleController<T> {
 	
 	public T getUI() {
 		return ui;
+	}
+	
+	public ServiceContainer getServiceContainer(){
+		return serviceContainer;
 	}
 
 

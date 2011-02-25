@@ -19,7 +19,7 @@ public abstract class AbstractCommand<T> {
 		this.appContext = context;
 		ui = appContext.rootUI;
 		
-		new AOPTool(appContext).injectData(this);
+		new AOPTool(appContext, ui).injectData(this);
 	}
 	
 	public T invokeCommand() throws Exception {

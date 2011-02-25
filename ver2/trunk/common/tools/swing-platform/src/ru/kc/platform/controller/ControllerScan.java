@@ -136,13 +136,14 @@ public class ControllerScan {
 		}
 		
 		//инитим дерево начиная с рута
+		AOPTool aopTool = new AOPTool(appContext, initOb);
 		LinkedList<ControllerDependenceNode> queue = new LinkedList<ControllerScan.ControllerDependenceNode>(firstLevelNodes);
 		while(!queue.isEmpty()){
 			ControllerDependenceNode node = queue.removeFirst();
 			try {
 				AbstractController c = (AbstractController<?>) node.controllerClass.newInstance();
 
-				init(c,initOb);
+				init(c, initOb, aopTool);
 				out.add(c);
 				
 				allNodes.remove(node.controllerClass);
@@ -184,17 +185,12 @@ public class ControllerScan {
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void init(AbstractController c,Object initOb) {
+	private void init(AbstractController c, Object initOb, AOPTool aopTool) {
 		c.setUIObject(initOb);
-		injectData(c);
+		aopTool.injectData(c);
 		scanForMethodActions(c);
 		scanForEventListenerMethods(c);
 		c.init(appContext);
-	}
-
-
-	private void injectData(AbstractController<?> c) {
-		new AOPTool(appContext).injectData(c);
 	}
 	
 

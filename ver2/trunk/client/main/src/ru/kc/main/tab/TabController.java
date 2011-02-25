@@ -8,9 +8,11 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.common.tab.TabFacade;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TabPanel.class)
@@ -32,6 +34,28 @@ public class TabController extends Controller<TabPanel>{
 		ui.root.add(component);
 		refreshToolbar();
 	}
+
+	public void setTabWrapper(TabbedWrapper tabsWrapper) {
+		initExternalService(tabsWrapper);
+	}
+	
+
+	private void initExternalService(final TabbedWrapper tabsWrapper) {
+		TabFacade facade = new TabFacade() {
+			
+			@Override
+			public void resetMarks() {
+				System.out.println("resetMarks");
+			}
+			
+			@Override
+			public void markAsModified() {
+				System.out.println("markAsModified");
+			}
+		};
+		
+	}
+	
 	
 
 	public Component getComponent() {
@@ -64,6 +88,7 @@ public class TabController extends Controller<TabPanel>{
 			toolbar.add(action.createButton(true));
 		}
 	}
+
 
 
 
