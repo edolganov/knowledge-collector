@@ -2,7 +2,6 @@ package ru.kc.main;
 
 import java.awt.Component;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import ru.kc.common.controller.Controller;
@@ -45,15 +44,8 @@ public class TabsController extends Controller<MainForm> {
 			
 			@Override
 			public boolean canClose(Component comp, int index, String text) {
-				//default icon, custom title
-				int n = JOptionPane.showConfirmDialog(
-					ui,
-				    "Close? "+text,
-				    "???",
-				    JOptionPane.YES_NO_OPTION);
-
-
-				return n == 0;
+				boolean confirm = dialogs.confirmByDialog(rootUI, "Закрыть?");
+				return confirm;
 			}
 		});
 		

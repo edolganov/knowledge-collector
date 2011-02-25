@@ -5,17 +5,17 @@ import java.awt.Container;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import javax.swing.JTextArea;
 import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 
 import ru.kc.util.Check;
 
 public class EmptyTextAreaDecorator {
 	
-	JTextArea textArea;
+	JTextComponent textArea;
 	Color initBackground;
 	
-	public EmptyTextAreaDecorator(JTextArea textArea) {
+	public EmptyTextAreaDecorator(JTextComponent textArea) {
 		this.textArea = textArea;
 		initBackground = textArea.getBackground();
 		

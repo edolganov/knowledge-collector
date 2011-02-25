@@ -7,10 +7,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.swing.JButton;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.UpdateNode;
@@ -34,8 +33,8 @@ import ru.kc.util.Check;
 
 public abstract class AbstractNodePropsController<N extends Node, T> extends Controller<T> implements PropsUpdater {
 
-	protected JTextField name;
-	protected JTextArea description;
+	protected JTextComponent name;
+	protected JTextComponent description;
 	protected JButton save;
 	protected JButton revert;
 	
@@ -45,7 +44,7 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 	
 	protected NodeEditionsAggregator nodeEditionsAggregator;
 	
-	protected void init(JTextField name, JTextArea description, JButton save, JButton revert) {
+	protected void init(JTextComponent name, JTextComponent description, JButton save, JButton revert) {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		this.name = name;
 		this.description = description;

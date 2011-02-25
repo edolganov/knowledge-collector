@@ -16,6 +16,7 @@ import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ExceptionHandler;
 import ru.kc.platform.global.GlobalObjects;
+import ru.kc.platform.init.InitializerScan;
 import ru.kc.platform.module.ModuleScan;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
@@ -85,12 +86,13 @@ public class App {
 			
 			@Override
 			public void run() {
+				initFirstInitializers();
 				initServices();
 				initContext();
 			}
 		});
 	}
-	
+
 	public void run() {
 		SwingUtilities.invokeLater(new Runnable() {
 			
@@ -103,6 +105,13 @@ public class App {
 	}
 
 
+	protected void initFirstInitializers() {
+		InitializerScan initializerScan = new InitializerScan();
+		for(String preffix : globalObjectPackages){
+			initializerScan.scanAndInvokeFirstInitializers(preffix);
+		}
+	}
+	
 
 	private void initServices() {
 		scriptsService = new ScriptsService(new ScriptServiceControlleImpl());

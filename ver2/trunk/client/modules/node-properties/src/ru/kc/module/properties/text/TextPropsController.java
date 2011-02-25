@@ -1,5 +1,7 @@
 package ru.kc.module.properties.text;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -9,6 +11,7 @@ import javax.swing.event.DocumentListener;
 import ru.kc.common.node.edit.NodeEditions;
 import ru.kc.common.node.edit.event.TextChanged;
 import ru.kc.common.node.edit.event.TextReverted;
+import ru.kc.common.node.event.OpenNodeRequest;
 import ru.kc.model.Text;
 import ru.kc.module.properties.node.AbstractNodePropsController;
 import ru.kc.module.properties.ui.TextProps;
@@ -41,14 +44,27 @@ public class TextPropsController extends AbstractNodePropsController<Text, TextP
 			}
 		});
 		
+		ui.open.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				openNodeRequest();
+			}
+		});
+		
 	}
-	
+
 	protected void textChanged() {
 		if(!enabledUpdateMode) return;
 		
 		setButtonsEnabled(true);
 		String newText = ui.text.getText();
 		fireEventInEDT(new TextChanged(node, newText));
+	}
+	
+	protected void openNodeRequest() {
+		if(node == null) return;
+		fireEventInEDT(new OpenNodeRequest(node));
 	}
 	
 	@Override

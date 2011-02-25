@@ -3,6 +3,7 @@ package ru.kc.common.controller;
 import java.awt.Frame;
 
 import ru.kc.common.Context;
+import ru.kc.common.dialog.Dialogs;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
 import ru.kc.common.node.event.NodeUpdated;
@@ -24,6 +25,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	protected Factory persistFactory;
 	protected Frame rootUI;
 	protected Updater updater;
+	protected Dialogs dialogs;
 	
 	@Override
 	protected void beforeInit() {
@@ -32,6 +34,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 		persistFactory = persist.factory();
 		rootUI = (Frame)appContext.rootUI;
 		updater = persist.updater();
+		dialogs = context.dialogs;
 	}
 	
 	protected void onChildAdded(Node parent, Node child){ /* override if need */ }
