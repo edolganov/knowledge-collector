@@ -1,8 +1,11 @@
 package ru.kc.main;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
@@ -17,6 +20,7 @@ import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.platform.ui.tabs.TabbedWrapper.TabsListener;
+import ru.kc.util.Check;
 
 @Mapping(MainForm.class)
 public class TabsController extends Controller<MainForm> {
@@ -44,8 +48,8 @@ public class TabsController extends Controller<MainForm> {
 			
 			@Override
 			public boolean canClose(Component comp, int index, String text) {
-				boolean confirm = dialogs.confirmByDialog(rootUI, "Закрыть?");
-				return confirm;
+				//boolean confirm = dialogs.confirmByDialog(rootUI, "Закрыть?");
+				return true;
 			}
 		});
 		
@@ -54,17 +58,66 @@ public class TabsController extends Controller<MainForm> {
 	@EventListener(OpenNodeRequest.class)
 	public void onOpenNodeRequest(OpenNodeRequest event){
 		Node node = event.node;
-		Component existTab = findExistNodeTab(node);
+		TabModule existTab = findFirstExistNodeTab(node);
 		if(existTab != null){
 			focusRequest(existTab);
 		} else {
 			Component createdTab = createTab(node);
 			focusRequest(createdTab);
 		}
+	}
+
+	
+	
+	@Override
+	protected void onNodeUpdated(Node old, Node updatedNode) {
+		List<TabModule> list = findExistNodeTabs(old);
+		for (TabModule tab : list) {
+			Component component = tab.getComponent();
+			setNode(component, updatedNode);
+		}
+	}
+	
+	@Override
+	protected void onChildDeletedRecursive(Node parent, final Node deletedChild, final List<Node> deletedSubChildren) {
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				closeNodeTab(deletedChild);
+				for (Node node : deletedSubChildren) {
+					closeNodeTab(node);
+				}
+			}
+		});
 
 	}
 	
-	private Component findExistNodeTab(Node node) {
+	private void closeNodeTab(Node node){
+		List<TabModule> list = findExistNodeTabs(node);
+		for (TabModule tab : list) {
+			closeTab(tab);
+		}
+	}
+	
+	
+	
+	private void closeTab(Component tab) {
+		tabsWrapper.close(tab);
+	}
+
+	private void focusRequest(Component tab) {
+		tabs.setSelectedComponent(tab);
+	}
+	
+	
+	private TabModule findFirstExistNodeTab(Node node) {
+		List<TabModule> list = findExistNodeTabs(node);
+		return list.size() > 0 ? list.get(0) : null;
+	}
+	
+	private List<TabModule> findExistNodeTabs(Node node) {
+		ArrayList<TabModule> out = new ArrayList<TabModule>();
 		for (int i = 0; i < tabs.getComponentCount(); i++) {
 			Component tab = tabs.getComponent(i);
 			if(tab instanceof TabModule){
@@ -72,31 +125,35 @@ public class TabsController extends Controller<MainForm> {
 				if(component instanceof NodeContainer<?>){
 					Node candidat = ((NodeContainer<?>) component).getNode();
 					if(candidat.equals(node)){
-						return tab;
+						out.add((TabModule)tab);
 					}
 				}
 			}
 		}
-		return null;
+		return out;
 	}
-	
-	
-	private void focusRequest(Component component) {
-		tabs.setSelectedComponent(component);
-	}
-
-
 
 	private TabModule createTab(Node node) {
 		if(node instanceof Text){
 			TabModule tab = createTab("text-editor");
-			tabsWrapper.addTab(tab, node.getName(), true);
+			tabsWrapper.addTab(tab, convertToShort(node.getName()), true);
 			Component component = tab.getComponent();
 			setNode(component,node);
 			return tab;
 		}
 		else throw new IllegalArgumentException("unknow type for open tab: "+node);
 	}
+	
+	private String convertToShort(String string) {
+		if(Check.isEmpty(string)) return string;
+		
+		if(string.length() > 20){
+			string = string.substring(0, 17);
+			string = string + "...";
+		}
+		return string;
+	}
+	
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void setNode(Component component, Node node) {
@@ -117,6 +174,9 @@ public class TabsController extends Controller<MainForm> {
 		tab.setComponent(component);
 		return tab;
 	}
+	
+	
+
 	
 
 

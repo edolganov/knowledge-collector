@@ -108,7 +108,7 @@ public class PropsController extends Controller<PropsPanel> {
 	}
 	
 	@Override
-	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
+	protected void onChildDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {
 		currentNode = null;
 		clearAll();
 	}

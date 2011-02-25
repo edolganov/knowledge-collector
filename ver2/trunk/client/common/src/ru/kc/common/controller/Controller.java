@@ -1,6 +1,7 @@
 package ru.kc.common.controller;
 
 import java.awt.Frame;
+import java.util.List;
 
 import ru.kc.common.Context;
 import ru.kc.common.dialog.Dialogs;
@@ -39,7 +40,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	protected void onChildAdded(Node parent, Node child){ /* override if need */ }
 	
-	protected void onChildDeletedRecursive(Node parent, Node deletedChild){ /* override if need */ }
+	protected void onChildDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren){ /* override if need */ }
 	
 	protected void onNodeUpdated(Node old, Node updatedNode){ /* override if need */ }
 	
@@ -52,7 +53,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	@EventListener(ChildDeletedRecursive.class)
 	public void _onChildDeletedRecursive(ChildDeletedRecursive event){
-		onChildDeletedRecursive(event.parent, event.deletedChild);
+		onChildDeletedRecursive(event.parent, event.deletedChild, event.deletedSubChildren);
 	}
 	
 	@EventListener(NodeUpdated.class)

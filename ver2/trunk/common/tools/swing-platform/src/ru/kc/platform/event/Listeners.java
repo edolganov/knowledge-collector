@@ -13,6 +13,7 @@ public class Listeners {
 	
 	private ExceptionHandler exceptionHandler;
 	private Map<Class<?>, ListenersQueue> listeners = new HashMap<Class<?>, ListenersQueue>();
+	private Map<Class<?>, Object> locks = new HashMap<Class<?>, Object>();
 	
 	public void setExceptionHandler(ExceptionHandler exceptionHandler) {
 		this.exceptionHandler = exceptionHandler;
@@ -46,6 +47,9 @@ public class Listeners {
 
 	private int removeLike(MethodListener listener) {
 		Class<?> type = listener.getEventType();
+		if(lockExists(type))
+			throw new IllegalStateException(type+" is locked with other operation, can't delete "+listener);
+			
 		ListenersQueue queue = listeners.get(type);
 		if(queue != null){
 			return queue.removeLike(listener);
@@ -63,21 +67,31 @@ public class Listeners {
 		while(curClass != exitClass){
 			ListenersQueue queue = listeners.get(curClass);
 			if(queue != null){
-				queue.removeInvalidListeners();
-				for(MethodListener listener : queue){
-					if(listener.belongsTo(domianKey)){
-						try {
-							listener.process(event);
-						}catch (Throwable e) {
-							handleListenerException(e);
-						}
-					}
+				setLock(curClass);
+				try {
+					tryProcessListenersQueue(queue, domianKey, event);
+					
+				} finally{
+					removeLock(curClass);
 				}
 			}
 			
 			curClass = curClass.getSuperclass();
 		}
 		
+	}
+
+	private void tryProcessListenersQueue(ListenersQueue queue,Object domianKey, Event event) {
+		queue.removeInvalidListeners();
+		for(MethodListener listener : queue){
+			if(listener.belongsTo(domianKey)){
+				try {
+					listener.process(event);
+				}catch (Throwable e) {
+					handleListenerException(e);
+				}
+			}
+		}
 	}
 
 	private Object getDomianKey(Object source, Event event) {
@@ -97,6 +111,24 @@ public class Listeners {
 		if(exceptionHandler != null) exceptionHandler.handle(e);
 		else throw new ProcessEventException(e);
 	}
+	
+	
+	private void setLock(Class<?> type) {
+		locks.put(type, null);
+	}
+	
+	private void removeLock(Class<?> type) {
+		locks.remove(type);
+	}
+	
+	private boolean lockExists(Class<?> type){
+		return locks.containsKey(type);
+	}
+
+
+	
+	
+	
 
 	@Override
 	public String toString() {

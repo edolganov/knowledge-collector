@@ -153,7 +153,7 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	@Override
-	protected void onChildDeletedRecursive(Node parent, Node deletedChild) {
+	protected void onChildDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
 		if(parentNode == null){
 			log.info("can't find child tree node by "+parent);

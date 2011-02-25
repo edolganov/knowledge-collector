@@ -1,5 +1,6 @@
 package ru.kc.tools.filepersist.impl;
 
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ru.kc.model.Node;
@@ -17,8 +18,8 @@ public class Listeners {
 		for(ServiceListener l : listeners) l.onAdded(parent, child);
 	}
 
-	public void fireDeletedEvent(Node parent, Node child) {
-		for(ServiceListener l : listeners) l.onDeletedRecursive(parent, child);
+	public void fireDeletedEvent(Node parent, Node child, List<Node> deletedSubChildren) {
+		for(ServiceListener l : listeners) l.onDeletedRecursive(parent, child, deletedSubChildren);
 	}
 	
 	public void fireUpdatedEvent(Node old, Node updated) {

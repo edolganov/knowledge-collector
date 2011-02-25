@@ -95,12 +95,19 @@ public class TabbedWrapper {
 	public void addListener(TabsListener l){
 		listeners.add(l);
 	}
-
-	private void desellectAllHeaders() {
-		for (TabHeader h : headers) h.setSelected(false);
-		tabs.repaint();
+	
+	public void close(Component comp) {
+		int index = getIndex(comp);
+		if(index == -1) return;
+		String text = headers.get(index).getText();
+		
+		tabs.remove(comp);
+		headers.remove(index);
+		for (TabsListener listener : listeners) listener.onClosed(comp,index,text);
 	}
-
+	
+	
+	
 	private boolean canClose(Component comp) {
 		int index = getIndex(comp);
 		if(index == -1) return false;
@@ -112,14 +119,9 @@ public class TabbedWrapper {
 		return true;
 	}
 
-	private void close(Component comp) {
-		int index = getIndex(comp);
-		if(index == -1) return;
-		String text = headers.get(index).getText();
-		
-		tabs.remove(comp);
-		headers.remove(index);
-		for (TabsListener listener : listeners) listener.onClosed(comp,index,text);
+	private void desellectAllHeaders() {
+		for (TabHeader h : headers) h.setSelected(false);
+		tabs.repaint();
 	}
 
 	private int getIndex(Component comp) {

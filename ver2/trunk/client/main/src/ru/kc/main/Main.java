@@ -1,6 +1,7 @@
 package ru.kc.main;
 
 import java.io.File;
+import java.util.List;
 
 import ru.kc.common.Context;
 import ru.kc.common.dialog.Dialogs;
@@ -92,8 +93,8 @@ public class Main {
 			}
 			
 			@Override
-			public void onDeletedRecursive(Node parent, Node deletedChild) {
-				eventManager.fireEventInEDT(this, new ChildDeletedRecursive(parent, deletedChild));
+			public void onDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {
+				eventManager.fireEventInEDT(this, new ChildDeletedRecursive(parent, deletedChild, deletedSubChildren));
 			}
 			
 			@Override

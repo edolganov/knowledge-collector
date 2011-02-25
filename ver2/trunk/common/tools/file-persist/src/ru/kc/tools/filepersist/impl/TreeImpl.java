@@ -1,5 +1,7 @@
 package ru.kc.tools.filepersist.impl;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import ru.kc.model.Dir;
@@ -64,8 +66,26 @@ public class TreeImpl implements Tree {
 		Node parent = getParent(node);
 		if(parent == null) 
 			throw new IllegalStateException("parent is null for "+node);
+		List<Node> subChildren = getSubChildren(node);
 		fs.deleteRecursive(convert(node));
-		listeners.fireDeletedEvent(parent,node);
+		listeners.fireDeletedEvent(parent,node, subChildren);
+	}
+
+	private List<Node> getSubChildren(Node parent) throws Exception {
+		ArrayList<Node> out = new ArrayList<Node>();
+		
+		LinkedList<Node> parentQueue = new LinkedList<Node>();
+		parentQueue.addLast(parent);
+		while(parentQueue.size() > 0){
+			Node curParent = parentQueue.removeFirst();
+			List<Node> children = curParent.getChildren();
+			for (Node node : children) {
+				out.add(node);
+				parentQueue.addLast(node);
+			}
+		}
+		
+		return out;
 	}
 
 	private NodeBean convert(Node node) {
