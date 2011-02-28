@@ -63,7 +63,7 @@ public class TabsController extends Controller<MainForm> {
 		if(existTab != null){
 			focusRequest(existTab);
 		} else {
-			Component createdTab = createTab(node);
+			Component createdTab = addTab(node);
 			focusRequest(createdTab);
 		}
 	}
@@ -134,7 +134,7 @@ public class TabsController extends Controller<MainForm> {
 		return out;
 	}
 
-	private TabModule createTab(Node node) {
+	private TabModule addTab(Node node) {
 		if(node instanceof Text){
 			TabModule tab = createTab("text-editor");
 			tabsWrapper.addTab(tab, convertToShort(node.getName()), true);
