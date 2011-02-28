@@ -19,7 +19,6 @@ public class TabController extends Controller<TabPanel>{
 
 	JToolBar toolbar;
 	Component component;
-	TabbedWrapper tabsWrapper;
 	
 	
 	@Override
@@ -33,10 +32,6 @@ public class TabController extends Controller<TabPanel>{
 		this.component = component;
 		ui.root.add(component);
 		refreshToolbar();
-	}
-
-	public void setTabWrapper(TabbedWrapper tabsWrapper) {
-		this.tabsWrapper = tabsWrapper;
 	}
 	
 

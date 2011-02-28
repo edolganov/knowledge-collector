@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.module.Module;
-import ru.kc.platform.ui.tabs.TabbedWrapper;
 
 public class TabModule extends Module<TabPanel>{
 
@@ -19,10 +18,6 @@ public class TabModule extends Module<TabPanel>{
 	
 	public Component getComponent(){
 		return getController(TabController.class).getComponent();
-	}
-
-	public void setTabWrapper(TabbedWrapper tabsWrapper) {
-		getController(TabController.class).setTabWrapper(tabsWrapper);
 	}
 
 }

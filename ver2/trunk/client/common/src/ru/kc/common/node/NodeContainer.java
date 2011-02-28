@@ -7,5 +7,7 @@ public interface NodeContainer<T extends Node> {
 	void setNode(T node);
 	
 	T getNode();
+	
+	void addListener(NodeContainerListener listener);
 
 }

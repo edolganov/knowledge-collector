@@ -107,6 +107,12 @@ public class TabbedWrapper {
 	}
 	
 	
+	public void setModified(Component comp, boolean value){
+		int index = getIndex(comp);
+		if(index == -1) return;
+		headers.get(index).setModified(value);
+	}
+	
 	
 	private boolean canClose(Component comp) {
 		int index = getIndex(comp);

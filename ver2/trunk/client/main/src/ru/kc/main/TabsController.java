@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
+import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.event.OpenNodeRequest;
 import ru.kc.main.tab.TabModule;
 import ru.kc.model.Node;
@@ -139,11 +140,12 @@ public class TabsController extends Controller<MainForm> {
 			tabsWrapper.addTab(tab, convertToShort(node.getName()), true);
 			Component component = tab.getComponent();
 			setNode(component,node);
+			addNodeContainerListener(tab, component);
 			return tab;
 		}
 		else throw new IllegalArgumentException("unknow type for open tab: "+node);
 	}
-	
+
 	private String convertToShort(String string) {
 		if(Check.isEmpty(string)) return string;
 		
@@ -162,6 +164,26 @@ public class TabsController extends Controller<MainForm> {
 		}
 		
 	}
+	
+	@SuppressWarnings("rawtypes")
+	private void addNodeContainerListener(final Component tab, Component component) {
+		if(component instanceof NodeContainer<?>){
+			((NodeContainer) component).addListener(new NodeContainerListener() {
+				
+				@Override
+				public void onModified(Node node) {
+					tabsWrapper.setModified(tab, true);
+				}
+				
+				@Override
+				public void onReverted(Node node) {
+					tabsWrapper.setModified(tab, false);
+				}
+				
+
+			});
+		}
+	}
 
 	private TabModule createTab(String mapping){
 		Component component = (Component)instanceByMapping(mapping);
@@ -172,7 +194,6 @@ public class TabsController extends Controller<MainForm> {
 		TabModule tab = new TabModule();
 		tab.setAppContext(appContext);
 		tab.setComponent(component);
-		tab.setTabWrapper(tabsWrapper);
 		return tab;
 	}
 	

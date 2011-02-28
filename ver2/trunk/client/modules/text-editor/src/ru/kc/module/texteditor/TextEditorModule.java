@@ -1,6 +1,7 @@
 package ru.kc.module.texteditor;
 
 import ru.kc.common.node.NodeContainer;
+import ru.kc.common.node.NodeContainerListener;
 import ru.kc.model.Text;
 import ru.kc.module.texteditor.ui.TextEditor;
 import ru.kc.platform.annotations.GlobalMapping;
@@ -23,6 +24,11 @@ public class TextEditorModule extends Module<TextEditor> implements NodeContaine
 	@Override
 	public Text getNode() {
 		return getController(TextEditorController.class).getNode();
+	}
+
+	@Override
+	public void addListener(NodeContainerListener listener) {
+		getController(TextEditorController.class).addListener(listener);
 	}
 
 }

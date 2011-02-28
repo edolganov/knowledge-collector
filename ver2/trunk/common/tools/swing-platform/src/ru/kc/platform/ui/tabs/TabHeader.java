@@ -77,8 +77,10 @@ public class TabHeader extends JPanel {
 
 		public void setSelectedState(boolean b) {
 			this.selectedState = b;
-			if(b) setActive();
-			else setPassive();
+			if(b) 
+				setActive();
+			else 
+				setPassive();
 		}
 
     }
@@ -89,6 +91,7 @@ public class TabHeader extends JPanel {
 	private JLabel label;
 	private String text;
 	private boolean bold;
+	private boolean modified;
 	
 	private CloseButton button;
 	
@@ -128,6 +131,11 @@ public class TabHeader extends JPanel {
 	}
 	
     private void printText(){
+    	String text = this.text;
+    	if(modified){
+    		text = "* "+text; 
+    	}
+    	
     	if(bold){
     		label.setText("<html><b>"+text+"</b></html>");
     	} else {
@@ -141,11 +149,15 @@ public class TabHeader extends JPanel {
     }
 
 
-	public void setSelected(boolean b) {
-		button.setSelectedState(b);
-		setBold(b);
+	public void setSelected(boolean value) {
+		button.setSelectedState(value);
+		setBold(value);
 	}
 
+	public void setModified(boolean value) {
+		this.modified = value;
+		printText();
+	}
 
 
 

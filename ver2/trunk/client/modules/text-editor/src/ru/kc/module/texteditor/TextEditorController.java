@@ -1,11 +1,14 @@
 package ru.kc.module.texteditor;
 
+import java.util.ArrayList;
+
 import javax.swing.JEditorPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
+import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.edit.NodeEditions;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.edit.event.NodeChanged;
@@ -26,6 +29,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	private JEditorPane editor;
 	private boolean enabledUpdateMode = true;
 	private NodeEditionsAggregator nodeEditionsAggregator;
+	private ArrayList<NodeContainerListener> listeners = new ArrayList<NodeContainerListener>();
 	
 	@Override
 	protected void init() {
@@ -58,6 +62,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		
 		String newText = editor.getText();
 		fireEventInEDT(new TextChanged(node, newText));
+		for(NodeContainerListener l : listeners) l.onModified(node);
 	}
 
 	@Override
@@ -77,8 +82,15 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		
 		NodeEditions editions = nodeEditionsAggregator.getEditions(node);
 		String text = editions.get(UpdateText.class);
-		editor.setText(text == null? node.safeGetText() : text);
+		boolean modified = text != null;
+		editor.setText(modified? text : node.safeGetText());
 		editor.setCaretPosition(0);
+		
+		if(modified){
+			for(NodeContainerListener l : listeners) l.onModified(node);
+		} else {
+			for(NodeContainerListener l : listeners) l.onReverted(node);
+		}
 		
 		enabledUpdateMode = oldValue;
 	}
@@ -108,6 +120,11 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 			log.error("class cast exception", e);
 		}
 
+	}
+
+	@Override
+	public void addListener(NodeContainerListener listener) {
+		listeners.add(listener);
 	}
 	
 }
