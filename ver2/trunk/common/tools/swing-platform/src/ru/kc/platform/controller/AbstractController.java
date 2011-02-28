@@ -122,12 +122,5 @@ public abstract class AbstractController<T> implements DomainMember {
 		}
 		return DomainMember.ROOT_DOMAIN_KEY;
 	}
-	
-	protected Object getModule(){
-		if(ui instanceof Component){
-			return ((Component) ui).getParent();
-		}
-		throw new IllegalStateException("unknow type of ui: "+ui);
-	}
 
 }
