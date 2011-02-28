@@ -10,7 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.annotations.Inject;
-import ru.kc.platform.annotations.OptionalInject;
 import ru.kc.platform.app.AppContext;
 
 public class AOPTool {
@@ -34,7 +33,6 @@ public class AOPTool {
 
 	public void injectData(Object ob){
 		injectDataFromContext(ob);
-		injectDataFromUITree(ob);
 	}
 
 	private void injectDataFromContext(Object ob) {
@@ -50,25 +48,6 @@ public class AOPTool {
 					inject(field, ob, objectToInject);
 				}catch (Exception e) {
 					log.error("can't set value for "+field);
-				}
-
-			}
-		}
-	}
-	
-	private void injectDataFromUITree(Object ob) {
-		
-		List<Field> optionalField = getOptionalFields(ob);
-		for (Field field : optionalField) {
-			Object serviceToInject = findServiceToInject(field);
-			if(serviceToInject == null){
-				log.warn("can't find object to inject for "+field);
-				continue;
-			} else {
-				try {
-					inject(field, ob, serviceToInject);
-				}catch (Exception e) {
-					log.error("can't set value to "+field+" for "+ob);
 				}
 
 			}
@@ -92,38 +71,11 @@ public class AOPTool {
 		return out;
 	}
 	
-
-	private List<Field> getOptionalFields(Object ob) {
-		ArrayList<Field> out = new ArrayList<Field>();
-		Class<?> curClass = ob.getClass();
-		while(!curClass.equals(Object.class)){
-			Field[] fields = curClass.getDeclaredFields();
-			for(Field candidat : fields){
-				OptionalInject inject = candidat.getAnnotation(OptionalInject.class);
-				if(inject != null){
-					out.add(candidat);
-				}
-			}
-			curClass = curClass.getSuperclass();
-		}
-		return out;
-	}
-	
 	private Object findObjectToInject(Field field) {
 		Class<?> declaringType = field.getType();
 		for (Object candidat : context.dataForInject) {
 			if(candidat.getClass().equals(declaringType)){
 				return candidat;
-			}
-		}
-		return null;
-	}
-	
-	private Object findServiceToInject(Field field) {
-		Class<?> declaringType = field.getType();
-		for (Class<?> candidatType : servicesToInject.keySet()) {
-			if(candidatType.equals(declaringType)){
-				return servicesToInject.get(candidatType);
 			}
 		}
 		return null;

@@ -30,9 +30,6 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	private boolean enabledUpdateMode = true;
 	private NodeEditionsAggregator nodeEditionsAggregator;
 	
-	@OptionalInject
-	private TabFacade tabFacade = new TabFacadeStub();
-	
 	@Override
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
