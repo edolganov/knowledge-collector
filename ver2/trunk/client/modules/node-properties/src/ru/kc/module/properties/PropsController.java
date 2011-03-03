@@ -42,7 +42,7 @@ public class PropsController extends Controller<PropsPanel> {
 	}
 	
 	
-	@EventListener(NodeSelected.class)
+	@EventListener
 	public void onNodeSelected(NodeSelected event){
 		currentNode = event.node;
 		showProps();

@@ -19,8 +19,8 @@ import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.aop.AOPTool;
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.reflection.ReflectionTool;
 import ru.kc.util.Check;
 
 public class ControllerScan {
@@ -136,7 +136,7 @@ public class ControllerScan {
 		}
 		
 		//инитим дерево начиная с рута
-		AOPTool aopTool = new AOPTool(appContext, initOb);
+		ReflectionTool aopTool = new ReflectionTool(appContext, initOb);
 		LinkedList<ControllerDependenceNode> queue = new LinkedList<ControllerScan.ControllerDependenceNode>(firstLevelNodes);
 		while(!queue.isEmpty()){
 			ControllerDependenceNode node = queue.removeFirst();
@@ -185,7 +185,7 @@ public class ControllerScan {
 
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void init(AbstractController c, Object initOb, AOPTool aopTool) {
+	private void init(AbstractController c, Object initOb, ReflectionTool aopTool) {
 		c.setUIObject(initOb);
 		aopTool.injectData(c);
 		scanForMethodActions(c);

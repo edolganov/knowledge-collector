@@ -97,12 +97,12 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 
 
 	
-	@EventListener(NodeChanged.class)
+	@EventListener
 	public void onNodeChanged(NodeChanged event){
 		processNodeEvent(event, event.node);
 	}
 
-	@EventListener(NodeReverted.class)
+	@EventListener
 	public void onNodeReverted(NodeReverted event){
 		processNodeEvent(event, event.node);
 	}

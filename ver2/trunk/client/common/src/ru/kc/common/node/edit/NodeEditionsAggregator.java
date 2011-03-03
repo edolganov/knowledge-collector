@@ -41,7 +41,7 @@ public class NodeEditionsAggregator {
 	}
 	
 	
-	@EventListener(NameChanged.class)
+	@EventListener
 	public void onEditing(NameChanged event){
 		Node node = event.node;
 		String edition = event.newName;
@@ -50,21 +50,21 @@ public class NodeEditionsAggregator {
 		}
 	}
 	
-	@EventListener(DescriptionChanged.class)
+	@EventListener
 	public void onEditing(DescriptionChanged event){
 		Node node = event.node;
 		String edition = event.newDescription;
 		getOrCreate(node).add(new UpdateDescription(edition));
 	}
 	
-	@EventListener(UrlChanged.class)
+	@EventListener
 	public void onEditing(UrlChanged event){
 		Node node = event.node;
 		String edition = event.newUrl;
 		getOrCreate(node).add(new UpdateUrl(edition));
 	}
 	
-	@EventListener(TextChanged.class)
+	@EventListener
 	public void onEditing(TextChanged event){
 		Node node = event.node;
 		String edition = event.newText;
@@ -74,7 +74,7 @@ public class NodeEditionsAggregator {
 	
 	
 	
-	@EventListener(UpdateNodeRequest.class)
+	@EventListener
 	public void onUpdateRequest(UpdateNodeRequest event){
 		Node node = event.node;
 		NodeEditions editions = get(node);
@@ -85,7 +85,7 @@ public class NodeEditionsAggregator {
 		}
 	}
 	
-	@EventListener(RevertNodeRequest.class)
+	@EventListener
 	public void onRevertRequest(RevertNodeRequest event){
 		Node node = event.node;
 		NodeEditions editions = get(node);
@@ -95,12 +95,12 @@ public class NodeEditionsAggregator {
 		}
 	}
 	
-	@EventListener(NodeUpdated.class)
+	@EventListener
 	public void onUpdated(NodeUpdated event){
 		clearEditions(event.old);
 	}
 	
-	@EventListener(ChildDeletedRecursive.class)
+	@EventListener
 	public void onDeleted(ChildDeletedRecursive event){
 		clearEditions(event.deletedChild);
 	}

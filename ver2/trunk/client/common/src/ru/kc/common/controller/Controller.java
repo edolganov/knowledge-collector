@@ -46,17 +46,17 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	
 	
-	@EventListener(ChildAdded.class)
+	@EventListener
 	public void _onChildAdded(ChildAdded event){
 		onChildAdded(event.parent, event.child);
 	}
 	
-	@EventListener(ChildDeletedRecursive.class)
+	@EventListener
 	public void _onChildDeletedRecursive(ChildDeletedRecursive event){
 		onChildDeletedRecursive(event.parent, event.deletedChild, event.deletedSubChildren);
 	}
 	
-	@EventListener(NodeUpdated.class)
+	@EventListener
 	public void _onNodeUpdated(NodeUpdated event){
 		onNodeUpdated(event.old, event.node);
 	}

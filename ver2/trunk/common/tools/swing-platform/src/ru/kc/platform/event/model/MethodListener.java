@@ -157,18 +157,24 @@ public class MethodListener {
 		return out;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static Class<? extends Event> getEventType(Method method){
-		EventListener annotation = method.getAnnotation(EventListener.class);
-		if(annotation != null) return annotation.value();
+		if(method.getAnnotation(EventListener.class) == null 
+				&& method.getAnnotation(LastEventListener.class) == null
+				&& method.getAnnotation(FirstEventListener.class) == null){
+			return null;
+		}
+				
 		
-		LastEventListener last = method.getAnnotation(LastEventListener.class);
-		if(last != null) return last.value();
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		if(parameterTypes != null && parameterTypes.length > 0){
+			return (Class<? extends Event>)parameterTypes[0];
+		}
 		
-		FirstEventListener first = method.getAnnotation(FirstEventListener.class);
-		if(first != null) return first.value();
-		
-		return null;
+		throw new IllegalStateException("unknow type of "+method);
 	}
+	
+	
 
 	@Override
 	public String toString() {

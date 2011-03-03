@@ -30,7 +30,7 @@ public class AnnotationTest {
 		System.out.println("call f1");
 	}
 	
-	@EventListener(TestEvent.class)
+	@EventListener
 	public void f2(Object source){
 		System.out.println("call f2");
 	}
@@ -40,18 +40,18 @@ public class AnnotationTest {
 		System.out.println("call f3");
 	}
 	
-	@EventListener(TestEvent.class)
+	@EventListener
 	public void f4(){
 		System.out.println("call f4");
 	}
 	
 	@SuppressWarnings("unused")
-	@EventListener(TestEvent.class)
+	@EventListener
 	private void f5(){
 		System.out.println("call f5");
 	}
 	
-	@LastEventListener(TestEvent.class)
+	@LastEventListener
 	void f6(){
 		System.out.println("call f6");
 	}

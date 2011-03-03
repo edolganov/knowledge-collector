@@ -1,7 +1,9 @@
-package ru.kc.platform.aop;
+package ru.kc.platform.reflection;
 
 import java.awt.Component;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +14,14 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.app.AppContext;
 
-public class AOPTool {
+public class ReflectionTool {
 	
-	private static final Log log = LogFactory.getLog(AOPTool.class);
+	private static final Log log = LogFactory.getLog(ReflectionTool.class);
 	
 	AppContext context;
 	HashMap<Class<?>, Object> servicesToInject = new HashMap<Class<?>, Object>();
 
-	public AOPTool(AppContext context, Object uiObject) {
+	public ReflectionTool(AppContext context, Object uiObject) {
 		super();
 		this.context = context;
 		findServicesToInject(uiObject);

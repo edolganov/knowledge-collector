@@ -5,9 +5,9 @@ import java.awt.Container;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.aop.AOPTool;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.data.Answer;
+import ru.kc.platform.reflection.ReflectionTool;
 
 public abstract class AbstractCommand<T> {
 	
@@ -19,7 +19,7 @@ public abstract class AbstractCommand<T> {
 		this.appContext = context;
 		ui = appContext.rootUI;
 		
-		new AOPTool(appContext, ui).injectData(this);
+		new ReflectionTool(appContext, ui).injectData(this);
 	}
 	
 	public T invokeCommand() throws Exception {

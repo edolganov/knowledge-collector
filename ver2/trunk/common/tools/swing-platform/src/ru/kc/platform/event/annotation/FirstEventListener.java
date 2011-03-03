@@ -5,15 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ru.kc.platform.event.Event;
-
 
 
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface FirstEventListener {
-	
-	Class<? extends Event> value() default Event.class;
 
 }

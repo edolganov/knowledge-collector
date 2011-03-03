@@ -224,12 +224,12 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 	}
 	
 	
-	@EventListener(NodeChanged.class)
+	@EventListener
 	public void onNodeChanged(NodeChanged event){
 		processNodeEvent(event, event.node);
 	}
 	
-	@EventListener(NodeReverted.class)
+	@EventListener
 	public void onNodeReverted(NodeReverted event){
 		processNodeEvent(event, event.node);
 	}

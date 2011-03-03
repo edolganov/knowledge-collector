@@ -181,7 +181,7 @@ public class TreeController extends Controller<Tree>{
 		updateNode(oldNode, old, updatedNode);
 	}
 	
-	@EventListener(NodeChanged.class)
+	@EventListener
 	public void onNodeChanged(NodeChanged event){
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
@@ -190,7 +190,7 @@ public class TreeController extends Controller<Tree>{
 		}
 	}
 	
-	@EventListener(NodeReverted.class)
+	@EventListener
 	public void onNodeReverted(NodeReverted event){
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);

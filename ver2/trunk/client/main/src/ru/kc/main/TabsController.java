@@ -56,7 +56,7 @@ public class TabsController extends Controller<MainForm> {
 		
 	}
 	
-	@EventListener(OpenNodeRequest.class)
+	@EventListener
 	public void onOpenNodeRequest(OpenNodeRequest event){
 		Node node = event.node;
 		TabModule existTab = findFirstExistNodeTab(node);
