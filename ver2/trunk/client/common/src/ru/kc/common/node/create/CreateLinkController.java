@@ -39,6 +39,13 @@ public class CreateLinkController extends Controller<LinkDialog>{
 				createNodeRequest();
 			}
 		});
+		panel.url.addKeyListener(new EnterKey() {
+			
+			@Override
+			protected void doAction(KeyEvent e) {
+				createNodeRequest();
+			}
+		});
 	}
 
 	private void initExchangeButton() {
