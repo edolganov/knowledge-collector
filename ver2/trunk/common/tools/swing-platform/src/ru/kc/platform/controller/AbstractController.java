@@ -2,9 +2,6 @@ package ru.kc.platform.controller;
 
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,8 +10,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.action.facade.AbstractActionFacade;
-import ru.kc.platform.action.facade.ButtonFacadeMediator;
-import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
@@ -23,7 +18,6 @@ import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.module.Module;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
-import ru.kc.util.swing.icon.IconUtil;
 
 public abstract class AbstractController<T> implements DomainMember {
 	
@@ -32,8 +26,8 @@ public abstract class AbstractController<T> implements DomainMember {
 	protected AppContext appContext;
 	protected RuntimeStorage runtimeStorage;
 	
-	private List<AbstractActionFacade> actionFacades = new ArrayList<AbstractActionFacade>();
 	private ControllersPool controllersPool;
+	private ActionFacades actionFacades;
 	
 	void setUIObject(T ui){
 		this.ui = ui;
@@ -45,44 +39,19 @@ public abstract class AbstractController<T> implements DomainMember {
 		beforeInit();
 		init();
 	}
-
+	
+	
 	private void initContext(AppContext appContext) {
 		this.appContext = appContext;
 		runtimeStorage = appContext.runtimeStorage;
 	}
 	
 	private void initActionFacades() {
-		Class<?> curClass = getClass();
-		while(!curClass.equals(AbstractController.class)){
-			Method[] methods = curClass.getDeclaredMethods();
-			for(Method candidat : methods){
-				ExportAction annotation = candidat.getAnnotation(ExportAction.class);
-				if(annotation != null){
-					actionFacades.add(createButtonFacadeMediator(annotation, candidat));
-				}
-			}
-			curClass = curClass.getSuperclass();
-		}
+		actionFacades = new ActionFacades(this);
+		actionFacades.init();
 	}
+
 	
-	private AbstractActionFacade createButtonFacadeMediator(ExportAction annotation, final Method method) {
-		ButtonFacadeMediator mediator = new ButtonFacadeMediator();
-		mediator.setIcon(IconUtil.get(annotation.icon()));
-		mediator.setToolTipText(annotation.description());
-		mediator.addListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try{
-					method.invoke(AbstractController.this);
-				}catch (Exception ex) {
-					log.error("invoke error for "+method,ex);
-				}
-				
-			}
-		});
-		return mediator;
-	}
 	
 
 	protected void beforeInit(){ /* override if need */ };
@@ -97,7 +66,7 @@ public abstract class AbstractController<T> implements DomainMember {
 	}
 
 	public List<AbstractActionFacade> getActionFacades(){
-		return actionFacades;
+		return actionFacades.getAll();
 	}
 
 
