@@ -139,8 +139,9 @@ public class TabsController extends Controller<MainForm> {
 			TabModule tab = createTab("text-editor");
 			tabsWrapper.addTab(tab, convertToShort(node.getName()), true);
 			Component component = tab.getComponent();
-			setNode(component,node);
 			addNodeContainerListener(tab, component);
+			setNode(component,node);
+
 			return tab;
 		}
 		else throw new IllegalArgumentException("unknow type for open tab: "+node);

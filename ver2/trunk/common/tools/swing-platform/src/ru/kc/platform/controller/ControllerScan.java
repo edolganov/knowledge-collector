@@ -1,10 +1,8 @@
 package ru.kc.platform.controller;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -15,9 +13,7 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import ru.kc.platform.action.MethodAction;
 import ru.kc.platform.annotations.Dependence;
-import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.reflection.ReflectionTool;
@@ -188,33 +184,10 @@ public class ControllerScan {
 	private void init(AbstractController c, Object initOb, ReflectionTool aopTool) {
 		c.setUIObject(initOb);
 		aopTool.injectData(c);
-		scanForMethodActions(c);
 		scanForEventListenerMethods(c);
 		c.init(appContext);
 	}
-	
 
-	private void scanForMethodActions(AbstractController<?> c) {
-		List<MethodAction> actions = findMethodActions(c);
-		c.setMethodActions(actions);
-	}
-
-
-	private List<MethodAction> findMethodActions(AbstractController<?> c) {
-		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
-		Class<?> curClass = c.getClass();
-		while(!curClass.equals(AbstractController.class)){
-			Method[] methods = curClass.getDeclaredMethods();
-			for(Method candidat : methods){
-				ExportAction annotation = candidat.getAnnotation(ExportAction.class);
-				if(annotation != null){
-					out.add(new MethodAction(candidat, annotation, c));
-				}
-			}
-			curClass = curClass.getSuperclass();
-		}
-		return out;
-	}
 
 
 	private void scanForEventListenerMethods(AbstractController<?> c) {

@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.action.MethodAction;
+import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.controller.ControllerScan;
@@ -68,10 +68,10 @@ public abstract class ModuleController<T> {
 		return (N)controllers.getController(clazz);
 	}
 	
-	public List<MethodAction> getMethodActions(){
-		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
+	public List<AbstractActionFacade> getActionFacades() {
+		ArrayList<AbstractActionFacade> out = new ArrayList<AbstractActionFacade>();
 		for (AbstractController<?> c : controllers) {
-			out.addAll(c.getMethodActions());
+			out.addAll(c.getActionFacades());
 		}
 		return out;
 	}
@@ -98,6 +98,8 @@ public abstract class ModuleController<T> {
 		return owner.getClass().getSimpleName() + " [inited=" + inited + ", ui=" + AppUtils.toStringLikeObject(ui) + ", controllers="
 				+ controllers + "]";
 	}
+
+
 
 
 

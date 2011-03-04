@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import ru.kc.platform.action.MethodAction;
+import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.domain.DomainMember;
@@ -92,8 +92,8 @@ public abstract class Module<T extends Component> extends JPanel implements Doma
 		return (N)controller.getController(clazz);
 	}
 	
-	public List<MethodAction> getMethodActions(){
-		return controller.getMethodActions();
+	public List<AbstractActionFacade> getMethodActions(){
+		return controller.getActionFacades();
 	}
 	
 	public void setAppContext(AppContext context) {

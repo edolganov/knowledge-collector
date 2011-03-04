@@ -2,15 +2,19 @@ package ru.kc.platform.controller;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.platform.action.MethodAction;
+import ru.kc.platform.action.facade.AbstractActionFacade;
+import ru.kc.platform.action.facade.ButtonFacadeMediator;
+import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
@@ -19,16 +23,17 @@ import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.module.Module;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
+import ru.kc.util.swing.icon.IconUtil;
 
 public abstract class AbstractController<T> implements DomainMember {
 	
 	protected Log log = LogFactory.getLog(getClass());
-	private List<MethodAction> methodActions;
-	private ControllersPool controllersPool;
-	
 	protected T ui;
 	protected AppContext appContext;
 	protected RuntimeStorage runtimeStorage;
+	
+	private List<AbstractActionFacade> actionFacades = new ArrayList<AbstractActionFacade>();
+	private ControllersPool controllersPool;
 	
 	void setUIObject(T ui){
 		this.ui = ui;
@@ -36,38 +41,69 @@ public abstract class AbstractController<T> implements DomainMember {
 	
 	void init(AppContext appContext){
 		initContext(appContext);
+		initActionFacades();
 		beforeInit();
 		init();
 	}
-	
+
 	private void initContext(AppContext appContext) {
 		this.appContext = appContext;
 		runtimeStorage = appContext.runtimeStorage;
 	}
 	
+	private void initActionFacades() {
+		Class<?> curClass = getClass();
+		while(!curClass.equals(AbstractController.class)){
+			Method[] methods = curClass.getDeclaredMethods();
+			for(Method candidat : methods){
+				ExportAction annotation = candidat.getAnnotation(ExportAction.class);
+				if(annotation != null){
+					actionFacades.add(createButtonFacadeMediator(annotation, candidat));
+				}
+			}
+			curClass = curClass.getSuperclass();
+		}
+	}
+	
+	private AbstractActionFacade createButtonFacadeMediator(ExportAction annotation, final Method method) {
+		ButtonFacadeMediator mediator = new ButtonFacadeMediator();
+		mediator.setIcon(IconUtil.get(annotation.icon()));
+		mediator.setToolTipText(annotation.description());
+		mediator.addListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					method.invoke(AbstractController.this);
+				}catch (Exception ex) {
+					log.error("invoke error for "+method,ex);
+				}
+				
+			}
+		});
+		return mediator;
+	}
+	
+
 	protected void beforeInit(){ /* override if need */ };
 	
 	protected abstract void init();
 	
 	protected void afterAllInited(){ /* override if need */ };
 	
-
-	void setMethodActions(List<MethodAction> actions){
-		methodActions = Collections.unmodifiableList(actions);
-	}
 	
 	void setControllersPool(ControllersPool pool){
 		controllersPool = pool;
 	}
 
-	public List<MethodAction> getMethodActions(){
-		return methodActions;
+	public List<AbstractActionFacade> getActionFacades(){
+		return actionFacades;
 	}
 
 
 	
-	protected List<MethodAction> getSubActionsRecursive(){
-		ArrayList<MethodAction> out = new ArrayList<MethodAction>();
+	protected List<AbstractActionFacade> getSubActionFacades(){
+		ArrayList<AbstractActionFacade> out = new ArrayList<AbstractActionFacade>();
 		
 		LinkedList<Container> queue = new LinkedList<Container>();
 		if(ui instanceof Container){

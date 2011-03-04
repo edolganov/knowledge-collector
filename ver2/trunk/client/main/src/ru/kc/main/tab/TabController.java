@@ -9,9 +9,11 @@ import javax.swing.JToolBar;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.main.tab.ui.TabPanel;
-import ru.kc.platform.action.MethodAction;
+import ru.kc.platform.action.AbstractAction;
+import ru.kc.platform.action.ButtonAction;
+import ru.kc.platform.action.facade.AbstractActionFacade;
+import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TabPanel.class)
@@ -44,7 +46,7 @@ public class TabController extends Controller<TabPanel>{
 		
 		addSystemButtons();
 		addSeparator();
-		addCustomButtons();
+		addExternalActionComponents();
 		
 
 	}
@@ -59,10 +61,20 @@ public class TabController extends Controller<TabPanel>{
 		toolbar.add(new JToolBar.Separator());
 	}
 
-	private void addCustomButtons() {
-		List<MethodAction> acitons = getSubActionsRecursive();
-		for (MethodAction action : acitons) {
-			toolbar.add(action.createButton(true));
+	private void addExternalActionComponents() {
+		List<AbstractActionFacade> facades = getSubActionFacades();
+		for (AbstractActionFacade facade : facades) {
+			AbstractAction action = null;
+			if(facade instanceof ButtonFacadeMediator){
+				ButtonAction buttonAction = new ButtonAction();
+				((ButtonFacadeMediator) facade).addRealFacade(buttonAction);
+				action = buttonAction;
+			}
+			
+			if(action != null){
+				toolbar.add(action.getComponent());
+			}
+
 		}
 	}
 
