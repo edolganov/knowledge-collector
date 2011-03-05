@@ -5,6 +5,7 @@ import ru.kc.common.node.NodeContainerListener;
 import ru.kc.model.Text;
 import ru.kc.module.texteditor.ui.TextEditor;
 import ru.kc.platform.annotations.GlobalMapping;
+import ru.kc.platform.controller.AbstractController;
 import ru.kc.platform.module.Module;
 
 @SuppressWarnings("serial")
@@ -16,9 +17,14 @@ public class TextEditorModule extends Module<TextEditor> implements NodeContaine
 		return new TextEditor();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setNode(Text node) {
-		getController(TextEditorController.class).setNode(node);
+		for(AbstractController<?> c : getControllers()){
+			if(c instanceof NodeContainer){
+				((NodeContainer) c).setNode(node);
+			}
+		}
 	}
 
 	@Override

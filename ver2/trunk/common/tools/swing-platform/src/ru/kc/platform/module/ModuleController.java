@@ -68,6 +68,11 @@ public abstract class ModuleController<T> {
 		return (N)controllers.getController(clazz);
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public <N extends AbstractController<T>> List<N> getControllers(){
+		return new ArrayList(controllers.getAll());
+	}
+	
 	public List<AbstractActionFacade> getActionFacades() {
 		ArrayList<AbstractActionFacade> out = new ArrayList<AbstractActionFacade>();
 		for (AbstractController<?> c : controllers) {

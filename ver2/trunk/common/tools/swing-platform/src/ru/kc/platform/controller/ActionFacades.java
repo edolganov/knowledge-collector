@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.kc.platform.action.facade.AbstractActionFacade;
+import ru.kc.platform.action.facade.ActionService;
+import ru.kc.platform.action.facade.ButtonFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.util.swing.icon.IconUtil;
 
-public class ActionFacades {
+public class ActionFacades implements ActionService {
 	
 	private AbstractController<?> controller;
 	private List<AbstractActionFacade> actionFacades = new ArrayList<AbstractActionFacade>();
@@ -62,6 +64,13 @@ public class ActionFacades {
 	
 	public List<AbstractActionFacade> getAll(){
 		return actionFacades;
+	}
+
+	@Override
+	public ButtonFacade addButtonAction() {
+		ButtonFacadeMediator mediator = new ButtonFacadeMediator();
+		actionFacades.add(mediator);
+		return mediator;
 	}
 	
 

@@ -121,6 +121,16 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		}
 
 	}
+	
+	@Override
+	protected void onNodeUpdated(Node old, Node updatedNode) {
+		if(old == node){
+			if(updatedNode instanceof Text){
+				setNode((Text)updatedNode);
+			}
+		}
+	}
+	
 
 	@Override
 	public void addListener(NodeContainerListener listener) {

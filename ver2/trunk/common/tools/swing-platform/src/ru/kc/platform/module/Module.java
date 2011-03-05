@@ -92,6 +92,10 @@ public abstract class Module<T extends Component> extends JPanel implements Doma
 		return (N)controller.getController(clazz);
 	}
 	
+	public <N extends AbstractController<T>> List<N> getControllers(){
+		return controller.getControllers();
+	}
+	
 	public List<AbstractActionFacade> getMethodActions(){
 		return controller.getActionFacades();
 	}

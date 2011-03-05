@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.action.facade.AbstractActionFacade;
+import ru.kc.platform.action.facade.ActionService;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
 import ru.kc.platform.data.Answer;
@@ -28,6 +29,7 @@ public abstract class AbstractController<T> implements DomainMember {
 	
 	private ControllersPool controllersPool;
 	private ActionFacades actionFacades;
+	protected ActionService actionService;
 	
 	void setUIObject(T ui){
 		this.ui = ui;
@@ -49,6 +51,7 @@ public abstract class AbstractController<T> implements DomainMember {
 	private void initActionFacades() {
 		actionFacades = new ActionFacades(this);
 		actionFacades.init();
+		actionService = actionFacades;
 	}
 
 	
@@ -68,8 +71,6 @@ public abstract class AbstractController<T> implements DomainMember {
 	public List<AbstractActionFacade> getActionFacades(){
 		return actionFacades.getAll();
 	}
-
-
 	
 	protected List<AbstractActionFacade> getSubActionFacades(){
 		ArrayList<AbstractActionFacade> out = new ArrayList<AbstractActionFacade>();
