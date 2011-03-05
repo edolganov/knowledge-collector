@@ -3,47 +3,77 @@ package ru.kc.module.texteditor.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.KeyStroke;
+
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.edit.NodeEditions;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
-import ru.kc.model.Node;
+import ru.kc.common.node.edit.event.RevertNodeRequest;
+import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.model.Text;
-import ru.kc.module.texteditor.TextEditorController;
 import ru.kc.module.texteditor.ui.TextEditor;
 import ru.kc.platform.action.facade.ButtonFacade;
-import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.util.swing.icon.IconUtil;
 
-@Dependence(TextEditorController.class)
 @Mapping(TextEditor.class)
 public class EditorActionsController extends Controller<TextEditor> implements NodeContainer<Text>{
 	
 	private Text node;
 	private ButtonFacade save;
+	private ButtonFacade revert;
 
 	@Override
 	protected void init() {
 		
+		revert = actionService.addButtonAction();
+		revert.setToolTipText("Revert");
+		revert.setIcon(IconUtil.get("/ru/kc/common/img/revert.png"));
+		revert.addListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				revert();
+			}
+		});
 		
 		save = actionService.addButtonAction();
-		save.setToolTipText("save");
+		save.setToolTipText("Save");
 		save.setIcon(IconUtil.get("/ru/kc/common/img/save.png"));
 		save.addListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("!!!");
+				save();  
 			}
 		});
+		
+		
+		ui.editor.getActionMap().put("save", new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		});
+		KeyStroke keyStroke = KeyStroke.getKeyStroke("control S");
+		ui.editor.getInputMap().put(keyStroke, "save");
+
 	}
 
+	private void save(){
+		fireEventInEDT(new UpdateNodeRequest(node));
+	}
+	
+	private void revert(){
+		fireEventInEDT(new RevertNodeRequest(node));
+	}
 
 
 	@Override
@@ -58,48 +88,41 @@ public class EditorActionsController extends Controller<TextEditor> implements N
 	}
 	
 	private void refreshActions() {
-		refreshSave();
+		refreshSaveAndRevert();
 	}
 	
 
-	private void refreshSave() {
+	private void refreshSaveAndRevert() {
 		NodeEditions editions = context.nodeEditionsAggregator.getEditions(node);
 		String text = editions.get(UpdateText.class);
 		boolean modified = text != null;
 		
-		if(modified) 
+		if(modified) {
 			save.enabledRequest();
-		else 
+			revert.enabledRequest();
+		}
+		else {
 			save.disable();
+			revert.disable();
+		}
 	}
 
 
-
-	@Override
-	public void addListener(NodeContainerListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	@EventListener
 	public void onNodeChanged(NodeChanged event){
 		if(event.node == node)
-			refreshSave();
+			refreshSaveAndRevert();
 	}
 
 	@EventListener
 	public void onNodeReverted(NodeReverted event){
 		if(event.node == node)
-			refreshSave();
+			refreshSaveAndRevert();
 	}
 	
+	
 	@Override
-	protected void onNodeUpdated(Node old, Node updatedNode) {
-		if(old == node){
-			if(updatedNode instanceof Text){
-				setNode((Text)updatedNode);
-			}
-		}
-	}
+	public void addListener(NodeContainerListener listener) {}
 
 }
