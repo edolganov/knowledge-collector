@@ -2,7 +2,6 @@ package ru.kc.module.texteditor.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
@@ -23,12 +22,13 @@ import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TextEditor.class)
-public class EditorActionsController extends Controller<TextEditor> implements NodeContainer<Text>{
+public class SaveRevertController extends Controller<TextEditor> implements NodeContainer<Text>{
 	
 	private Text node;
 	private ButtonFacade save;
 	private ButtonFacade revert;
 
+	@SuppressWarnings({ "serial" })
 	@Override
 	protected void init() {
 		
@@ -64,6 +64,7 @@ public class EditorActionsController extends Controller<TextEditor> implements N
 		});
 		KeyStroke keyStroke = KeyStroke.getKeyStroke("control S");
 		ui.editor.getInputMap().put(keyStroke, "save");
+		
 
 	}
 

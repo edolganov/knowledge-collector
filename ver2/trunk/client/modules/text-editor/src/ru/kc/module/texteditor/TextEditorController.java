@@ -35,7 +35,6 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		editor = ui.editor;
-		editor.setContentType("text/groovy");
 		//undoManHack = new CompoundUndoManHack(pane);
 		
 		editor.getDocument().addDocumentListener(new DocumentListener() {

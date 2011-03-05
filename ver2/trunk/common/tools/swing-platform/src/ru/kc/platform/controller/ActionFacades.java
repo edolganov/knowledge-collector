@@ -10,6 +10,8 @@ import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.action.facade.ActionService;
 import ru.kc.platform.action.facade.ButtonFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
+import ru.kc.platform.action.facade.ComboBoxFacade;
+import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
 import ru.kc.platform.annotations.ExportAction;
 import ru.kc.util.swing.icon.IconUtil;
 
@@ -69,6 +71,13 @@ public class ActionFacades implements ActionService {
 	@Override
 	public ButtonFacade addButtonAction() {
 		ButtonFacadeMediator mediator = new ButtonFacadeMediator();
+		actionFacades.add(mediator);
+		return mediator;
+	}
+
+	@Override
+	public ComboBoxFacade addComboBoxAction() {
+		ComboBoxFacadeMediator mediator = new ComboBoxFacadeMediator();
 		actionFacades.add(mediator);
 		return mediator;
 	}

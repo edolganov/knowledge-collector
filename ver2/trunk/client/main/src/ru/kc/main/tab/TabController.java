@@ -11,8 +11,10 @@ import ru.kc.common.controller.Controller;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
 import ru.kc.platform.action.ButtonAction;
+import ru.kc.platform.action.ComboBoxAction;
 import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
+import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.icon.IconUtil;
 
@@ -69,6 +71,11 @@ public class TabController extends Controller<TabPanel>{
 				ButtonAction buttonAction = new ButtonAction();
 				((ButtonFacadeMediator) facade).addRealFacade(buttonAction);
 				action = buttonAction;
+			}
+			else if(facade instanceof ComboBoxFacadeMediator){
+				ComboBoxAction comboAction = new ComboBoxAction();
+				((ComboBoxFacadeMediator) facade).addRealFacade(comboAction);
+				action = comboAction;
 			}
 			
 			if(action != null){
