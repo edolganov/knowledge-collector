@@ -1,12 +1,14 @@
 package ru.kc.module.texteditor.tools;
 
 import java.io.StringReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JEditorPane;
 
-import jsyntaxpane.DefaultSyntaxKit;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
@@ -20,16 +22,15 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	
 	private Text node;
 	private ComboBoxFacade comboBox;
-	private List<String> contentTypes;
+	private Map<String,String> contentTypes;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected void init() {
-		contentTypes = Arrays.asList(DefaultSyntaxKit.getContentTypes());
+		initContentTypes();
 		
 		comboBox = actionService.addComboBoxAction();
-		comboBox.setValues((List)contentTypes);
-		comboBox.selectValue(0);
+		comboBox.setValues(new ArrayList(contentTypes.keySet()));
 		comboBox.addListener(new ComboBoxFacade.Listener() {
 			
 			@Override
@@ -38,8 +39,18 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 					selectContentType((String)value);
 			}
 		});
-		
+		comboBox.selectValue(0);
+		selectContentType("plain");
 
+	}
+
+
+	private void initContentTypes() {
+		//contentTypes = Arrays.asList(DefaultSyntaxKit.getContentTypes());
+		contentTypes = new LinkedHashMap<String,String>();
+		contentTypes.put("plain","text/plain");
+		contentTypes.put("java","text/java");
+		contentTypes.put("xml","text/xml");
 	}
 
 
@@ -59,8 +70,8 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	}
 	
 	private void selectContentType(String value) {
-		if(contentTypes.contains(value)){
-			changeContentType(value);
+		if(contentTypes.containsKey(value)){
+			changeContentType(contentTypes.get(value));
 		}
 	}
 	
