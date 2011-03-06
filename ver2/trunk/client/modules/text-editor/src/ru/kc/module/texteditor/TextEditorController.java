@@ -36,7 +36,10 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		editor = ui.editor;
 		//undoManHack = new CompoundUndoManHack(pane);
-		
+		reloadEditorListeners();
+	}
+	
+	public void reloadEditorListeners() {
 		editor.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
@@ -126,5 +129,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	public void addListener(NodeContainerListener listener) {
 		listeners.add(listener);
 	}
+
+
 	
 }
