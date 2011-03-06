@@ -2,8 +2,18 @@ package ru.kc.platform.action;
 
 import java.awt.Component;
 
-public interface AbstractAction {
+public abstract class AbstractAction {
 	
-	Component getComponent();
+	private int order;
+	
+	public abstract Component getComponent();
+	
+	public void setOrder(int order){
+		this.order = order;
+	}
+	
+	public int getOrder(){
+		return order;
+	}
 
 }

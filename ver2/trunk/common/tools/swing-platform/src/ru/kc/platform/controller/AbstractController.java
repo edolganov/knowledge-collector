@@ -3,6 +3,7 @@ package ru.kc.platform.controller;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.action.facade.AbstractActionFacade;
+import ru.kc.platform.action.facade.ActionFacadeComparator;
 import ru.kc.platform.action.facade.ActionService;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.AbstractCommand;
@@ -92,6 +94,7 @@ public abstract class AbstractController<T> implements DomainMember {
 			}
 		}
 		
+		Collections.sort(out, new ActionFacadeComparator());
 		return out;
 	}
 	

@@ -1,5 +1,6 @@
 package ru.kc.platform.action;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -9,9 +10,13 @@ import javax.swing.JComboBox;
 import ru.kc.platform.action.facade.ComboBoxFacade;
 import ru.kc.util.swing.combobox.ListComboBoxModel;
 
-public class ComboBoxAction  implements ComboBoxFacade, AbstractAction{
+public class ComboBoxAction extends AbstractAction  implements ComboBoxFacade {
 	
 	private JComboBox combo = new JComboBox();
+	
+	public ComboBoxAction() {
+		combo.setMaximumSize(new Dimension(100, 30));
+	}
 
 	@Override
 	public void enabledRequest() {

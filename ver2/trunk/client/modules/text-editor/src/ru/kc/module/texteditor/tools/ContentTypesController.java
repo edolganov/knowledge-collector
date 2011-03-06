@@ -41,6 +41,7 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 			}
 		});
 		comboBox.selectValue(0);
+		comboBox.setOrder(100);
 
 	}
 	

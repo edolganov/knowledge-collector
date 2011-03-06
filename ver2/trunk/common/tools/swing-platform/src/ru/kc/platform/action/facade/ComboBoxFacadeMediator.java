@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	
+	private int order;
 	private List<Object> values;
 	private int selectIndex;
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
@@ -21,6 +22,18 @@ public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	public void disable() {
 		for (ComboBoxFacade realImpl : realFacadeImpls)
 			realImpl.disable();
+	}
+	
+	@Override
+	public void setOrder(int order) {
+		this.order = order;
+		for (ComboBoxFacade realImpl : realFacadeImpls)
+			realImpl.setOrder(order);
+	}
+	
+	@Override
+	public int getOrder() {
+		return order;
 	}
 	
 	@Override
@@ -52,6 +65,7 @@ public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	}
 
 	private void init(ComboBoxFacade facade) {
+		facade.setOrder(order);
 		facade.setValues(values);
 		facade.selectValue(selectIndex);
 		for(Listener l : listeners)

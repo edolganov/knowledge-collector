@@ -9,6 +9,7 @@ import javax.swing.Icon;
 
 public class ButtonFacadeMediator implements ButtonFacade {
 	
+	private int order;
 	private Icon icon;
 	private String toolTipText;
 	private ArrayList<ActionListener> listeners = new ArrayList<ActionListener>();
@@ -24,6 +25,18 @@ public class ButtonFacadeMediator implements ButtonFacade {
 	public void disable() {
 		for (ButtonFacade realImpl : realFacadeImpls)
 			realImpl.disable();
+	}
+	
+	@Override
+	public void setOrder(int order) {
+		this.order = order;
+		for (ButtonFacade realImpl : realFacadeImpls)
+			realImpl.setOrder(order);
+	}
+	
+	@Override
+	public int getOrder() {
+		return order;
 	}
 
 	@Override
@@ -54,10 +67,15 @@ public class ButtonFacadeMediator implements ButtonFacade {
 	}
 
 	private void init(ButtonFacade facade) {
+		facade.setOrder(order);
 		facade.setIcon(icon);
 		facade.setToolTipText(toolTipText);
 		for(ActionListener l : listeners)
 			facade.addListener(l);
 	}
+
+
+
+
 
 }

@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 import ru.kc.platform.action.facade.ButtonFacade;
 
-public class ButtonAction  implements ButtonFacade, AbstractAction{
+public class ButtonAction extends AbstractAction implements ButtonFacade{
 	
 	private JButton button = new JButton();
 

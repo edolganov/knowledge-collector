@@ -42,6 +42,7 @@ public class SaveRevertController extends Controller<TextEditor> implements Node
 				revert();
 			}
 		});
+		revert.setOrder(0);
 		
 		save = actionService.addButtonAction();
 		save.setToolTipText("Save");
@@ -53,7 +54,7 @@ public class SaveRevertController extends Controller<TextEditor> implements Node
 				save();  
 			}
 		});
-		
+		revert.setOrder(1);
 		
 		ui.editor.getActionMap().put("save", new AbstractAction() {
 			
