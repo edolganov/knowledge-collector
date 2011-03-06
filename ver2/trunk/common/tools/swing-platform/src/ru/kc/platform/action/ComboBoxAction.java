@@ -39,6 +39,11 @@ public class ComboBoxAction extends AbstractAction  implements ComboBoxFacade {
 	}
 	
 	@Override
+	public void setToolTipText(String text){
+		combo.setToolTipText(text);
+	}
+	
+	@Override
 	public void addListener(final Listener listener) {
 		combo.addActionListener(new ActionListener() {
 			

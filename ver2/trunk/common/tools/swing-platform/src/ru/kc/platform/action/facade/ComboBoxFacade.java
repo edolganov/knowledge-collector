@@ -16,6 +16,8 @@ public interface ComboBoxFacade extends AbstractActionFacade {
 	
 	void selectValue(int index);
 	
+	void setToolTipText(String text);
+	
 	void addListener(Listener listener);
 	
 
