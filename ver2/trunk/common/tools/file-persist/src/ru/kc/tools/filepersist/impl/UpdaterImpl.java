@@ -11,12 +11,15 @@ import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.FileSystemImpl;
 import ru.kc.tools.filepersist.persist.transaction.UserTransaction;
+import ru.kc.tools.filepersist.update.RemoveProperty;
+import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.tools.filepersist.update.UpdateUrl;
 import ru.kc.util.Check;
+import ru.kc.util.collection.Pair;
 
 public class UpdaterImpl implements Updater {
 	
@@ -86,6 +89,24 @@ public class UpdaterImpl implements Updater {
 					throw new IllegalArgumentException("unknow type for update url: "+node);
 				}
 			}
+			else if(update instanceof SetProperty){
+				Pair<String, String> keyValue = ((SetProperty) update).keyValue;
+				if(keyValue != null){
+					String key = keyValue.getFirst();
+					String value = keyValue.getSecond();
+					if(key != null){
+						node.setProperty(key, value);
+					}
+				}
+			}
+			else if(update instanceof RemoveProperty){
+				String key = ((RemoveProperty) update).key;
+				if(key != null){
+					node.removeProperty(key);
+				}
+			}
+			else 
+				throw new IllegalArgumentException("unknow update info: "+update);
 		}
 	}
 	

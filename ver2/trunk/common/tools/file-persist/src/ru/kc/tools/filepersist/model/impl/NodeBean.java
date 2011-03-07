@@ -1,7 +1,9 @@
 package ru.kc.tools.filepersist.model.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.kc.model.Node;
 import ru.kc.util.collection.Pair;
@@ -21,6 +23,8 @@ public abstract class NodeBean implements Node, Cloneable {
 
 	protected String parentId;
 	protected List<String> childrenIds;
+	
+	protected Map<String, String> properties;
 	
 	public String getParentId() {
 		return parentId;
@@ -140,6 +144,31 @@ public abstract class NodeBean implements Node, Cloneable {
 		return container.getContext().tree.getParent(this);
 	}
 	
+	public String getProperty(String key){
+		if(properties == null) 
+			return null;
+		return properties.get(key);
+	}
+	
+	public void setProperty(String key, String value){
+		if(properties == null) 
+			properties = new HashMap<String, String>();
+		properties.put(key, value);
+	}
+	
+	public void removeProperty(String key){
+		if(properties == null) 
+			return;
+		properties.remove(key);
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
 
 	@Override
 	public String toString() {

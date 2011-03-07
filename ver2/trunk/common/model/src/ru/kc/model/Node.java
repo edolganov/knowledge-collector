@@ -16,5 +16,6 @@ public interface Node {
 	
 	List<Node> getChildren() throws Exception;
 
+	String getProperty(String key);
 
 }
