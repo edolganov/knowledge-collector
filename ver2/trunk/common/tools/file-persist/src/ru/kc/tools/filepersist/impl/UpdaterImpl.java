@@ -105,8 +105,6 @@ public class UpdaterImpl implements Updater {
 					node.removeProperty(key);
 				}
 			}
-			else 
-				throw new IllegalArgumentException("unknow update info: "+update);
 		}
 	}
 	

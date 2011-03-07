@@ -42,19 +42,17 @@ public class PropertyTest extends Assert {
 		Updater updater = ps.updater();
 		
 		
-		Node root = tree.getRoot();
-		updater.update(root, new SetProperty("key", "value"));
-		assertEquals("value", root.getProperty("key"));
+		updater.update(tree.getRoot(), new SetProperty("key", "value"));
+		assertEquals("value", tree.getRoot().getProperty("key"));
 		
 		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();
-		Node newRoot = newTree.getRoot();
-		assertEquals("value", newRoot.getProperty("key"));
+		assertEquals("value", newTree.getRoot().getProperty("key"));
 		
 		
-		updater.update(root, new RemoveProperty("key"));
-		assertEquals(null, root.getProperty("key"));
-		assertEquals(null, newRoot.getProperty("key"));
+		updater.update(tree.getRoot(), new RemoveProperty("key"));
+		assertEquals(null, tree.getRoot().getProperty("key"));
+		assertEquals("value", newTree.getRoot().getProperty("key"));
 		
 		PersistServiceImpl newPs2 = createService(2,2,2);
 		Tree newTree2 = newPs2.tree();
@@ -62,26 +60,22 @@ public class PropertyTest extends Assert {
 		assertEquals(null, newRoot2.getProperty("key"));
 	}
 	
-	//@Test
-	public void setAndRemoveProperty() throws Exception{
+	@Test
+	public void setPropertyToRootChild() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
 		Updater updater = ps.updater();
 		
+		Dir dir = factory.createDir("dir", null);
+		tree.add(tree.getRoot(), dir);
 		
-		String newName = "newName";
-		Node root = tree.getRoot();
-		
-		tree.add(root, factory.createDir("child1", null));
-		tree.add(root, factory.createDir("child2", null));
-		updater.update(root, new UpdateName(newName));
+		updater.update(dir, new SetProperty("key", "value"));
+		assertEquals("value", tree.getRoot().getChildren().get(0).getProperty("key"));
 		
 		PersistServiceImpl newPs = createService(2,2,2);
 		Tree newTree = newPs.tree();
-		Node newRoot = newTree.getRoot();
-		
-		assertEquals(newName, newRoot.getName());
+		assertEquals("value", newTree.getRoot().getChildren().get(0).getProperty("key"));
 	}
 	
 	
