@@ -97,12 +97,26 @@ public class NodeEditionsAggregator {
 	
 	@EventListener
 	public void onUpdated(NodeUpdated event){
-		clearEditions(event.old);
+		clearEditions(event.old, event.updates);
+	}
+	
+	private void clearEditions(Node node, Collection<UpdateRequest> updates){
+		NodeEditions editions = get(node);
+		if(editions != null){
+			for(UpdateRequest update : updates){
+				editions.remove(update.getClass());
+			}
+		}
+
 	}
 	
 	@EventListener
 	public void onDeleted(ChildDeletedRecursive event){
 		clearEditions(event.deletedChild);
+	}
+	
+	private void clearEditions(Node node){
+		runtimeStorage.remove(node, storageKey);
 	}
 	
 
@@ -129,10 +143,6 @@ public class NodeEditionsAggregator {
 			runtimeStorage.putWithWeakReferenceDomain(node, storageKey, out);
 		}
 		return out;
-	}
-	
-	private void clearEditions(Node node){
-		runtimeStorage.remove(node, storageKey);
 	}
 
 }
