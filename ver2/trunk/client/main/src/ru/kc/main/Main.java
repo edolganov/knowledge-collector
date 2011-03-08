@@ -1,6 +1,7 @@
 package ru.kc.main;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import ru.kc.common.Context;
@@ -18,6 +19,7 @@ import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.tools.filepersist.ServiceListener;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.swing.laf.Laf;
 
 public class Main {
@@ -98,8 +100,8 @@ public class Main {
 			}
 			
 			@Override
-			public void onNodeUpdated(Node old, Node node) {
-				eventManager.fireEventInEDT(this, new NodeUpdated(old, node));
+			public void onNodeUpdated(Node old, Node node, Collection<UpdateRequest> updates) {
+				eventManager.fireEventInEDT(this, new NodeUpdated(old, node, updates));
 			}
 		});
 		

@@ -3,6 +3,7 @@ package ru.kc.module.properties;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ru.kc.common.controller.Controller;
@@ -18,6 +19,7 @@ import ru.kc.module.properties.text.TextPropsModule;
 import ru.kc.module.properties.ui.PropsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 @Mapping(PropsPanel.class)
 public class PropsController extends Controller<PropsPanel> {
@@ -101,7 +103,7 @@ public class PropsController extends Controller<PropsPanel> {
 	
 	
 	@Override
-	protected void onNodeUpdated(Node old, Node updatedNode) {
+	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
 		if(old.equals(currentNode)){
 			onNodeSelected(new NodeSelected(updatedNode));
 		}

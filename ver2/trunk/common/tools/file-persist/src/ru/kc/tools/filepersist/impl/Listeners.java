@@ -1,10 +1,12 @@
 package ru.kc.tools.filepersist.impl;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.ServiceListener;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public class Listeners {
 	
@@ -22,8 +24,8 @@ public class Listeners {
 		for(ServiceListener l : listeners) l.onDeletedRecursive(parent, child, deletedSubChildren);
 	}
 	
-	public void fireUpdatedEvent(Node old, Node updated) {
-		for(ServiceListener l : listeners) l.onNodeUpdated(old, updated);
+	public void fireUpdatedEvent(Node old, Node updated, Collection<UpdateRequest> updates) {
+		for(ServiceListener l : listeners) l.onNodeUpdated(old, updated, updates);
 	}
 
 }

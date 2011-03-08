@@ -65,7 +65,7 @@ public class UpdaterImpl implements Updater {
 		}
 
 		
-		listeners.fireUpdatedEvent(old, clone);
+		listeners.fireUpdatedEvent(old, clone, updates);
 	}
 	
 

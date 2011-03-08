@@ -1,8 +1,10 @@
 package ru.kc.tools.filepersist;
 
+import java.util.Collection;
 import java.util.List;
 
 import ru.kc.model.Node;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public class ServiceAdapter implements ServiceListener {
 
@@ -13,6 +15,6 @@ public class ServiceAdapter implements ServiceListener {
 	public void onDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {}
 	
 	@Override
-	public void onNodeUpdated(Node old, Node updated) {}
+	public void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates) {}
 
 }

@@ -42,10 +42,10 @@ public class TextBlobsTest extends Assert {
 	public void createTextForRootException() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
-		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		
 		Node root = tree.getRoot();
-		textService.setText((Text)root, "test");
+		updater.update((Text)root, new UpdateText("test"));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -58,18 +58,18 @@ public class TextBlobsTest extends Assert {
 		textService.getText(text);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void createNullTextException() throws Exception{
+	@Test
+	public void createNullText() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
-		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		Factory factory = ps.factory();
 		
 		Node root = tree.getRoot();
 		Text text = factory.createText("test", null);
 		tree.add(root, text);
 		
-		textService.setText(text, null);
+		updater.update(text, new UpdateText(null));
 	}
 	
 	@Test
@@ -94,15 +94,15 @@ public class TextBlobsTest extends Assert {
 	public void createText() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
-		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		Factory factory = ps.factory();
 		
 		Node root = tree.getRoot();
 		Text text = factory.createText("test", null);
 		tree.add(root, text);
 		
-		textService.setText(text, "тест");
-		String savedContent = textService.getText(text);
+		updater.update(text, new UpdateText("тест"));
+		String savedContent = ps.textService().getText(text);
 		assertEquals("тест", savedContent);
 	}
 	
@@ -111,18 +111,19 @@ public class TextBlobsTest extends Assert {
 	public void deleteText() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
-		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		Factory factory = ps.factory();
+		TextService textService = ps.textService();
 		
 		Node root = tree.getRoot();
 		Text text = factory.createText("test", null);
 		tree.add(root, text);
 		
-		textService.setText(text, "тест");
+		updater.update(text, new UpdateText("тест"));
 		String savedContent = textService.getText(text);
 		assertEquals("тест", savedContent);
 		
-		textService.removeText(text);
+		updater.update(text, new UpdateText(null));
 		String nullContent = textService.getText(text);
 		assertEquals(null, nullContent);
 	}
@@ -132,6 +133,7 @@ public class TextBlobsTest extends Assert {
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		Factory factory = ps.factory();
 		
 		Node root = tree.getRoot();
@@ -149,7 +151,7 @@ public class TextBlobsTest extends Assert {
 		Text text = factory.createText("test", null);
 		tree.add(subChild, text);
 		
-		textService.setText(text, "суб тест");
+		updater.update(text, new UpdateText("суб тест"));
 		String savedContent = textService.getText(text);
 		assertEquals("суб тест", savedContent);
 	}
@@ -160,7 +162,7 @@ public class TextBlobsTest extends Assert {
 	public void deleteTextWithNodes() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
-		TextService textService = ps.textService();
+		Updater updater = ps.updater();
 		Factory factory = ps.factory();
 		
 		Node root = tree.getRoot();
@@ -175,9 +177,9 @@ public class TextBlobsTest extends Assert {
 		Text subSubChild = factory.createText("test", null);
 		tree.add(subChild, subSubChild);
 		
-		textService.setText(child, "тест1");
-		textService.setText(subChild, "тест2");
-		textService.setText(subSubChild, "тест3");
+		updater.update(child, new UpdateText("тест1"));
+		updater.update(subChild, new UpdateText("тест2"));
+		updater.update(subSubChild, new UpdateText("тест3"));
 		
 		File text1 = getTextFile(child);
 		File text2 = getTextFile(subChild);

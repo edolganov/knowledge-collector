@@ -2,6 +2,7 @@ package ru.kc.main;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
@@ -21,6 +22,7 @@ import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.platform.ui.tabs.TabbedWrapper.TabsListener;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.Check;
 
 @Mapping(MainForm.class)
@@ -71,7 +73,7 @@ public class TabsController extends Controller<MainForm> {
 	
 	
 	@Override
-	protected void onNodeUpdated(Node old, Node updatedNode) {
+	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
 		List<TabModule> list = findExistNodeTabs(old);
 		for (TabModule tab : list) {
 			Component component = tab.getComponent();

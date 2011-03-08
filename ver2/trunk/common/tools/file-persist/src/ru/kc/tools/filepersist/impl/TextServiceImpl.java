@@ -25,7 +25,6 @@ public class TextServiceImpl implements TextService {
 		return fs.getText(textBean);
 	}
 	
-	@Override
 	public void setText(Text text, String content) throws Exception {
 		if(content == null)
 			throw new IllegalArgumentException("null content");
@@ -37,8 +36,6 @@ public class TextServiceImpl implements TextService {
 	}
 
 
-	
-	@Override
 	public void removeText(Text text) throws Exception {
 		TextBean textBean = convert(text);
 		checkContainer(textBean);

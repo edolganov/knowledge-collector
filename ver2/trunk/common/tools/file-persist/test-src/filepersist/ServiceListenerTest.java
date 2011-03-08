@@ -2,6 +2,7 @@ package filepersist;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.After;
@@ -18,6 +19,7 @@ import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.impl.PersistServiceImpl;
 import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.file.FileUtil;
 
 
@@ -221,7 +223,7 @@ public class ServiceListenerTest extends Assert{
 		ps.addListener(new ServiceAdapter(){
 			
 			@Override
-			public void onNodeUpdated(Node old, Node updated) {
+			public void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates) {
 				oldNode[0] = old;
 				updatedNode[0] = updated;
 			}
@@ -254,7 +256,7 @@ public class ServiceListenerTest extends Assert{
 		ps.addListener(new ServiceAdapter(){
 			
 			@Override
-			public void onNodeUpdated(Node old, Node updated) {
+			public void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates) {
 				oldNode[0] = old;
 				updatedNode[0] = updated;
 			}

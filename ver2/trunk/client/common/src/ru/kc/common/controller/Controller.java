@@ -1,6 +1,7 @@
 package ru.kc.common.controller;
 
 import java.awt.Frame;
+import java.util.Collection;
 import java.util.List;
 
 import ru.kc.common.Context;
@@ -16,6 +17,7 @@ import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.Tree;
 import ru.kc.tools.filepersist.Updater;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public abstract class Controller<T> extends AbstractController<T>{
 	
@@ -42,7 +44,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	protected void onChildDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren){ /* override if need */ }
 	
-	protected void onNodeUpdated(Node old, Node updatedNode){ /* override if need */ }
+	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates){ /* override if need */ }
 	
 	
 	
@@ -58,7 +60,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	@EventListener
 	public void _onNodeUpdated(NodeUpdated event){
-		onNodeUpdated(event.old, event.node);
+		onNodeUpdated(event.old, event.node, event.updates);
 	}
 	
 

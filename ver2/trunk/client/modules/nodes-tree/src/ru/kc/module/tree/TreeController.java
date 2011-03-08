@@ -1,6 +1,7 @@
 package ru.kc.module.tree;
 
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeFacade;
 import ru.kc.util.swing.tree.TreeTransferHandler;
@@ -171,7 +173,7 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	@Override
-	protected void onNodeUpdated(Node old, Node updatedNode) {
+	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
 		DefaultMutableTreeNode oldNode = getFromStorage(old);
 		if(oldNode == null){
 			log.info("can't find tree node by "+old);
