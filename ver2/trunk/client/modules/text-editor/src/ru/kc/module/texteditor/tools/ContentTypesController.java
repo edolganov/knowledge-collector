@@ -3,27 +3,30 @@ package ru.kc.module.texteditor.tools;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.swing.JEditorPane;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
+import ru.kc.common.node.command.UpdateNode;
 import ru.kc.model.Text;
 import ru.kc.module.texteditor.TextEditorController;
 import ru.kc.module.texteditor.ui.TextEditor;
 import ru.kc.platform.action.facade.ComboBoxFacade;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.tools.filepersist.update.SetProperty;
 
 @Dependence(TextEditorController.class)
 @Mapping(TextEditor.class)
 public class ContentTypesController extends Controller<TextEditor> implements NodeContainer<Text>{
 	
+	private static final String TEXT_CONTENT_TYPE = "text.content-type";
 	private Text node;
 	private ComboBoxFacade comboBox;
-	private Map<String,String> contentTypes;
+	private LinkedHashMap<String,String> contentTypes;
+	private String skipSave;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -36,28 +39,24 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 			
 			@Override
 			public void onSelected(Object value) {
-				if(value instanceof String)
-					selectContentType((String)value);
+				if(value instanceof String){
+					String key = (String)value;
+					changeContentTypeByKey(key);
+					saveContentType(key);
+				}
 			}
 		});
-		comboBox.selectValue(0);
 		comboBox.setOrder(100);
 		comboBox.setToolTipText("Content type");
-
-	}
-	
-	@Override
-	protected void afterAllInited() {
-		selectContentType("plain text");
 	}
 
 
 	private void initContentTypes() {
-		//contentTypes = Arrays.asList(DefaultSyntaxKit.getContentTypes());
 		contentTypes = new LinkedHashMap<String,String>();
 		contentTypes.put("plain text","text/plain");
 		contentTypes.put("java","text/java");
 		contentTypes.put("xml","text/xml");
+		//or DefaultSyntaxKit.getContentTypes();
 	}
 
 
@@ -73,12 +72,40 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	}
 
 	private void refreshContentType() {
-		
+		String key = node.getProperty(TEXT_CONTENT_TYPE);
+		if(key == null)
+			key = "plain text";
+		skipSave = key;
+		selectContentTypeByKey(key);
 	}
 	
-	private void selectContentType(String value) {
-		if(contentTypes.containsKey(value)){
-			changeContentType(contentTypes.get(value));
+	private void selectContentTypeByKey(String key){
+		int index = 0;
+		for(String candidat : contentTypes.keySet()){
+			if(candidat.equals(key)){
+				comboBox.selectValue(index);
+				return;
+			}
+			index++;
+		}
+	}
+	
+	private void saveContentType(String key) {
+		if(!key.equals(skipSave)){
+			if(contentTypes.containsKey(key)){
+				invokeSafe(new UpdateNode(node, new SetProperty(TEXT_CONTENT_TYPE, key)));
+			}
+		} else {
+			log.info("skip saving content type: "+key);
+		}
+		skipSave = null;
+	}
+	
+
+	
+	private void changeContentTypeByKey(String key) {
+		if(contentTypes.containsKey(key)){
+			changeContentType(contentTypes.get(key));
 		}
 	}
 	
