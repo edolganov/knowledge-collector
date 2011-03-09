@@ -3,7 +3,6 @@ package ru.kc.module.texteditor.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
-import javax.swing.KeyStroke;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
@@ -19,6 +18,7 @@ import ru.kc.platform.action.facade.ButtonFacade;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateText;
+import ru.kc.util.swing.component.ComponentUtil;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TextEditor.class)
@@ -56,15 +56,14 @@ public class SaveRevertController extends Controller<TextEditor> implements Node
 		});
 		revert.setOrder(1);
 		
-		ui.editor.getActionMap().put("save", new AbstractAction() {
+		
+		ComponentUtil.addAction(ui.editor, "control S", new AbstractAction() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				save();
 			}
 		});
-		KeyStroke keyStroke = KeyStroke.getKeyStroke("control S");
-		ui.editor.getInputMap().put(keyStroke, "save");
 		
 
 	}
