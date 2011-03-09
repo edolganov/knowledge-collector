@@ -13,6 +13,11 @@ public class TextBean extends NodeBean implements Text {
 	private final static Log log = LogFactory.getLog(TextBean.class);
 	
 	@Override
+	public boolean hasText() {
+		return getContainer().getContext().textService.hasText(this);
+	}
+	
+	@Override
 	public String getText() throws Exception {
 		return getContainer().getContext().textService.getText(this);
 	}
@@ -26,5 +31,7 @@ public class TextBean extends NodeBean implements Text {
 			return null;
 		}
 	}
+
+
 
 }

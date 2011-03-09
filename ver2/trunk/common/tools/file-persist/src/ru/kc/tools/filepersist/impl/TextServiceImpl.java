@@ -18,6 +18,12 @@ public class TextServiceImpl implements TextService {
 		
 	}
 	
+	public boolean hasText(Text text) {
+		TextBean textBean = convert(text);
+		checkContainer(textBean);
+		return fs.hasText(textBean);
+	}
+	
 	@Override
 	public String getText(Text text) throws Exception {
 		TextBean textBean = convert(text);
@@ -52,6 +58,8 @@ public class TextServiceImpl implements TextService {
 	private TextBean convert(Text node) {
 		return c.converter.convert(node);
 	}
+
+
 
 
 

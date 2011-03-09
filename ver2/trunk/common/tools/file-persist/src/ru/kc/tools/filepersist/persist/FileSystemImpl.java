@@ -203,6 +203,10 @@ public class FileSystemImpl {
 	public void move(NodeBean node, NodeBean newParent)throws Exception{
 		//TODO
 	}
+	
+	public boolean hasText(NodeBean node) {
+		return c.blobs.hasText(node);
+	}
 
 	public String getText(NodeBean node)throws Exception {
 		return c.blobs.getText(node);
@@ -215,6 +219,8 @@ public class FileSystemImpl {
 	public void removeText(NodeBean node) {
 		c.blobs.removeText(node);
 	}
+
+
 
 
 

@@ -18,6 +18,7 @@ public class NodeIcon {
 	public static final String FILE_LINK = "/ru/kc/common/img/fileLink.png";
 	public static final String LINK = "/ru/kc/common/img/link.png";
 	public static final String TEXT = "/ru/kc/common/img/text.png";
+	public static final String TEXT_FULL = "/ru/kc/common/img/text-full.png";
 	
 	
 	private static final Icon unknowType = IconUtil.get(UNKNOW_TYPE);
@@ -25,9 +26,14 @@ public class NodeIcon {
 	private static final Icon fileLink = IconUtil.get(FILE_LINK);
 	private static final Icon link = IconUtil.get(LINK);
 	private static final Icon text = IconUtil.get(TEXT);
+	private static final Icon textFull = IconUtil.get(TEXT_FULL);
 	
 	
 	public static Icon getIcon(Node node){
+		if(node instanceof Text){
+			Text text = (Text)node;
+			if(text.hasText()) return textFull;
+		}
 		return getIcon(node.getClass());
 	}
 	

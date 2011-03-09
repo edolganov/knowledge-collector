@@ -40,6 +40,10 @@ public class Blobs {
 	}
 
 
+	public boolean hasText(NodeBean node) {
+		File path = getTextPath(node);
+		return path.exists();
+	}
 
 	public String getText(NodeBean node) throws Exception {
 		File path = getTextPath(node);
@@ -152,6 +156,9 @@ public class Blobs {
 		File out = new File(tempDir,name);
 		return out;
 	}
+
+
+
 
 
 

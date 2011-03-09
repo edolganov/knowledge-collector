@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import ru.kc.model.Node;
-import ru.kc.tools.filepersist.UpdateBuilder;
 import ru.kc.tools.filepersist.Updater;
 import ru.kc.tools.filepersist.model.impl.LinkBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
@@ -31,11 +30,6 @@ public class UpdaterImpl implements Updater {
 		c = context;
 		fs = context.fs;
 		listeners = c.listeners;
-	}
-
-	@Override
-	public UpdateBuilder builder() {
-		return new UpdateBuilderImpl();
 	}
 	
 	@Override

@@ -7,8 +7,6 @@ import ru.kc.tools.filepersist.update.UpdateRequest;
 
 public interface Updater {
 	
-	UpdateBuilder builder();
-	
 	void update(Node node, UpdateRequest... updates) throws Exception;
 	
 	void update(Node node, Collection<UpdateRequest> updates) throws Exception;
