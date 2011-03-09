@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -59,6 +60,13 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 				}
 			}
 		});
+		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected Collection<JComponent> getComponentsToCtrlS_Save() {
+		return (Collection)Arrays.asList(ui.url);
 	}
 
 	protected void urlChanged() {

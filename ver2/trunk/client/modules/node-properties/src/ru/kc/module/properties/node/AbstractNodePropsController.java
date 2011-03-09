@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
@@ -30,6 +32,7 @@ import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.Check;
+import ru.kc.util.swing.component.ComponentUtil;
 
 public abstract class AbstractNodePropsController<N extends Node, T> extends Controller<T> implements PropsUpdater {
 
@@ -104,6 +107,34 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 				save();
 			}
 		});
+		
+		initCtrlSAction();
+	}
+	
+	@SuppressWarnings("serial")
+	private void initCtrlSAction(){
+		String controlS = "control S";
+		AbstractAction saveAction = new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				save();
+			}
+		};
+		ArrayList<JComponent> componentsToCtrlSAction = new ArrayList<JComponent>();
+		componentsToCtrlSAction.add(name);
+		componentsToCtrlSAction.add(description);
+		Collection<JComponent> fromChild = getComponentsToCtrlS_Save();
+		if(fromChild != null)
+			componentsToCtrlSAction.addAll(fromChild);
+		for(JComponent component : componentsToCtrlSAction){
+			ComponentUtil.addAction(component, controlS, saveAction);
+		}
+	}
+	
+	protected Collection<JComponent> getComponentsToCtrlS_Save(){
+		/* override if need */
+		return null;
 	}
 
 
@@ -204,6 +235,8 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		if(!enabledUpdateMode) return;
 		
 		String newName = name.getText();
+		if(Check.isEmpty(newName)) return;
+		
 		String newDesctiption = description.getText();
 		
 		ArrayList<UpdateRequest> updates = new ArrayList<UpdateRequest>();
