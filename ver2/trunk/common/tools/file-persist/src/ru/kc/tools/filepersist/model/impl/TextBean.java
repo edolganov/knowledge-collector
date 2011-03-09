@@ -14,12 +14,20 @@ public class TextBean extends NodeBean implements Text {
 	
 	@Override
 	public boolean hasText() {
-		return getContainer().getContext().textService.hasText(this);
+		if(container != null){
+			return container.getContext().textService.hasText(this);
+		} else {
+			return false;
+		}
 	}
 	
 	@Override
 	public String getText() throws Exception {
-		return getContainer().getContext().textService.getText(this);
+		if(container != null){
+			return container.getContext().textService.getText(this);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

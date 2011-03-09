@@ -96,6 +96,12 @@ public class TabbedWrapper {
 		listeners.add(l);
 	}
 	
+	public void rename(Component comp, String text){
+		int index = getIndex(comp);
+		if(index == -1) return;
+		headers.get(index).setText(text);
+	}
+	
 	public void close(Component comp) {
 		int index = getIndex(comp);
 		if(index == -1) return;

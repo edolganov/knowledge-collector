@@ -78,6 +78,7 @@ public class TabsController extends Controller<MainForm> {
 		for (TabModule tab : list) {
 			Component component = tab.getComponent();
 			setNode(component, updatedNode);
+			tabsWrapper.rename(tab, convertToShort(updatedNode.getName()));
 		}
 	}
 	
