@@ -55,7 +55,7 @@ public class FileLinkPropsController extends AbstractNodePropsController<FileLin
 				try {
 					String text = ui.path.getText();
 					if(!Check.isEmpty(text)){
-						//OSUtil.openUrl(text);
+						OSUtil.openFile(text);
 					}
 				}catch (Exception ex) {
 					log.error("can't open url", ex);

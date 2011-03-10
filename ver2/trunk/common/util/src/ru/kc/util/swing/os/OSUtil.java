@@ -12,4 +12,9 @@ public class OSUtil {
 		desktop.browse(new URI(url));
 	}
 
+	public static void openFile(String text) {
+		System.out.println("!!!");
+		
+	}
+
 }
