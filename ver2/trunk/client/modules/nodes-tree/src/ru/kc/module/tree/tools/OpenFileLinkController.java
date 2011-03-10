@@ -17,7 +17,7 @@ public class OpenFileLinkController extends AbstractOpenController<FileLink, Tre
 		try{
 			OSUtil.openFile(file.getPath());
 		}catch (Exception e) {
-			log.error("can't open url", e);
+			log.error("can't open file", e);
 		}
 	}
 
