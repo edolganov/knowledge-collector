@@ -58,6 +58,7 @@ public class CreateFileLinkController extends Controller<FileLinkDialog>{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				int returnVal = fc.showOpenDialog(rootUI);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();

@@ -34,7 +34,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="path" pref="192" max="32767" attributes="0"/>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="fileChooser" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
@@ -54,7 +54,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="path" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                  <Component id="fileChooser" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -148,7 +148,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Open"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="fileChooser">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/ru/kc/common/img/find.png"/>

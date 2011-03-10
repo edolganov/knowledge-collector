@@ -2,10 +2,12 @@ package ru.kc.module.properties.filelink;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -57,6 +59,20 @@ public class FileLinkPropsController extends AbstractNodePropsController<FileLin
 					}
 				}catch (Exception ex) {
 					log.error("can't open url", ex);
+				}
+			}
+		});
+		
+		ui.fileChooser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				int returnVal = fc.showOpenDialog(rootUI);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					ui.path.setText(file.getAbsolutePath());
 				}
 			}
 		});

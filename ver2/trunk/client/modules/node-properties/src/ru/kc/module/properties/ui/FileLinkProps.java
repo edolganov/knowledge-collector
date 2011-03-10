@@ -41,7 +41,7 @@ public class FileLinkProps extends javax.swing.JPanel {
         path = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         open = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        fileChooser = new javax.swing.JButton();
 
         jLabel1.setText("name:");
 
@@ -69,8 +69,8 @@ public class FileLinkProps extends javax.swing.JPanel {
         open.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/execute.png"))); // NOI18N
         open.setToolTipText("Open");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/find.png"))); // NOI18N
-        jButton1.setToolTipText("File chooser");
+        fileChooser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/find.png"))); // NOI18N
+        fileChooser.setToolTipText("File chooser");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -93,7 +93,7 @@ public class FileLinkProps extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(path, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(fileChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -108,7 +108,7 @@ public class FileLinkProps extends javax.swing.JPanel {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
+                    .addComponent(fileChooser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -125,7 +125,7 @@ public class FileLinkProps extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTextArea description;
-    public javax.swing.JButton jButton1;
+    public javax.swing.JButton fileChooser;
     public javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel2;
     public javax.swing.JLabel jLabel3;

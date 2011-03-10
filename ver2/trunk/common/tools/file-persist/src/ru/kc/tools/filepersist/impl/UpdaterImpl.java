@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import ru.kc.model.Node;
 import ru.kc.tools.filepersist.Updater;
+import ru.kc.tools.filepersist.model.impl.FileLinkBean;
 import ru.kc.tools.filepersist.model.impl.LinkBean;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.model.impl.TextBean;
@@ -15,6 +16,7 @@ import ru.kc.tools.filepersist.update.RemoveProperty;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdatePath;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.tools.filepersist.update.UpdateUrl;
@@ -84,6 +86,14 @@ public class UpdaterImpl implements Updater {
 					((LinkBean)node).setUrl(url);
 				} else {
 					throw new IllegalArgumentException("unknow type for update url: "+node);
+				}
+			}
+			else if(update instanceof UpdatePath){
+				if(node instanceof FileLinkBean){
+					String path = ((UpdatePath) update).value;
+					((FileLinkBean)node).setPath(path);
+				} else {
+					throw new IllegalArgumentException("unknow type for update path: "+node);
 				}
 			}
 			else if(update instanceof SetProperty){
