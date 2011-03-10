@@ -1,5 +1,6 @@
 package ru.kc.tools.filepersist.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -59,7 +60,7 @@ public class UpdaterImpl implements Updater {
 		}
 
 		
-		listeners.fireUpdatedEvent(old, clone, updates);
+		listeners.fireUpdatedEvent(old, clone, new ArrayList<UpdateRequest>(updates));
 	}
 	
 
@@ -69,6 +70,8 @@ public class UpdaterImpl implements Updater {
 		for (UpdateRequest update : updates) {
 			if(update instanceof UpdateName){
 				String name = ((UpdateName) update).value;
+				if(Check.isEmpty(name))
+					continue;
 				node.setName(name);
 			} 
 			else if(update instanceof UpdateDescription){

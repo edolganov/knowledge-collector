@@ -17,6 +17,7 @@ import javax.swing.tree.TreePath;
 import ru.kc.common.Context;
 import ru.kc.common.node.NodeIcon;
 import ru.kc.common.node.command.CreateDirRequest;
+import ru.kc.common.node.command.CreateFileLinkRequest;
 import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.CreateTextRequest;
 import ru.kc.common.node.command.DeleteNode;
@@ -168,7 +169,7 @@ public class TreeMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Node parent = treeFacade.getCurrentObject(Node.class);
-				//commandService.invokeSafe(new CreateLinkRequest(parent));
+				commandService.invokeSafe(new CreateFileLinkRequest(parent));
 			}
 
 		});
@@ -213,7 +214,7 @@ public class TreeMenu extends JPopupMenu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Node parent = getParentOfCurrentNode();
-				//commandService.invokeSafe(new CreateLinkRequest(parent));
+				commandService.invokeSafe(new CreateFileLinkRequest(parent));
 			}
 
 		});
