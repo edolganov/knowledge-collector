@@ -1,30 +1,29 @@
 package ru.kc.tools.filepersist.persist.transaction.actions;
 
+import java.util.HashSet;
+
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.transaction.AtomicAction;
 
 public class SaveContainers extends AtomicAction<Void>{
 	
-	NodeBean node1;
-	NodeBean node2;
 	
+	HashSet<Container> containers = new HashSet<Container>();
 	
-	
-	public SaveContainers(NodeBean node1, NodeBean node2) {
+	public SaveContainers(NodeBean... nodes) {
 		super();
-		this.node1 = node1;
-		this.node2 = node2;
+		if(nodes != null){
+			for(NodeBean node : nodes){
+				containers.add(node.getContainer());
+			}
+		}
 	}
 	
 	@Override
 	public Void invoke() throws Throwable {
-		Container con1 = node1.getContainer();
-		t.invoke(new SaveContainer(con1));
-		
-		Container con2 = node2.getContainer();
-		if(!con1.equals(con2)){
-			t.invoke(new SaveContainer(con2));
+		for(Container con : containers){
+			t.invoke(new SaveContainer(con));
 		}
 		return null;
 	}

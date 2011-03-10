@@ -16,8 +16,6 @@ public class AddChild extends AtomicAction<Void>{
 
 	@Override
 	public Void invoke() throws Exception {
-		if(parent.getContainer() == null) throw new IllegalStateException("parent must contains container: "+parent);
-		if(node.getContainer() == null) throw new IllegalStateException("child must contains container: "+node);
 		
 		parent.addChild(node);
 		node.setParent(parent);
@@ -26,9 +24,6 @@ public class AddChild extends AtomicAction<Void>{
 
 	@Override
 	public void rollback() throws Exception {
-		if(parent.getContainer() == null) throw new IllegalStateException("parent must contains container: "+parent);
-		if(node.getContainer() == null) throw new IllegalStateException("child must contains container: "+node);
-		
 		parent.removeChild(node);
 		node.setParent(null);
 	}

@@ -200,8 +200,21 @@ public class FileSystemImpl {
 	
 
 	
-	public void move(NodeBean node, NodeBean newParent)throws Exception{
-		//TODO
+	public void move(final NodeBean node, final NodeBean newParent)throws Exception{
+		new Transaction<Void>(c) {
+
+			@Override
+			protected Void body() throws Throwable {
+				NodeBean parent = invoke(new GetParent(node));
+				if(parent == null)
+					throw new IllegalStateException("parent null for "+node);
+				
+				
+				
+				return null;
+			}
+			
+		}.start();
 	}
 	
 	public boolean hasText(NodeBean node) {
