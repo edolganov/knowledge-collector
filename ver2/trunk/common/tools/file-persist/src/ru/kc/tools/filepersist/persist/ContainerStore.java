@@ -113,8 +113,13 @@ public class ContainerStore {
 		long revision = container.getRevision();
 		
 		//create new history file
-		File destFile = getHistoryFile(resourse,revision);
-		if(destFile.exists()) throw new IllegalStateException("Found already persisted revision "+revision+" of "+container);
+		File destFile = getHistoryFile(resourse, revision);
+		if(destFile.exists()){
+			boolean deleted = destFile.delete();
+			if(!deleted)
+				throw new IllegalStateException("Found already persisted revision "+revision+" of "+container);
+		}
+			
 		try {
 			FileUtil.copyFile(resourse, destFile);
 		} catch (IOException e) {
