@@ -63,7 +63,7 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 		
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	protected Collection<JComponent> getComponentsToCtrlS_Save() {
 		return (Collection)Arrays.asList(ui.url);

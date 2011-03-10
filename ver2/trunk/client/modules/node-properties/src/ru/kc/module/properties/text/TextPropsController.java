@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -52,6 +53,12 @@ public class TextPropsController extends AbstractNodePropsController<Text, TextP
 			}
 		});
 		
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	protected Collection<JComponent> getComponentsToCtrlS_Save() {
+		return (Collection)Arrays.asList(ui.text);
 	}
 
 	protected void textChanged() {
