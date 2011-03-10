@@ -6,6 +6,7 @@ import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.DescriptionChanged;
 import ru.kc.common.node.edit.event.NameChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
+import ru.kc.common.node.edit.event.PathChanged;
 import ru.kc.common.node.edit.event.RevertNodeRequest;
 import ru.kc.common.node.edit.event.TextChanged;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
@@ -20,6 +21,7 @@ import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.tools.filepersist.update.UpdateDescription;
 import ru.kc.tools.filepersist.update.UpdateName;
+import ru.kc.tools.filepersist.update.UpdatePath;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.tools.filepersist.update.UpdateUrl;
@@ -62,6 +64,13 @@ public class NodeEditionsAggregator {
 		Node node = event.node;
 		String edition = event.newUrl;
 		getOrCreate(node).add(new UpdateUrl(edition));
+	}
+	
+	@EventListener
+	public void onEditing(PathChanged event){
+		Node node = event.node;
+		String edition = event.newPath;
+		getOrCreate(node).add(new UpdatePath(edition));
 	}
 	
 	@EventListener

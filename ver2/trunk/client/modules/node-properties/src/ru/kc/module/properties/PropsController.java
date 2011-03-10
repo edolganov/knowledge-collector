@@ -13,6 +13,7 @@ import ru.kc.model.FileLink;
 import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
+import ru.kc.module.properties.filelink.FileLinkPropsModule;
 import ru.kc.module.properties.link.LinkPropsModule;
 import ru.kc.module.properties.node.NodePropsModule;
 import ru.kc.module.properties.text.TextPropsModule;
@@ -27,6 +28,7 @@ public class PropsController extends Controller<PropsPanel> {
 	NodePropsModule nodePropsModule;
 	LinkPropsModule linkPropsModule;
 	TextPropsModule textPropsModule;
+	FileLinkPropsModule fileLinkPropsModule;
 	Node currentNode;
 	
 	@Override
@@ -41,6 +43,9 @@ public class PropsController extends Controller<PropsPanel> {
 		
 		textPropsModule = new TextPropsModule();
 		textPropsModule.setAppContext(appContext);
+		
+		fileLinkPropsModule = new FileLinkPropsModule();
+		fileLinkPropsModule.setAppContext(appContext);
 	}
 	
 	
@@ -87,7 +92,8 @@ public class PropsController extends Controller<PropsPanel> {
 	}
 	
 	private void showProps(FileLink node) {
-		showPropsForAbstractNode(node);
+		fileLinkPropsModule.setNode(node);
+		replace(fileLinkPropsModule);
 	}
 	
 
