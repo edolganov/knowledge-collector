@@ -3,6 +3,8 @@ package ru.kc.module.tree.tools;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.common.node.command.MoveNode;
+import ru.kc.model.Node;
 import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -22,19 +24,30 @@ public class DragAndDropController extends Controller<Tree> implements TreeTrans
 	@Override
 	public void onMove(DefaultMutableTreeNode destination, Object ob) {
 		destination = getNotNullDestination(destination);
+		Object userObject = destination.getUserObject();
 		
-		try {
-			
-		}catch (Exception e) {
-			
+		if(userObject instanceof Node){
+			Node parent = (Node) userObject;
+			if(ob instanceof Node){
+				move((Node)ob, parent);
+			} else {
+				log.info("unknow type to move: "+ob);
+			}
+		} else {
+			log.info("unknow destination: "+userObject);
 		}
+	}
+
+	private void move(Node node, Node parent) {
+		invokeSafe(new MoveNode(node, parent));
+		System.out.println("done!!!!!!!");
 	}
 
 	@Override
 	public void onCopy(DefaultMutableTreeNode destination, Object ob) {
 		destination = getNotNullDestination(destination);
 		
-		log.info("copy!!!");
+		log.info("TODO copy");
 	}
 	
 	private DefaultMutableTreeNode getNotNullDestination(DefaultMutableTreeNode destination) {
