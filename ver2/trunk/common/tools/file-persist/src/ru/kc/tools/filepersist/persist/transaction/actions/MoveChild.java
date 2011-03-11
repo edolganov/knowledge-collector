@@ -21,13 +21,32 @@ public class MoveChild extends AtomicAction<Void>{
 		if(oldParent == null)
 			throw new IllegalStateException("parent null for "+child);
 		
-		//TODO check logic
+		checkChildToMove(child, newParent);
 		
 		oldParent.removeChild(child);
 		newParent.addChild(child);
 		child.setParent(newParent);
 		
 		return null;
+	}
+
+	private void checkChildToMove(NodeBean child, NodeBean newParent) throws Throwable {
+		//проверяем что предок не перемещается в потомка
+		NodeBean[] targetPath = t.invoke(new GetNodePath(newParent));
+		NodeBean[] candidatPath = t.invoke(new GetNodePath(child));
+		boolean valid = false;
+		if(candidatPath.length > targetPath.length) 
+			valid = true;
+		else {
+			for (int i = 0; i < candidatPath.length; i++) {
+				if(!candidatPath[i].equals(targetPath[i])){
+					valid = true;
+					break;
+				}
+			}
+		}
+		if(!valid) 
+			throw new IllegalStateException("invalid move destination "+newParent+" for "+child);
 	}
 
 	@Override

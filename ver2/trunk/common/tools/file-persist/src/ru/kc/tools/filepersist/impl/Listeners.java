@@ -27,5 +27,9 @@ public class Listeners {
 	public void fireUpdatedEvent(Node old, Node updated, Collection<UpdateRequest> updates) {
 		for(ServiceListener l : listeners) l.onNodeUpdated(old, updated, updates);
 	}
+	
+	public void fireMovedEvent(Node oldParent, Node child, Node newParent) {
+		for(ServiceListener l : listeners) l.onMoved(oldParent, child, newParent);
+	}
 
 }

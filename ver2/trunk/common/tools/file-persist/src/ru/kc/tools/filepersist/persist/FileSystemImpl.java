@@ -11,7 +11,6 @@ import ru.kc.model.Node;
 import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
-import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
@@ -19,6 +18,7 @@ import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
+import ru.kc.tools.filepersist.persist.transaction.actions.MoveChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveNodeFromContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.ReplaceNodeInContainer;
@@ -156,7 +156,7 @@ public class FileSystemImpl {
 		}.start();
 	}
 	
-	public void deleteRecursive(final NodeBean node)throws Exception{
+	public void deleteRecursive(final NodeBean node)throws Exception {
 		new Transaction<Void>(c) {
 
 			@Override
@@ -200,7 +200,7 @@ public class FileSystemImpl {
 	
 
 	
-	public void move(final NodeBean node, final NodeBean newParent)throws Exception{
+	public void move(final NodeBean node, final NodeBean newParent)throws Exception {
 		new Transaction<Void>(c) {
 
 			@Override
@@ -209,7 +209,9 @@ public class FileSystemImpl {
 				if(parent == null)
 					throw new IllegalStateException("parent null for "+node);
 				
+				invoke(new MoveChild(node, newParent));
 				
+				invoke(new SaveContainers(parent, node, newParent));
 				
 				return null;
 			}

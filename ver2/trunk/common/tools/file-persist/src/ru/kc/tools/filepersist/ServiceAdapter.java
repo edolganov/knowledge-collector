@@ -17,4 +17,7 @@ public class ServiceAdapter implements ServiceListener {
 	@Override
 	public void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates) {}
 
+	@Override
+	public void onMoved(Node oldParent, Node child, Node newParent) {}
+
 }

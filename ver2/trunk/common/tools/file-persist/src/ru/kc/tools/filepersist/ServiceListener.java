@@ -13,5 +13,7 @@ public interface ServiceListener {
 	void onDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren);
 	
 	void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates);
+	
+	void onMoved(Node oldParent, Node child, Node newParent);
 
 }

@@ -87,6 +87,20 @@ public class TreeImpl implements Tree {
 		
 		return out;
 	}
+	
+	public void move(Node child, Node newParent) throws Exception {
+		if(child == null) throw new NullPointerException("child");
+		if(child.equals(getRoot())) throw new IllegalArgumentException("can't move root");
+		
+		Node oldParent = getParent(child);
+		if(oldParent == null) 
+			throw new IllegalStateException("parent is null for "+child);
+		
+		fs.move(convert(child), convert(newParent));
+		listeners.fireMovedEvent(oldParent, child, newParent);
+	}
+	
+	
 
 	private NodeBean convert(Node node) {
 		return c.converter.convert(node);

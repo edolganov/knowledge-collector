@@ -103,6 +103,12 @@ public class Main {
 			public void onNodeUpdated(Node old, Node node, Collection<UpdateRequest> updates) {
 				eventManager.fireEventInEDT(this, new NodeUpdated(old, node, updates));
 			}
+
+			@Override
+			public void onMoved(Node oldParent, Node child, Node newParent) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		
 		context.nodeEditionsAggregator.init(appContext);
