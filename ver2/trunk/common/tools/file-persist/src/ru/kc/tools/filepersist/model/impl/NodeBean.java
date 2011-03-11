@@ -54,6 +54,34 @@ public abstract class NodeBean implements Node, Cloneable {
 		childrenIds.remove(childId);
 	}
 	
+	public int moveChildUp(NodeBean node) {
+		if(childrenIds == null) return -1;
+		String childId = generateNodeIdWithContainerPath(node);
+		int oldIndex = childrenIds.indexOf(childId);
+		if(oldIndex == -1) return -1;
+		
+		int newIndex = oldIndex - 1;
+		if(newIndex == -1) 
+			newIndex = childrenIds.size()-1;
+		childrenIds.remove(oldIndex);
+		childrenIds.add(newIndex, childId);
+		return newIndex;
+	}
+	
+	public int moveChildDown(NodeBean node) {
+		if(childrenIds == null) return -1;
+		String childId = generateNodeIdWithContainerPath(node);
+		int oldIndex = childrenIds.indexOf(childId);
+		if(oldIndex == -1) return -1;
+		
+		int newIndex = oldIndex + 1;
+		if(newIndex == childrenIds.size())
+			newIndex = 0;
+		childrenIds.remove(oldIndex);
+		childrenIds.add(newIndex, childId);
+		return newIndex;
+	}
+	
 	private String generateNodeIdWithContainerPath(NodeBean node){
 		if(container == null) throw new IllegalStateException(this+" must contains container");
 		Container otherContainer = node.getContainer();
