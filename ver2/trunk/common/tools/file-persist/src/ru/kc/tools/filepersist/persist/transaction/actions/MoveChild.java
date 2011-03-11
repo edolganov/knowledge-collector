@@ -46,7 +46,7 @@ public class MoveChild extends AtomicAction<Void>{
 			}
 		}
 		if(!valid) 
-			throw new IllegalStateException("invalid move destination "+newParent+" for "+child);
+			throw new IllegalArgumentException("invalid move destination "+newParent+" for "+child);
 	}
 
 	@Override

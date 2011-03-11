@@ -210,7 +210,6 @@ public class FileSystemImpl {
 					throw new IllegalStateException("parent null for "+node);
 				
 				invoke(new MoveChild(node, newParent));
-				
 				invoke(new SaveContainers(parent, node, newParent));
 				
 				return null;

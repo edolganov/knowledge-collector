@@ -90,11 +90,15 @@ public class TreeImpl implements Tree {
 	
 	public void move(Node child, Node newParent) throws Exception {
 		if(child == null) throw new NullPointerException("child");
+		if(newParent == null) throw new NullPointerException("newParent");
 		if(child.equals(getRoot())) throw new IllegalArgumentException("can't move root");
 		
 		Node oldParent = getParent(child);
 		if(oldParent == null) 
 			throw new IllegalStateException("parent is null for "+child);
+		
+		if(oldParent.equals(newParent))
+			return;
 		
 		fs.move(convert(child), convert(newParent));
 		listeners.fireMovedEvent(oldParent, child, newParent);

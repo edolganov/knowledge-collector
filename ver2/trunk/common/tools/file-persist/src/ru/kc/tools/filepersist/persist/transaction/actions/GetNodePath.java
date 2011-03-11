@@ -21,7 +21,7 @@ public class GetNodePath extends AtomicAction<NodeBean[]>{
 		NodeBean parent = t.invoke(new GetParent(node));
 		while(parent != null){
 			path.add(0, parent);
-			parent = t.invoke(new GetParent(node));
+			parent = t.invoke(new GetParent(parent));
 		}
 		
 		return path.toArray(new NodeBean[0]);
