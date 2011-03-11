@@ -15,6 +15,7 @@ import ru.kc.tools.filepersist.persist.model.ContainersModel;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
+import ru.kc.tools.filepersist.persist.transaction.actions.CanMoveChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
@@ -199,6 +200,17 @@ public class FileSystemImpl {
 	}
 	
 
+	public boolean canMove(final NodeBean node, final NodeBean newParent)throws Exception {
+		return new Transaction<Boolean>(c) {
+
+			@Override
+			protected Boolean body() throws Throwable {
+				return invoke(new CanMoveChild(node, newParent));
+			}
+			
+		}.start();
+	}
+	
 	
 	public void move(final NodeBean node, final NodeBean newParent)throws Exception {
 		new Transaction<Void>(c) {
@@ -217,6 +229,8 @@ public class FileSystemImpl {
 			
 		}.start();
 	}
+	
+	
 	
 	public boolean hasText(NodeBean node) {
 		return c.blobs.hasText(node);

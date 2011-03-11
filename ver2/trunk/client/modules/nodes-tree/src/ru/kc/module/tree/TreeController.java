@@ -32,7 +32,6 @@ import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeFacade;
-import ru.kc.util.swing.tree.TreeTransferHandler;
 
 @Mapping(Tree.class)
 public class TreeController extends Controller<Tree>{
@@ -49,8 +48,6 @@ public class TreeController extends Controller<Tree>{
 		treeFacade = new TreeFacade(ui.tree);
 		
 		tree.setRootVisible(true);
-		tree.setTransferHandler(new TreeTransferHandler());
-		tree.setDragEnabled(true);
 		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender(tree, context.nodeEditionsAggregator));
 		final CellEditor cellEditor = new CellEditor(tree);

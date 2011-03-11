@@ -8,6 +8,7 @@ import ru.kc.common.Context;
 import ru.kc.common.dialog.Dialogs;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
+import ru.kc.common.node.event.NodeMoved;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.annotations.Inject;
@@ -46,6 +47,7 @@ public abstract class Controller<T> extends AbstractController<T>{
 	
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates){ /* override if need */ }
 	
+	protected void onNodeMoved(Node oldParent, Node node, Node newParent){ /* override if need */ }
 	
 	
 	@EventListener
@@ -61,6 +63,11 @@ public abstract class Controller<T> extends AbstractController<T>{
 	@EventListener
 	public void _onNodeUpdated(NodeUpdated event){
 		onNodeUpdated(event.old, event.node, event.updates);
+	}
+	
+	@EventListener
+	public void _onNodeMoved(NodeMoved event){
+		onNodeMoved(event.oldParent, event.node, event.newParent);
 	}
 	
 

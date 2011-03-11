@@ -14,6 +14,8 @@ public interface Tree {
 
 	void deleteRecursive(Node node)throws Exception;
 	
+	boolean canMove(Node child, Node newParent) throws Exception;
+	
 	void move(Node child, Node newParent) throws Exception;
 
 }

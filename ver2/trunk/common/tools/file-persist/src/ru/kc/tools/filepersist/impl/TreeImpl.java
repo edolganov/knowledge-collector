@@ -88,6 +88,16 @@ public class TreeImpl implements Tree {
 		return out;
 	}
 	
+	@Override
+	public boolean canMove(Node child, Node newParent) throws Exception {
+		if(child == null) return false;
+		if(newParent == null) return false;
+		if(child.equals(getRoot())) return false;
+		
+		return fs.canMove(convert(child), convert(newParent));
+	}
+	
+	@Override
 	public void move(Node child, Node newParent) throws Exception {
 		if(child == null) throw new NullPointerException("child");
 		if(newParent == null) throw new NullPointerException("newParent");

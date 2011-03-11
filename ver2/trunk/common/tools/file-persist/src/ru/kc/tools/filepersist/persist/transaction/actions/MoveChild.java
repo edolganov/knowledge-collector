@@ -31,20 +31,7 @@ public class MoveChild extends AtomicAction<Void>{
 	}
 
 	private void checkChildToMove(NodeBean child, NodeBean newParent) throws Throwable {
-		//проверяем что предок не перемещается в потомка
-		NodeBean[] targetPath = t.invoke(new GetNodePath(newParent));
-		NodeBean[] candidatPath = t.invoke(new GetNodePath(child));
-		boolean valid = false;
-		if(candidatPath.length > targetPath.length) 
-			valid = true;
-		else {
-			for (int i = 0; i < candidatPath.length; i++) {
-				if(!candidatPath[i].equals(targetPath[i])){
-					valid = true;
-					break;
-				}
-			}
-		}
+		boolean valid = t.invoke(new CanMoveChild(child, newParent));
 		if(!valid) 
 			throw new IllegalArgumentException("invalid move destination "+newParent+" for "+child);
 	}

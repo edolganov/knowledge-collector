@@ -9,6 +9,7 @@ import ru.kc.common.dialog.Dialogs;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
+import ru.kc.common.node.event.NodeMoved;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.Platform;
@@ -106,8 +107,7 @@ public class Main {
 
 			@Override
 			public void onMoved(Node oldParent, Node child, Node newParent) {
-				// TODO Auto-generated method stub
-				
+				eventManager.fireEventInEDT(this, new NodeMoved(oldParent, child, newParent));
 			}
 		});
 		
