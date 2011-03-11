@@ -182,4 +182,9 @@ public class TreeFacade {
 		}
 		return false;
 	}
+	
+	
+	public boolean moveNode(DefaultMutableTreeNode tagretNode, DefaultMutableTreeNode draggedNode){
+		return TreeUtil.moveNode(tree, tagretNode, draggedNode, false);
+	}
 }

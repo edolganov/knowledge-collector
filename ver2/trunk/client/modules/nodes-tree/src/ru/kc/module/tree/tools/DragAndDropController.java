@@ -40,7 +40,6 @@ public class DragAndDropController extends Controller<Tree> implements TreeTrans
 
 	private void move(Node node, Node parent) {
 		invokeSafe(new MoveNode(node, parent));
-		System.out.println("done!!!!!!!");
 	}
 
 	@Override

@@ -80,7 +80,7 @@ public class TreeUtil {
 			}
 		}
 		model.insertNodeInto(child, parent, uiPosition);
-		model.reload(parent);
+		//model.reload(parent);
 		return child;
 	}
 
@@ -149,45 +149,34 @@ public class TreeUtil {
 		return false;
 	}
 
-	public static boolean moveNode(JTree tree, DefaultMutableTreeNode tagretNode, DefaultMutableTreeNode draggedNode,Class<?> validParentClass) {
-		if(draggedNode.isRoot()) return false;
+	public static boolean moveNode(JTree tree, 
+			DefaultMutableTreeNode tagretNode, 
+			DefaultMutableTreeNode draggedNode,
+			boolean checkOp) {
 		if(tagretNode.equals(draggedNode)) return false;
 		if(draggedNode.getParent().equals(tagretNode)) return false;
 		
-		if(validParentClass != null){
-			Object targetObj = tagretNode.getUserObject();
-			if(!isValid(targetObj.getClass(), validParentClass)){
-				tagretNode = (DefaultMutableTreeNode) tagretNode.getParent();
-				if(tagretNode == null) return false;
-				if(tagretNode.isRoot()){
-					targetObj = null;
-				}
-				else {
-					targetObj = tagretNode.getUserObject();
-					if(!isValid(targetObj.getClass(), validParentClass)) return false;
-				}
-			}
-		}
-		
-		//проверяем что предок не перемещается в потомка
-		TreeNode[] targetPath = tagretNode.getPath();
-		TreeNode[] candidatPath = draggedNode.getPath();
-		boolean valid = false;
-		if(candidatPath.length > targetPath.length) valid = true;
-		else {
-			for (int i = 0; i < candidatPath.length; i++) {
-				if(!candidatPath[i].equals(targetPath[i])){
-					valid = true;
-					break;
+		if(checkOp){
+			//проверяем что предок не перемещается в потомка
+			TreeNode[] targetPath = tagretNode.getPath();
+			TreeNode[] candidatPath = draggedNode.getPath();
+			boolean valid = false;
+			if(candidatPath.length > targetPath.length) valid = true;
+			else {
+				for (int i = 0; i < candidatPath.length; i++) {
+					if(!candidatPath[i].equals(targetPath[i])){
+						valid = true;
+						break;
+					}
 				}
 			}
+			if(!valid) return false;
 		}
-		if(!valid) return false;
 		
 
 		DefaultMutableTreeNode oldParent = (DefaultMutableTreeNode)draggedNode.getParent();
 		//tree
-		addChild(tree, tagretNode, draggedNode, validParentClass);
+		addChild(tree, tagretNode, draggedNode, null);
 		//tagretNode.add(draggedNode);
 		
 		DefaultTreeModel model = (DefaultTreeModel) tree.getModel();

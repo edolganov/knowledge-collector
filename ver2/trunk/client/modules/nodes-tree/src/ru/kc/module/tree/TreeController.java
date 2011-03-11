@@ -153,6 +153,19 @@ public class TreeController extends Controller<Tree>{
 		addChildToTree(parentNode, child);
 	}
 	
+	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
+		boolean selectChild = treeFacade.isSelectedNode(parentTreeNode);
+		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
+		addToStorage(child,treeChild);
+		if(selectChild){
+			treeFacade.setSelection(treeChild);
+			tree.requestFocus();
+		}
+
+		return treeChild;
+	}
+	
+	
 	@Override
 	protected void onChildDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {
 		DefaultMutableTreeNode parentNode = getFromStorage(parent);
@@ -171,6 +184,19 @@ public class TreeController extends Controller<Tree>{
 		
 	}
 	
+	private void removeChild(DefaultMutableTreeNode treeNode, Node deletedNode) {
+		boolean selectParent = treeFacade.isSelectedNode(treeNode);
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
+		treeFacade.removeNode(treeNode);
+		removeFromStorage(deletedNode);
+		if(parent != null){
+			if(selectParent){
+				treeFacade.setSelection(parent);
+				tree.requestFocus();
+			}
+		}
+	}
+	
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
 		DefaultMutableTreeNode oldNode = getFromStorage(old);
@@ -181,6 +207,32 @@ public class TreeController extends Controller<Tree>{
 		
 		updateNode(oldNode, old, updatedNode);
 	}
+	
+	private void updateNode(DefaultMutableTreeNode treeNode, Node old, Node updatedNode) {
+		treeNode.setUserObject(updatedNode);
+		removeFromStorage(old);
+		addToStorage(updatedNode, treeNode);
+		treeFacade.reload(treeNode);
+	}
+	
+	@Override
+	protected void onNodeMoved(Node oldParent, Node node, Node newParent) {
+		DefaultMutableTreeNode oldNode = getFromStorage(node);
+		if(oldNode == null){
+			log.info("can't find tree node by "+node);
+			return;
+		}
+		
+		DefaultMutableTreeNode newParentNode = getFromStorage(newParent);
+		if(newParentNode == null){
+			log.info("can't find tree node by "+newParent);
+			return;
+		}
+		
+		treeFacade.moveNode(newParentNode, oldNode);
+	}
+	
+	
 	
 	@EventListener
 	public void onNodeChanged(NodeChanged event){
@@ -201,37 +253,11 @@ public class TreeController extends Controller<Tree>{
 	}
 
 
-	private DefaultMutableTreeNode addChildToTree(DefaultMutableTreeNode parentTreeNode, Node child) {
-		boolean selectChild = treeFacade.isSelectedNode(parentTreeNode);
-		DefaultMutableTreeNode treeChild = treeFacade.addChild(parentTreeNode, child);
-		addToStorage(child,treeChild);
-		if(selectChild){
-			treeFacade.setSelection(treeChild);
-			tree.requestFocus();
-		}
 
-		return treeChild;
-	}
 	
-	private void removeChild(DefaultMutableTreeNode treeNode, Node deletedNode) {
-		boolean selectParent = treeFacade.isSelectedNode(treeNode);
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)treeNode.getParent();
-		treeFacade.removeNode(treeNode);
-		removeFromStorage(deletedNode);
-		if(parent != null){
-			if(selectParent){
-				treeFacade.setSelection(parent);
-				tree.requestFocus();
-			}
-		}
-	}
+
 	
-	private void updateNode(DefaultMutableTreeNode treeNode, Node old, Node updatedNode) {
-		treeNode.setUserObject(updatedNode);
-		removeFromStorage(old);
-		addToStorage(updatedNode, treeNode);
-		treeFacade.reload(treeNode);
-	}
+
 	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
 		runtimeStorage.putWithWeakReferenceDomain(node, treeNodeKey, treeNode);
