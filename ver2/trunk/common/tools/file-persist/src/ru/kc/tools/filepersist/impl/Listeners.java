@@ -31,5 +31,9 @@ public class Listeners {
 	public void fireMovedEvent(Node oldParent, Node child, Node newParent) {
 		for(ServiceListener l : listeners) l.onMoved(oldParent, child, newParent);
 	}
+	
+	public void fireMovedChildEvent(Node parent, Node child, int newIndex){
+		for(ServiceListener l : listeners) l.onChildMoved(parent, child, newIndex);
+	}
 
 }

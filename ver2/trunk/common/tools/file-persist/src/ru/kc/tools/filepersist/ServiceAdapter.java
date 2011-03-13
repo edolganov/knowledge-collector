@@ -20,4 +20,9 @@ public class ServiceAdapter implements ServiceListener {
 	@Override
 	public void onMoved(Node oldParent, Node child, Node newParent) {}
 
+	@Override
+	public void onChildMoved(Node parent, Node child, int newIndex) {}
+	
+	
+
 }

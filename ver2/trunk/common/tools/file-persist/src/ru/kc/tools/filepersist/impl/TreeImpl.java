@@ -115,6 +115,35 @@ public class TreeImpl implements Tree {
 	}
 	
 	
+	@Override
+	public int moveUp(Node node) throws Exception {
+		if(node == null) throw new NullPointerException("node");
+		if(node.equals(getRoot())) return 0;
+		
+		Node parent = getParent(node);
+		if(parent == null) 
+			throw new IllegalStateException("parent is null for "+node);
+		
+		int newIndex = fs.moveUp(convert(parent), convert(node));
+		listeners.fireMovedChildEvent(parent, node, newIndex);
+		return newIndex;
+	}
+	
+	@Override
+	public int moveDown(Node node) throws Exception {
+		if(node == null) throw new NullPointerException("node");
+		if(node.equals(getRoot())) return 0;
+		
+		Node parent = getParent(node);
+		if(parent == null) 
+			throw new IllegalStateException("parent is null for "+node);
+		
+		int newIndex = fs.moveDown(convert(parent), convert(node));
+		listeners.fireMovedChildEvent(parent, node, newIndex);
+		return newIndex;
+	}
+	
+	
 
 	private NodeBean convert(Node node) {
 		return c.converter.convert(node);

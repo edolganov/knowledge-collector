@@ -109,6 +109,11 @@ public class Main {
 			public void onMoved(Node oldParent, Node child, Node newParent) {
 				eventManager.fireEventInEDT(this, new NodeMoved(oldParent, child, newParent));
 			}
+
+			@Override
+			public void onChildMoved(Node parent, Node child, int newIndex) {
+				
+			}
 		});
 		
 		context.nodeEditionsAggregator.init(appContext);

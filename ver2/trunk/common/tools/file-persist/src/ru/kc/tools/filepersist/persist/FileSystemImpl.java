@@ -20,6 +20,8 @@ import ru.kc.tools.filepersist.persist.transaction.actions.GetChildren;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetNotFullContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.GetParent;
 import ru.kc.tools.filepersist.persist.transaction.actions.MoveChild;
+import ru.kc.tools.filepersist.persist.transaction.actions.MoveChildDown;
+import ru.kc.tools.filepersist.persist.transaction.actions.MoveChildUp;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.RemoveNodeFromContainer;
 import ru.kc.tools.filepersist.persist.transaction.actions.ReplaceNodeInContainer;
@@ -212,7 +214,7 @@ public class FileSystemImpl {
 	}
 	
 	
-	public void move(final NodeBean node, final NodeBean newParent)throws Exception {
+	public void move(final NodeBean node, final NodeBean newParent) throws Exception {
 		new Transaction<Void>(c) {
 
 			@Override
@@ -225,6 +227,32 @@ public class FileSystemImpl {
 				invoke(new SaveContainers(parent, node, newParent));
 				
 				return null;
+			}
+			
+		}.start();
+	}
+	
+	public int moveUp(final NodeBean parent, final NodeBean node) throws Exception {
+		return new Transaction<Integer>(c) {
+
+			@Override
+			protected Integer body() throws Throwable {
+				int index = invoke(new MoveChildUp(parent, node));
+				invoke(new SaveContainers(parent));
+				return index;
+			}
+			
+		}.start();
+	}
+	
+	public int moveDown(final NodeBean parent, final NodeBean node) throws Exception {
+		return new Transaction<Integer>(c) {
+
+			@Override
+			protected Integer body() throws Throwable {
+				int index = invoke(new MoveChildDown(parent, node));
+				invoke(new SaveContainers(parent));
+				return index;
 			}
 			
 		}.start();

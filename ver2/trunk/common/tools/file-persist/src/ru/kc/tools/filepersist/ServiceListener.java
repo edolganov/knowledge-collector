@@ -15,5 +15,7 @@ public interface ServiceListener {
 	void onNodeUpdated(Node old, Node updated, Collection<UpdateRequest> updates);
 	
 	void onMoved(Node oldParent, Node child, Node newParent);
+	
+	void onChildMoved(Node parent, Node child, int newIndex);
 
 }

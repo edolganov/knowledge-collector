@@ -17,5 +17,9 @@ public interface Tree {
 	boolean canMove(Node child, Node newParent) throws Exception;
 	
 	void move(Node child, Node newParent) throws Exception;
+	
+	int moveUp(Node node) throws Exception;
+	
+	int moveDown(Node node) throws Exception;
 
 }
