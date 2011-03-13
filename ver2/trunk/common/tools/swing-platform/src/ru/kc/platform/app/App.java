@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.common.app.event.AppInited;
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
@@ -198,6 +199,8 @@ public class App {
 		//scripts controllers
 		new ScriptControllerScan(context.scriptsService).scanAndInit(context.rootUI);
 		context.scriptsService.addListener(new RootUIScriptListener(context));
+		
+		eventManager.fireEventInEDT(this, new AppInited());
 	}
 
 	private void showUI() {

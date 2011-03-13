@@ -28,6 +28,12 @@ public class ButtonFacadeMediator implements ButtonFacade {
 	}
 	
 	@Override
+	public void requestFocus() {
+		for (ButtonFacade realImpl : realFacadeImpls)
+			realImpl.requestFocus();
+	}
+	
+	@Override
 	public void setOrder(int order) {
 		this.order = order;
 		for (ButtonFacade realImpl : realFacadeImpls)
@@ -73,6 +79,8 @@ public class ButtonFacadeMediator implements ButtonFacade {
 		for(ActionListener l : listeners)
 			facade.addListener(l);
 	}
+
+
 
 
 

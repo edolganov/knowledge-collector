@@ -59,6 +59,11 @@ public class ComboBoxAction extends AbstractAction  implements ComboBoxFacade {
 		return combo;
 	}
 
+	@Override
+	public void requestFocus() {
+		combo.requestFocus();
+	}
+
 
 
 

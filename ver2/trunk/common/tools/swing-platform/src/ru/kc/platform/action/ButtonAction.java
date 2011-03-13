@@ -41,4 +41,9 @@ public class ButtonAction extends AbstractAction implements ButtonFacade{
 		return button;
 	}
 
+	@Override
+	public void requestFocus() {
+		button.requestFocus();
+	}
+
 }

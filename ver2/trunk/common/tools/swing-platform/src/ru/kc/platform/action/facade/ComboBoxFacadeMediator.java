@@ -26,6 +26,12 @@ public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	}
 	
 	@Override
+	public void requestFocus() {
+		for (ComboBoxFacade realImpl : realFacadeImpls)
+			realImpl.requestFocus();
+	}
+	
+	@Override
 	public void setOrder(int order) {
 		this.order = order;
 		for (ComboBoxFacade realImpl : realFacadeImpls)
@@ -80,6 +86,8 @@ public class ComboBoxFacadeMediator implements ComboBoxFacade {
 		for(Listener l : listeners)
 			facade.addListener(l);
 	}
+
+
 
 
 

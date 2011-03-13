@@ -9,5 +9,7 @@ public interface AbstractActionFacade {
 	void setOrder(int order);
 	
 	int getOrder();
+	
+	void requestFocus();
 
 }
