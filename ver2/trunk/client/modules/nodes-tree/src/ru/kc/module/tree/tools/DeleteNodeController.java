@@ -13,7 +13,7 @@ import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class TreeKeysController extends Controller<Tree>{
+public class DeleteNodeController extends Controller<Tree>{
 
 	TreeFacade treeFacade;
 	
