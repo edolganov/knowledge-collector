@@ -13,11 +13,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ru.kc.common.controller.Controller;
-import ru.kc.common.node.command.CreateDirRequest;
-import ru.kc.common.node.command.CreateFileLinkRequest;
-import ru.kc.common.node.command.CreateLinkRequest;
-import ru.kc.common.node.command.CreateTextRequest;
-import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
@@ -27,7 +22,6 @@ import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
 import ru.kc.module.tree.tools.TreeMenu;
 import ru.kc.module.tree.ui.Tree;
-import ru.kc.platform.annotations.ExportAction;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateName;
@@ -109,40 +103,6 @@ public class TreeController extends Controller<Tree>{
 		}catch (Exception e) {
 			log.error("error init tree", e);
 		}
-	}
-
-
-
-	@ExportAction(description="create dir", icon="/ru/kc/common/img/createDir.png")
-	public void createDirRequest(){
-		Node parent = treeFacade.getCurrentObject(Node.class);
-		invokeSafe(new CreateDirRequest(parent));
-	}
-	
-	@ExportAction(description="create link", icon="/ru/kc/common/img/createLink.png")
-	public void createLinkRequest(){
-		Node parent = treeFacade.getCurrentObject(Node.class);
-		invokeSafe(new CreateLinkRequest(parent));
-	}
-	
-	@ExportAction(description="create text", icon="/ru/kc/common/img/createText.png")
-	public void createTextRequest(){
-		Node parent = treeFacade.getCurrentObject(Node.class);
-		invokeSafe(new CreateTextRequest(parent));
-	}
-	
-	@ExportAction(description="create file link", icon="/ru/kc/common/img/createFileLink.png")
-	public void createFileLinkRequest(){
-		Node parent = treeFacade.getCurrentObject(Node.class);
-		invokeSafe(new CreateFileLinkRequest(parent));
-	}
-	
-	public void deleteNodeRequest(){
-		DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
-		if(treeNode.isRoot()) return;
-		
-		Node node = treeFacade.getCurrentObject(Node.class);
-		invokeSafe(new DeleteNode(node));
 	}
 	
 	@Override

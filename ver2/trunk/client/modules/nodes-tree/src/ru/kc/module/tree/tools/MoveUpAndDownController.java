@@ -3,6 +3,7 @@ package ru.kc.module.tree.tools;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.MoveDown;
@@ -45,6 +46,9 @@ public class MoveUpAndDownController extends Controller<Tree> {
 
 
 	protected void moveUp() {
+		DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
+		if(treeNode != null && treeNode.isRoot()) return;
+		
 		Node node = treeFacade.getCurrentObject(Node.class);
 		if(node != null){
 			invokeSafe(new MoveUp(node));
@@ -52,6 +56,9 @@ public class MoveUpAndDownController extends Controller<Tree> {
 	}
 
 	protected void moveDown() {
+		DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
+		if(treeNode != null && treeNode.isRoot()) return;
+		
 		Node node = treeFacade.getCurrentObject(Node.class);
 		if(node != null){
 			invokeSafe(new MoveDown(node));
