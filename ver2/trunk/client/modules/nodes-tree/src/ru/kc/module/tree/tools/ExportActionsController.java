@@ -172,7 +172,7 @@ public class ExportActionsController extends Controller<Tree> {
 	
 	private void refreshSpecialActions() {
 		DefaultMutableTreeNode currentTreeNode = treeFacade.getCurrentNode();
-		Node node = treeFacade.getCurrentObject(Node.class);
+		//Node node = treeFacade.getCurrentObject(Node.class);
 		
 		if(currentTreeNode.isRoot()){
 			moveUp.disable();
