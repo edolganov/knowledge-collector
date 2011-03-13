@@ -10,6 +10,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.CreateDirRequest;
@@ -20,6 +21,7 @@ import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
+import ru.kc.common.node.event.ChildMoved;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
@@ -253,12 +255,42 @@ public class TreeController extends Controller<Tree>{
 	}
 
 
-
+	@EventListener
+	public void onChildMoved(ChildMoved event){
+		Node parent = event.parent;
+		Node child = event.child;
+		DefaultMutableTreeNode parentNode = getFromStorage(parent);
+		DefaultMutableTreeNode childNode = getFromStorage(child);
+		if(parentNode != null && childNode != null){
+			int newIndex = event.newIndex;
+			moveChild(parentNode, childNode, newIndex);
+		}
+	}
+	
+	private void moveChild(DefaultMutableTreeNode parentNode,
+			DefaultMutableTreeNode childNode, int newIndex) {
+		
+		TreePath childPath = new TreePath(childNode.getPath());
+		TreePath selectedPath = null;
+		if(ui.tree.isPathSelected(childPath)){
+			selectedPath = childPath;
+		}
+		
+		for (int i = 0; i < parentNode.getChildCount(); i++) {
+			DefaultMutableTreeNode candidat = (DefaultMutableTreeNode)parentNode.getChildAt(i);
+			if(candidat == childNode){
+				parentNode.remove(childNode);
+				parentNode.insert(childNode, newIndex);
+			}					
+		}
+		model.reload(parentNode);
+		
+		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
+	}
+	
+	
 	
 
-	
-
-	
 	private void addToStorage(Node node, DefaultMutableTreeNode treeNode) {
 		runtimeStorage.putWithWeakReferenceDomain(node, treeNodeKey, treeNode);
 	}
