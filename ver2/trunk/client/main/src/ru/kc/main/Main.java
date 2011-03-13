@@ -9,6 +9,7 @@ import ru.kc.common.dialog.Dialogs;
 import ru.kc.common.node.edit.NodeEditionsAggregator;
 import ru.kc.common.node.event.ChildAdded;
 import ru.kc.common.node.event.ChildDeletedRecursive;
+import ru.kc.common.node.event.ChildMoved;
 import ru.kc.common.node.event.NodeMoved;
 import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
@@ -112,7 +113,7 @@ public class Main {
 
 			@Override
 			public void onChildMoved(Node parent, Node child, int newIndex) {
-				
+				eventManager.fireEventInEDT(this, new ChildMoved(parent, child, newIndex));
 			}
 		});
 		
