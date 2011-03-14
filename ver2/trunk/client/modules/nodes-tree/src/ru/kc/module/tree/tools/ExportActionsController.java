@@ -28,6 +28,9 @@ import ru.kc.util.swing.tree.TreeFacade;
 public class ExportActionsController extends Controller<Tree> {
 	
 	
+	private static final String EDIT_GROUP = "1-edit";
+	private static final String ADD_GROUP = "2-add";
+	
 	TreeFacade treeFacade;
 	//basics
 	ButtonFacade createDir;
@@ -65,7 +68,7 @@ public class ExportActionsController extends Controller<Tree> {
 		createDir = actionService.addButtonAction();
 		createDir.setIcon(IconUtil.get("/ru/kc/common/img/createDir.png"));
 		createDir.setToolTipText("Create dir");
-		createDir.setGroup("0-add");
+		createDir.setGroup(ADD_GROUP);
 		createDir.addListener(new ActionListener() {
 			
 			@Override
@@ -78,7 +81,7 @@ public class ExportActionsController extends Controller<Tree> {
 		createLink = actionService.addButtonAction();
 		createLink.setIcon(IconUtil.get("/ru/kc/common/img/createLink.png"));
 		createLink.setToolTipText("Create link");
-		createLink.setGroup("0-add");
+		createLink.setGroup(ADD_GROUP);
 		createLink.addListener(new ActionListener() {
 			
 			@Override
@@ -91,7 +94,7 @@ public class ExportActionsController extends Controller<Tree> {
 		createText = actionService.addButtonAction();
 		createText.setIcon(IconUtil.get("/ru/kc/common/img/createText.png"));
 		createText.setToolTipText("Create text");
-		createText.setGroup("0-add");
+		createText.setGroup(ADD_GROUP);
 		createText.addListener(new ActionListener() {
 			
 			@Override
@@ -104,7 +107,7 @@ public class ExportActionsController extends Controller<Tree> {
 		createFileLink = actionService.addButtonAction();
 		createFileLink.setIcon(IconUtil.get("/ru/kc/common/img/createFileLink.png"));
 		createFileLink.setToolTipText("Create file link");
-		createFileLink.setGroup("0-add");
+		createFileLink.setGroup(ADD_GROUP);
 		createFileLink.addListener(new ActionListener() {
 			
 			@Override
@@ -118,7 +121,7 @@ public class ExportActionsController extends Controller<Tree> {
 		moveUp = actionService.addButtonAction();
 		moveUp.setIcon(IconUtil.get("/ru/kc/common/img/arrow_up.png"));
 		moveUp.setToolTipText("Move up  (Ctrl+UP)");
-		moveUp.setGroup("1-edit");
+		moveUp.setGroup(EDIT_GROUP);
 		moveUp.addListener(new ActionListener() {
 			
 			@Override
@@ -134,7 +137,7 @@ public class ExportActionsController extends Controller<Tree> {
 		moveDown = actionService.addButtonAction();
 		moveDown.setIcon(IconUtil.get("/ru/kc/common/img/arrow_down.png"));
 		moveDown.setToolTipText("Move down  (Ctrl+DOWN)");
-		moveDown.setGroup("1-edit");
+		moveDown.setGroup(EDIT_GROUP);
 		moveDown.addListener(new ActionListener() {
 			
 			@Override
@@ -150,7 +153,7 @@ public class ExportActionsController extends Controller<Tree> {
 		delete = actionService.addButtonAction();
 		delete.setIcon(IconUtil.get("/ru/kc/common/img/delete.png"));
 		delete.setToolTipText("Delete  (Delete)");
-		delete.setGroup("1-edit");
+		delete.setGroup(EDIT_GROUP);
 		delete.addListener(new ActionListener() {
 			
 			@Override

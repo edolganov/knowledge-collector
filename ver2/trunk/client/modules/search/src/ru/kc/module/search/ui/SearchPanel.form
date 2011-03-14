@@ -17,28 +17,26 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="text" pref="176" max="32767" attributes="0"/>
+              <Component id="text" pref="182" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="search" min="-2" pref="27" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="settings" min="-2" pref="25" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
           </Group>
-          <Component id="jScrollPane1" alignment="1" pref="244" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="1" pref="248" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="settings" alignment="0" max="32767" attributes="1"/>
-                      <Component id="search" alignment="0" min="-2" max="-2" attributes="1"/>
-                  </Group>
-                  <Component id="text" min="-2" max="-2" attributes="1"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="settings" max="32767" attributes="1"/>
+                  <Component id="search" min="-2" max="-2" attributes="1"/>
+                  <Component id="text" min="-2" pref="25" max="-2" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="296" max="32767" attributes="0"/>
           </Group>
       </Group>
