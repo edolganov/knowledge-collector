@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -130,6 +132,10 @@ public abstract class AbstractController<T> implements DomainMember {
 			return DomainUtil.findDomainKey((Component)ui);
 		}
 		return DomainMember.ROOT_DOMAIN_KEY;
+	}
+	
+	public void invokeLater(Runnable runnable){
+		SwingUtilities.invokeLater(runnable);
 	}
 
 }

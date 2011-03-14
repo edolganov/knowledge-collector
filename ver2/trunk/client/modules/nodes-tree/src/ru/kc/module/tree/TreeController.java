@@ -201,16 +201,30 @@ public class TreeController extends Controller<Tree>{
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
 		if(treeNode != null){
-			treeFacade.reload(treeNode);
+			reloadNode(treeNode);
 		}
 	}
-	
+
 	@EventListener
 	public void onNodeReverted(NodeReverted event){
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
 		if(treeNode != null){
-			treeFacade.reload(treeNode);
+			reloadNode(treeNode);
+		}
+	}
+	
+	private void reloadNode(DefaultMutableTreeNode treeNode){
+		if(! treeNode.isRoot()){
+			model.reload(treeNode);
+		} else {
+			if(treeFacade.isExpanded(treeNode)){
+				treeFacade.collapse(treeNode);
+				treeFacade.expand(treeNode);
+			} else {
+				treeFacade.expand(treeNode);
+				treeFacade.collapse(treeNode);
+			}
 		}
 	}
 
@@ -262,6 +276,7 @@ public class TreeController extends Controller<Tree>{
 	private DefaultMutableTreeNode removeFromStorage(Node node){
 		return runtimeStorage.remove(node, treeNodeKey);
 	}
+	
 	
 
 }

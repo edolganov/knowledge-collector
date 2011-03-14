@@ -167,13 +167,24 @@ public class TreeFacade {
 		
 	}
 	
+	public void collapse(DefaultMutableTreeNode node){
+		TreePath path =  new TreePath(node.getPath());
+		tree.collapsePath(path);
+	}
+	
 	public void expand(DefaultMutableTreeNode node) {
 		tree.expandPath(new TreePath(node.getPath()));
+	}
+	
+	public boolean isExpanded(DefaultMutableTreeNode node){
+		return tree.isExpanded(new TreePath(node.getPath()));
 	}
 	
 	public void setSelection(DefaultMutableTreeNode node){
 		tree.setSelectionPath(new TreePath(node.getPath()));
 	}
+	
+
 	
 	public boolean isSelectedNode(DefaultMutableTreeNode node){
 		DefaultMutableTreeNode selected = getCurrentNode();
