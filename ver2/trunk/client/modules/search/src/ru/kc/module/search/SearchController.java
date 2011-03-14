@@ -43,7 +43,7 @@ public class SearchController extends Controller<SearchPanel>{
 	}
 
 	protected void search() {
-		System.out.println("search");
+		
 	}
 
 }
