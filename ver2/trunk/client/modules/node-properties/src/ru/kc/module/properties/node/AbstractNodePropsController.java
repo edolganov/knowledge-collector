@@ -55,6 +55,8 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		this.revert = revert;
 		desctiptionDecorator = new EmptyTextAreaDecorator(description);
 		
+		save.setToolTipText("Save  (Ctrl+S)");
+		
 		name.getDocument().addDocumentListener(new DocumentListener() {
 			
 			@Override
