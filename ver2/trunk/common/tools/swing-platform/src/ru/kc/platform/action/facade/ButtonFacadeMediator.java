@@ -10,6 +10,7 @@ import javax.swing.Icon;
 public class ButtonFacadeMediator implements ButtonFacade {
 	
 	private int order;
+	private String group;
 	private Icon icon;
 	private String toolTipText;
 	private ArrayList<ActionListener> listeners = new ArrayList<ActionListener>();
@@ -43,6 +44,19 @@ public class ButtonFacadeMediator implements ButtonFacade {
 	@Override
 	public int getOrder() {
 		return order;
+	}
+	
+	@Override
+	public void setGroup(String group) {
+		this.group = group;
+		for (ButtonFacade realImpl : realFacadeImpls)
+			realImpl.setGroup(group);
+		
+	}
+
+	@Override
+	public String getGroup() {
+		return group;
 	}
 
 	@Override
@@ -79,6 +93,8 @@ public class ButtonFacadeMediator implements ButtonFacade {
 		for(ActionListener l : listeners)
 			facade.addListener(l);
 	}
+
+
 
 
 

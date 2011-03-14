@@ -7,6 +7,7 @@ import java.util.List;
 public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	
 	private int order;
+	private String group;
 	private List<Object> values;
 	private int selectIndex;
 	private String toolTipText;
@@ -41,6 +42,19 @@ public class ComboBoxFacadeMediator implements ComboBoxFacade {
 	@Override
 	public int getOrder() {
 		return order;
+	}
+	
+	@Override
+	public void setGroup(String group) {
+		this.group = group;
+		for (ComboBoxFacade realImpl : realFacadeImpls)
+			realImpl.setGroup(group);
+		
+	}
+
+	@Override
+	public String getGroup() {
+		return group;
 	}
 	
 	@Override

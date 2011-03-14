@@ -12,6 +12,7 @@ import ru.kc.util.swing.combobox.ListComboBoxModel;
 
 public class ComboBoxAction extends AbstractAction  implements ComboBoxFacade {
 	
+	private String group;
 	private JComboBox combo = new JComboBox();
 	
 	public ComboBoxAction() {
@@ -64,7 +65,15 @@ public class ComboBoxAction extends AbstractAction  implements ComboBoxFacade {
 		combo.requestFocus();
 	}
 
+	@Override
+	public String getGroup() {
+		return group;
+	}
 
+	@Override
+	public void setGroup(String group) {
+		this.group = group;
+	}
 
 
 

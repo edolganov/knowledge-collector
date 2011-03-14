@@ -9,6 +9,7 @@ import ru.kc.platform.action.facade.ButtonFacade;
 
 public class ButtonAction extends AbstractAction implements ButtonFacade{
 	
+	private String group;
 	private JButton button = new JButton();
 
 	@Override
@@ -45,5 +46,17 @@ public class ButtonAction extends AbstractAction implements ButtonFacade{
 	public void requestFocus() {
 		button.requestFocus();
 	}
+
+	@Override
+	public String getGroup() {
+		return group;
+	}
+
+	@Override
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	
+	
 
 }

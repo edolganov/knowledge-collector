@@ -65,7 +65,9 @@ public class TabController extends Controller<TabPanel>{
 
 	private void addExternalActionComponents() {
 		List<AbstractActionFacade> facades = getSubActionFacades();
+		AbstractActionFacade before = null;
 		for (AbstractActionFacade facade : facades) {
+			addSeparatorInNewGroup(before, facade);
 			AbstractAction action = null;
 			if(facade instanceof ButtonFacadeMediator){
 				ButtonAction buttonAction = new ButtonAction();
@@ -81,7 +83,20 @@ public class TabController extends Controller<TabPanel>{
 			if(action != null){
 				toolbar.add(action.getComponent());
 			}
+			before = facade;
+		}
+	}
 
+	private void addSeparatorInNewGroup(AbstractActionFacade before,
+			AbstractActionFacade next) {
+		if(before != null){
+			String beforeGroup = before.getGroup();
+			String nextGroup = next.getGroup();
+			if(beforeGroup == null) beforeGroup = "";
+			if(nextGroup == null) nextGroup = "";
+			if( ! beforeGroup.equals(nextGroup)){
+				addSeparator();
+			}
 		}
 	}
 

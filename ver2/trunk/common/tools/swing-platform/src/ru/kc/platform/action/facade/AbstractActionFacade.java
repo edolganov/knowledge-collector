@@ -11,5 +11,9 @@ public interface AbstractActionFacade {
 	int getOrder();
 	
 	void requestFocus();
+	
+	void setGroup(String group);
+	
+	String getGroup();
 
 }
