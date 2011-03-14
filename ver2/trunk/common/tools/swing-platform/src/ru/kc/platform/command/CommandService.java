@@ -24,10 +24,10 @@ public class CommandService {
 	public <T> Answer<T> invokeSafe(AbstractCommand<T> command){
 		try{
 			T result = (T)invoke(command);
-			return new Answer<T>(result, false, null);
+			return new Answer<T>(result);
 		}catch (Exception e) {
 			log.error("error while invoke "+command, e);
-			return new Answer<T>(null, true, e);
+			return new Answer<T>(e);
 		}
 	}
 	

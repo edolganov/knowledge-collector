@@ -69,11 +69,11 @@ public class SaveRevertController extends Controller<TextEditor> implements Node
 	}
 
 	private void save(){
-		fireEventInEDT(new UpdateNodeRequest(node));
+		fireEvent(new UpdateNodeRequest(node));
 	}
 	
 	private void revert(){
-		fireEventInEDT(new RevertNodeRequest(node));
+		fireEvent(new RevertNodeRequest(node));
 	}
 
 

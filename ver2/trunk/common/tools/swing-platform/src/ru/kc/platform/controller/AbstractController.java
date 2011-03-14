@@ -21,6 +21,7 @@ import ru.kc.platform.data.Answer;
 import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.domain.DomainUtil;
 import ru.kc.platform.event.Event;
+import ru.kc.platform.event.Request;
 import ru.kc.platform.module.Module;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
 
@@ -122,8 +123,24 @@ public abstract class AbstractController<T> implements DomainMember {
 		return (N) appContext.globalObjects.instanceByMapping(mapping);
 	}
 	
-	protected void fireEventInEDT(Event event){
+	protected void fireEvent(Event event){
 		appContext.eventManager.fireEventInEDT(this, event);
+	}
+	
+	protected <N> Answer<N> fireRequest(Request<N> request){
+		try {
+			N result = appContext.eventManager.fireRequestInEDT(this, request);
+			return new Answer<N>(result);
+		}catch (Throwable t) {
+			if(t instanceof Exception){
+				return new Answer<N>((Exception)t);
+			}
+			if(t instanceof Error){
+				throw (Error) t;
+			} else {
+				throw new IllegalStateException(t);
+			}
+		}
 	}
 	
 	@Override

@@ -29,7 +29,19 @@ public class EventManager {
 		SwingUtil.invokeInEDT(runnable);
 	}
 	
+	public <T> T fireRequestInEDT(final Object source, final Request<T> request) throws Throwable {
+		Runnable runnable = new Runnable() {
+			
+			@Override
+			public void run() {
+				fireEvent(source, request);
+			}
+		};
+		SwingUtil.invokeInEDTAndWait(runnable);
+		return request.getResponse();
+	}
 
+	
 	private void fireEvent(Object source, Event event){
 		listeners.processEvent(source, event);
 	}

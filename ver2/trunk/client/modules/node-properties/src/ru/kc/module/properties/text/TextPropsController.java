@@ -66,12 +66,12 @@ public class TextPropsController extends AbstractNodePropsController<Text, TextP
 		
 		setButtonsEnabled(true);
 		String newText = ui.text.getText();
-		fireEventInEDT(new TextChanged(node, newText));
+		fireEvent(new TextChanged(node, newText));
 	}
 	
 	protected void openNodeRequest() {
 		if(node == null) return;
-		fireEventInEDT(new OpenNodeRequest(node));
+		fireEvent(new OpenNodeRequest(node));
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class TextPropsController extends AbstractNodePropsController<Text, TextP
 	@Override
 	protected void extendedRevert(NodeEditions editions) {
 		editions.remove(UpdateText.class);
-		fireEventInEDT(new TextReverted(node));
+		fireEvent(new TextReverted(node));
 	}
 	
 	@Override

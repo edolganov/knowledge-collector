@@ -9,6 +9,7 @@ import javax.swing.tree.DefaultTreeModel;
 import ru.kc.common.controller.Controller;
 import ru.kc.module.search.ui.SearchPanel;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.Check;
 import ru.kc.util.swing.component.ComponentUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -21,7 +22,7 @@ public class SearchController extends Controller<SearchPanel>{
 	@Override
 	protected void init() {
 		treeFacade = new TreeFacade(ui.tree);
-		DefaultTreeModel model = TreeFacade.createModelByUserObject("root");
+		DefaultTreeModel model = TreeFacade.createModelByUserObject("");
 		ui.tree.setModel(model);
 		ui.tree.setRootVisible(false);
 		
@@ -43,6 +44,19 @@ public class SearchController extends Controller<SearchPanel>{
 	}
 
 	protected void search() {
+		String searchQuery = ui.text.getText();
+		if(Check.isEmpty(searchQuery)){
+			cleanTree();
+		} else {
+			searchRequest();
+		}
+	}
+
+	private void cleanTree() {
+		ui.tree.setModel(TreeFacade.createModelByUserObject(""));
+	}
+	
+	private void searchRequest() {
 		
 	}
 

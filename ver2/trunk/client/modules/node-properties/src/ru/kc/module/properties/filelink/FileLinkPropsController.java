@@ -90,7 +90,7 @@ public class FileLinkPropsController extends AbstractNodePropsController<FileLin
 		
 		setButtonsEnabled(true);
 		String newPath = ui.path.getText();
-		fireEventInEDT(new PathChanged(node, newPath));
+		fireEvent(new PathChanged(node, newPath));
 	}
 	
 	@Override
@@ -107,7 +107,7 @@ public class FileLinkPropsController extends AbstractNodePropsController<FileLin
 	@Override
 	protected void extendedRevert(NodeEditions editions) {
 		editions.remove(UpdatePath.class);
-		fireEventInEDT(new PathReverted(node));
+		fireEvent(new PathReverted(node));
 	}
 	
 	@Override

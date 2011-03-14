@@ -74,7 +74,7 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 		
 		setButtonsEnabled(true);
 		String newUrl = ui.url.getText();
-		fireEventInEDT(new UrlChanged(node, newUrl));
+		fireEvent(new UrlChanged(node, newUrl));
 	}
 	
 	@Override
@@ -91,7 +91,7 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 	@Override
 	protected void extendedRevert(NodeEditions editions) {
 		editions.remove(UpdateUrl.class);
-		fireEventInEDT(new UrlReverted(node));
+		fireEvent(new UrlReverted(node));
 	}
 	
 	@Override

@@ -29,9 +29,9 @@ public class TreeSelectController extends Controller<Tree> {
 			public void valueChanged(TreeSelectionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
-					fireEventInEDT(new NodeSelected(node));
+					fireEvent(new NodeSelected(node));
 				} else {
-					fireEventInEDT(new NodeSelected(null));
+					fireEvent(new NodeSelected(null));
 				}
 			}
 			
@@ -44,7 +44,7 @@ public class TreeSelectController extends Controller<Tree> {
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
 		Node node = treeFacade.getCurrentObject(Node.class);
 		if(node == null){
-			fireEventInEDT(new NodeSelected(null));
+			fireEvent(new NodeSelected(null));
 		}
 	}
 

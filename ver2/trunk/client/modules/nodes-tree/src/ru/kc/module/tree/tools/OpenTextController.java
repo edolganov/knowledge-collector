@@ -14,7 +14,7 @@ public class OpenTextController extends AbstractOpenController<Text, Tree> {
 	}
 
 	protected void open(Text node) {
-		fireEventInEDT(new OpenNodeRequest(node));
+		fireEvent(new OpenNodeRequest(node));
 	}
 
 }

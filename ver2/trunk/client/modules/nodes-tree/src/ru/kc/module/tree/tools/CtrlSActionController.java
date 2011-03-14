@@ -25,7 +25,7 @@ public class CtrlSActionController extends Controller<Tree> {
 			public void actionPerformed(ActionEvent e) {
 				Node node = facade.getCurrentObject(Node.class);
 				if(node != null){
-					fireEventInEDT(new UpdateNodeRequest(node));
+					fireEvent(new UpdateNodeRequest(node));
 				}
 			}
 		});

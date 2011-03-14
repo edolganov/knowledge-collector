@@ -188,7 +188,7 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		
 		setButtonsEnabled(true);
 		String newName = name.getText();
-		fireEventInEDT(new NameChanged(node, newName));
+		fireEvent(new NameChanged(node, newName));
 	}
 
 
@@ -197,7 +197,7 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		
 		setButtonsEnabled(true);
 		String description = this.description.getText();
-		fireEventInEDT(new DescriptionChanged(node, description));
+		fireEvent(new DescriptionChanged(node, description));
 	}
 	
 	protected void setButtonsEnabled(boolean value){
@@ -218,9 +218,9 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		
 		NodeEditions editions = nodeEditionsAggregator.getEditions(node);
 		editions.remove(UpdateName.class);
-		fireEventInEDT(new NameReverted(node));
+		fireEvent(new NameReverted(node));
 		editions.remove(UpdateDescription.class);
-		fireEventInEDT(new DescriptionReverted(node));
+		fireEvent(new DescriptionReverted(node));
 		
 		name.requestFocus();
 		

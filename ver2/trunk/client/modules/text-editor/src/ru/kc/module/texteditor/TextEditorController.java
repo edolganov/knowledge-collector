@@ -63,7 +63,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		if(!enabledUpdateMode) return;
 		
 		String newText = editor.getText();
-		fireEventInEDT(new TextChanged(node, newText));
+		fireEvent(new TextChanged(node, newText));
 		for(NodeContainerListener l : listeners) l.onModified(node);
 	}
 
