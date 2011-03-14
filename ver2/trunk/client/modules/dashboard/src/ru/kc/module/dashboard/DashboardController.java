@@ -27,6 +27,7 @@ public class DashboardController extends Controller<Dashboard>{
 		Component tree = instanceByMapping("nodes-tree");
 		centerPanel.add(tree,BorderLayout.CENTER);
 		
+		ui.leftPanel.setMinimumSize(new Dimension(0, 0));
 		JPanel searchPanel = ui.search;
 		searchPanel.setLayout(new BorderLayout());
 		Component search = instanceByMapping("search");

@@ -63,9 +63,9 @@ public class SearchController extends Controller<SearchPanel>{
 		}
 	}
 	
-	private void buildTree(List<Node> result) {
+	private void buildTree(List<Node> list) {
 		cleanTree();
-		
+		System.out.println(list.size());
 	}
 
 	private void emptyResultTree() {

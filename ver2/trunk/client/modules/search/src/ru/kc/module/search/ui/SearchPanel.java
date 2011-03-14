@@ -37,13 +37,18 @@ public class SearchPanel extends javax.swing.JPanel {
         search = new javax.swing.JButton();
         settings = new javax.swing.JButton();
 
+        jScrollPane1.setMinimumSize(null);
         jScrollPane1.setViewportView(tree);
+
+        text.setMinimumSize(null);
 
         search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/find.png"))); // NOI18N
         search.setToolTipText("Search");
+        search.setMinimumSize(new java.awt.Dimension(51, 25));
 
         settings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/settings.png"))); // NOI18N
         settings.setToolTipText("Search settings");
+        settings.setMinimumSize(new java.awt.Dimension(51, 25));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,7 +69,7 @@ public class SearchPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(settings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(search)
+                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(text, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))

@@ -44,6 +44,11 @@
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="null"/>
+        </Property>
+      </Properties>
       <AuxValues>
         <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
       </AuxValues>
@@ -55,6 +60,11 @@
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="text">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="null"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="search">
       <Properties>
@@ -62,6 +72,9 @@
           <Image iconType="3" name="/ru/kc/common/img/find.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Search"/>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[51, 25]"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="settings">
@@ -70,6 +83,9 @@
           <Image iconType="3" name="/ru/kc/common/img/settings.png"/>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Search settings"/>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[51, 25]"/>
+        </Property>
       </Properties>
     </Component>
   </SubComponents>

@@ -45,6 +45,10 @@ public class Dashboard extends javax.swing.JPanel {
         jSplitPane1.setDividerSize(2);
         jSplitPane1.setAutoscrolls(true);
 
+        leftTabs.setMinimumSize(null);
+
+        snapshots.setMinimumSize(null);
+
         javax.swing.GroupLayout snapshotsLayout = new javax.swing.GroupLayout(snapshots);
         snapshots.setLayout(snapshotsLayout);
         snapshotsLayout.setHorizontalGroup(
@@ -57,6 +61,8 @@ public class Dashboard extends javax.swing.JPanel {
         );
 
         leftTabs.addTab("Snapshots", snapshots);
+
+        search.setMinimumSize(null);
 
         javax.swing.GroupLayout searchLayout = new javax.swing.GroupLayout(search);
         search.setLayout(searchLayout);
