@@ -3,7 +3,7 @@ package ru.kc.platform.data;
 public class Answer<T> {
 	
 	public final T result;
-	public final boolean isException;
+	private final boolean isException;
 	public final Exception exception;
 	
 	public Answer(T result) {
@@ -19,6 +19,10 @@ public class Answer<T> {
 		this.result = result;
 		this.isException = isException;
 		this.exception = exception;
+	}
+	
+	public boolean isValid(){
+		return ! isException;
 	}
 	
 

@@ -35,7 +35,10 @@ public class TreeFacade {
     }
 
     public DefaultMutableTreeNode addChild(DefaultMutableTreeNode parent, Object userObject) {
-        return TreeUtil.addChild(tree, parent, userObject);
+        DefaultMutableTreeNode out = TreeUtil.addChild(tree, parent, userObject);
+        DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+        model.reload(parent);
+        return out;
     }
 
     public Object getCurrentObject() {
