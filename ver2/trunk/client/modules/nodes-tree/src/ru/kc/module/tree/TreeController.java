@@ -44,7 +44,7 @@ public class TreeController extends Controller<Tree>{
 		treeFacade = new TreeFacade(ui.tree);
 		
 		tree.setRootVisible(true);
-		tree.setModel(TreeFacade.createDefaultModelByUserObject(TreeFacade.createNode("")));
+		tree.setModel(TreeFacade.createModelByUserObject(TreeFacade.createNode("")));
 		tree.setCellRenderer(new CellRender(tree, context.nodeEditionsAggregator));
 		final CellEditor cellEditor = new CellEditor(tree);
 		cellEditor.addCustomListener(new CellEditorListener() {
@@ -82,7 +82,7 @@ public class TreeController extends Controller<Tree>{
 			Node rootNode = persistTree.getRoot();
 			DefaultMutableTreeNode treeRootNode = TreeFacade.createNode(rootNode);
 			addToStorage(rootNode,treeRootNode);
-			model = TreeFacade.createDefaultModelByNode(treeRootNode);
+			model = TreeFacade.createModelByNode(treeRootNode);
 			tree.setModel(model);
 
 			

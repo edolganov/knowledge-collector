@@ -96,11 +96,11 @@ public class TreeFacade {
     	return new DefaultMutableTreeNode(ob);
     }
     
-    public static DefaultTreeModel createDefaultModelByUserObject(Object rootObject){
+    public static DefaultTreeModel createModelByUserObject(Object rootObject){
     	return new DefaultTreeModel(createNode(rootObject));
     }
     
-    public static DefaultTreeModel createDefaultModelByNode(DefaultMutableTreeNode root){
+    public static DefaultTreeModel createModelByNode(DefaultMutableTreeNode root){
     	return new DefaultTreeModel(root);
     }
 
