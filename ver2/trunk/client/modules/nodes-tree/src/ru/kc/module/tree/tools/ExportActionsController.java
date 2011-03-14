@@ -13,6 +13,7 @@ import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateFileLinkRequest;
 import ru.kc.common.node.command.CreateLinkRequest;
 import ru.kc.common.node.command.CreateTextRequest;
+import ru.kc.common.node.command.DeleteNode;
 import ru.kc.common.node.command.MoveDown;
 import ru.kc.common.node.command.MoveUp;
 import ru.kc.model.Node;
@@ -36,6 +37,7 @@ public class ExportActionsController extends Controller<Tree> {
 	//special
 	ButtonFacade moveUp;
 	ButtonFacade moveDown;
+	ButtonFacade delete;
 	
 	@Override
 	protected void init() {
@@ -111,7 +113,7 @@ public class ExportActionsController extends Controller<Tree> {
 		
 		moveUp = actionService.addButtonAction();
 		moveUp.setIcon(IconUtil.get("/ru/kc/common/img/arrow_up.png"));
-		moveUp.setToolTipText("Move up");
+		moveUp.setToolTipText("Move up  (Ctrl+UP)");
 		moveUp.addListener(new ActionListener() {
 			
 			@Override
@@ -126,7 +128,7 @@ public class ExportActionsController extends Controller<Tree> {
 		
 		moveDown = actionService.addButtonAction();
 		moveDown.setIcon(IconUtil.get("/ru/kc/common/img/arrow_down.png"));
-		moveDown.setToolTipText("Move down");
+		moveDown.setToolTipText("Move down  (Ctrl+DOWN)");
 		moveDown.addListener(new ActionListener() {
 			
 			@Override
@@ -135,6 +137,20 @@ public class ExportActionsController extends Controller<Tree> {
 				if(node != null){
 					invokeSafe(new MoveDown(node));
 					moveDown.requestFocus();
+				}
+			}
+		});
+		
+		delete = actionService.addButtonAction();
+		delete.setIcon(IconUtil.get("/ru/kc/common/img/delete.png"));
+		delete.setToolTipText("Delete  (Delete)");
+		delete.addListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Node node = treeFacade.getCurrentObject(Node.class);
+				if(node != null){
+					invokeSafe(new DeleteNode(node));
 				}
 			}
 		});
@@ -160,6 +176,7 @@ public class ExportActionsController extends Controller<Tree> {
 		
 		moveUp.disable();
 		moveDown.disable();
+		delete.disable();
 	}
 
 	private void enableBasics() {
@@ -177,10 +194,11 @@ public class ExportActionsController extends Controller<Tree> {
 		if(currentTreeNode.isRoot()){
 			moveUp.disable();
 			moveDown.disable();
-			
+			delete.disable();
 		} else {
 			moveUp.enabledRequest();
 			moveDown.enabledRequest();
+			delete.enabledRequest();
 		}
 		
 	}

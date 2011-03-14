@@ -38,11 +38,11 @@ import ru.kc.util.swing.tree.TreeFacade;
 @SuppressWarnings("serial")
 public class TreeMenu extends JPopupMenu {
 
-	JMenuItem delete = new JMenuItem("Delete", IconUtil.get("/ru/kc/common/img/delete.png"));
+	JMenuItem delete = new JMenuItem("Delete  (Delete)", IconUtil.get("/ru/kc/common/img/delete.png"));
 
 	JMenuItem info = new JMenuItem();
 
-	JMenuItem save = new JMenuItem("Save", IconUtil.get("/ru/kc/common/img/save.png"));
+	JMenuItem save = new JMenuItem("Save  (Ctrl+S)", IconUtil.get("/ru/kc/common/img/save.png"));
 	JMenuItem revert = new JMenuItem("Revert", IconUtil.get("/ru/kc/common/img/revert.png"));
 	
 	JMenuItem rename = new JMenuItem("Rename", IconUtil.get("/ru/kc/common/img/rename.png"));
