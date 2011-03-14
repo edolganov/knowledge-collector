@@ -33,6 +33,9 @@ public class Dashboard extends javax.swing.JPanel {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         leftPanel = new javax.swing.JPanel();
+        leftTabs = new javax.swing.JTabbedPane();
+        snapshots = new javax.swing.JPanel();
+        search = new javax.swing.JPanel();
         jSplitPane2 = new javax.swing.JSplitPane();
         centerPanel = new javax.swing.JPanel();
         rightPanel = new javax.swing.JPanel();
@@ -42,15 +45,41 @@ public class Dashboard extends javax.swing.JPanel {
         jSplitPane1.setDividerSize(2);
         jSplitPane1.setAutoscrolls(true);
 
+        javax.swing.GroupLayout snapshotsLayout = new javax.swing.GroupLayout(snapshots);
+        snapshots.setLayout(snapshotsLayout);
+        snapshotsLayout.setHorizontalGroup(
+            snapshotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 195, Short.MAX_VALUE)
+        );
+        snapshotsLayout.setVerticalGroup(
+            snapshotsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 402, Short.MAX_VALUE)
+        );
+
+        leftTabs.addTab("Snapshots", snapshots);
+
+        javax.swing.GroupLayout searchLayout = new javax.swing.GroupLayout(search);
+        search.setLayout(searchLayout);
+        searchLayout.setHorizontalGroup(
+            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 195, Short.MAX_VALUE)
+        );
+        searchLayout.setVerticalGroup(
+            searchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 402, Short.MAX_VALUE)
+        );
+
+        leftTabs.addTab("Search", search);
+
         javax.swing.GroupLayout leftPanelLayout = new javax.swing.GroupLayout(leftPanel);
         leftPanel.setLayout(leftPanelLayout);
         leftPanelLayout.setHorizontalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addComponent(leftTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
         );
         leftPanelLayout.setVerticalGroup(
             leftPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addComponent(leftTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(leftPanel);
@@ -106,7 +135,10 @@ public class Dashboard extends javax.swing.JPanel {
     public javax.swing.JSplitPane jSplitPane1;
     public javax.swing.JSplitPane jSplitPane2;
     public javax.swing.JPanel leftPanel;
+    public javax.swing.JTabbedPane leftTabs;
     public javax.swing.JPanel rightPanel;
+    public javax.swing.JPanel search;
+    public javax.swing.JPanel snapshots;
     // End of variables declaration//GEN-END:variables
 
 }

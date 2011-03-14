@@ -15,6 +15,7 @@
 	<classpathentry kind="src" path="client/modules/nodes-tree/src"/>
 	<classpathentry kind="src" path="client/modules/node-properties/src"/>
 	<classpathentry kind="src" path="client/modules/text-editor/src"/>
+	<classpathentry kind="src" path="client/modules/search/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="thirdparty/commons-logging.jar"/>
 	<classpathentry kind="lib" path="thirdparty/dom4j-1.6.jar"/>
