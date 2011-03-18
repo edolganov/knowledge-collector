@@ -12,6 +12,7 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.search.event.SearchRequest;
 import ru.kc.model.Node;
 import ru.kc.module.search.tools.ByGroupSorter;
+import ru.kc.module.search.tools.CellRender;
 import ru.kc.module.search.tools.Group;
 import ru.kc.module.search.tools.GroupComparator;
 import ru.kc.module.search.ui.SearchPanel;
@@ -33,6 +34,7 @@ public class SearchController extends Controller<SearchPanel>{
 		treeFacade = new TreeFacade(ui.tree);
 		cleanTree();
 		ui.tree.setRootVisible(false);
+		ui.tree.setCellRenderer(new CellRender());
 		
 		ComponentUtil.addAction(ui.text, "ENTER", new AbstractAction() {
 			
@@ -49,6 +51,8 @@ public class SearchController extends Controller<SearchPanel>{
 				search();
 			}
 		});
+		
+		ui.settings.setEnabled(false);
 	}
 
 	protected void search() {

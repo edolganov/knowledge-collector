@@ -37,7 +37,7 @@ public class NodeIcon {
 		return getIcon(node.getClass());
 	}
 	
-	public static Icon getIcon(Class<? extends Node> type){
+	public static Icon getIcon(Class<?> type){
 		
 		if(Dir.class.isAssignableFrom(type))
 			return dir;
