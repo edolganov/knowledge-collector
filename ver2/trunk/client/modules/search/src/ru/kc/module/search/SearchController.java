@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.search.event.SearchRequest;
 import ru.kc.model.Node;
+import ru.kc.module.search.tools.ByGroupSorter;
+import ru.kc.module.search.tools.Group;
+import ru.kc.module.search.tools.GroupComparator;
 import ru.kc.module.search.ui.SearchPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.data.Answer;
@@ -22,14 +25,13 @@ import ru.kc.util.swing.tree.TreeFacade;
 public class SearchController extends Controller<SearchPanel>{
 
 	TreeFacade treeFacade;
-	DefaultTreeModel model;
+	GroupComparator byGroupComparator = new GroupComparator();
 	
 	@SuppressWarnings("serial")
 	@Override
 	protected void init() {
 		treeFacade = new TreeFacade(ui.tree);
-		DefaultTreeModel model = TreeFacade.createModelByUserObject("");
-		ui.tree.setModel(model);
+		cleanTree();
 		ui.tree.setRootVisible(false);
 		
 		ComponentUtil.addAction(ui.text, "ENTER", new AbstractAction() {
@@ -65,7 +67,23 @@ public class SearchController extends Controller<SearchPanel>{
 	
 	private void buildTree(List<Node> list) {
 		cleanTree();
-		System.out.println(list.size());
+		ByGroupSorter byGroupSorter = new ByGroupSorter(list);
+		for(Group group : byGroupSorter){
+			addGroupToTree(group);
+		}
+		DefaultMutableTreeNode root = treeFacade.getRoot();
+		for(int i = 0; i < root.getChildCount(); ++i){
+			treeFacade.expand((DefaultMutableTreeNode)root.getChildAt(i));
+		}
+		
+	}
+
+	private void addGroupToTree(Group group) {
+		DefaultMutableTreeNode root = treeFacade.getRoot();
+		DefaultMutableTreeNode groupNode = treeFacade.addChild(root, group);
+		for(Node node : group.nodes){
+			treeFacade.addChild(groupNode, node);
+		}
 	}
 
 	private void emptyResultTree() {
