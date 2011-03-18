@@ -2,6 +2,9 @@ package ru.kc.module.search;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.search.event.SearchRequest;
+import ru.kc.common.tree.event.SelectNodeRequest;
 import ru.kc.model.Node;
 import ru.kc.module.search.tools.ByGroupSorter;
 import ru.kc.module.search.tools.CellRender;
@@ -20,6 +24,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.data.Answer;
 import ru.kc.util.Check;
 import ru.kc.util.swing.component.ComponentUtil;
+import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SearchPanel.class)
@@ -53,6 +58,36 @@ public class SearchController extends Controller<SearchPanel>{
 		});
 		
 		ui.settings.setEnabled(false);
+		
+		ui.tree.addMouseListener(new MouseAdapter(){
+			
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Node node = treeFacade.getCurrentObject(Node.class);
+				if(node == null) return; 
+				
+				if(e.getClickCount() == 2 && treeFacade.isOnSelectedElement(e.getX(), e.getY())){
+					open(node);
+				}
+			}
+			
+		});
+		
+		ui.tree.addKeyListener(new EnterKey() {
+			
+			@Override
+			protected void doAction(KeyEvent e) {
+				Node node = treeFacade.getCurrentObject(Node.class);
+				if(node == null) return; 
+				
+				open(node);
+			}
+		});
+	}
+
+	protected void open(Node node) {
+		fireEvent(new SelectNodeRequest(node));
 	}
 
 	protected void search() {

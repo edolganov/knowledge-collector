@@ -1,11 +1,9 @@
 package ru.kc.module.search.tools;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import ru.kc.common.node.NodeByNameComparator;
 import ru.kc.model.Node;
 import ru.kc.util.collection.Pair;
 
@@ -25,7 +23,7 @@ public class ByGroupSorter implements Iterable<Group> {
 		}
 		for(Group group : sortedGroups){
 			if(group != null){
-				Collections.sort(group.nodes, new NodeByNameComparator());
+				//Collections.sort(group.nodes, new NodeByNameComparator());
 				groups.add(group);
 			}
 		}

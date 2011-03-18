@@ -17,6 +17,7 @@ import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.NodeChanged;
 import ru.kc.common.node.edit.event.NodeReverted;
 import ru.kc.common.node.event.ChildMoved;
+import ru.kc.common.tree.event.SelectNodeRequest;
 import ru.kc.model.Node;
 import ru.kc.module.tree.tools.CellEditor;
 import ru.kc.module.tree.tools.CellRender;
@@ -260,6 +261,15 @@ public class TreeController extends Controller<Tree>{
 		model.reload(parentNode);
 		
 		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
+	}
+	
+	
+	@EventListener
+	public void onSelectRequest(SelectNodeRequest event){
+		DefaultMutableTreeNode node = getFromStorage(event.node);
+		if(node != null){
+			treeFacade.setSelection(node);
+		}
 	}
 	
 	
