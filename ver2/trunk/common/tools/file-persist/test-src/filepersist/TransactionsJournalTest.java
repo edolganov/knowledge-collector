@@ -35,7 +35,7 @@ public class TransactionsJournalTest extends Assert {
 		InitParams params = new InitParams(dir, 2, 2, 2);
 		InitContextExt init = new InitContextExt(params, dir, null);
 		
-		c = new Context(init, null, null, null,null, null);
+		c = new Context(init, null, null, null,null, null, null);
 		journal = new TransactionsJournal();
 		ContainerStore store = new ContainerStore();
 		//context = new FSContext(null, store, c,journal);
