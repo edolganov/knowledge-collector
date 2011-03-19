@@ -2,7 +2,7 @@ package ru.kc.module.snapshots.model;
 
 import java.util.List;
 
-public class SnapshotBean  {
+public class Snapshot  {
 	
 	
 	private List<String> leafSubNodesIds;

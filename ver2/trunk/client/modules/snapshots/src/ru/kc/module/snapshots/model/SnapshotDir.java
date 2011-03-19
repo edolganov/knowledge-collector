@@ -2,12 +2,12 @@ package ru.kc.module.snapshots.model;
 
 import java.util.List;
 
-public class SnapshotDirBean  {
+public class SnapshotDir  {
 	
 	
 	private boolean open;
 	private String name;
-	private List<SnapshotBean> snapshots;
+	private List<Snapshot> snapshots;
 	
 
 	public void setName(String name) {
@@ -26,11 +26,11 @@ public class SnapshotDirBean  {
 		return open;
 	}
 	
-	public void setSnapshots(List<SnapshotBean> snapshots) {
+	public void setSnapshots(List<Snapshot> snapshots) {
 		this.snapshots = snapshots;
 	}
 
-	public List<SnapshotBean> getSnapshots() {
+	public List<Snapshot> getSnapshots() {
 		return snapshots;
 	}
 }
