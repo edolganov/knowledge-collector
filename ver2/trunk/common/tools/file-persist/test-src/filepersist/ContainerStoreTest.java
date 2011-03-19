@@ -87,7 +87,7 @@ public class ContainerStoreTest extends Assert  {
 	public FSContext testContext(){
 		InitParams params = new InitParams(dir, 10, 10, 10);
 		InitContextExt init = new InitContextExt(params, dir, dir);
-		Context c = new Context(init, null, null, null, null, null, null);
+		Context c = new Context(init, null, null, null, null, null);
 		
 		ContainerStore store = new ContainerStore();
 		FSContext fsContext = new FSContext(null, store, c, null);

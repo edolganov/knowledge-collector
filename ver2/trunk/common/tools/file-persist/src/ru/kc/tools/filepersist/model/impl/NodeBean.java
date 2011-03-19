@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import ru.kc.model.Node;
-import ru.kc.model.SnapshotDir;
 import ru.kc.util.collection.Pair;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -21,7 +20,6 @@ public abstract class NodeBean implements Node, Cloneable {
 	protected String parentId;
 	protected List<String> childrenIds;
 	protected Map<String, String> properties;
-	protected List<SnapshotDirBean> snapshotDirs;
 	
 	@XStreamOmitField
 	protected Container container;
@@ -196,19 +194,6 @@ public abstract class NodeBean implements Node, Cloneable {
 
 	public void setProperties(Map<String, String> properties) {
 		this.properties = properties;
-	}
-	
-	
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List<SnapshotDir> getSnapshotDirs() {
-		if(snapshotDirs == null)
-			return new ArrayList<SnapshotDir>(0);
-		return (List)snapshotDirs;
-	}
-
-	public void setSnapshotDirs(List<SnapshotDirBean> snapshotDirs) {
-		this.snapshotDirs = snapshotDirs;
 	}
 
 	@Override

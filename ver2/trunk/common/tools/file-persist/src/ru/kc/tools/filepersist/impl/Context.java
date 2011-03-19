@@ -12,10 +12,9 @@ public class Context {
 	public final Listeners listeners;
 	public final Converter converter;
 	public final TextServiceImpl textService;
-	public final SnapshotServiceImpl snapshotService;
 	
 	public Context(InitContextExt init, FactoryImpl factory, TreeImpl tree,
-			FileSystemImpl fs, UpdaterImpl updater, TextServiceImpl textService, SnapshotServiceImpl snapshotService) {
+			FileSystemImpl fs, UpdaterImpl updater, TextServiceImpl textService) {
 		super();
 		this.init = init;
 		this.factory = factory;
@@ -25,7 +24,6 @@ public class Context {
 		this.listeners = new Listeners();
 		this.converter = new Converter();
 		this.textService = textService;
-		this.snapshotService = snapshotService;
 	}
 	
 

@@ -28,15 +28,13 @@ public class PersistServiceImpl implements PersistService {
 		FileSystemImpl fs = new FileSystemImpl();
 		UpdaterImpl updater = new UpdaterImpl();
 		TextServiceImpl textService = new TextServiceImpl();
-		SnapshotServiceImpl snapshotService = new SnapshotServiceImpl();
 		
-		context = new Context(init, factory, tree, fs, updater, textService, snapshotService);
+		context = new Context(init, factory, tree, fs, updater, textService);
 		fs.init(context);
 		tree.init(context);
 		factory.init(context);
 		updater.init(context);
 		textService.init(context);
-		snapshotService.init(context);
 		
 	}
 	
