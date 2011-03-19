@@ -33,6 +33,7 @@ public class SearchPanel extends javax.swing.JPanel {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tree = new javax.swing.JTree();
+        jToolBar1 = new javax.swing.JToolBar();
         text = new javax.swing.JTextField();
         search = new javax.swing.JButton();
         settings = new javax.swing.JButton();
@@ -40,45 +41,44 @@ public class SearchPanel extends javax.swing.JPanel {
         jScrollPane1.setMinimumSize(null);
         jScrollPane1.setViewportView(tree);
 
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
         text.setMinimumSize(null);
+        jToolBar1.add(text);
 
         search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/find.png"))); // NOI18N
         search.setToolTipText("Search");
-        search.setMinimumSize(new java.awt.Dimension(51, 25));
+        search.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        search.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(search);
 
         settings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/common/img/settings.png"))); // NOI18N
         settings.setToolTipText("Search settings");
-        settings.setMinimumSize(new java.awt.Dimension(51, 25));
+        settings.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        settings.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(settings);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(text, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(settings, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(settings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(text, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JToolBar jToolBar1;
     public javax.swing.JButton search;
     public javax.swing.JButton settings;
     public javax.swing.JTextField text;
