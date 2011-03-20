@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -175,6 +174,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 		DefaultMutableTreeNode parent = (DefaultMutableTreeNode) beforeInsert.getParent();
 		parent.insert(new DefaultMutableTreeNode(dir), index);
+		treeFacade.getModel().reload(parent);
 		
 	}
 
