@@ -16,6 +16,7 @@ import ru.kc.components.dialog.OneTextFieldModule;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
+import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
@@ -36,6 +37,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		treeFacade = new TreeFacade(ui.tree);
 		ui.tree.setModel(TreeFacade.createModelByUserObject(""));
 		ui.tree.setRootVisible(false);
+		ui.tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
 		
 		ui.addFolder.addActionListener(new ActionListener() {
