@@ -27,7 +27,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	private static final String SNAPSHOTS_PROPERTY_KEY = "snapshots";
 	
 	private TreeFacade treeFacade;
-	private List<SnapshotDir> snapshots;
+	private List<SnapshotDir> snapshots = new ArrayList<SnapshotDir>();
 	
 	@Override
 	protected void init() {
@@ -56,7 +56,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		String name = module.getText();
 		if(Check.isEmpty(name))
 			return;
-		System.out.println(name);
+		
+		
 		
 	}
 
@@ -87,13 +88,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 
 	private void loadSnapshots(Node node) {
-		try {
-			List<SnapshotDir> snapshots = getSnaphots(node);
-			this.snapshots = snapshots;
-		}catch (Exception e) {
-			this.snapshots = new ArrayList<SnapshotDir>(0);
-		}
-		
+		List<SnapshotDir> snapshots = getSnaphots(node);
+		this.snapshots = snapshots;
 	}
 
 	private List<SnapshotDir> getSnaphots(Node node) {

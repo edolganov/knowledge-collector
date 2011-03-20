@@ -1,5 +1,6 @@
 package ru.kc.module.snapshots.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SnapshotDir  {
@@ -7,7 +8,11 @@ public class SnapshotDir  {
 	
 	private boolean open;
 	private String name;
-	private List<Snapshot> snapshots;
+	private List<Snapshot> snapshots = new ArrayList<Snapshot>();
+	
+	public void add(Snapshot snapshot){
+		snapshots.add(snapshot);
+	}
 	
 
 	public void setName(String name) {
