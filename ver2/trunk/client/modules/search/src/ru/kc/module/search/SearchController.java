@@ -40,6 +40,7 @@ public class SearchController extends Controller<SearchPanel>{
 		cleanTree();
 		ui.tree.setRootVisible(false);
 		ui.tree.setCellRenderer(new CellRender());
+		treeFacade.setSingleSelection();
 		
 		ComponentUtil.addAction(ui.text, "ENTER", new AbstractAction() {
 			

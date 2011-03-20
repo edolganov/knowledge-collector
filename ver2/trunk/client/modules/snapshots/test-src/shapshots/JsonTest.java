@@ -1,11 +1,13 @@
 package shapshots;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
@@ -37,6 +39,27 @@ public class JsonTest extends Assert {
 		assertEquals(2, snapshotsCopy.size());
 		assertEquals("1 2 3", snapshotsCopy.get(0).listToString());
 		assertEquals("4 5 6", snapshotsCopy.get(1).listToString());
+	}
+	
+	@Test
+	public void listToJsonAndBack(){
+		SnapshotDir dir1 = new SnapshotDir();
+		dir1.setName("dir1");
+		SnapshotDir dir2 = new SnapshotDir();
+		dir2.setName("dir2");
+		
+		ArrayList<SnapshotDir> list = new ArrayList<SnapshotDir>();
+		list.add(dir1);
+		list.add(dir2);
+		String data = new Gson().toJson(list);
+		
+		Type listType = new TypeToken<List<SnapshotDir>>(){}.getType();
+		List<SnapshotDir> copy = new Gson().fromJson(data, listType);
+		assertNotNull(copy);
+		assertEquals(2, copy.size());
+		assertEquals("dir1", copy.get(0).getName());
+		assertEquals("dir2", copy.get(1).getName());
+		
 	}
 
 }

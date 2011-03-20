@@ -35,11 +35,11 @@ public class SnapshotsPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tree = new javax.swing.JTree();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        addFolder = new javax.swing.JButton();
+        addSnapshot = new javax.swing.JButton();
+        up = new javax.swing.JButton();
+        down = new javax.swing.JButton();
+        remove = new javax.swing.JButton();
 
         jScrollPane1.setViewportView(tree);
 
@@ -57,40 +57,40 @@ public class SnapshotsPanel extends javax.swing.JPanel {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/folder.png"))); // NOI18N
-        jButton1.setToolTipText("Create folder");
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton1);
+        addFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/folder.png"))); // NOI18N
+        addFolder.setToolTipText("Create folder");
+        addFolder.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addFolder.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(addFolder);
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/foto.png"))); // NOI18N
-        jButton2.setToolTipText("Create snapshots");
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        addSnapshot.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/foto.png"))); // NOI18N
+        addSnapshot.setToolTipText("Create snapshots");
+        addSnapshot.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        addSnapshot.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(addSnapshot);
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/up.png"))); // NOI18N
-        jButton3.setToolTipText("Move up");
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        up.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/up.png"))); // NOI18N
+        up.setToolTipText("Move up");
+        up.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        up.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        up.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                upActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton3);
+        jToolBar1.add(up);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/down.png"))); // NOI18N
-        jButton4.setToolTipText("Move down");
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        down.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/down.png"))); // NOI18N
+        down.setToolTipText("Move down");
+        down.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        down.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(down);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/delete.png"))); // NOI18N
-        jButton5.setToolTipText("Delete");
-        jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton5);
+        remove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ru/kc/module/snapshots/img/delete.png"))); // NOI18N
+        remove.setToolTipText("Delete");
+        remove.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        remove.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(remove);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -108,21 +108,21 @@ public class SnapshotsPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void upActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_upActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_upActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JButton jButton1;
-    public javax.swing.JButton jButton2;
-    public javax.swing.JButton jButton3;
-    public javax.swing.JButton jButton4;
-    public javax.swing.JButton jButton5;
+    public javax.swing.JButton addFolder;
+    public javax.swing.JButton addSnapshot;
+    public javax.swing.JButton down;
     public javax.swing.JPanel jPanel2;
     public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JToolBar jToolBar1;
+    public javax.swing.JButton remove;
     public javax.swing.JTree tree;
+    public javax.swing.JButton up;
     // End of variables declaration//GEN-END:variables
 
 }
