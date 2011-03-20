@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -302,8 +303,17 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	}
 
 
-	private void deleteSnapshot() {
-		
+	private void deleteSnapshot() throws Exception {
+		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
+		Snapshot snapshot = (Snapshot) node.getUserObject();
+		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+snapshot.getName()+"?");
+		if(confirm){
+			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+			SnapshotDir dir = (SnapshotDir)parent.getUserObject();
+			dir.getSnapshots().remove(snapshot);
+			saveSnapshots();
+			treeFacade.removeNode(node);
+		}
 	}
 
 
