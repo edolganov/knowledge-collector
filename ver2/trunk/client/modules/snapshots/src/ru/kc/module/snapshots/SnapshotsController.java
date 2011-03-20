@@ -48,8 +48,17 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 		});
 		
+		ui.remove.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				delete();
+			}
+		});
+		
 		buildTree();
 	}
+
 
 	private void buildTree() {
 		try {
@@ -179,6 +188,36 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		treeFacade.getModel().reload(parent);
 		
 	}
+
+
+	
+	protected void delete() {
+		Object ob = treeFacade.getCurrentObject();
+		if(ob == null)
+			return;
+		
+		if(ob instanceof SnapshotDir){
+			deleteDir();
+		}
+		else if(ob instanceof Snapshot){
+			deleteSnapshot();
+		}
+	}
+	
+	private void deleteDir() {
+		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
+		SnapshotDir dir = (SnapshotDir) node.getUserObject();
+		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the delete operation","Delete "+dir.getName()+"?");
+		if(confirm){
+			
+		}
+	}
+
+
+	private void deleteSnapshot() {
+		
+	}
+
 
 
 

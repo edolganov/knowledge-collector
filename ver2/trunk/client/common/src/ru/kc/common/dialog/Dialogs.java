@@ -26,22 +26,22 @@ public class Dialogs {
 	
 	
 	public boolean confirmByDialog(Component parent){
-		int n = confirmByDialog(parent, "Подтверждение операции", "Подтвердить операцию?", 1, "Ок", "Отмена");
+		int n = confirmByDialog(parent, "Confirm the operation", "Confirm the operation?", 1, "OK", "Cancel");
 		return n == 0;
 	}
 	public boolean confirmByDialog(Component parent,String text){
-		int n = confirmByDialog(parent, "Подтверждение операции", text, 1, "Ок", "Отмена");
+		int n = confirmByDialog(parent, "Confirm the operation", text, 1, "OK", "Cancel");
 		return n == 0;
 	}
 	
 	public boolean confirmByDialog(Component parent, String title, String text){
-		int n = confirmByDialog(parent, title, text, 1, "Ок", "Отмена");
+		int n = confirmByDialog(parent, title, text, 1, "OK", "Cancel");
 		return n == 0;
 	}
 	
 	public int confirmByDialog(Component parent, String title, String text, int initialOption, Object... options){
 		if(options == null){
-			options = new String[]{"Ок", "Отмена"};
+			options = new String[]{"OK", "Cancel"};
 			initialOption = 1;
 		}
 		
@@ -64,7 +64,7 @@ public class Dialogs {
 	
 	
 	public void errorDialog(Component parent, Object message){
-		errorDialog(parent, "Системная ошибка",message);
+		errorDialog(parent, "System Error",message);
 	}
 	
 	public void errorDialog(Component parent, String title, Object message){
@@ -72,7 +72,7 @@ public class Dialogs {
 	}
 	
 	public void warnDialog(Component parent, Object message) {
-		warnDialog(parent,"Внимание",message);
+		warnDialog(parent,"Warning",message);
 	}
 	
 	public void warnDialog(Component parent, String title, Object message) {
