@@ -201,4 +201,9 @@ public class TreeFacade {
 	public boolean moveNode(DefaultMutableTreeNode tagretNode, DefaultMutableTreeNode draggedNode){
 		return TreeUtil.moveNode(tree, tagretNode, draggedNode, false);
 	}
+
+	public DefaultTreeModel getModel() {
+		return (DefaultTreeModel) tree.getModel();
+		
+	}
 }
