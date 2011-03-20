@@ -2,6 +2,7 @@ package ru.kc.module.snapshots;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.Check;
+import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -34,6 +36,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	@Override
 	protected void init() {
+		ui.remove.setToolTipText("Delete  (Delete)");
+		
 		treeFacade = new TreeFacade(ui.tree);
 		ui.tree.setModel(TreeFacade.createModelByUserObject(""));
 		ui.tree.setRootVisible(false);
@@ -47,6 +51,13 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 				createDir();
 			}
 		});
+		ui.addSnapshot.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createSnapshot();
+			}
+		});
 		
 		ui.remove.addActionListener(new ActionListener() {
 			
@@ -55,9 +66,24 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 				delete();
 			}
 		});
+		ui.tree.addKeyListener(new DeleteKey() {
+			
+			@Override
+			protected void doAction(KeyEvent e) {
+				delete();
+			}
+			
+		});
+
+		
+		
+		
 		
 		buildTree();
 	}
+
+
+
 
 
 	private void buildTree() {
@@ -110,29 +136,35 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	
 	private void createDir() {
+		OneTextFieldModule module = new OneTextFieldModule();
+		module.createDialog(rootUI, true);
+		module.setTitle("Create snapshot dir");
+		module.setFieldName("name");
+		module.show();
+		String name = module.getText();
+		if(Check.isEmpty(name))
+			return;
+		
 		try {
-			OneTextFieldModule module = new OneTextFieldModule();
-			module.createDialog(rootUI, true);
-			module.setTitle("Create snapshot dir");
-			module.setFieldName("name");
-			module.show();
-			String name = module.getText();
-			if(Check.isEmpty(name))
-				return;
-			
-			SnapshotDir dir = new SnapshotDir();
-			dir.setName(name);
-			
-			DefaultMutableTreeNode beforeInsert = findBeforeInsertElement(dir);
-			int insertIndex = 0;
-			if(beforeInsert != null){
-				insertIndex = findIndexInParent(beforeInsert) + 1;
-			}
-			insertDir(dir, insertIndex);
-			addToTree(beforeInsert, dir);
+			createDir(name);
 		} catch (Exception e) {
-			log.error("",e);
+			log.error("", e);
 		}
+	}
+
+
+	private DefaultMutableTreeNode createDir(String name) throws Exception {
+		SnapshotDir dir = new SnapshotDir();
+		dir.setName(name);
+		
+		DefaultMutableTreeNode beforeInsert = findBeforeInsertElement(dir);
+		int insertIndex = 0;
+		if(beforeInsert != null){
+			insertIndex = findIndexInParent(beforeInsert) + 1;
+		}
+		insertDir(dir, insertIndex);
+		DefaultMutableTreeNode newNode = addToTree(beforeInsert, dir);
+		return newNode;
 	}
 
 	private DefaultMutableTreeNode findBeforeInsertElement(SnapshotDir dir) {
@@ -175,41 +207,97 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		saveSnapshots();
 	}
 	
-	
-
-
-	private void addToTree(DefaultMutableTreeNode beforeInsert, SnapshotDir dir) {
+	private DefaultMutableTreeNode addToTree(DefaultMutableTreeNode beforeInsert, SnapshotDir dir) {
 		int index = 0;
 		if(beforeInsert != null){
 			index = findIndexInParent(beforeInsert) + 1;
 		}
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode) beforeInsert.getParent();
-		parent.insert(new DefaultMutableTreeNode(dir), index);
-		treeFacade.getModel().reload(parent);
+		DefaultMutableTreeNode root = treeFacade.getRoot();
+		DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(dir);
+		root.insert(newChild, index);
+		treeFacade.getModel().reload(root);
+		return newChild;
 		
+	}
+	
+	
+	
+	
+	protected void createSnapshot() {
+		try {
+			OneTextFieldModule module = new OneTextFieldModule();
+			module.createDialog(rootUI, true);
+			module.setTitle("Create snapshot");
+			module.setFieldName("name");
+			module.show();
+			String name = module.getText();
+			if(Check.isEmpty(name))
+				return;
+			
+			Snapshot snapshot = new Snapshot();
+			snapshot.setName(name);
+			
+			DefaultMutableTreeNode dirNode = findDirNodeToSnapshot();
+			if(dirNode == null){
+				dirNode = createDir("main");
+			}
+			SnapshotDir dir = (SnapshotDir)dirNode.getUserObject();
+			dir.add(snapshot);
+			saveSnapshots();
+			DefaultMutableTreeNode child = treeFacade.addChild(dirNode, snapshot);
+			treeFacade.setSelection(child);
+		} catch (Exception e) {
+			log.error("",e);
+		}
+	}
+	
+	private DefaultMutableTreeNode findDirNodeToSnapshot() {
+		DefaultMutableTreeNode out = treeFacade.getCurrentNode();
+		if(out == null){
+			DefaultMutableTreeNode root = treeFacade.getRoot();
+			if(root.getChildCount() == 0){
+				return null;
+			}
+			out = (DefaultMutableTreeNode) root.getChildAt(0);
+		}
+		
+		Object ob = out.getUserObject();
+		if(ob instanceof Snapshot){
+			out = (DefaultMutableTreeNode)out.getParent();
+		}
+		
+		return out;
 	}
 
 
-	
+
+
+
 	protected void delete() {
 		Object ob = treeFacade.getCurrentObject();
 		if(ob == null)
 			return;
 		
-		if(ob instanceof SnapshotDir){
-			deleteDir();
-		}
-		else if(ob instanceof Snapshot){
-			deleteSnapshot();
+		try {
+			if(ob instanceof SnapshotDir){
+				deleteDir();
+			}
+			else if(ob instanceof Snapshot){
+				deleteSnapshot();
+			}
+		}catch (Exception e) {
+			log.error("", e);
 		}
 	}
 	
-	private void deleteDir() {
+	private void deleteDir() throws Exception {
 		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
 		SnapshotDir dir = (SnapshotDir) node.getUserObject();
-		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the delete operation","Delete "+dir.getName()+"?");
+		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+dir.getName()+"?");
 		if(confirm){
-			
+			snapshots.remove(dir);
+			saveSnapshots();
+			treeFacade.removeNode(node);
 		}
 	}
 
