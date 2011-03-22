@@ -6,4 +6,8 @@ public interface TreeNodeFacade {
 	
 	boolean isOpen();
 	
+	void reload();
+	
+	void open();
+	
 }

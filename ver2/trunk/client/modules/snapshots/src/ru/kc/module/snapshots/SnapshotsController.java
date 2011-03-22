@@ -3,6 +3,8 @@ package ru.kc.module.snapshots;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -28,6 +30,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.Check;
 import ru.kc.util.swing.keyboard.DeleteKey;
+import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -79,7 +82,30 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 			
 		});
-
+		ui.tree.addMouseListener(new MouseAdapter(){
+			
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Snapshot node = treeFacade.getCurrentObject(Snapshot.class);
+				if(node == null) return; 
+				
+				if(e.getClickCount() == 2 && treeFacade.isOnSelectedElement(e.getX(), e.getY())){
+					open(node);
+				}
+			}
+			
+		});
+		
+		ui.tree.addKeyListener(new EnterKey() {
+			
+			@Override
+			protected void doAction(KeyEvent e) {
+				Snapshot node = treeFacade.getCurrentObject(Snapshot.class);
+				if(node == null) return; 
+				open(node);
+			}
+		});
 		
 		
 		
@@ -293,13 +319,60 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		
 		return out;
 	}
+	
+	protected void open(Snapshot snapshot) {
+		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
+		if(service == null){
+			return;
+		}
+		
+		TreeNode treeNodeRoot = snapshot.getRoot();
+		if(treeNodeRoot == null){
+			return;
+		}
+		
+		TreeNodeFacade root = service.getRoot();
+		if(isNodeContainer(root)){
+			
+			root.reload();
+			
+			LinkedList<Info> queue = new LinkedList<Info>();
+			queue.addLast(new Info(root, treeNodeRoot));
+			
+			while(!queue.isEmpty()){
+				Info info = queue.removeFirst();
+				TreeNodeFacade treeNode = info.treeNode;
+				treeNode.open();
+				List<TreeNodeFacade> treeNodeChildren = service.getChildren(treeNode);
+				
+				TreeNode node = info.node;
+				for(TreeNode child : node.getChildren()){
+					TreeNodeFacade treeNodeChild = find(treeNodeChildren, child.getId());
+					if(treeNodeChild != null){
+						queue.addLast(new Info(treeNodeChild, child));
+					}
+				}
+			}
+		}
+	}
+
+	private TreeNodeFacade find(List<TreeNodeFacade> list, String id) {
+		for(TreeNodeFacade treeNode : list){
+			Node node = treeNode.getUserObject(Node.class);
+			if(node != null){
+				if(id.equals(node.getId())){
+					return treeNode;
+				}
+			}
+		}
+		return null;
+	}
+
 
 	private boolean isValid(TreeNodeFacade node) {
 		if(node.isOpen()){
-			Node nodeObject = node.getUserObject(Node.class);
-			if(nodeObject != null){
-				return true;
-			}
+			boolean nodeContainer = isNodeContainer(node);
+			return nodeContainer;
 		}
 		
 		return false;
@@ -312,6 +385,13 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		return out;
 	}
 
+	private boolean isNodeContainer(TreeNodeFacade node) {
+		Node nodeObject = node.getUserObject(Node.class);
+		if(nodeObject != null){
+			return true;
+		}
+		return false;
+	}
 
 
 
@@ -379,6 +459,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			treeFacade.removeNode(node);
 		}
 	}
+
 
 
 

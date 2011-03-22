@@ -39,6 +39,16 @@ public class TreeServiceController extends Controller<Tree> implements TreeServi
 		public boolean isOpen() {
 			return treeFacade.isExpanded(node);
 		}
+
+		@Override
+		public void reload() {
+			treeFacade.getModel().reload(node);
+		}
+
+		@Override
+		public void open() {
+			treeFacade.expand(node);
+		}
 		
 		
 	}
