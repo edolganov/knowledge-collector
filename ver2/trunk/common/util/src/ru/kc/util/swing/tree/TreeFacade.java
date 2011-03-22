@@ -50,8 +50,22 @@ public class TreeFacade {
     }
 
     public void reload(DefaultMutableTreeNode node) {
-        DefaultTreeModel model = ((DefaultTreeModel) tree.getModel());
-        model.reload(node);
+    	DefaultTreeModel model = ((DefaultTreeModel) tree.getModel());
+		if( ! node.isRoot()){
+			model.reload(node);
+		} else {
+			TreePath selectionPath = tree.getSelectionPath();
+			if(isExpanded(node)){
+				collapse(node);
+				expand(node);
+			} else {
+				expand(node);
+				collapse(node);
+			}
+			if(selectionPath != null){
+				tree.setSelectionPath(selectionPath);
+			}
+		}
     }
 
     public void clear() {

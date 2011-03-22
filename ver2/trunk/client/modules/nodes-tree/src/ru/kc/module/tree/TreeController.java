@@ -9,7 +9,6 @@ import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import ru.kc.common.controller.Controller;
@@ -37,7 +36,6 @@ public class TreeController extends Controller<Tree>{
 	
 	JTree tree;
 	TreeFacade treeFacade;
-	DefaultTreeModel model;
 
 	@Override
 	public void init() {
@@ -83,8 +81,7 @@ public class TreeController extends Controller<Tree>{
 			Node rootNode = persistTree.getRoot();
 			DefaultMutableTreeNode treeRootNode = TreeFacade.createNode(rootNode);
 			addToStorage(rootNode,treeRootNode);
-			model = TreeFacade.createModelByNode(treeRootNode);
-			tree.setModel(model);
+			tree.setModel(TreeFacade.createModelByNode(treeRootNode));
 
 			
 			
@@ -216,17 +213,7 @@ public class TreeController extends Controller<Tree>{
 	}
 	
 	private void reloadNode(DefaultMutableTreeNode treeNode){
-		if(! treeNode.isRoot()){
-			model.reload(treeNode);
-		} else {
-			if(treeFacade.isExpanded(treeNode)){
-				treeFacade.collapse(treeNode);
-				treeFacade.expand(treeNode);
-			} else {
-				treeFacade.expand(treeNode);
-				treeFacade.collapse(treeNode);
-			}
-		}
+		treeFacade.reload(treeNode);
 	}
 
 
@@ -258,7 +245,7 @@ public class TreeController extends Controller<Tree>{
 				parentNode.insert(childNode, newIndex);
 			}					
 		}
-		model.reload(parentNode);
+		treeFacade.reload(parentNode);
 		
 		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
 	}
