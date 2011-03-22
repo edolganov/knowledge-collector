@@ -283,6 +283,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			saveSnapshots();
 			DefaultMutableTreeNode child = treeFacade.addChild(dirNode, snapshot);
 			treeFacade.setSelection(child);
+			
 		} catch (Exception e) {
 			log.error("",e);
 		}
