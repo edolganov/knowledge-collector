@@ -172,7 +172,7 @@ public class TreeController extends Controller<Tree>{
 		treeNode.setUserObject(updatedNode);
 		removeFromStorage(old);
 		addToStorage(updatedNode, treeNode);
-		treeFacade.reload(treeNode);
+		treeFacade.refresh(treeNode);
 	}
 	
 	@Override
@@ -199,7 +199,7 @@ public class TreeController extends Controller<Tree>{
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
 		if(treeNode != null){
-			reloadNode(treeNode);
+			treeFacade.refresh(treeNode);
 		}
 	}
 
@@ -208,13 +208,10 @@ public class TreeController extends Controller<Tree>{
 		Node node = event.node;
 		DefaultMutableTreeNode treeNode = getFromStorage(node);
 		if(treeNode != null){
-			reloadNode(treeNode);
+			treeFacade.refresh(treeNode);
 		}
 	}
 	
-	private void reloadNode(DefaultMutableTreeNode treeNode){
-		treeFacade.reload(treeNode);
-	}
 
 
 	@EventListener
@@ -245,7 +242,7 @@ public class TreeController extends Controller<Tree>{
 				parentNode.insert(childNode, newIndex);
 			}					
 		}
-		treeFacade.reload(parentNode);
+		treeFacade.getModel().reload(parentNode);
 		
 		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
 	}
