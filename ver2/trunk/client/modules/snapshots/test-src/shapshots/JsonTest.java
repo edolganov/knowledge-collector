@@ -19,8 +19,8 @@ public class JsonTest extends Assert {
 	@Test
 	public void beanToJsonAndBack(){
 		ArrayList<Snapshot> snapshots = new ArrayList<Snapshot>();
-		snapshots.add(new Snapshot("1","2","3"));
-		snapshots.add(new Snapshot("4","5","6"));
+		snapshots.add(new Snapshot());
+		snapshots.add(new Snapshot());
 		
 		SnapshotDir dir = new SnapshotDir();
 		dir.setName("dir1");
@@ -37,8 +37,6 @@ public class JsonTest extends Assert {
 		List<Snapshot> snapshotsCopy = copy.getSnapshots();
 		assertNotNull(snapshotsCopy);
 		assertEquals(2, snapshotsCopy.size());
-		assertEquals("1 2 3", snapshotsCopy.get(0).listToString());
-		assertEquals("4 5 6", snapshotsCopy.get(1).listToString());
 	}
 	
 	@Test

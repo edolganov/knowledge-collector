@@ -5,19 +5,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.common.tree.TreeNodeFacade;
+import ru.kc.common.tree.TreeService;
+import ru.kc.common.tree.event.GetTreeServiceRequest;
 import ru.kc.components.dialog.OneTextFieldModule;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
+import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
@@ -226,6 +230,11 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	protected void createSnapshot() {
 		try {
+			TreeNode root = buildTreeNodeRoot();
+			if(root == null){
+				return;
+			}
+			
 			OneTextFieldModule module = new OneTextFieldModule();
 			module.createDialog(rootUI, true);
 			module.setTitle("Create snapshot");
@@ -237,6 +246,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			
 			Snapshot snapshot = new Snapshot();
 			snapshot.setName(name);
+			snapshot.setRoot(root);
 			
 			DefaultMutableTreeNode dirNode = findDirNodeToSnapshot();
 			if(dirNode == null){
@@ -252,6 +262,60 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 	}
 	
+	private TreeNode buildTreeNodeRoot() {
+		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
+		if(service == null){
+			return null;
+		}
+		
+		TreeNodeFacade root = service.getRoot();
+		if(! isValid(root)){
+			return null;
+		}
+		
+		TreeNode out = create(root);
+		LinkedList<Info> queue = new LinkedList<Info>();
+		queue.addLast(new Info(root, out));
+		
+		while(!queue.isEmpty()){
+			Info info = queue.removeFirst();
+			TreeNodeFacade treeNode = info.treeNode;
+			TreeNode node = info.node;
+			List<TreeNodeFacade> children = service.getChildren(treeNode);
+			for(TreeNodeFacade child : children){
+				if(isValid(child)){
+					TreeNode treeNodeChild = create(child);
+					node.addChild(treeNodeChild);
+					queue.addLast(new Info(child, treeNodeChild));
+				}
+			}
+		}
+		
+		return out;
+	}
+
+	private boolean isValid(TreeNodeFacade node) {
+		if(node.isOpen()){
+			Node nodeObject = node.getUserObject(Node.class);
+			if(nodeObject != null){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	private TreeNode create(TreeNodeFacade node) {
+		Node ob = node.getUserObject(Node.class);
+		TreeNode out = new TreeNode();
+		out.setId(ob.getId());
+		return out;
+	}
+
+
+
+
+
 	private DefaultMutableTreeNode findDirNodeToSnapshot() {
 		DefaultMutableTreeNode out = treeFacade.getCurrentNode();
 		if(out == null){
@@ -320,4 +384,18 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 
 
 
+}
+
+
+class Info {
+	
+	public final TreeNodeFacade treeNode;
+	public final TreeNode node;
+	
+	public Info(TreeNodeFacade treeNode, TreeNode node) {
+		super();
+		this.treeNode = treeNode;
+		this.node = node;
+	}
+	
 }
