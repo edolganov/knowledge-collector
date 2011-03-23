@@ -10,6 +10,10 @@ public class Request<T> extends Event {
 		this.responseData = data;
 	}
 	
+	public void setNullResponse(){
+		setResponse(null);
+	}
+	
 	public T getResponse(){
 		return responseData;
 	}
