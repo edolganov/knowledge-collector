@@ -6,6 +6,9 @@ public class UuidGenerator {
 	
 	private static Random random = new Random();
 	
+	public static String simpleUuid(){
+		return simpleUuid(3);
+	}
 	
 	public static String simpleUuid(int randomCount){
 		StringBuilder sb = new StringBuilder();

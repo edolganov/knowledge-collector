@@ -16,6 +16,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.data.Answer;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.Check;
+import ru.kc.util.UuidGenerator;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -70,6 +71,7 @@ public class CreateDirController extends Controller<SnapshotsPanel> {
 	
 	private Integer createDir(String name) {
 		SnapshotDir newDir = new SnapshotDir();
+		newDir.setId(UuidGenerator.simpleUuid());
 		newDir.setName(name);
 		
 		DefaultMutableTreeNode beforeInsert = findBeforeInsertElement(newDir);

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SnapshotDir  {
 	
-	
+	private String id;
 	private boolean open;
 	private String name;
 	private List<Snapshot> snapshots = new ArrayList<Snapshot>();
@@ -14,6 +14,16 @@ public class SnapshotDir  {
 		snapshots.add(snapshot);
 	}
 	
+	
+	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public void setName(String name) {
 		this.name = name;

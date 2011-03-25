@@ -15,6 +15,7 @@ import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.Check;
+import ru.kc.util.UuidGenerator;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -49,6 +50,7 @@ public class CreateSnapshotController extends Controller<SnapshotsPanel> {
 		}
 		
 		Snapshot snapshot = new Snapshot();
+		snapshot.setId(UuidGenerator.simpleUuid());
 		snapshot.setName(name);
 		snapshot.setRoot(root);
 		
