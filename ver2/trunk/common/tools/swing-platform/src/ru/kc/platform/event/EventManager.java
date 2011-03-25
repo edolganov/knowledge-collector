@@ -38,7 +38,7 @@ public class EventManager {
 			}
 		};
 		SwingUtil.invokeInEDTAndWait(runnable);
-		if(request.hasResponse())
+		if(request.isProcessed())
 			return request.getResponse();
 		else 
 			throw new IllegalStateException("no response for "+request);

@@ -1,5 +1,6 @@
 package ru.kc.platform.event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,15 @@ public class Listeners {
 			if(queue != null){
 				setLock(curClass);
 				try {
-					tryProcessListenersQueue(queue, domianKey, event);
+					queue.removeInvalidListeners();
+					List<MethodListener> validListeners = getValidMethodListener(queue, domianKey, event);
+					
+					for(MethodListener l : validListeners){
+						boolean processed = process(l, event);
+						if(processed){
+							event.setProcessed();
+						}
+					}
 					
 				} finally{
 					removeLock(curClass);
@@ -80,17 +89,24 @@ public class Listeners {
 		}
 		
 	}
-
-	private void tryProcessListenersQueue(ListenersQueue queue,Object domianKey, Event event) {
-		queue.removeInvalidListeners();
+	
+	private List<MethodListener> getValidMethodListener(ListenersQueue queue,Object domianKey, Event event){
+		ArrayList<MethodListener> out = new ArrayList<MethodListener>();
 		for(MethodListener listener : queue){
 			if(listener.belongsTo(domianKey)){
-				try {
-					listener.process(event);
-				}catch (Throwable e) {
-					handleListenerException(e);
-				}
+				out.add(listener);
 			}
+		}
+		return out;
+	}
+
+	private boolean process(MethodListener listener, Event event) {
+		try {
+			listener.process(event);
+			return true;
+		}catch (Throwable e) {
+			handleListenerException(e);
+			return false;
 		}
 	}
 

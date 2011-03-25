@@ -34,8 +34,6 @@ public class TreeNodesController extends Controller<SnapshotsPanel> {
 	public void openSnapshot(OpenSnapshotRequest request){
 		Snapshot snapshot = request.snapshot;
 		open(snapshot);
-		
-		request.setNullResponse();
 	}
 	
 	

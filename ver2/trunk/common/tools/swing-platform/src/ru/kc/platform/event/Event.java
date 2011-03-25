@@ -3,6 +3,7 @@ package ru.kc.platform.event;
 public class Event {
 	
 	private Object sender;
+	private boolean processed = false;
 
 	public Event() {
 		super();
@@ -14,6 +15,14 @@ public class Event {
 
 	void setSender(Object sender) {
 		this.sender = sender;
+	}
+	
+	void setProcessed(){
+		processed = true;
+	}
+
+	boolean isProcessed() {
+		return processed;
 	}
 
 	@Override

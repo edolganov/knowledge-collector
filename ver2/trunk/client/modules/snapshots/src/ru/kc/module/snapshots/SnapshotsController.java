@@ -149,8 +149,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		int insertIndex = request.index;
 		snapshotDirs.add(insertIndex, dir);
 		saveSnapshots();
-		
-		request.setNullResponse();
 	}
 	
 	@EventListener
@@ -163,9 +161,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			parentDir.add(newSnapshot);
 			saveSnapshots();
 		}
-
-		
-		request.setNullResponse();
 	}
 
 	@Override
