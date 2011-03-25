@@ -217,11 +217,28 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 
 
 	private void saveSnapshots(SnapshotsUpdate additionInfo) throws Exception {
+		synchronizedOpenDirs();
 		String data = new Gson().toJson(snapshotDirs);
 		updater.update(owner, new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo));
 	}
 	
 	
+	private void synchronizedOpenDirs() {
+		for(SnapshotDir dir : snapshotDirs){
+			DefaultMutableTreeNode node = findNode(dir.getId());
+			if(node != null){
+				if(treeFacade.isExpanded(node)){
+					dir.setOpen(true);
+				} else {
+					dir.setOpen(false);
+				}
+			} else {
+				dir.setOpen(false);
+			}
+		}
+		
+	}
+
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> nodeUpdates) {
 		if(old.equals(owner)){
@@ -229,7 +246,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			
 			List<SnapshotsUpdate> updates = findUpdates(nodeUpdates);
 			if(updates.size() > 0){
-				syncronizedTree(updates);
+				synchronizedTree(updates);
 			}
 
 		}
@@ -248,13 +265,13 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		return out;
 	}
 
-	private void syncronizedTree(List<SnapshotsUpdate> updates) {
+	private void synchronizedTree(List<SnapshotsUpdate> updates) {
 		for(SnapshotsUpdate update : updates){
-			syncronizedTree(update);
+			synchronizedTree(update);
 		}
 	}
 
-	private void syncronizedTree(SnapshotsUpdate update) {
+	private void synchronizedTree(SnapshotsUpdate update) {
 		if(update instanceof SnapshotCreated){
 			process((SnapshotCreated)update);
 		}
