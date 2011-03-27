@@ -10,8 +10,8 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import ru.kc.common.app.event.AppInited;
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.common.event.AppInited;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.event.EventManager;

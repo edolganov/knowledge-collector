@@ -1,4 +1,4 @@
-package ru.kc.common.app.event;
+package ru.kc.platform.common.event;
 
 import ru.kc.platform.event.Event;
 

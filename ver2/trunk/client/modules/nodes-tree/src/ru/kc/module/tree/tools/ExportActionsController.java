@@ -7,7 +7,6 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import ru.kc.common.app.event.AppInited;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateFileLinkRequest;
@@ -20,6 +19,7 @@ import ru.kc.model.Node;
 import ru.kc.module.tree.ui.Tree;
 import ru.kc.platform.action.facade.ButtonFacade;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.common.event.AppInited;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
