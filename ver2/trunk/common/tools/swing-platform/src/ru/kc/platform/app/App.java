@@ -1,6 +1,9 @@
 package ru.kc.platform.app;
 
 import java.awt.Container;
+import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -11,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.common.event.AppInited;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
@@ -185,6 +189,8 @@ public class App {
 
 
 	private void initUI() {
+		initClosingEvent();
+		
         //init modules
         new ModuleScan(context).scanAndInit(context.rootUI);
         
@@ -201,6 +207,23 @@ public class App {
 		context.scriptsService.addListener(new RootUIScriptListener(context));
 		
 		eventManager.fireEventInEDT(this, new AppInited());
+	}
+
+	private void initClosingEvent() {
+		if(rootUI instanceof Window){
+			((Window)rootUI).addWindowListener(new WindowAdapter() {
+				
+				public void windowClosing(WindowEvent e) {
+					closeRequest();					
+				}
+				
+			});
+		}
+	}
+
+	protected void closeRequest() {
+		eventManager.fireEventInEDT(this, new AppClosing());
+		System.exit(0);
 	}
 
 	private void showUI() {

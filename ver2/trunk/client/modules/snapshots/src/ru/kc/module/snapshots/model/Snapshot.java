@@ -34,5 +34,10 @@ public class Snapshot  {
 		this.root = root;
 	}
 
+	@Override
+	public String toString() {
+		return "Snapshot [id=" + id + ", name=" + name + "]";
+	}
+
 	
 }

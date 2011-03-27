@@ -48,4 +48,15 @@ public class SnapshotDir  {
 	public List<Snapshot> getSnapshots() {
 		return snapshots;
 	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "SnapshotDir [id=" + id + ", open=" + open + ", name=" + name
+				+ ", snapshots=" + snapshots + "]";
+	}
+	
+	
 }

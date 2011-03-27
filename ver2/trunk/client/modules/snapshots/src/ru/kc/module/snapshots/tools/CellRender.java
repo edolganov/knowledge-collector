@@ -41,7 +41,6 @@ public class CellRender extends DefaultTreeCellRenderer {
 		else if(ob instanceof Snapshot){
 			Snapshot dir = (Snapshot) ob;
 			setText(dir.getName());
-			setIcon(null);
 		}
 		return this;
 		

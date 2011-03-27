@@ -30,6 +30,7 @@ import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
 import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateRequest;
@@ -147,6 +148,15 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		return list;
 	}
 	
+	
+	@EventListener
+	public void onClosing(AppClosing event){
+		try {
+			saveSnapshots(null);
+		} catch (Exception e) {
+			log.error("", e);
+		}
+	}
 	
 	
 	@EventListener
