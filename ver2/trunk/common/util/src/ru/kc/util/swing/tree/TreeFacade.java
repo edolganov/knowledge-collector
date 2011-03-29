@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class TreeFacade {
 
@@ -47,6 +48,11 @@ public class TreeFacade {
 
     public <T> T getCurrentObject(Class<T> clazz) {
         return (T) TreeUtil.getCurrentObject(tree, clazz);
+    }
+    
+    public <T> T getRootObject(Class<T> clazz) {
+    	DefaultMutableTreeNode root = getRoot();
+        return (T) TreeUtil.getUserObject(root, clazz);
     }
 
     public void refresh(DefaultMutableTreeNode node) {
@@ -219,5 +225,13 @@ public class TreeFacade {
 	public DefaultTreeModel getModel() {
 		return (DefaultTreeModel) tree.getModel();
 		
+	}
+
+	public List<DefaultMutableTreeNode> getChildren(DefaultMutableTreeNode node) {
+		ArrayList<DefaultMutableTreeNode> out = new ArrayList<DefaultMutableTreeNode>();
+		for(int i=0; i < node.getChildCount(); i++){
+			out.add((DefaultMutableTreeNode)node.getChildAt(i));
+		}
+		return out;
 	}
 }

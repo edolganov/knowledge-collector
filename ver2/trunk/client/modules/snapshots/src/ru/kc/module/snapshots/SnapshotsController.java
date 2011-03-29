@@ -14,9 +14,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import ru.kc.common.controller.Controller;
-import ru.kc.common.tree.TreeService;
-import ru.kc.common.tree.event.GetTreeServiceRequest;
 import ru.kc.model.Node;
+import ru.kc.module.snapshots.command.GetOwner;
 import ru.kc.module.snapshots.event.OpenSnapshotRequest;
 import ru.kc.module.snapshots.event.SaveSnapshotDirRequest;
 import ru.kc.module.snapshots.event.SaveSnapshotRequest;
@@ -47,8 +46,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	private static final String SNAPSHOTS_PROPERTY_KEY = "snapshots";
 	
 	private TreeFacade treeFacade;
-	private Node owner;
-	private List<SnapshotDir> snapshotDirs = new ArrayList<SnapshotDir>();
 	
 	@Override
 	protected void init() {
@@ -117,25 +114,20 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 				moveDown();
 			}
 		});
-		
-		
-		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
-		if(service != null){
-			Node node = service.getRoot().getUserObject(Node.class);
-			if(node != null){
-				this.owner = node;
-				buildTree();
-			}
-		}
 
+		buildTree();
 	}
 
 
 	private void buildTree() {
 		treeFacade.clear();
+		
+		Node owner = invokeSafe(new GetOwner(this)).result;
+		if(owner == null) return;
+		
+		List<SnapshotDir> snaphots = getSnaphots(owner);
 		DefaultMutableTreeNode treeRoot = treeFacade.getRoot();
-		loadSnapshots();
-		for(SnapshotDir dir : snapshotDirs){
+		for(SnapshotDir dir : snaphots){
 			DefaultMutableTreeNode dirNode = treeFacade.addChild(treeRoot, dir);
 			for(Snapshot snapshot : dir.getSnapshots()){
 				treeFacade.addChild(dirNode, snapshot);
@@ -151,10 +143,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 	}
 	
-	private void loadSnapshots() {
-		List<SnapshotDir> snapshots = getSnaphots(owner);
-		this.snapshotDirs = snapshots;
-	}
 
 	private List<SnapshotDir> getSnaphots(Node node) {
 		String data = node.getProperty(SNAPSHOTS_PROPERTY_KEY);
@@ -177,6 +165,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	public void onSaveRequest(SaveSnapshotDirRequest request) {
 		SnapshotDir dir = request.newDir;
 		int insertIndex = request.index;
+		List<SnapshotDir> snapshotDirs = getDirs();
 		snapshotDirs.add(insertIndex, dir);
 		saveSnapshots(new SnapshotDirCreated(dir, insertIndex));
 	}
@@ -186,6 +175,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		int dirIndex = request.snapshotDirIndex;
 		Snapshot newSnapshot = request.snapshot;
 		
+		List<SnapshotDir> snapshotDirs = getDirs();
 		SnapshotDir parentDir = snapshotDirs.get(dirIndex);
 		if(parentDir != null){
 			parentDir.add(newSnapshot);
@@ -213,8 +203,9 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		SnapshotDir dir = (SnapshotDir) node.getUserObject();
 		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+dir.getName()+"?");
 		if(confirm){
+			List<SnapshotDir> snapshotDirs = copyModel();
 			snapshotDirs.remove(dir);
-			saveSnapshots(new SnapshotDirDeleted(dir));
+			saveSnapshots(snapshotDirs, new SnapshotDirDeleted(dir));
 		}
 	}
 
@@ -236,8 +227,9 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	}
 
 
-	private void saveSnapshots(SnapshotsUpdate additionInfo) {
-		synchronizedOpenDirs();
+	private void saveSnapshots(List<SnapshotDir> snapshotDirs, SnapshotsUpdate additionInfo) {
+		Node owner = invokeSafe(new GetOwner(this)).result;
+		if(owner == null) return;
 		String data = new Gson().toJson(snapshotDirs);
 		try {
 			updater.update(owner, new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo));
@@ -246,8 +238,19 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			revert();
 		}
 	}
+	
 
-	private void synchronizedOpenDirs() {
+	private List<SnapshotDir> copyModel() {
+		ArrayList<SnapshotDir> out = new ArrayList<SnapshotDir>();
+		DefaultMutableTreeNode root = treeFacade.getRoot();
+		for(DefaultMutableTreeNode treeNode : treeFacade.getChildren(root)){
+			out.add((SnapshotDir)treeNode.getUserObject());
+		}
+		synchronizedOpenDirs(out);
+		return out;
+	}
+
+	private void synchronizedOpenDirs(List<SnapshotDir> snapshotDirs) {
 		for(SnapshotDir dir : snapshotDirs){
 			DefaultMutableTreeNode node = findNode(dir.getId());
 			if(node != null){
@@ -269,8 +272,10 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> nodeUpdates) {
+		Node owner = invokeSafe(new GetOwner(this)).result;
+		if(owner == null) return;
+		
 		if(old.equals(owner)){
-			this.owner = updatedNode;
 			
 			List<SnapshotsUpdate> updates = findUpdates(nodeUpdates);
 			if(updates.size() > 0){

@@ -3,6 +3,8 @@ package ru.kc.platform.event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import ru.kc.platform.data.Answer;
+import ru.kc.platform.domain.DomainMember;
 import ru.kc.util.swing.SwingUtil;
 
 
@@ -18,7 +20,7 @@ public class EventManager {
 	}
 	
 
-	public void fireEventInEDT(final Object source, final Event event){
+	public void fireEventInEDT(final DomainMember source, final Event event){
 		Runnable runnable = new Runnable() {
 			
 			@Override
@@ -29,7 +31,21 @@ public class EventManager {
 		SwingUtil.invokeInEDT(runnable);
 	}
 	
-	public <T> T fireRequestInEDT(final Object source, final Request<T> request) throws Throwable {
+	public <N> Answer<N> fireSaveRequestInEDT(DomainMember source, Request<N> request){
+		try {
+			N result = fireRequestInEDT(source, request);
+			return new Answer<N>(result);
+		}catch (Throwable t) {
+			log.error("invoke error", t);
+			if(t instanceof Exception){
+				return new Answer<N>((Exception)t);
+			} else {
+				return new Answer<N>(new IllegalStateException(t));
+			}
+		}
+	}
+	
+	public <T> T fireRequestInEDT(final DomainMember source, final Request<T> request) throws Throwable {
 		Runnable runnable = new Runnable() {
 			
 			@Override
@@ -45,7 +61,7 @@ public class EventManager {
 	}
 
 	
-	private void fireEvent(Object source, Event event){
+	private void fireEvent(DomainMember source, Event event){
 		listeners.processEvent(source, event);
 	}
 	

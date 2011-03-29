@@ -18,6 +18,7 @@ import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.common.event.AppInited;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
+import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ExceptionHandler;
 import ru.kc.platform.global.GlobalObjects;
@@ -32,7 +33,7 @@ import ru.kc.tools.scriptengine.ScriptsService;
 import ru.kc.util.swing.config.ComponentScanner;
 import ru.kc.util.swing.config.ObjectHandler;
 
-public class App {
+public class App implements DomainMember{
 	
 	private static Log log = LogFactory.getLog(App.class);
 	
@@ -232,6 +233,11 @@ public class App {
 
 	public AppContext getInitedContext() {
 		return context;
+	}
+
+	@Override
+	public Object getDomainKey() {
+		return DomainMember.ROOT_DOMAIN_KEY;
 	}
 
 

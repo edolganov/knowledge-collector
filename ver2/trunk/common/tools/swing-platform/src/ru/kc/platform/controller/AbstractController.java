@@ -128,17 +128,7 @@ public abstract class AbstractController<T> implements DomainMember {
 	}
 	
 	protected <N> Answer<N> invokeSafe(Request<N> request){
-		try {
-			N result = appContext.eventManager.fireRequestInEDT(this, request);
-			return new Answer<N>(result);
-		}catch (Throwable t) {
-			log.error("invoke error", t);
-			if(t instanceof Exception){
-				return new Answer<N>((Exception)t);
-			} else {
-				return new Answer<N>(new IllegalStateException(t));
-			}
-		}
+		return (Answer<N>)appContext.eventManager.fireSaveRequestInEDT(this, request);
 	}
 	
 	@Override

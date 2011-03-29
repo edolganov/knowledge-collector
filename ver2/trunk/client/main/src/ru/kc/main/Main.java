@@ -16,6 +16,8 @@ import ru.kc.model.Node;
 import ru.kc.platform.Platform;
 import ru.kc.platform.app.App;
 import ru.kc.platform.app.AppContext;
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.RootDomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.ui.tabbedform.MainForm;
 import ru.kc.tools.filepersist.ServiceListener;
@@ -93,27 +95,27 @@ public class Main {
 			
 			@Override
 			public void onAdded(Node parent, Node child) {
-				eventManager.fireEventInEDT(this,new ChildAdded(parent, child));
+				eventManager.fireEventInEDT(new RootDomainMember(this), new ChildAdded(parent, child));
 			}
 			
 			@Override
 			public void onDeletedRecursive(Node parent, Node deletedChild, List<Node> deletedSubChildren) {
-				eventManager.fireEventInEDT(this, new ChildDeletedRecursive(parent, deletedChild, deletedSubChildren));
+				eventManager.fireEventInEDT(new RootDomainMember(this), new ChildDeletedRecursive(parent, deletedChild, deletedSubChildren));
 			}
 			
 			@Override
 			public void onNodeUpdated(Node old, Node node, Collection<UpdateRequest> updates) {
-				eventManager.fireEventInEDT(this, new NodeUpdated(old, node, updates));
+				eventManager.fireEventInEDT(new RootDomainMember(this), new NodeUpdated(old, node, updates));
 			}
 
 			@Override
 			public void onMoved(Node oldParent, Node child, Node newParent) {
-				eventManager.fireEventInEDT(this, new NodeMoved(oldParent, child, newParent));
+				eventManager.fireEventInEDT(new RootDomainMember(this), new NodeMoved(oldParent, child, newParent));
 			}
 
 			@Override
 			public void onChildMoved(Node parent, Node child, int newIndex) {
-				eventManager.fireEventInEDT(this, new ChildMoved(parent, child, newIndex));
+				eventManager.fireEventInEDT(new RootDomainMember(this), new ChildMoved(parent, child, newIndex));
 			}
 		});
 		

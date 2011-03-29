@@ -1,5 +1,7 @@
 package ru.kc.platform.event.annotation;
 
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.RootDomainMember;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.event.EventManager;
 
@@ -19,7 +21,7 @@ public class AnnotationTest {
 		try {
 			EventManager eventManager = new EventManager();
 			eventManager.addObjectMethodListeners(new AnnotationTest());
-			eventManager.fireEventInEDT(new Object(), new TestEvent("test"));
+			eventManager.fireEventInEDT(new RootDomainMember(new Object()), new TestEvent("test"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

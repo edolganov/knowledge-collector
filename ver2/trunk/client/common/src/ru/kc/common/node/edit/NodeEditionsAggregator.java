@@ -16,6 +16,8 @@ import ru.kc.common.node.event.NodeUpdated;
 import ru.kc.model.Node;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.RootDomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
@@ -100,7 +102,7 @@ public class NodeEditionsAggregator {
 		NodeEditions editions = get(node);
 		if(editions != null){
 			editions.removeAll();
-			eventManager.fireEventInEDT(this, new NodeReverted(node));
+			eventManager.fireEventInEDT(new RootDomainMember(this), new NodeReverted(node));
 		}
 	}
 	

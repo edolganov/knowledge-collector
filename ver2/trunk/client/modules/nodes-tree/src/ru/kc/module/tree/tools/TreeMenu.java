@@ -31,6 +31,8 @@ import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.domain.DomainMember;
+import ru.kc.platform.domain.RootDomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -104,7 +106,7 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
-					events.fireEventInEDT(this, new UpdateNodeRequest(node));
+					events.fireEventInEDT(new RootDomainMember(this), new UpdateNodeRequest(node));
 				}
 			}
 		});
@@ -115,7 +117,7 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
-					events.fireEventInEDT(this, new RevertNodeRequest(node));
+					events.fireEventInEDT(new RootDomainMember(this), new RevertNodeRequest(node));
 				}
 			}
 		});

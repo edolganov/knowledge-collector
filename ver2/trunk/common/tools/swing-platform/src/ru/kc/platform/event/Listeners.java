@@ -59,7 +59,7 @@ public class Listeners {
 		}
 	}
 
-	public void processEvent(Object source, Event event) {
+	public void processEvent(DomainMember source, Event event) {
 		event.setSender(source);
 		Object domianKey = getDomianKey(source, event);
 		
