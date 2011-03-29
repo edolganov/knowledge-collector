@@ -157,7 +157,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	@EventListener
 	public void onClosing(AppClosing event){
-		saveSnapshots(null);
+		//saveSnapshots(null);
 	}
 	
 	
@@ -165,9 +165,9 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	public void onSaveRequest(SaveSnapshotDirRequest request) {
 		SnapshotDir dir = request.newDir;
 		int insertIndex = request.index;
-		List<SnapshotDir> snapshotDirs = getDirs();
-		snapshotDirs.add(insertIndex, dir);
-		saveSnapshots(new SnapshotDirCreated(dir, insertIndex));
+		//List<SnapshotDir> snapshotDirs = getDirs();
+		//snapshotDirs.add(insertIndex, dir);
+		//saveSnapshots(new SnapshotDirCreated(dir, insertIndex));
 	}
 	
 	@EventListener
@@ -175,12 +175,12 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		int dirIndex = request.snapshotDirIndex;
 		Snapshot newSnapshot = request.snapshot;
 		
-		List<SnapshotDir> snapshotDirs = getDirs();
-		SnapshotDir parentDir = snapshotDirs.get(dirIndex);
-		if(parentDir != null){
-			parentDir.add(newSnapshot);
-			saveSnapshots(new SnapshotCreated(parentDir, newSnapshot));
-		}
+		//List<SnapshotDir> snapshotDirs = getDirs();
+		//SnapshotDir parentDir = snapshotDirs.get(dirIndex);
+		//if(parentDir != null){
+			//parentDir.add(newSnapshot);
+			//saveSnapshots(new SnapshotCreated(parentDir, newSnapshot));
+		//}
 	}
 
 	
@@ -218,7 +218,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
 			SnapshotDir dir = (SnapshotDir)parent.getUserObject();
 			dir.getSnapshots().remove(snapshot);
-			saveSnapshots(new SnapshotDeleted(snapshot));
+			//saveSnapshots(new SnapshotDeleted(snapshot));
 		}
 	}
 
