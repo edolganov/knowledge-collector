@@ -53,6 +53,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	@Override
 	protected void init() {
 		ui.remove.setToolTipText("Delete  (Delete)");
+		ui.up.setToolTipText("Move up  (Ctrl+UP)");
+		ui.down.setToolTipText("Move down  (Ctrl+DOWN)");
 		
 		treeFacade = new TreeFacade(ui.tree);
 		ui.tree.setModel(TreeFacade.createModelByUserObject(""));
@@ -100,6 +102,21 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 		});
 		
+		ui.up.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveUp();
+			}
+		});
+		
+		ui.down.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveDown();
+			}
+		});
 		
 		
 		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
@@ -113,10 +130,11 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 
 	}
 
+
 	private void buildTree() {
 		treeFacade.clear();
 		DefaultMutableTreeNode treeRoot = treeFacade.getRoot();
-		loadSnapshots(owner);
+		loadSnapshots();
 		for(SnapshotDir dir : snapshotDirs){
 			DefaultMutableTreeNode dirNode = treeFacade.addChild(treeRoot, dir);
 			for(Snapshot snapshot : dir.getSnapshots()){
@@ -133,8 +151,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 	}
 	
-	private void loadSnapshots(Node node) {
-		List<SnapshotDir> snapshots = getSnaphots(node);
+	private void loadSnapshots() {
+		List<SnapshotDir> snapshots = getSnaphots(owner);
 		this.snapshotDirs = snapshots;
 	}
 
@@ -151,16 +169,12 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	@EventListener
 	public void onClosing(AppClosing event){
-		try {
-			saveSnapshots(null);
-		} catch (Exception e) {
-			log.error("", e);
-		}
+		saveSnapshots(null);
 	}
 	
 	
 	@EventListener
-	public void onSaveRequest(SaveSnapshotDirRequest request) throws Exception {
+	public void onSaveRequest(SaveSnapshotDirRequest request) {
 		SnapshotDir dir = request.newDir;
 		int insertIndex = request.index;
 		snapshotDirs.add(insertIndex, dir);
@@ -168,7 +182,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	}
 	
 	@EventListener
-	public void onSaveRequest(SaveSnapshotRequest request)throws Exception {
+	public void onSaveRequest(SaveSnapshotRequest request) {
 		int dirIndex = request.snapshotDirIndex;
 		Snapshot newSnapshot = request.snapshot;
 		
@@ -186,19 +200,15 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		if(ob == null)
 			return;
 		
-		try {
-			if(ob instanceof SnapshotDir){
-				deleteDir();
-			}
-			else if(ob instanceof Snapshot){
-				deleteSnapshot();
-			}
-		}catch (Exception e) {
-			log.error("", e);
+		if(ob instanceof SnapshotDir){
+			deleteDir();
+		}
+		else if(ob instanceof Snapshot){
+			deleteSnapshot();
 		}
 	}
 	
-	private void deleteDir() throws Exception {
+	private void deleteDir() {
 		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
 		SnapshotDir dir = (SnapshotDir) node.getUserObject();
 		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+dir.getName()+"?");
@@ -209,7 +219,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	}
 
 
-	private void deleteSnapshot() throws Exception {
+	private void deleteSnapshot() {
 		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
 		Snapshot snapshot = (Snapshot) node.getUserObject();
 		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+snapshot.getName()+"?");
@@ -226,13 +236,17 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	}
 
 
-	private void saveSnapshots(SnapshotsUpdate additionInfo) throws Exception {
+	private void saveSnapshots(SnapshotsUpdate additionInfo) {
 		synchronizedOpenDirs();
 		String data = new Gson().toJson(snapshotDirs);
-		updater.update(owner, new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo));
+		try {
+			updater.update(owner, new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo));
+		} catch (Exception e) {
+			log.error("save error", e);
+			revert();
+		}
 	}
-	
-	
+
 	private void synchronizedOpenDirs() {
 		for(SnapshotDir dir : snapshotDirs){
 			DefaultMutableTreeNode node = findNode(dir.getId());
@@ -247,6 +261,10 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 		}
 		
+	}
+	
+	private void revert() {
+		buildTree();
 	}
 
 	@Override
@@ -362,6 +380,62 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 		return null;
 	}
+	
+	
+	protected void moveUp() {
+		Object ob = treeFacade.getCurrentObject();
+		if(ob == null){
+			return;
+		}
+		
+		if(ob instanceof SnapshotDir){
+			moveSnapshotDirUp();
+		}
+		else if(ob instanceof Snapshot){
+			moveSnapshotUp();
+		}
+	}
+	
+	private void moveSnapshotDirUp() {
+		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
+//		snapshotDirs.re
+		
+	}
+
+
+	private void moveSnapshotUp() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	protected void moveDown() {
+		Object ob = treeFacade.getCurrentObject();
+		if(ob == null){
+			return;
+		}
+		
+		if(ob instanceof SnapshotDir){
+			moveSnapshotDirDown();
+		}
+		else if(ob instanceof Snapshot){
+			moveSnapshotDown();
+		}
+	}
+	
+	private void moveSnapshotDirDown() {
+		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
+//		snapshotDirs.re
+		
+	}
+
+
+	private void moveSnapshotDown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
 
 
 }

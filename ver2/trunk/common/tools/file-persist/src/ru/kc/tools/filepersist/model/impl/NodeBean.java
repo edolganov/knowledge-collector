@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ru.kc.model.Node;
+import ru.kc.util.collection.ListUtil;
 import ru.kc.util.collection.Pair;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -55,28 +56,14 @@ public abstract class NodeBean implements Node, Cloneable {
 	public int moveChildUp(NodeBean node) {
 		if(childrenIds == null) return -1;
 		String childId = generateNodeIdWithContainerPath(node);
-		int oldIndex = childrenIds.indexOf(childId);
-		if(oldIndex == -1) return -1;
-		
-		int newIndex = oldIndex - 1;
-		if(newIndex == -1) 
-			newIndex = childrenIds.size()-1;
-		childrenIds.remove(oldIndex);
-		childrenIds.add(newIndex, childId);
+		int newIndex = ListUtil.moveUp(childrenIds, childId);;
 		return newIndex;
 	}
 	
 	public int moveChildDown(NodeBean node) {
 		if(childrenIds == null) return -1;
 		String childId = generateNodeIdWithContainerPath(node);
-		int oldIndex = childrenIds.indexOf(childId);
-		if(oldIndex == -1) return -1;
-		
-		int newIndex = oldIndex + 1;
-		if(newIndex == childrenIds.size())
-			newIndex = 0;
-		childrenIds.remove(oldIndex);
-		childrenIds.add(newIndex, childId);
+		int newIndex = ListUtil.moveDown(childrenIds, childId);
 		return newIndex;
 	}
 	
