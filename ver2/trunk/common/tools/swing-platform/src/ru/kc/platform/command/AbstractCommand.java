@@ -18,22 +18,11 @@ public abstract class AbstractCommand<T> {
 	protected Log log = LogFactory.getLog(getClass());
 	protected AppContext appContext;
 	protected Container ui;
-	protected DomainMember domainMember;
-	
-	
-	public AbstractCommand() {
-		this(null);
-	}
+	protected DomainMember domainMember = new RootDomainMember(this);
 
-	public AbstractCommand(DomainMember domainMember) {
-		super();
-		if(domainMember == null){
-			domainMember = new RootDomainMember(this);
-		}
+	public void setDomainMember(DomainMember domainMember) {
 		this.domainMember = domainMember;
 	}
-
-
 
 	void init(AppContext context){
 		this.appContext = context;
@@ -53,10 +42,12 @@ public abstract class AbstractCommand<T> {
 	
 	
 	protected <N> N invoke(AbstractCommand<N> command) throws Exception {
+		command.setDomainMember(domainMember);
 		return (N) appContext.commandService.invoke(command);
 	}
 	
 	protected <N> Answer<N> invokeSafe(AbstractCommand<N> command){
+		command.setDomainMember(domainMember);
 		return (Answer<N>) appContext.commandService.invokeSafe(command);
 	}
 	

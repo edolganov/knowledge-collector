@@ -7,15 +7,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.components.dialog.OneTextFieldModule;
-import ru.kc.module.snapshots.event.CreateSnapshotDirRequest;
-import ru.kc.module.snapshots.event.CreateTreeNodesRequest;
-import ru.kc.module.snapshots.event.SaveSnapshotRequest;
+import ru.kc.module.snapshots.command.CreateSnapshot;
+import ru.kc.module.snapshots.command.CreateSnapshotDir;
 import ru.kc.module.snapshots.model.Snapshot;
-import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.Check;
-import ru.kc.util.UuidGenerator;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -39,31 +36,20 @@ public class CreateSnapshotController extends Controller<SnapshotsPanel> {
 	
 	
 	protected void createSnapshot() {
-		TreeNode root = invokeSafe(new CreateTreeNodesRequest()).result;
-		if(root == null){
-			return;
-		}
-		
 		String name = getName();
 		if(Check.isEmpty(name)){
 			return;
 		}
 		
-		Snapshot snapshot = new Snapshot();
-		snapshot.setId(UuidGenerator.simpleUuid());
-		snapshot.setName(name);
-		snapshot.setRoot(root);
-		
-		Integer dirIndex = findDirToSnapshot();
-		if(dirIndex == null){
-			dirIndex = invokeSafe(new CreateSnapshotDirRequest("main")).result;
+		int dirIndex = findDirToSnapshot();
+		if(dirIndex == -1){
+			boolean dirCreated = invokeSafe(new CreateSnapshotDir("main", 0)).isValid();
+			if(!dirCreated)
+				return;
+			dirIndex = 0;
 		}
 		
-		if(dirIndex == null){
-			return;
-		}
-		
-		invokeSafe(new SaveSnapshotRequest(snapshot, dirIndex));
+		invokeSafe(new CreateSnapshot(name, dirIndex));
 			
 	}
 
@@ -78,12 +64,12 @@ public class CreateSnapshotController extends Controller<SnapshotsPanel> {
 		return name;
 	}
 	
-	private Integer findDirToSnapshot() {
+	private int findDirToSnapshot() {
 		DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
 		if(treeNode == null){
 			DefaultMutableTreeNode root = treeFacade.getRoot();
 			if(root.getChildCount() == 0){
-				return null;
+				return -1;
 			}
 			treeNode = (DefaultMutableTreeNode) root.getChildAt(0);
 		}

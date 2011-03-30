@@ -7,16 +7,11 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.components.dialog.OneTextFieldModule;
-import ru.kc.module.snapshots.event.CreateSnapshotDirRequest;
-import ru.kc.module.snapshots.event.SaveSnapshotDirRequest;
+import ru.kc.module.snapshots.command.CreateSnapshotDir;
 import ru.kc.module.snapshots.model.Snapshot;
-import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.data.Answer;
-import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.Check;
-import ru.kc.util.UuidGenerator;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -38,16 +33,11 @@ public class CreateDirController extends Controller<SnapshotsPanel> {
 	}
 	
 	private void createDir() {
-		try {
-			String name = getNameForDir();
-			if(Check.isEmpty(name)){
-				return;
-			}
-			createDir(name);
-			
-		} catch (Exception e) {
-			log.error("", e);
+		String name = getNameForDir();
+		if(Check.isEmpty(name)){
+			return;
 		}
+		createDir(name);
 	}
 
 	private String getNameForDir() {
@@ -61,34 +51,17 @@ public class CreateDirController extends Controller<SnapshotsPanel> {
 	}
 	
 	
-	@EventListener
-	public void createRequest(CreateSnapshotDirRequest request){
-		String name = request.name;
-		Integer out = createDir(name);
-		request.setResponse(out);
-	}
-	
-	
-	private Integer createDir(String name) {
-		SnapshotDir newDir = new SnapshotDir();
-		newDir.setId(UuidGenerator.simpleUuid());
-		newDir.setName(name);
+	private void createDir(String name) {
 		
-		DefaultMutableTreeNode beforeInsert = findBeforeInsertElement(newDir);
+		DefaultMutableTreeNode beforeInsert = findBeforeInsertElement();
 		int insertIndex = 0;
 		if(beforeInsert != null){
 			insertIndex = findIndexInParent(beforeInsert) + 1;
 		}
-		
-		Answer<?> answer = invokeSafe(new SaveSnapshotDirRequest(newDir, insertIndex));
-		if(answer.isValid()){
-			return insertIndex;
-		} else {
-			return null;
-		}
+		invokeSafe(new CreateSnapshotDir(name, insertIndex));
 	}
 	
-	private DefaultMutableTreeNode findBeforeInsertElement(SnapshotDir dir) {
+	private DefaultMutableTreeNode findBeforeInsertElement() {
 		DefaultMutableTreeNode before = getLastRootElement();
 		DefaultMutableTreeNode currentNode = treeFacade.getCurrentNode();
 		if(currentNode != null){

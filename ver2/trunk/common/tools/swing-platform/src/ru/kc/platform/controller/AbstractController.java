@@ -104,10 +104,12 @@ public abstract class AbstractController<T> implements DomainMember {
 	
 	
 	protected <N> N invoke(AbstractCommand<N> command) throws Exception {
+		command.setDomainMember(this);
 		return (N) appContext.commandService.invoke(command);
 	}
 	
 	protected <N> Answer<N> invokeSafe(AbstractCommand<N> command){
+		command.setDomainMember(this);
 		return (Answer<N>) appContext.commandService.invokeSafe(command);
 	}
 	

@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,8 +16,6 @@ import ru.kc.common.controller.Controller;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.command.GetOwner;
 import ru.kc.module.snapshots.event.OpenSnapshotRequest;
-import ru.kc.module.snapshots.event.SaveSnapshotDirRequest;
-import ru.kc.module.snapshots.event.SaveSnapshotRequest;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotCreated;
@@ -27,6 +24,7 @@ import ru.kc.module.snapshots.model.update.SnapshotDirCreated;
 import ru.kc.module.snapshots.model.update.SnapshotDirDeleted;
 import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
 import ru.kc.module.snapshots.tools.CellRender;
+import ru.kc.module.snapshots.tools.SnapshotConverter;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.common.event.AppClosing;
@@ -37,15 +35,11 @@ import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 @Mapping(SnapshotsPanel.class)
 public class SnapshotsController extends Controller<SnapshotsPanel>{
-
-	private static final String SNAPSHOTS_PROPERTY_KEY = "snapshots";
 	
 	private TreeFacade treeFacade;
+	private SnapshotConverter snapshotConverter = new SnapshotConverter();
 	
 	@Override
 	protected void init() {
@@ -122,10 +116,11 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	private void buildTree() {
 		treeFacade.clear();
 		
-		Node owner = invokeSafe(new GetOwner(this)).result;
+		Node owner = invokeSafe(new GetOwner()).result;
 		if(owner == null) return;
 		
-		List<SnapshotDir> snaphots = getSnaphots(owner);
+
+		List<SnapshotDir> snaphots = snapshotConverter.loadFrom(owner);
 		DefaultMutableTreeNode treeRoot = treeFacade.getRoot();
 		for(SnapshotDir dir : snaphots){
 			DefaultMutableTreeNode dirNode = treeFacade.addChild(treeRoot, dir);
@@ -134,8 +129,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 		}
 		
-		for(int i = 0; i < treeRoot.getChildCount(); ++i){
-			DefaultMutableTreeNode child = (DefaultMutableTreeNode)treeRoot.getChildAt(i);
+		for(DefaultMutableTreeNode child : treeFacade.getChildren(treeRoot)){
 			SnapshotDir dir = (SnapshotDir)child.getUserObject();
 			if(dir.isOpen()){
 				treeFacade.expand(child);
@@ -143,47 +137,11 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 	}
 	
-
-	private List<SnapshotDir> getSnaphots(Node node) {
-		String data = node.getProperty(SNAPSHOTS_PROPERTY_KEY);
-		if(data == null)
-			return new ArrayList<SnapshotDir>(0);
-		
-		Type listType = new TypeToken<List<SnapshotDir>>(){}.getType();
-		List<SnapshotDir> list = new Gson().fromJson(data, listType);
-		return list;
-	}
-	
 	
 	@EventListener
 	public void onClosing(AppClosing event){
 		//saveSnapshots(null);
 	}
-	
-	
-	@EventListener
-	public void onSaveRequest(SaveSnapshotDirRequest request) {
-		SnapshotDir dir = request.newDir;
-		int insertIndex = request.index;
-		//List<SnapshotDir> snapshotDirs = getDirs();
-		//snapshotDirs.add(insertIndex, dir);
-		//saveSnapshots(new SnapshotDirCreated(dir, insertIndex));
-	}
-	
-	@EventListener
-	public void onSaveRequest(SaveSnapshotRequest request) {
-		int dirIndex = request.snapshotDirIndex;
-		Snapshot newSnapshot = request.snapshot;
-		
-		//List<SnapshotDir> snapshotDirs = getDirs();
-		//SnapshotDir parentDir = snapshotDirs.get(dirIndex);
-		//if(parentDir != null){
-			//parentDir.add(newSnapshot);
-			//saveSnapshots(new SnapshotCreated(parentDir, newSnapshot));
-		//}
-	}
-
-	
 
 	protected void delete() {
 		Object ob = treeFacade.getCurrentObject();
@@ -205,7 +163,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		if(confirm){
 			List<SnapshotDir> snapshotDirs = copyModel();
 			snapshotDirs.remove(dir);
-			saveSnapshots(snapshotDirs, new SnapshotDirDeleted(dir));
+			//saveSnapshots(snapshotDirs, new SnapshotDirDeleted(dir));
 		}
 	}
 
@@ -224,19 +182,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 
 	protected void open(Snapshot node) {
 		invokeSafe(new OpenSnapshotRequest(node));
-	}
-
-
-	private void saveSnapshots(List<SnapshotDir> snapshotDirs, SnapshotsUpdate additionInfo) {
-		Node owner = invokeSafe(new GetOwner(this)).result;
-		if(owner == null) return;
-		String data = new Gson().toJson(snapshotDirs);
-		try {
-			updater.update(owner, new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo));
-		} catch (Exception e) {
-			log.error("save error", e);
-			revert();
-		}
 	}
 	
 
@@ -265,14 +210,10 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 		
 	}
-	
-	private void revert() {
-		buildTree();
-	}
 
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> nodeUpdates) {
-		Node owner = invokeSafe(new GetOwner(this)).result;
+		Node owner = invokeSafe(new GetOwner()).result;
 		if(owner == null) return;
 		
 		if(old.equals(owner)){

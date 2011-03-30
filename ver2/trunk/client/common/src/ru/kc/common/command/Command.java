@@ -6,7 +6,6 @@ import ru.kc.common.Context;
 import ru.kc.common.dialog.Dialogs;
 import ru.kc.platform.annotations.Inject;
 import ru.kc.platform.command.AbstractCommand;
-import ru.kc.platform.domain.DomainMember;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.PersistService;
 import ru.kc.tools.filepersist.Tree;
@@ -22,14 +21,6 @@ public abstract class Command<T> extends AbstractCommand<T> {
 	protected Frame rootUI;
 	protected Updater updater;
 	protected Dialogs dialogs;
-	
-	public Command() {
-		super();
-	}
-
-	public Command(DomainMember domainMember) {
-		super(domainMember);
-	}
 
 
 	@Override
