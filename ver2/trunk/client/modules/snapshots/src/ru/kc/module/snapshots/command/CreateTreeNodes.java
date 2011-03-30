@@ -18,8 +18,8 @@ public class CreateTreeNodes extends Command<TreeNode>{
 		return root;
 	}
 	
-	private TreeNode buildTreeNodeRoot() {
-		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
+	private TreeNode buildTreeNodeRoot() throws Exception {
+		TreeService service = invoke(new GetTreeServiceRequest());
 		if(service == null){
 			return null;
 		}

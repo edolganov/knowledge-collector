@@ -45,7 +45,7 @@ public class EventManager {
 		}
 	}
 	
-	public <T> T fireRequestInEDT(final DomainMember source, final Request<T> request) throws Throwable {
+	public <T> T fireRequestInEDT(final DomainMember source, final Request<T> request) throws Exception {
 		Runnable runnable = new Runnable() {
 			
 			@Override

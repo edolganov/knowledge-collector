@@ -15,7 +15,7 @@ public class SwingUtil {
 	}
 	
 	
-	public static void invokeInEDTAndWait(Runnable runnable) throws Throwable{
+	public static void invokeInEDTAndWait(Runnable runnable) throws Exception{
 		if(SwingUtilities.isEventDispatchThread()){
 			runnable.run();
 		} else {
@@ -23,7 +23,12 @@ public class SwingUtil {
 				SwingUtilities.invokeAndWait(runnable);
 				
 			}catch (InvocationTargetException e) {
-				throw e.getTargetException();
+				Throwable targetException = e.getTargetException();
+				if(targetException instanceof Exception)
+					throw (Exception) targetException;
+				if(targetException instanceof Error)
+					throw (Error)targetException;
+				throw new IllegalStateException(targetException);
 				
 			} catch (InterruptedException e) {
 				throw new IllegalStateException(e);

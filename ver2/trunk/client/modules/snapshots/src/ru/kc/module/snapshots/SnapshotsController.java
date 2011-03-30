@@ -2,9 +2,6 @@ package ru.kc.module.snapshots;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +12,6 @@ import javax.swing.tree.TreePath;
 import ru.kc.common.controller.Controller;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.command.GetOwner;
-import ru.kc.module.snapshots.event.OpenSnapshotRequest;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotCreated;
@@ -31,8 +27,6 @@ import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateRequest;
-import ru.kc.util.swing.keyboard.DeleteKey;
-import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -53,45 +47,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		ui.tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
 		
-		ui.remove.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				delete();
-			}
-		});
-		ui.tree.addKeyListener(new DeleteKey() {
-			
-			@Override
-			protected void doAction(KeyEvent e) {
-				delete();
-			}
-			
-		});
-		ui.tree.addMouseListener(new MouseAdapter(){
-			
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Snapshot node = treeFacade.getCurrentObject(Snapshot.class);
-				if(node == null) return; 
-				
-				if(e.getClickCount() == 2 && treeFacade.isOnSelectedElement(e.getX(), e.getY())){
-					open(node);
-				}
-			}
-			
-		});
-		
-		ui.tree.addKeyListener(new EnterKey() {
-			
-			@Override
-			protected void doAction(KeyEvent e) {
-				Snapshot node = treeFacade.getCurrentObject(Snapshot.class);
-				if(node == null) return; 
-				open(node);
-			}
-		});
+
+
 		
 		ui.up.addActionListener(new ActionListener() {
 			
@@ -141,47 +98,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 	@EventListener
 	public void onClosing(AppClosing event){
 		//saveSnapshots(null);
-	}
-
-	protected void delete() {
-		Object ob = treeFacade.getCurrentObject();
-		if(ob == null)
-			return;
-		
-		if(ob instanceof SnapshotDir){
-			deleteDir();
-		}
-		else if(ob instanceof Snapshot){
-			deleteSnapshot();
-		}
-	}
-	
-	private void deleteDir() {
-		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
-		SnapshotDir dir = (SnapshotDir) node.getUserObject();
-		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+dir.getName()+"?");
-		if(confirm){
-			List<SnapshotDir> snapshotDirs = copyModel();
-			snapshotDirs.remove(dir);
-			//saveSnapshots(snapshotDirs, new SnapshotDirDeleted(dir));
-		}
-	}
-
-
-	private void deleteSnapshot() {
-		DefaultMutableTreeNode node = treeFacade.getCurrentNode();
-		Snapshot snapshot = (Snapshot) node.getUserObject();
-		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+snapshot.getName()+"?");
-		if(confirm){
-			DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
-			SnapshotDir dir = (SnapshotDir)parent.getUserObject();
-			dir.getSnapshots().remove(snapshot);
-			//saveSnapshots(new SnapshotDeleted(snapshot));
-		}
-	}
-
-	protected void open(Snapshot node) {
-		invokeSafe(new OpenSnapshotRequest(node));
 	}
 	
 

@@ -58,5 +58,9 @@ public abstract class AbstractCommand<T> {
 	protected <N> Answer<N> invokeSafe(Request<N> request){
 		return (Answer<N>)appContext.eventManager.fireSaveRequestInEDT(domainMember, request);
 	}
+	
+	protected <N> N invoke(Request<N> request) throws Exception {
+		return (N)appContext.eventManager.fireRequestInEDT(domainMember, request);
+	}
 
 }

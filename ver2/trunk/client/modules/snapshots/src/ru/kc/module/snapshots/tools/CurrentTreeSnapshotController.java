@@ -4,8 +4,8 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.tree.TreeService;
 import ru.kc.common.tree.event.GetTreeServiceRequest;
 import ru.kc.model.Node;
-import ru.kc.module.snapshots.event.CreateTreeNodesRequest;
-import ru.kc.module.snapshots.event.OpenSnapshotRequest;
+import ru.kc.module.snapshots.command.CreateTreeNodes;
+import ru.kc.module.snapshots.command.OpenSnapshot;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
@@ -34,7 +34,7 @@ public class CurrentTreeSnapshotController extends Controller<SnapshotsPanel> {
 		
 		Snapshot lastState = loadSnapshot(owner);
 		if(lastState != null){
-			invokeSafe(new OpenSnapshotRequest(lastState));
+			invokeSafe(new OpenSnapshot(lastState));
 		}
 		
 	}
@@ -62,7 +62,7 @@ public class CurrentTreeSnapshotController extends Controller<SnapshotsPanel> {
 			return;
 		}
 		
-		TreeNode root = invokeSafe(new CreateTreeNodesRequest()).result;
+		TreeNode root = invokeSafe(new CreateTreeNodes()).result;
 		if(root == null){
 			return;
 		}

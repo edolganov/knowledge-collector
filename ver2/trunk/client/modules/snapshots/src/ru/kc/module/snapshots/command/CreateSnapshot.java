@@ -29,9 +29,7 @@ public class CreateSnapshot extends Command<Void> {
 	@Override
 	protected Void invoke() throws Exception {
 		
-		owner = invokeSafe(new GetOwner()).result;
-		if(owner == null) 
-			throw new IllegalStateException("owner is null");
+		owner = invoke(new GetOwner());
 		
 		TreeNode root = invokeSafe(new CreateTreeNodes()).result;
 		if(root == null)

@@ -10,13 +10,12 @@ public class GetOwner extends Command<Node> {
 	@Override
 	protected Node invoke() throws Exception {
 		
-		TreeService service = invokeSafe(new GetTreeServiceRequest()).result;
-		if(service != null){
-			Node node = service.getRoot().getUserObject(Node.class);
-			return node;
-		}
-		
-		return null;
+		TreeService service = invoke(new GetTreeServiceRequest());
+		Node node = service.getRoot().getUserObject(Node.class);
+		if(node == null)
+			throw new IllegalStateException("root node is null");
+		return node;
+
 	}
 
 }
