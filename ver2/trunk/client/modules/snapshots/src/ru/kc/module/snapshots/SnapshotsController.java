@@ -1,7 +1,5 @@
 package ru.kc.module.snapshots;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +21,6 @@ import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.tools.SnapshotConverter;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
-import ru.kc.platform.common.event.AppClosing;
-import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -46,25 +42,6 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		ui.tree.setRootVisible(false);
 		ui.tree.setCellRenderer(new CellRender());
 		treeFacade.setSingleSelection();
-		
-
-
-		
-		ui.up.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				moveUp();
-			}
-		});
-		
-		ui.down.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				moveDown();
-			}
-		});
 
 		buildTree();
 	}
@@ -93,39 +70,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 			}
 		}
 	}
-	
-	
-	@EventListener
-	public void onClosing(AppClosing event){
-		//saveSnapshots(null);
-	}
-	
 
-	private List<SnapshotDir> copyModel() {
-		ArrayList<SnapshotDir> out = new ArrayList<SnapshotDir>();
-		DefaultMutableTreeNode root = treeFacade.getRoot();
-		for(DefaultMutableTreeNode treeNode : treeFacade.getChildren(root)){
-			out.add((SnapshotDir)treeNode.getUserObject());
-		}
-		synchronizedOpenDirs(out);
-		return out;
-	}
 
-	private void synchronizedOpenDirs(List<SnapshotDir> snapshotDirs) {
-		for(SnapshotDir dir : snapshotDirs){
-			DefaultMutableTreeNode node = findNode(dir.getId());
-			if(node != null){
-				if(treeFacade.isExpanded(node)){
-					dir.setOpen(true);
-				} else {
-					dir.setOpen(false);
-				}
-			} else {
-				dir.setOpen(false);
-			}
-		}
-		
-	}
 
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> nodeUpdates) {
@@ -240,63 +186,8 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 				}
 			}
 		}
-		return null;
+		throw new IllegalStateException("can't find node by id "+id);
 	}
-	
-	
-	protected void moveUp() {
-		Object ob = treeFacade.getCurrentObject();
-		if(ob == null){
-			return;
-		}
-		
-		if(ob instanceof SnapshotDir){
-			moveSnapshotDirUp();
-		}
-		else if(ob instanceof Snapshot){
-			moveSnapshotUp();
-		}
-	}
-	
-	private void moveSnapshotDirUp() {
-		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
-//		snapshotDirs.re
-		
-	}
-
-
-	private void moveSnapshotUp() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	protected void moveDown() {
-		Object ob = treeFacade.getCurrentObject();
-		if(ob == null){
-			return;
-		}
-		
-		if(ob instanceof SnapshotDir){
-			moveSnapshotDirDown();
-		}
-		else if(ob instanceof Snapshot){
-			moveSnapshotDown();
-		}
-	}
-	
-	private void moveSnapshotDirDown() {
-		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
-//		snapshotDirs.re
-		
-	}
-
-
-	private void moveSnapshotDown() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 
 
