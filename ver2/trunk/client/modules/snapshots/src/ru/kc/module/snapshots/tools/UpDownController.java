@@ -3,11 +3,18 @@ package ru.kc.module.snapshots.tools;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+
 import ru.kc.common.controller.Controller;
+import ru.kc.module.snapshots.command.MoveSnapshotDirDown;
+import ru.kc.module.snapshots.command.MoveSnapshotDirUp;
+import ru.kc.module.snapshots.command.MoveSnapshotDown;
+import ru.kc.module.snapshots.command.MoveSnapshotUp;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.swing.component.ComponentUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
@@ -15,6 +22,7 @@ public class UpDownController extends Controller<SnapshotsPanel>{
 
 	private TreeFacade treeFacade;
 	
+	@SuppressWarnings("serial")
 	@Override
 	protected void init() {
 		treeFacade = new TreeFacade(ui.tree);
@@ -34,6 +42,22 @@ public class UpDownController extends Controller<SnapshotsPanel>{
 				moveDown();
 			}
 		});
+		
+		ComponentUtil.addAction(ui.tree, "control UP", new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveUp();
+			}
+		});
+		
+		ComponentUtil.addAction(ui.tree, "control DOWN", new AbstractAction() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				moveDown();
+			}
+		});
 	}
 	
 	private void moveUp() {
@@ -43,23 +67,14 @@ public class UpDownController extends Controller<SnapshotsPanel>{
 		}
 		
 		if(ob instanceof SnapshotDir){
-			moveSnapshotDirUp();
+			SnapshotDir dir = (SnapshotDir)ob;
+			invokeSafe(new MoveSnapshotDirUp(dir));
 		}
 		else if(ob instanceof Snapshot){
-			moveSnapshotUp();
+			Snapshot snap = (Snapshot)ob;
+			SnapshotDir dir = (SnapshotDir)treeFacade.getParentOfCurrentNode().getUserObject();
+			invokeSafe(new MoveSnapshotUp(dir, snap));
 		}
-	}
-	
-	private void moveSnapshotDirUp() {
-		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
-//		snapshotDirs.re
-		
-	}
-
-
-	private void moveSnapshotUp() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void moveDown() {
@@ -69,22 +84,14 @@ public class UpDownController extends Controller<SnapshotsPanel>{
 		}
 		
 		if(ob instanceof SnapshotDir){
-			moveSnapshotDirDown();
+			SnapshotDir dir = (SnapshotDir)ob;
+			invokeSafe(new MoveSnapshotDirDown(dir));
 		}
 		else if(ob instanceof Snapshot){
-			moveSnapshotDown();
+			Snapshot snap = (Snapshot)ob;
+			SnapshotDir dir = (SnapshotDir)treeFacade.getParentOfCurrentNode().getUserObject();
+			invokeSafe(new MoveSnapshotDown(dir, snap));
 		}
 	}
 	
-	private void moveSnapshotDirDown() {
-		SnapshotDir dir = treeFacade.getCurrentObject(SnapshotDir.class);
-//		snapshotDirs.re
-		
-	}
-
-
-	private void moveSnapshotDown() {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -234,4 +234,35 @@ public class TreeFacade {
 		}
 		return out;
 	}
+
+	public DefaultMutableTreeNode getParentOfCurrentNode() {
+		DefaultMutableTreeNode node = getCurrentNode();
+		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+		return parent;
+		
+	}
+	
+	public void moveChild(DefaultMutableTreeNode childNode, int newIndex){
+		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode)childNode.getParent();
+		if(parentNode == null)
+			return;
+		
+		TreePath childPath = new TreePath(childNode.getPath());
+		TreePath selectedPath = null;
+		if(tree.isPathSelected(childPath)){
+			selectedPath = childPath;
+		}
+		
+		for (int i = 0; i < parentNode.getChildCount(); i++) {
+			DefaultMutableTreeNode candidat = (DefaultMutableTreeNode)parentNode.getChildAt(i);
+			if(candidat == childNode){
+				parentNode.remove(childNode);
+				parentNode.insert(childNode, newIndex);
+			}					
+		}
+		getModel().reload(parentNode);
+		
+		if(selectedPath != null) tree.setSelectionPath(selectedPath);
+		
+	}
 }

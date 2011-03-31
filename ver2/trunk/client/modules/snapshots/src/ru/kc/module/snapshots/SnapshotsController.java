@@ -12,10 +12,12 @@ import ru.kc.model.Node;
 import ru.kc.module.snapshots.command.GetOwner;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
+import ru.kc.module.snapshots.model.update.DirMoved;
 import ru.kc.module.snapshots.model.update.SnapshotCreated;
 import ru.kc.module.snapshots.model.update.SnapshotDeleted;
 import ru.kc.module.snapshots.model.update.SnapshotDirCreated;
 import ru.kc.module.snapshots.model.update.SnapshotDirDeleted;
+import ru.kc.module.snapshots.model.update.SnapshotMoved;
 import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
 import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.tools.SnapshotConverter;
@@ -120,6 +122,12 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		else if(update instanceof SnapshotDirDeleted){
 			process((SnapshotDirDeleted)update);
 		}
+		else if(update instanceof DirMoved){
+			process((DirMoved)update);
+		}
+		else if(update instanceof SnapshotMoved){
+			process((SnapshotMoved)update);
+		}
 	}
 	
 	private void process(SnapshotCreated update){
@@ -169,6 +177,35 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		treeFacade.removeNode(node);
 	}
 	
+	private void process(DirMoved update){
+		SnapshotDir dir = update.dir;
+		int newIndex = update.newIndex;
+		DefaultMutableTreeNode node = findNode(dir.getId());
+		treeFacade.moveChild(node, newIndex);
+		openDirs();
+	}
+
+
+	private void process(SnapshotMoved update){
+		Snapshot snapshot = update.snapshot;
+		int newIndex = update.newIndex;
+		DefaultMutableTreeNode node = findNode(snapshot.getId());
+		treeFacade.moveChild(node, newIndex);
+		openDirs();
+	}
+	
+	private void openDirs() {
+		DefaultMutableTreeNode root = treeFacade.getRoot();
+		for(int i=0; i < root.getChildCount(); ++i){
+			DefaultMutableTreeNode dirNode = (DefaultMutableTreeNode)root.getChildAt(i);
+			SnapshotDir dir = (SnapshotDir) dirNode.getUserObject();
+			boolean open = dir.isOpen();
+			if(open)
+				treeFacade.expand(dirNode);
+		}
+	}
+	
+
 	private DefaultMutableTreeNode findNode(String id) {
 		DefaultMutableTreeNode root = treeFacade.getRoot();
 		for(int i=0; i < root.getChildCount(); ++i){

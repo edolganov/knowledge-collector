@@ -222,29 +222,8 @@ public class TreeController extends Controller<Tree>{
 		DefaultMutableTreeNode childNode = getFromStorage(child);
 		if(parentNode != null && childNode != null){
 			int newIndex = event.newIndex;
-			moveChild(parentNode, childNode, newIndex);
+			treeFacade.moveChild(childNode, newIndex);
 		}
-	}
-	
-	private void moveChild(DefaultMutableTreeNode parentNode,
-			DefaultMutableTreeNode childNode, int newIndex) {
-		
-		TreePath childPath = new TreePath(childNode.getPath());
-		TreePath selectedPath = null;
-		if(ui.tree.isPathSelected(childPath)){
-			selectedPath = childPath;
-		}
-		
-		for (int i = 0; i < parentNode.getChildCount(); i++) {
-			DefaultMutableTreeNode candidat = (DefaultMutableTreeNode)parentNode.getChildAt(i);
-			if(candidat == childNode){
-				parentNode.remove(childNode);
-				parentNode.insert(childNode, newIndex);
-			}					
-		}
-		treeFacade.getModel().reload(parentNode);
-		
-		if(selectedPath != null) ui.tree.setSelectionPath(selectedPath);
 	}
 	
 	
