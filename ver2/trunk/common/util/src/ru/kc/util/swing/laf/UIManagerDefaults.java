@@ -116,6 +116,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	/*
 	 *  When the LAF is changed we need to reset the content pane
 	 */
+	@SuppressWarnings("rawtypes")
 	public void resetComponents()
 	{
 		items.clear();
@@ -147,6 +148,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	 *	The item map will contain items for each component or
 	 *  items for each attribute type.
 	 */
+	@SuppressWarnings("rawtypes")
 	private TreeMap buildItemsMap()
 	{
 		UIDefaults defaults = UIManager.getLookAndFeelDefaults();
@@ -348,6 +350,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	/*
 	 *  Change the TabelModel in the table for the selected item
 	 */
+	@SuppressWarnings("rawtypes")
 	private void changeTableModel(String itemName)
 	{
 		//  The model has been created previously so just use it
@@ -523,6 +526,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 		 * @param clazz
 		 * @throws IllegalAccessException
 		 */
+		@SuppressWarnings("serial")
 		private JComponent getSubstitute(Class<?> clazz) throws IllegalAccessException
 		{
 			JComponent standInComponent;
@@ -560,6 +564,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	/*
 	 *  Render the value based on its class.
 	 */
+	@SuppressWarnings("serial")
 	class SampleRenderer extends JLabel implements TableCellRenderer
 	{
 		public SampleRenderer()
@@ -621,6 +626,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	 *  Change the LAF and recreate the UIManagerDefaults so that the properties
 	 *  of the new LAF are correctly displayed.
 	 */
+	@SuppressWarnings("serial")
 	class ChangeLookAndFeelAction extends AbstractAction
 	{
 		private UIManagerDefaults defaults;
@@ -674,6 +680,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener
 	/*
 	 *	Close the frame
 	 */
+	@SuppressWarnings("serial")
 	class ExitAction extends AbstractAction
 	{
 		public ExitAction()

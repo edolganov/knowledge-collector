@@ -18,6 +18,7 @@ import ru.kc.module.snapshots.model.update.SnapshotDeleted;
 import ru.kc.module.snapshots.model.update.SnapshotDirCreated;
 import ru.kc.module.snapshots.model.update.SnapshotDirDeleted;
 import ru.kc.module.snapshots.model.update.SnapshotMoved;
+import ru.kc.module.snapshots.model.update.SnapshotMovedToOtherDir;
 import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
 import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.tools.SnapshotConverter;
@@ -128,6 +129,10 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		else if(update instanceof SnapshotMoved){
 			process((SnapshotMoved)update);
 		}
+		else if(update instanceof SnapshotMovedToOtherDir){
+			process((SnapshotMovedToOtherDir)update);
+		}
+		
 	}
 	
 	private void process(SnapshotCreated update){
@@ -175,6 +180,16 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		SnapshotDir dir = update.dir;
 		DefaultMutableTreeNode node = findNode(dir.getId());
 		treeFacade.removeNode(node);
+	}
+	
+	private void process(SnapshotMovedToOtherDir update){
+		Snapshot snapshot = update.snapshot;
+		SnapshotDir newDir = update.newDir;
+		
+		DefaultMutableTreeNode node = findNode(snapshot.getId());
+		DefaultMutableTreeNode newParent = findNode(newDir.getId());
+		treeFacade.moveNode(newParent, node);
+		openDirs();
 	}
 	
 	private void process(DirMoved update){

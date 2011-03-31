@@ -102,6 +102,7 @@ public class KeyBindings implements ItemListener
 	/*
 	**  Build the emtpy table to be added in the Center
 	*/
+	@SuppressWarnings("serial")
 	private JComponent buildCenterComponent()
 	{
 		DefaultTableModel model = new DefaultTableModel(COLUMN_NAMES, 0);
@@ -396,6 +397,7 @@ public class KeyBindings implements ItemListener
 	 *  Change the LAF and recreate the UIManagerDefaults so that the properties
 	 *  of the new LAF are correctly displayed.
 	 */
+	@SuppressWarnings("serial")
 	class ChangeLookAndFeelAction extends AbstractAction
 	{
 		private String laf;
@@ -434,6 +436,7 @@ public class KeyBindings implements ItemListener
 	/*
 	 *	Close the frame
 	 */
+	@SuppressWarnings("serial")
 	class ExitAction extends AbstractAction
 	{
 		public ExitAction()
