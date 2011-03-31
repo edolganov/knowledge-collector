@@ -17,7 +17,7 @@ import ru.kc.tools.filepersist.update.SetProperty;
 import com.google.gson.Gson;
 
 @Mapping(SnapshotsPanel.class)
-public class CurrentTreeSnapshotController extends Controller<SnapshotsPanel> {
+public class CurrentStateController extends Controller<SnapshotsPanel> {
 
 	
 	private static final String CUR_SNAPSHOT_KEY = "cur-snapshot";

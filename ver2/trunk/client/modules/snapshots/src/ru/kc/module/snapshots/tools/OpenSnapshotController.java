@@ -13,7 +13,7 @@ import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(SnapshotsPanel.class)
-public class TreeNodesController extends Controller<SnapshotsPanel> {
+public class OpenSnapshotController extends Controller<SnapshotsPanel> {
 
 	private TreeFacade treeFacade;
 	
