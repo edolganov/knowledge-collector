@@ -4,6 +4,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.module.snapshots.command.RenameTreeObject;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.tree.MenuController;
@@ -23,7 +24,8 @@ public class TreeMenuController extends Controller<SnapshotsPanel>{
 			
 			@Override
 			public void editingStopped(ChangeEvent e) {
-				System.out.println("update!!!");
+				String newName = cellEditor.getCellEditorValue();
+				invokeSafe(new RenameTreeObject(ui.tree, newName));
 			}
 			
 			@Override
