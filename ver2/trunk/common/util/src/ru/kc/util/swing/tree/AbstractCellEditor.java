@@ -12,7 +12,13 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.plaf.TreeUI;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import ru.kc.util.swing.keyboard.EnterKey;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -134,7 +140,30 @@ public abstract class AbstractCellEditor implements TreeCellEditor {
 		return cellPanel;
 	}
 	
-	protected abstract void fillCellEditorPanel();
+	protected void fillCellEditorPanel() {
+        JTree tree = treeFacade.tree;
+		TreeModel model = tree.getModel();
+        DefaultMutableTreeNode node = treeFacade.getCurrentNode();
+		TreePath path = new TreePath(node.getPath());
+        TreeCellRenderer r = tree.getCellRenderer();
+        TreeUI ui = tree.getUI();
+        int row = ui.getRowForPath(tree, path);
+        int lsr = tree.getLeadSelectionRow();
+        boolean hasFocus = tree.isFocusOwner() && (lsr == row);
+        boolean selected = tree.isPathSelected(path);
+        boolean expanded = tree.isExpanded(path);
+		boolean leaf = model.isLeaf(node);
+		Component component = r.getTreeCellRendererComponent(tree, 
+				node, selected, expanded, 
+                leaf, row, hasFocus);
+        
+        if(component instanceof DefaultTreeCellRenderer){
+        	DefaultTreeCellRenderer render = (DefaultTreeCellRenderer) component;
+    		label.setIcon(render.getIcon());
+    		text.setText(render.getText());
+        }
+        else throw new IllegalStateException("unknow type of tree render: "+r);
+	}
 
 
 

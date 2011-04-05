@@ -17,13 +17,13 @@ public class CellEditor extends AbstractCellEditor {
 	protected boolean isStopCellEditing() {
 		String name = text.getText();
 		
+		boolean empty = Check.isEmpty(name);
+		if(empty) return false;
+		
 		Node node = treeFacade.getCurrentObject(Node.class);
 		if(node != null && node.getName().equals(name)){
 			return false;
 		}
-			
-		boolean empty = Check.isEmpty(name);
-		if(empty) return false;
 		
 		return true;
 	}
