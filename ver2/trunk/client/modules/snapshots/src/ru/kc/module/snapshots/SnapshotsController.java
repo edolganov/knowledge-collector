@@ -21,7 +21,8 @@ import ru.kc.module.snapshots.model.update.SnapshotDirRenamed;
 import ru.kc.module.snapshots.model.update.SnapshotMoved;
 import ru.kc.module.snapshots.model.update.SnapshotMovedToOtherDir;
 import ru.kc.module.snapshots.model.update.SnapshotRenamed;
-import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
+import ru.kc.module.snapshots.model.update.AbstractSnapshotsUpdate;
+import ru.kc.module.snapshots.model.update.SnapshotUpdated;
 import ru.kc.module.snapshots.tools.CellRender;
 import ru.kc.module.snapshots.tools.SnapshotConverter;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
@@ -85,7 +86,7 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		
 		if(old.equals(owner)){
 			
-			List<SnapshotsUpdate> updates = findUpdates(nodeUpdates);
+			List<AbstractSnapshotsUpdate> updates = findUpdates(nodeUpdates);
 			if(updates.size() > 0){
 				synchronizedTree(updates);
 			}
@@ -93,26 +94,26 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 	}
 
-	private List<SnapshotsUpdate> findUpdates(Collection<UpdateRequest> nodeUpdates) {
-		ArrayList<SnapshotsUpdate> out = new ArrayList<SnapshotsUpdate>();
+	private List<AbstractSnapshotsUpdate> findUpdates(Collection<UpdateRequest> nodeUpdates) {
+		ArrayList<AbstractSnapshotsUpdate> out = new ArrayList<AbstractSnapshotsUpdate>();
 		for(UpdateRequest nodeUpdate : nodeUpdates){
 			if(nodeUpdate instanceof SetProperty){
 				Object additionInfo = ((SetProperty) nodeUpdate).additionInfo;
-				if(additionInfo instanceof SnapshotsUpdate){
-					out.add((SnapshotsUpdate)additionInfo);
+				if(additionInfo instanceof AbstractSnapshotsUpdate){
+					out.add((AbstractSnapshotsUpdate)additionInfo);
 				}
 			}
 		}
 		return out;
 	}
 
-	private void synchronizedTree(List<SnapshotsUpdate> updates) {
-		for(SnapshotsUpdate update : updates){
+	private void synchronizedTree(List<AbstractSnapshotsUpdate> updates) {
+		for(AbstractSnapshotsUpdate update : updates){
 			synchronizedTree(update);
 		}
 	}
 
-	private void synchronizedTree(SnapshotsUpdate update) {
+	private void synchronizedTree(AbstractSnapshotsUpdate update) {
 		if(update instanceof SnapshotCreated){
 			process((SnapshotCreated)update);
 		}
@@ -139,6 +140,9 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		}
 		else if(update instanceof SnapshotRenamed){
 			process((SnapshotRenamed)update);
+		}
+		else if(update instanceof SnapshotUpdated){
+			process((SnapshotUpdated)update);
 		}
 	}
 	
@@ -202,6 +206,14 @@ public class SnapshotsController extends Controller<SnapshotsPanel>{
 		DefaultMutableTreeNode node = findNode(renamed.getId());
 		Snapshot snapshot = (Snapshot)node.getUserObject();
 		snapshot.setName(renamed.getName());
+		treeFacade.refresh(node);
+	}
+	
+	private void process(SnapshotUpdated update){
+		Snapshot updated = update.snapshot;
+		DefaultMutableTreeNode node = findNode(updated.getId());
+		Snapshot snapshot = (Snapshot)node.getUserObject();
+		snapshot.setRoot(updated.getRoot());
 		treeFacade.refresh(node);
 	}
 	

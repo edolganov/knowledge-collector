@@ -3,7 +3,7 @@ package ru.kc.module.snapshots.model.update;
 import ru.kc.module.snapshots.model.SnapshotDir;
 
 
-public class SnapshotDirCreated extends SnapshotsUpdate {
+public class SnapshotDirCreated extends AbstractSnapshotsUpdate {
 	
 	public final SnapshotDir dir;
 	public final int index;

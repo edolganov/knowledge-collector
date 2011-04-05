@@ -4,7 +4,7 @@ import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 
 
-public class SnapshotMoved extends SnapshotsUpdate {
+public class SnapshotMoved extends AbstractSnapshotsUpdate {
 	
 	public final SnapshotDir dir;
 	public final Snapshot snapshot;

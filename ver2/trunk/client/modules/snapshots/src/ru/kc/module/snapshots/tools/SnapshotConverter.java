@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.SnapshotDir;
-import ru.kc.module.snapshots.model.update.SnapshotsUpdate;
+import ru.kc.module.snapshots.model.update.AbstractSnapshotsUpdate;
 import ru.kc.tools.filepersist.update.SetProperty;
 
 public class SnapshotConverter {
@@ -27,7 +27,7 @@ public class SnapshotConverter {
 	}
 	
 	
-	public SetProperty createUpdate(List<SnapshotDir> snapshotDirs, SnapshotsUpdate additionInfo){
+	public SetProperty createUpdate(List<SnapshotDir> snapshotDirs, AbstractSnapshotsUpdate additionInfo){
 		String data = new Gson().toJson(snapshotDirs);
 		return new SetProperty(SNAPSHOTS_PROPERTY_KEY, data, additionInfo);
 	}

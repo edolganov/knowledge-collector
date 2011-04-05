@@ -3,11 +3,11 @@ package ru.kc.module.snapshots.model.update;
 import ru.kc.module.snapshots.model.Snapshot;
 
 
-public class SnapshotRenamed extends AbstractSnapshotsUpdate {
+public class SnapshotUpdated extends AbstractSnapshotsUpdate {
 	
 	public final Snapshot snapshot;
 
-	public SnapshotRenamed(Snapshot snapshot) {
+	public SnapshotUpdated(Snapshot snapshot) {
 		super();
 		this.snapshot = snapshot;
 	}

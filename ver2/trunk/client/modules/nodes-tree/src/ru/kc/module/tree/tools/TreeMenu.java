@@ -31,7 +31,6 @@ import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
-import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.domain.RootDomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.util.swing.icon.IconUtil;

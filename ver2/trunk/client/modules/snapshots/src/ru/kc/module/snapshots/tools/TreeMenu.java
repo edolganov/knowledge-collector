@@ -13,6 +13,9 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 import ru.kc.module.snapshots.command.DeleteTreeObject;
+import ru.kc.module.snapshots.command.UpdateSnapshot;
+import ru.kc.module.snapshots.model.Snapshot;
+import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
 import ru.kc.util.swing.icon.IconUtil;
@@ -61,6 +64,19 @@ public class TreeMenu extends JPopupMenu {
 			}
 
 		});
+		
+		resnapshot.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DefaultMutableTreeNode node = treeFacade.getCurrentNode();
+				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
+				Snapshot snapshot = (Snapshot) node.getUserObject();
+				SnapshotDir dir = (SnapshotDir)parent.getUserObject();
+				commandService.invokeSafe(new UpdateSnapshot(dir, snapshot));
+			}
+
+		});
 
 	}
 
@@ -71,10 +87,19 @@ public class TreeMenu extends JPopupMenu {
 			return;
 
 		removeAll();
+		
+		Object ob = currentNode.getUserObject();
 
-		add(rename);
-		add(resnapshot);
-		add(delete);
+		if(ob instanceof Snapshot){
+			add(rename);
+			add(resnapshot);
+			add(delete);
+		} 
+		else if(ob instanceof SnapshotDir){
+			add(rename);
+			add(delete);
+		}
+
 
 		super.show(invoker, x, y);
 	}
