@@ -15,7 +15,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(Dashboard.class)
-public class ExternalActionsController extends Controller<Dashboard>{
+public class SplitPanelsController extends Controller<Dashboard>{
 	
 	private static final String COMMON_GROUP = "3-common";
 	
