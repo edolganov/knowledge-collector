@@ -15,7 +15,7 @@ public class CellRender extends DefaultTreeCellRenderer {
 	
 	public CellRender() {
 		super();
-
+		putClientProperty("html.disable", Boolean.TRUE);
 	}
 
 	@Override
