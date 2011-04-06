@@ -14,7 +14,7 @@ public class Request<T> extends Event {
 
 	@Override
 	public String toString() {
-		return "Request [responseData=" + responseData + "]";
+		return getClass().getSimpleName()+" [responseData=" + responseData + "]";
 	}
 	
 	

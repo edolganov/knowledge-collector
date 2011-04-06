@@ -115,6 +115,9 @@ public class Listeners {
 		if(DomainUtil.isDomainSpecific(event)){
 			if(source instanceof DomainMember){
 				domainKey = ((DomainMember) source).getDomainKey();
+				if(domainKey.equals(DomainMember.ROOT_DOMAIN_KEY)){
+					throw new IllegalStateException("Root domain member "+source+" fire domain specific event "+event);
+				}
 			} else {
 				throw new IllegalStateException(source+" should be a DomainMember for firing domain specific "+event);
 			}

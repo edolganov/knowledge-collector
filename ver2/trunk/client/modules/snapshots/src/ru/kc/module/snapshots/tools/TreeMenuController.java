@@ -35,7 +35,7 @@ public class TreeMenuController extends Controller<SnapshotsPanel>{
 		ui.tree.setRowHeight(0);
 		ui.tree.setEditable(true);
 		treeFacade.setSingleSelection();
-		treeFacade.setPopupMenu(new TreeMenu(ui.tree, appContext), new MenuController() {
+		treeFacade.setPopupMenu(new TreeMenu(ui.tree, appContext, this), new MenuController() {
 			
 			@Override
 			public boolean canShow() {

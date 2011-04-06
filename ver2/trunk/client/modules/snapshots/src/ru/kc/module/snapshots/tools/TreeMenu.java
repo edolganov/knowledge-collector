@@ -18,6 +18,7 @@ import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
+import ru.kc.platform.domain.DomainMember;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
@@ -30,7 +31,7 @@ public class TreeMenu extends JPopupMenu {
 	
 	TreeFacade treeFacade;
 
-	public TreeMenu(JTree tree, AppContext appContext) {
+	public TreeMenu(JTree tree, AppContext appContext, final DomainMember domainMember) {
 		treeFacade = new TreeFacade(tree);
 
 		final CommandService commandService = appContext.commandService;
@@ -60,7 +61,9 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				commandService.invokeSafe(new DeleteTreeObject(treeFacade.tree));
+				DeleteTreeObject command = new DeleteTreeObject(treeFacade.tree);
+				command.setDomainMember(domainMember);
+				commandService.invokeSafe(command);
 			}
 
 		});
@@ -73,7 +76,9 @@ public class TreeMenu extends JPopupMenu {
 				DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
 				Snapshot snapshot = (Snapshot) node.getUserObject();
 				SnapshotDir dir = (SnapshotDir)parent.getUserObject();
-				commandService.invokeSafe(new UpdateSnapshot(dir, snapshot));
+				UpdateSnapshot command = new UpdateSnapshot(dir, snapshot);
+				command.setDomainMember(domainMember);
+				commandService.invokeSafe(command);
 			}
 
 		});
