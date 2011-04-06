@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JSplitPane;
 
 import ru.kc.common.controller.Controller;
@@ -19,40 +18,79 @@ public class SplitPanelsController extends Controller<Dashboard>{
 	
 	private static final String COMMON_GROUP = "3-common";
 	
-	ButtonFacade showHideProps;
-	JSplitPane leftSplitPane ;
-	ImageIcon leftIcon = IconUtil.get("/ru/kc/common/img/left.png");
-	ImageIcon rightIcon = IconUtil.get("/ru/kc/common/img/right.png");
+	ButtonFacade showHideLeft;
+	ButtonFacade showHideRight;
+	
+	JSplitPane leftSplitPane;
+	JSplitPane rightSplitPane;
+	
 	
 	@Override
 	public void init() {
 		
-		leftSplitPane = ui.jSplitPane2;
-		leftSplitPane.addPropertyChangeListener(new PropertyChangeListener() {
+		leftSplitPane = ui.jSplitPane1;
+		leftSplitPane.setContinuousLayout(true);
+		leftSplitPane.setDividerLocation(180);
+
+		rightSplitPane = ui.jSplitPane2;
+		rightSplitPane.setDividerLocation(600);
+		rightSplitPane.setContinuousLayout(true);
+		rightSplitPane.setResizeWeight(1d);
+		
+		rightSplitPane.addPropertyChangeListener(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
 			
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				String propertyName = evt.getPropertyName();
-				System.out.println(propertyName);
-				if("lastDividerLocation".equals(propertyName)){
-					Integer newValue = (Integer)evt.getNewValue();
-					System.out.println(leftSplitPane.getWidth()+" "+newValue);
-					
-				}
+		        JSplitPane splitPane = (JSplitPane)evt.getSource();
+		        int loc = ((Integer)evt.getNewValue()).intValue();
+		        int size = splitPane.getDividerSize();
+		        int width = splitPane.getWidth();
+		        if(loc+size+1 == width){
+		        	System.out.println("collapsed");
+		        }
 			}
 		});
 		
-		showHideProps = actionService.addButtonAction();
-		showHideProps.setIcon(rightIcon);
-		showHideProps.setToolTipText("Create dir");
-		showHideProps.setGroup(COMMON_GROUP);
-		showHideProps.addListener(new ActionListener() {
+		showHideLeft = actionService.addButtonAction();
+		showHideLeft.setIcon(IconUtil.get("/ru/kc/common/img/left_panel.png"));
+		showHideLeft.setToolTipText("Show/hide left panel");
+		showHideLeft.setGroup(COMMON_GROUP);
+		showHideLeft.addListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//invokeSafe(new CreateDirRequest(parent));
+				showHide(leftSplitPane, true);
 			}
 		});
+		
+		showHideRight = actionService.addButtonAction();
+		showHideRight.setIcon(IconUtil.get("/ru/kc/common/img/right_panel.png"));
+		showHideRight.setToolTipText("Show/hide right panel");
+		showHideRight.setGroup(COMMON_GROUP);
+		showHideRight.addListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showHide(rightSplitPane, false);
+			}
+		});
+	}
+	
+	private void showHide(JSplitPane pane, boolean left){
+		if(left){
+			if(pane.getDividerLocation() != pane.getMinimumDividerLocation()) {
+				pane.setDividerLocation(pane.getMinimumDividerLocation());
+			} else {
+				pane.setDividerLocation(pane.getLastDividerLocation());
+			}
+		} else {
+			if(pane.getDividerLocation() != pane.getMaximumDividerLocation()) {
+				pane.setDividerLocation(pane.getMaximumDividerLocation());
+			} else {
+				pane.setDividerLocation(pane.getLastDividerLocation());
+			}
+		}
+
 	}
 
 }
