@@ -11,7 +11,6 @@
 	<classpathentry kind="src" path="client/common/src"/>
 	<classpathentry kind="src" path="client/components/src"/>
 	<classpathentry kind="src" path="client/main/src"/>
-	<classpathentry kind="src" path="client/main/script-src"/>
 	<classpathentry kind="src" path="client/modules/dashboard/src"/>
 	<classpathentry kind="src" path="client/modules/nodes-tree/src"/>
 	<classpathentry kind="src" path="client/modules/node-properties/src"/>

@@ -40,7 +40,8 @@ public final class AppContext {
 			List<Object> dataForInject, CommandService commandService,
 			EventManager eventManager,
 			RuntimeStorage runtimeStorage,
-			GlobalObjects globalObjects, ComponentScanner componentScanner) {
+			GlobalObjects globalObjects, 
+			ComponentScanner componentScanner) {
 		super();
 		this.rootUI = rootUI;
 		this.scriptsService = scriptsService;

@@ -26,6 +26,7 @@ import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.init.InitializerScan;
 import ru.kc.platform.module.ModuleScan;
+import ru.kc.platform.profile.ProfileManager;
 import ru.kc.platform.runtimestorage.RuntimeStorage;
 import ru.kc.platform.scripts.controller.ScriptControllerScan;
 import ru.kc.platform.scripts.controller.ScriptServiceControlleImpl;
@@ -59,6 +60,7 @@ public class App implements DomainMember{
 	RuntimeStorage runtimeStorageService;
 	GlobalObjects globalObjects;
 	ComponentScanner componentScanner;
+	ProfileManager profileManager;
 
 	
 	public void setRootUI(JFrame rootUI) {
@@ -147,6 +149,8 @@ public class App implements DomainMember{
 		for (ObjectHandler handler : uiObjectHandlers) {
 			componentScanner.addHandler(handler);
 		}
+		
+		profileManager = new ProfileManager(eventManager);
 	}
 	
 	
@@ -210,6 +214,7 @@ public class App implements DomainMember{
 		new ScriptControllerScan(context.scriptsService).scanAndInit(context.rootUI);
 		context.scriptsService.addListener(new RootUIScriptListener(context));
 		
+		profileManager.load();
 		eventManager.fireEventInEDT(this, new AppInited());
 	}
 	
@@ -237,6 +242,7 @@ public class App implements DomainMember{
 	}
 
 	protected void closeRequest() {
+		profileManager.persist();
 		eventManager.fireEventInEDT(this, new AppClosing());
 		System.exit(0);
 	}
