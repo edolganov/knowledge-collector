@@ -1,4 +1,4 @@
-package ru.kc.main;
+package ru.kc.main.tab;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -12,7 +12,6 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.event.OpenNodeRequest;
-import ru.kc.main.tab.TabModule;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.annotations.Mapping;

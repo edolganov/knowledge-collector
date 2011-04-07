@@ -1,4 +1,4 @@
-package ru.kc.main;
+package ru.kc.main.tools;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;

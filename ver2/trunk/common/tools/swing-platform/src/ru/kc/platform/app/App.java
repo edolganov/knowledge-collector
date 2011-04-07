@@ -16,11 +16,13 @@ import org.apache.commons.logging.LogFactory;
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.common.event.AppInited;
+import ru.kc.platform.common.event.CloseRequest;
 import ru.kc.platform.controller.ControllerScan;
 import ru.kc.platform.controller.ControllersPool;
 import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.platform.event.ExceptionHandler;
+import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.platform.global.GlobalObjects;
 import ru.kc.platform.init.InitializerScan;
 import ru.kc.platform.module.ModuleScan;
@@ -132,6 +134,7 @@ public class App implements DomainMember{
 				log.error("error while fire event",e);
 			}
 		});
+		eventManager.addObjectMethodListeners(this);
 		
 		runtimeStorageService = new RuntimeStorage();
 		
@@ -208,6 +211,17 @@ public class App implements DomainMember{
 		context.scriptsService.addListener(new RootUIScriptListener(context));
 		
 		eventManager.fireEventInEDT(this, new AppInited());
+	}
+	
+	@EventListener
+	public void onCloseRequest(CloseRequest request){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				closeRequest();
+			}
+		});
 	}
 
 	private void initClosingEvent() {
