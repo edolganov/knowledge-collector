@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,6 +14,7 @@ import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreePath;
 
 import ru.kc.common.Context;
+import ru.kc.common.dashboard.event.OpenHideRightPanel;
 import ru.kc.common.node.NodeIcon;
 import ru.kc.common.node.command.CreateDirRequest;
 import ru.kc.common.node.command.CreateFileLinkRequest;
@@ -31,7 +31,7 @@ import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
-import ru.kc.platform.domain.RootDomainMember;
+import ru.kc.platform.domain.DomainMember;
 import ru.kc.platform.event.EventManager;
 import ru.kc.util.swing.icon.IconUtil;
 import ru.kc.util.swing.tree.TreeFacade;
@@ -62,16 +62,13 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem fileLinkToParent = new JMenuItem("File link",
 			NodeIcon.getIcon(FileLink.class));
 
-	JMenuItem showHideInfo = new JMenuItem("");
-	ImageIcon leftIcon = IconUtil.get("/ru/kc/common/img/left.png");
-	ImageIcon rightIcon = IconUtil.get("/ru/kc/common/img/right.png");
+	JMenuItem showHideInfo = new JMenuItem("Show/hide right panel", IconUtil.get("/ru/kc/common/img/right_panel.png"));
 
-	boolean showInfo = true;
 
 	TreeFacade treeFacade;
 	NodeEditionsAggregator nodeEditionsAggregator;
 
-	public TreeMenu(JTree tree, AppContext appContext, Context context) {
+	public TreeMenu(JTree tree, AppContext appContext, Context context, final DomainMember domainMember) {
 		treeFacade = new TreeFacade(tree);
 
 		final CommandService commandService = appContext.commandService;
@@ -105,7 +102,7 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
-					events.fireEventInEDT(new RootDomainMember(this), new UpdateNodeRequest(node));
+					events.fireEventInEDT(domainMember, new UpdateNodeRequest(node));
 				}
 			}
 		});
@@ -116,7 +113,7 @@ public class TreeMenu extends JPopupMenu {
 			public void actionPerformed(ActionEvent e) {
 				Node node = treeFacade.getCurrentObject(Node.class);
 				if(node != null){
-					events.fireEventInEDT(new RootDomainMember(this), new RevertNodeRequest(node));
+					events.fireEventInEDT(domainMember, new RevertNodeRequest(node));
 				}
 			}
 		});
@@ -229,8 +226,7 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// App.getDefault().fireAction(this,
-				// "need-show-hide-info-action");
+				events.fireEventInEDT(domainMember, new OpenHideRightPanel());
 			}
 
 		});
@@ -291,14 +287,6 @@ public class TreeMenu extends JPopupMenu {
 		boolean isRootNode = currentNode.isRoot();
 		parent.setEnabled(!isRootNode);
 		add(parent);
-
-		if (showInfo) {
-			showHideInfo.setText("Hide info panel");
-			showHideInfo.setIcon(rightIcon);
-		} else {
-			showHideInfo.setText("Show info panel");
-			showHideInfo.setIcon(leftIcon);
-		}
 		add(showHideInfo);
 		addSeparator();
 

@@ -2,15 +2,15 @@ package ru.kc.module.dashboard.tools;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JSplitPane;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.common.dashboard.event.OpenHideRightPanel;
 import ru.kc.module.dashboard.ui.Dashboard;
 import ru.kc.platform.action.facade.ButtonFacade;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(Dashboard.class)
@@ -37,20 +37,6 @@ public class SplitPanelsController extends Controller<Dashboard>{
 		rightSplitPane.setContinuousLayout(true);
 		rightSplitPane.setResizeWeight(1d);
 		
-		rightSplitPane.addPropertyChangeListener(JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-		        JSplitPane splitPane = (JSplitPane)evt.getSource();
-		        int loc = ((Integer)evt.getNewValue()).intValue();
-		        int size = splitPane.getDividerSize();
-		        int width = splitPane.getWidth();
-		        if(loc+size+1 == width){
-		        	System.out.println("collapsed");
-		        }
-			}
-		});
-		
 		showHideLeft = actionService.addButtonAction();
 		showHideLeft.setIcon(IconUtil.get("/ru/kc/common/img/left_panel.png"));
 		showHideLeft.setToolTipText("Show/hide left panel");
@@ -74,6 +60,11 @@ public class SplitPanelsController extends Controller<Dashboard>{
 				showHide(rightSplitPane, false);
 			}
 		});
+	}
+	
+	@EventListener
+	public void onOpenHideRightPanel(OpenHideRightPanel event){
+		showHide(rightSplitPane, false);
 	}
 	
 	private void showHide(JSplitPane pane, boolean left){

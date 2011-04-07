@@ -17,7 +17,7 @@ public class SetSizeAndPosition extends ScriptController<MainForm>{
 		//size
 		int width = 1024;
 		int height = 540;
-		ui.setMinimumSize(new Dimension(width, height));
+		ui.setMinimumSize(new Dimension(560, 390));
 		ui.setSize(width, height);
 		
         //position
