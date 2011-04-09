@@ -55,7 +55,8 @@ public class TabController extends Controller<TabPanel>{
 	}
 	
 	private void addSystemButtons() {
-		MainMenu mainMenu = new MainMenu();
+		MainMenu mainMenu = new MainMenu(appContext.eventManager, this);
+		
 		DropDownButton dropDownButton = new DropDownButton();
 		dropDownButton.setIcon(IconUtil.get("/ru/kc/common/img/mainMenu.png"));
 		dropDownButton.setMenu(mainMenu);

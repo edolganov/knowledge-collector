@@ -4,35 +4,41 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JTree;
 
-import ru.kc.common.Context;
-import ru.kc.platform.app.AppContext;
+import ru.kc.platform.common.event.CloseRequest;
 import ru.kc.platform.domain.DomainMember;
-import ru.kc.util.swing.icon.IconUtil;
+import ru.kc.platform.event.EventManager;
 
 @SuppressWarnings("serial")
 public class MainMenu extends JPopupMenu {
 
-	JMenuItem delete = new JMenuItem("Delete  (Delete)", IconUtil.get("/ru/kc/common/img/delete.png"));
+	JMenuItem exit = new JMenuItem("Exit");
+	
+	JMenuItem importItem = new JMenuItem("Import...");
+	
 
-	public MainMenu() {
+	public MainMenu(final EventManager eventManager, final DomainMember member) {
 
 
-		delete.addActionListener(new ActionListener() {
+		exit.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				DefaultMutableTreeNode treeNode = treeFacade.getCurrentNode();
-//				if (treeNode.isRoot())
-//					return;
-//
-//				Node node = treeFacade.getCurrentObject(Node.class);
-//				commandService.invokeSafe(new DeleteNode(node));
+				eventManager.fireEventInEDT(member, new CloseRequest());
 			}
 
+		});
+		
+		importItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 
 
@@ -40,7 +46,11 @@ public class MainMenu extends JPopupMenu {
 
 	@Override
 	public void show(Component invoker, int x, int y) {
-		add(delete);
+		removeAll();
+		
+		add(importItem);
+		addSeparator();
+		add(exit);
 
 		super.show(invoker, x, y);
 	}
