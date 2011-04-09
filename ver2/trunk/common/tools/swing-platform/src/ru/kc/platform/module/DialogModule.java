@@ -14,9 +14,15 @@ import ru.kc.util.swing.dialog.DialogUtil;
 public abstract class DialogModule<T extends JDialog>{
 	
 	protected ModuleController<T> controller;
+	private boolean addEscapeListener = true;
 	
 	public DialogModule() {
+		this(true);
+	}
+	
+	public DialogModule(boolean addEscapeListener) {
 		super();
+		this.addEscapeListener = addEscapeListener;
 	}
 	
 	public T createDialog(Frame owner, boolean modal){
@@ -34,7 +40,7 @@ public abstract class DialogModule<T extends JDialog>{
 			}
 		};
 		
-		DialogUtil.init(ui);
+		DialogUtil.init(ui, addEscapeListener);
 		tryInit();
 		
 		ui.addWindowListener(new WindowAdapter() {

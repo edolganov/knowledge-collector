@@ -13,12 +13,19 @@ public class DialogUtil {
 	
 	
 	public static <T extends JDialog> T init(final T dialog){
+		return init(dialog, true);
+	}
+	
+	public static <T extends JDialog> T init(final T dialog, boolean addEscapeListener){
 		Window owner = dialog.getOwner();
 		
 		if(owner != null){
 			dialog.setLocationRelativeTo(owner);
 		}
-		addEscapeListener(dialog);
+		if(addEscapeListener){
+			addEscapeListener(dialog);
+		}
+
 		
 		return dialog;
 	}

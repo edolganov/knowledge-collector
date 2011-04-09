@@ -106,12 +106,12 @@ public class ImportOldDataDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        doClose(RET_CANCEL);
+        //doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     /** Closes the dialog */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
-        doClose(RET_CANCEL);
+        //doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
 
     private void doClose(int retStatus) {

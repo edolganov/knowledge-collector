@@ -8,6 +8,10 @@ import ru.kc.module.imports.ui.ImportOldDataDialog;
 import ru.kc.platform.module.DialogModule;
 
 public class ImportOldDataModule extends DialogModule<ImportOldDataDialog>{
+	
+	public ImportOldDataModule() {
+		super(false);
+	}
 
 	@Override
 	protected ImportOldDataDialog createUI(Frame parent, boolean modal) {
