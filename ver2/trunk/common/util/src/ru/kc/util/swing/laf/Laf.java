@@ -59,11 +59,14 @@ public class Laf {
 	
     public static void setupEnterActionForAllButtons() {
         InputMap im = (InputMap) UIManager.getDefaults().get("Button.focusInputMap");
+        InputMap toggleButtonIm = (InputMap) UIManager.getDefaults().get("ToggleButton.focusInputMap");
         Object pressedAction = im.get(KeyStroke.getKeyStroke("pressed SPACE"));
         Object releasedAction = im.get(KeyStroke.getKeyStroke("released SPACE"));
 
         im.put(KeyStroke.getKeyStroke("pressed ENTER"), pressedAction);
         im.put(KeyStroke.getKeyStroke("released ENTER"), releasedAction);
+        toggleButtonIm.put(KeyStroke.getKeyStroke("pressed ENTER"), pressedAction);
+        toggleButtonIm.put(KeyStroke.getKeyStroke("released ENTER"), releasedAction);
     }
     
     public static void setupComboboxInputMap(){

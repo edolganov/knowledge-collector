@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.main.tab.tools.MainMenu;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
 import ru.kc.platform.action.ButtonAction;
@@ -16,6 +16,7 @@ import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.swing.button.DropDownButton;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TabPanel.class)
@@ -54,11 +55,14 @@ public class TabController extends Controller<TabPanel>{
 	}
 	
 	private void addSystemButtons() {
-		JButton menu = new JButton(IconUtil.get("/ru/kc/common/img/mainMenu.png"));
-		menu.setToolTipText("menu");
-		toolbar.add(menu);
+		MainMenu mainMenu = new MainMenu();
+		DropDownButton dropDownButton = new DropDownButton();
+		dropDownButton.setIcon(IconUtil.get("/ru/kc/common/img/mainMenu.png"));
+		dropDownButton.setMenu(mainMenu);
+		dropDownButton.setToolTipText("Main menu");
+		toolbar.add(dropDownButton);
 	}
-	
+
 	private void addSeparator() {
 		toolbar.add(new JToolBar.Separator());
 	}
