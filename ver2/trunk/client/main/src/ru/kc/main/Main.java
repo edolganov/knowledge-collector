@@ -42,7 +42,7 @@ public class Main {
 		File scriptsDevDir = new File("./client/main/script-src");
 		File knowDir = new File(dataDir,"know");
 		Context context = createContext(knowDir);
-		String rootControllersPackage = "ru.kc.main";
+		String rootControllersPackage = "ru.kc";
 		String globalPackagePreffix = "ru.kc";
 		
 		Platform.setDataDir(dataDir);
