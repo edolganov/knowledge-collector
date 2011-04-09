@@ -4,17 +4,19 @@ public class ImportOldDataTextModel {
 	
 	
 	public String title = "";
-	public String searchTitle = "";
-	
-	private char newLine = '\n';
+	private String text = "";
 	
 	
 	public String getText(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(title);
-		sb.append(newLine);
-		sb.append(searchTitle);
+		sb.append(text);
 		return sb.toString();
+	}
+
+
+	public void addText(String newString) {
+		text = text+"\n"+newString;
 	}
 
 }

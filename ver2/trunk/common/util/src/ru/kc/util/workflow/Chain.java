@@ -29,7 +29,12 @@ public class Chain {
 					ReflectionUtil.injectDataFromContext(curObject, context);
 				}
 				curObject = curObject.getInvokeAndGetNext();
-				chainListener.onDone(old);
+				
+				boolean canContinue = chainListener.continueAfter(old);
+				if(!canContinue){
+					chainListener.onCanceled(old);
+					return;
+				}
 			}catch (Exception e) {
 				chainListener.onException(old, e);
 				return;

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTextArea;
@@ -12,9 +13,13 @@ import javax.swing.SwingWorker;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.model.Node;
+import ru.kc.module.imports.oldclient.chain.SearchData;
 import ru.kc.module.imports.oldclient.model.ImportOldDataTextModel;
 import ru.kc.module.imports.ui.ImportOldDataDialog;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.workflow.Chain;
+import ru.kc.util.workflow.ChainListener;
+import ru.kc.util.workflow.ChainObject;
 
 @Mapping(ImportOldDataDialog.class)
 public class ImportOldDataController extends Controller<ImportOldDataDialog> {
@@ -64,15 +69,50 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	
 	@SuppressWarnings("rawtypes")
 	protected void startImport() {
+		
 		final ImportOldDataTextModel textModel = new ImportOldDataTextModel();
-		textModel.title = "Import old data log";
+		textModel.title = "Importing...";
+		
+		final ArrayList<Object> chainContext = new ArrayList<Object>();
+		chainContext.add(textModel);
+		chainContext.add(dataDir);
+		chainContext.add(importRoot);
 		
 		SwingWorker worker = new SwingWorker() {
 
 			@Override
 			protected Object doInBackground() throws Exception {
-				// TODO Auto-generated method stub
+				
+				SearchData first = new SearchData();
+				Chain chain = new Chain(first, chainContext, new ChainListener() {
+					
+					@Override
+					public void onFinish() {}
+					
+					@Override
+					public void onException(ChainObject ob, Exception e) {
+						// TODO Auto-generated method stub
+						
+					}
+					
+					@Override
+					public boolean continueAfter(ChainObject ob) {
+						publishChainData();
+						return true;
+					}
+
+					@Override
+					public void onCanceled(ChainObject ob) {
+						
+					}
+				});
+				chain.execute();
 				return null;
+			}
+			
+			@SuppressWarnings("unchecked")
+			public void publishChainData(){
+				publish();
 			}
 			
 			@Override

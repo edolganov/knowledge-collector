@@ -2,7 +2,9 @@ package ru.kc.util.workflow;
 
 public interface ChainListener {
 	
-	void onDone(ChainObject ob);
+	boolean continueAfter(ChainObject ob);
+	
+	void onCanceled(ChainObject ob);
 	
 	void onFinish();
 	
