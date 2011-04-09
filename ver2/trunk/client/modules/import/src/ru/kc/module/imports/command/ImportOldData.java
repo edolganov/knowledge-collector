@@ -6,7 +6,7 @@ import javax.swing.JFileChooser;
 
 import ru.kc.common.command.Command;
 import ru.kc.model.Node;
-import ru.kc.module.imports.tools.ImportOldDataModule;
+import ru.kc.module.imports.oldclient.ImportOldDataModule;
 
 public class ImportOldData extends Command<Void>{
 	

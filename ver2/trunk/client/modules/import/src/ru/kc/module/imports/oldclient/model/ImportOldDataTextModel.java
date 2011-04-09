@@ -1,4 +1,4 @@
-package ru.kc.module.imports.tools;
+package ru.kc.module.imports.oldclient.model;
 
 public class ImportOldDataTextModel {
 	

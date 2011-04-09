@@ -1,4 +1,4 @@
-package ru.kc.module.imports.tools;
+package ru.kc.module.imports.oldclient;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +12,7 @@ import javax.swing.SwingWorker;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.model.Node;
+import ru.kc.module.imports.oldclient.model.ImportOldDataTextModel;
 import ru.kc.module.imports.ui.ImportOldDataDialog;
 import ru.kc.platform.annotations.Mapping;
 
@@ -65,7 +66,6 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	protected void startImport() {
 		final ImportOldDataTextModel textModel = new ImportOldDataTextModel();
 		textModel.title = "Import old data log";
-		textModel.searchTitle = "Searching old data...";
 		
 		SwingWorker worker = new SwingWorker() {
 
