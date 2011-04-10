@@ -3,6 +3,7 @@ package ru.kc.module.imports.oldclient.chain;
 import java.io.File;
 import java.util.Map;
 
+import ru.kc.module.imports.oldclient.DataLoader;
 import ru.kc.module.imports.oldclient.model.ImportOldDataTextModel;
 import ru.kc.util.annotation.Inject;
 import ru.kc.util.workflow.ChainObject;
@@ -15,6 +16,8 @@ public abstract class AbstractChainObject implements ChainObject {
 	protected ImportOldDataTextModel textModel;
 	@Inject
 	protected Map<String, Object> invokeContext;
+	@Inject
+	protected DataLoader dataLoader;
 	
 	
 	protected File getDataFile(File parent){

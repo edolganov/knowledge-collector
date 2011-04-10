@@ -2,6 +2,7 @@ package ru.kc.module.imports.oldclient.chain;
 
 import java.io.File;
 
+import ru.kc.module.imports.oldclient.oldmodel.Root;
 import ru.kc.util.workflow.ChainObject;
 
 public class ProcessData extends AbstractChainObject {
@@ -15,6 +16,14 @@ public class ProcessData extends AbstractChainObject {
 
 	@Override
 	public ChainObject getInvokeAndGetNext() throws Exception {
+		File dataDir = getDataFile(parentDir);
+		if(dataDir == null)
+			return null;
+		
+		Root root = dataLoader.loadFile(dataDir);
+		System.out.println(root);
+		
+		
 		
 		return null;
 	}
