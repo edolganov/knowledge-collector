@@ -4,7 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 
 @XStreamAlias("dir")
-public class OldDir extends Node {
+public class OldDir extends OldNode {
 	
 
 }

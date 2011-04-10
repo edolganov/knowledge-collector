@@ -1,6 +1,6 @@
 package ru.kc.module.imports.oldclient.oldmodel;
 
-public abstract class Link extends Node {
+public abstract class Link extends OldNode {
 	
 	String url;
 	

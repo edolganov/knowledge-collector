@@ -5,7 +5,7 @@ package ru.kc.module.imports.oldclient.oldmodel;
  * @author jenua.dolganov
  *
  */
-public abstract class Data extends Node {
+public abstract class Data extends OldNode {
 	
 
 }

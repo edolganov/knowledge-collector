@@ -7,13 +7,13 @@ import java.util.ArrayList;
  * @author jenua.dolganov
  *
  */
-public abstract class Node extends RootElement {
+public abstract class OldNode extends RootElement {
 	
 	protected String name;
 	protected String description;
 	protected ArrayList<Tag> tags;
 	
-	public Node() {
+	public OldNode() {
 		super();
 	}
 

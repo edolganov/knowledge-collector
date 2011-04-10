@@ -58,7 +58,7 @@ public class FactoryImpl implements Factory {
 	}
 
 	private String generateId() {
-		return UuidGenerator.simpleUuid(3);
+		return UuidGenerator.simpleUuid();
 	}
 
 

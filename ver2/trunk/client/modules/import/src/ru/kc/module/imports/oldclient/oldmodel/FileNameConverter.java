@@ -38,12 +38,6 @@ public class FileNameConverter {
 	
 	private static final int approxiMatemaxSize = 40;
 	
-	public static String getFilePath(String parentDirPath, String fileName) {
-		String path = new StringBuilder().append(parentDirPath).append('/').append(fileName).toString();
-		return path;
-	}
-	
-	
 
 	public static String convertToValidFSName(String name){
 		int length = name.length();
