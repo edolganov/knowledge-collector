@@ -47,7 +47,7 @@ public class ReflectionUtil {
 	private static Object findObjectToInject(Field field, List<Object> context) {
 		Class<?> declaringType = field.getType();
 		for (Object candidat : context) {
-			if(candidat.getClass().equals(declaringType)){
+			if(declaringType.isAssignableFrom(candidat.getClass())){
 				return candidat;
 			}
 		}

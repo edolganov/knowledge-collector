@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JTextArea;
@@ -77,6 +78,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 		chainContext.add(textModel);
 		chainContext.add(dataDir);
 		chainContext.add(importRoot);
+		chainContext.add(new HashMap<String, Object>());
 		
 		SwingWorker worker = new SwingWorker() {
 
@@ -87,12 +89,14 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 				Chain chain = new Chain(first, chainContext, new ChainListener() {
 					
 					@Override
-					public void onFinish() {}
+					public void onFinish() {
+						textModel.addText("IMPORT PASSED");
+					}
 					
 					@Override
 					public void onException(ChainObject ob, Exception e) {
-						// TODO Auto-generated method stub
-						
+						textModel.addText("Error! Message: "+ e.getMessage());
+						textModel.addText("IMPORT FAILED");
 					}
 					
 					@Override
@@ -122,6 +126,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 			
 			@Override
 			protected void done() {
+				textModel.addText("You can close dialog window");
 				textArea.setText(textModel.getText());
 				ui.okButton.setEnabled(true);
 				ui.cancelButton.setEnabled(false);
