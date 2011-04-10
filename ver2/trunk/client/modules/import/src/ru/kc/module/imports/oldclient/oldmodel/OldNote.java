@@ -8,6 +8,6 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
  *
  */
 @XStreamAlias("note")
-public class Note extends TextData {
+public class OldNote extends TextData {
 
 }

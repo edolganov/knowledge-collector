@@ -14,9 +14,12 @@ public class Root implements Parent, HavingUuid {
 	// [15.08.2009] jenua.dolganov: все дети лежат в перемешку
 	List<RootElement> nodes;
 	String uuid;
+	private TreeSnapshotRoot treeSnapshots;
 	
 	@XStreamOmitField
 	private String dirPath;
+	
+
 	
 
 	public List<RootElement> getNodes() {
@@ -29,7 +32,7 @@ public class Root implements Parent, HavingUuid {
 	}
 	
 	
-	private TreeSnapshotRoot treeSnapshots;
+
 
 	public TreeSnapshotRoot getTreeSnapshots() {
 		if(treeSnapshots == null) treeSnapshots = new TreeSnapshotRoot();

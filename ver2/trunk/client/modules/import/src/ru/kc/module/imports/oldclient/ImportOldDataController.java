@@ -78,6 +78,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 		chainContext.add(textModel);
 		chainContext.add(dataDir);
 		chainContext.add(importRoot);
+		chainContext.add(context.persistService);
 		chainContext.add(new HashMap<String, Object>());
 		chainContext.add(new DataLoader());
 		

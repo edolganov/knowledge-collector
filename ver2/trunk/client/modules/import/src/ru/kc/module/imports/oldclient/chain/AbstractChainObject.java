@@ -3,13 +3,19 @@ package ru.kc.module.imports.oldclient.chain;
 import java.io.File;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import ru.kc.model.Node;
 import ru.kc.module.imports.oldclient.DataLoader;
 import ru.kc.module.imports.oldclient.model.ImportOldDataTextModel;
+import ru.kc.tools.filepersist.PersistService;
 import ru.kc.util.annotation.Inject;
 import ru.kc.util.workflow.ChainObject;
 
 public abstract class AbstractChainObject implements ChainObject {
 	
+	protected Log log = LogFactory.getLog(getClass());
 	@Inject 
 	protected File dataDir;
 	@Inject 
@@ -18,6 +24,12 @@ public abstract class AbstractChainObject implements ChainObject {
 	protected Map<String, Object> invokeContext;
 	@Inject
 	protected DataLoader dataLoader;
+	@Inject
+	protected Node beginRootNode;
+	@Inject
+	protected PersistService persistService;
+	
+
 	
 	
 	protected File getDataFile(File parent){
