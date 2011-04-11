@@ -1,6 +1,7 @@
 package ru.kc.module.imports.oldclient.oldmodel;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
@@ -33,7 +34,7 @@ public class OldSnapshotConverter {
 		
 		//парсинг даты
 		//новый формат: 0;3829873523;r233239840932;209384098324;4345435345;35345345;rrrr345435435345;r
-		//старый формат: 0;3;r2;1;0;0;rrrr0;r
+		//где 0;3829873523; - пустышка
 
 		StringBuilder curOp = new StringBuilder();
 		char c;
@@ -56,6 +57,14 @@ public class OldSnapshotConverter {
 				curOp.append(c);
 			}
 		}
+		
+		//удаляем пустышку
+		List<TreeNode> children = rootNode.getChildren();
+		if(children.size() != 1){
+			throw new IllegalStateException("invalid data");
+		}
+		TreeNode oldRoot = children.get(0);
+		rootNode.setChildren(oldRoot.getChildren());
 		
 		Snapshot snapshot = new Snapshot();
 		snapshot.setId(UuidGenerator.simpleUuid());
