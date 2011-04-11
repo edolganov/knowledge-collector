@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,6 +78,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	private OldSnapshotConverter oldSnapshotConverter = new OldSnapshotConverter(idPreffix);
 	private SnapshotDirConverter dirConverter = new SnapshotDirConverter();
 	private SnapshotConverter snapshotConverter = new SnapshotConverter();
+	private HashSet<String> oldIds = new HashSet<String>();
 
 	@Override
 	protected void init() {
@@ -201,6 +203,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 								try {
 									for(TreeSnapshotDir oldDir : oldDirs){
 										String name = oldDir.getName();
+										log.info("try to add snapshot: "+name);
 										boolean open = Boolean.TRUE.equals(oldDir.isOpened());
 										ArrayList<TreeSnapshot> oldSnapshots = oldDir.getSnapshots();
 										createSnapshotDir(name, open, oldSnapshots);
@@ -252,7 +255,14 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 						
 						//replace new ids to old
 						for(ConvertInfo data : converted){
-							factoryBackdoor.updateId(data.node, idPreffix+data.oldNode.getUuid());
+							String nodeId = idPreffix+data.oldNode.getUuid();
+							if(oldIds.contains(nodeId)){
+								log.info("found dublicate id in old data: "+nodeId);
+								nodeId = UuidGenerator.simpleUuid();
+							} else {
+								oldIds.add(nodeId);
+							}
+							factoryBackdoor.updateId(data.node, nodeId);
 						}
 						
 						SwingUtilities.invokeAndWait(new Runnable() {
