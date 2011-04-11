@@ -7,7 +7,7 @@ import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotMoved;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.collection.ListUtil;
 
@@ -31,7 +31,7 @@ public class MoveSnapshotDown extends Command<Void>{
 		
 		Node owner = invoke(new GetOwner());
 		
-		SnapshotConverter converter = new SnapshotConverter();
+		SnapshotDirConverter converter = new SnapshotDirConverter();
 		List<SnapshotDir> list = converter.loadFrom(owner);
 		SnapshotDir parent = list.get(list.indexOf(dir));
 		List<Snapshot> snapshots = parent.getSnapshots();

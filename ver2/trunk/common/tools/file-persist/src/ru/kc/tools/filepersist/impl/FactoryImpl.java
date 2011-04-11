@@ -3,6 +3,7 @@ package ru.kc.tools.filepersist.impl;
 import ru.kc.model.Dir;
 import ru.kc.model.FileLink;
 import ru.kc.model.Link;
+import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.tools.filepersist.Factory;
 import ru.kc.tools.filepersist.model.impl.DirBean;
@@ -12,7 +13,8 @@ import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.util.UuidGenerator;
 
-public class FactoryImpl implements Factory {
+@SuppressWarnings("deprecation")
+public class FactoryImpl implements Factory, FactoryBackdoor {
 	
 	public void init(Context context){
 		
@@ -59,6 +61,18 @@ public class FactoryImpl implements Factory {
 
 	private String generateId() {
 		return UuidGenerator.simpleUuid();
+	}
+
+
+	@Override
+	public void updateId(Node node, String newId) {
+		if(node instanceof NodeBean){
+			NodeBean nodeBean = (NodeBean) node;
+			nodeBean.setId(newId);
+		}else {
+			throw new IllegalArgumentException("unknow type of node: "+node);
+		}
+		
 	}
 
 

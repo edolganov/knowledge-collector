@@ -38,7 +38,7 @@ public class SaveOnExitController extends Controller<SnapshotsPanel>{
 			return;
 		
 		List<SnapshotDir> snapshotDirs = getModel();
-		SetProperty update = new SnapshotConverter().createUpdate(snapshotDirs, null);
+		SetProperty update = new SnapshotDirConverter().createUpdate(snapshotDirs, null);
 		try {
 			updater.update(owner, update);
 		}catch (Exception e) {

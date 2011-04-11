@@ -8,7 +8,7 @@ import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.model.update.SnapshotUpdated;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 
 public class UpdateSnapshot extends Command<Void> {
@@ -30,7 +30,7 @@ public class UpdateSnapshot extends Command<Void> {
 		Node owner = invoke(new GetOwner());
 		TreeNode treeNode = invoke(new CreateTreeNodes());
 		
-		SnapshotConverter snapshotConverter = new SnapshotConverter();
+		SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 		List<SnapshotDir> list = snapshotConverter.loadFrom(owner);
 		int dirIndex = list.indexOf(parent);
 		SnapshotDir dir = list.get(dirIndex);

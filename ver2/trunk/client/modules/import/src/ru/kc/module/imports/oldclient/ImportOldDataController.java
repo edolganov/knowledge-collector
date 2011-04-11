@@ -1,5 +1,6 @@
 package ru.kc.module.imports.oldclient;
 
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -30,11 +31,25 @@ import ru.kc.module.imports.oldclient.oldmodel.OldNode;
 import ru.kc.module.imports.oldclient.oldmodel.OldNote;
 import ru.kc.module.imports.oldclient.oldmodel.Root;
 import ru.kc.module.imports.oldclient.oldmodel.RootElement;
+import ru.kc.module.imports.oldclient.oldmodel.OldSnapshotConverter;
+import ru.kc.module.imports.oldclient.oldmodel.TreeSnapshot;
+import ru.kc.module.imports.oldclient.oldmodel.TreeSnapshotDir;
+import ru.kc.module.imports.oldclient.oldmodel.TreeSnapshotRoot;
 import ru.kc.module.imports.ui.ImportOldDataDialog;
+import ru.kc.module.snapshots.model.Snapshot;
+import ru.kc.module.snapshots.model.SnapshotDir;
+import ru.kc.module.snapshots.model.update.SnapshotCreated;
+import ru.kc.module.snapshots.model.update.SnapshotDirCreated;
+import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.tools.filepersist.impl.FactoryBackdoor;
+import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.tools.filepersist.update.UpdateText;
+import ru.kc.util.UuidGenerator;
 import ru.kc.util.file.FileUtil;
 
+@SuppressWarnings("deprecation")
 @Mapping(ImportOldDataDialog.class)
 public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	
@@ -57,9 +72,16 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	private volatile Exception stopImportException = null;
 	private HashMap<String, String> textToSave = new HashMap<String, String>();
 	private HashMap<String, Node> createdNodes = new HashMap<String, Node>();
+	private FactoryBackdoor factoryBackdoor;
+	private String idPreffix = "old-";
+	private OldSnapshotConverter oldSnapshotConverter = new OldSnapshotConverter(idPreffix);
+	private SnapshotDirConverter dirConverter = new SnapshotDirConverter();
+	private SnapshotConverter snapshotConverter = new SnapshotConverter();
 
 	@Override
 	protected void init() {
+		factoryBackdoor = (FactoryBackdoor)persistFactory;
+
 		textArea = ui.importPanel1.text;
 		textArea.setEditable(false);
 		
@@ -81,6 +103,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 		});
 		ui.okButton.setEnabled(false);
 		
+		ui.cancelButton.setEnabled(false); //TODO remove
 		ui.cancelButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -103,7 +126,8 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 			@Override
 			protected Object doInBackground() throws Exception {
 				
-				textModel.addText("Scanning "+dataDir.getAbsolutePath());
+				String baseDirPath = dataDir.getAbsolutePath();
+				textModel.addText("Scanning "+baseDirPath);
 				File rootData = findDataFile();
 				if(rootData == null){
 					textModel.errorEnd("Can't find data dir");
@@ -125,9 +149,77 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 					return null;
 				}
 				
+
+				
+				//import snapshots
+				TreeSnapshotRoot treeSnapshots = root.getTreeSnapshots();
+				if(treeSnapshots != null){
+					final TreeSnapshot lastTreeState = treeSnapshots.getLastTreeState();
+					if(lastTreeState != null){
+						SwingUtilities.invokeAndWait(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									Snapshot snapshot = oldSnapshotConverter.convert(importRoot, lastTreeState);
+									SetProperty update = snapshotConverter.createUpdate(snapshot);
+									updater.update(importRoot, update);
+									textModel.addText("\tLast tree state imported");
+								}catch (Exception e) {
+									log.error("", e);
+									textModel.addText("\tCan't import last tree state: "+e.getMessage());
+								}
+								updateTextArea();
+							}
+						});
+					}
+					
+					final List<TreeSnapshot> mainSnapshots = treeSnapshots.getSnapshots();
+					if(mainSnapshots != null){
+						SwingUtilities.invokeAndWait(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									createSnapshotDir("old-main", true, mainSnapshots);
+									textModel.addText("\tMain tree snapshots imported");
+								}catch (Exception e) {
+									log.error("", e);
+									textModel.addText("\tCan't import main tree snapshots: "+e.getMessage());
+								}
+								updateTextArea();
+							}
+						});
+					}
+					
+					final List<TreeSnapshotDir> oldDirs = treeSnapshots.getSnaphotDirs();
+					if(oldDirs != null){
+						SwingUtilities.invokeAndWait(new Runnable() {
+							
+							@Override
+							public void run() {
+								try {
+									for(TreeSnapshotDir oldDir : oldDirs){
+										String name = oldDir.getName();
+										boolean open = Boolean.TRUE.equals(oldDir.isOpened());
+										ArrayList<TreeSnapshot> oldSnapshots = oldDir.getSnapshots();
+										createSnapshotDir(name, open, oldSnapshots);
+									}
+									textModel.addText("\tTree snapshots imported");
+								}catch (Exception e) {
+									log.error("", e);
+									textModel.addText("\tCan't import tree snapshots: "+e.getMessage());
+								}
+								updateTextArea();
+							}
+						});
+					}
+				}
+				
+				
+				//import nodes
 				LinkedList<Info> queue = new LinkedList<Info>();
 				queue.addLast(new Info(firstNodeDir, importRoot));
-				
 				try {
 					while( ! queue.isEmpty()){
 						checkForStopImportException();
@@ -137,7 +229,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 						if(dataFile == null) continue;
 						
 						Root curRoot = dataLoader.loadFile(dataFile);
-						textModel.addText("\tProcessing "+dataFile.getAbsolutePath());
+						textModel.addText("\tProcessing "+dataFile.getAbsolutePath().replace(baseDirPath, ""));
 						
 						final ArrayList<ConvertInfo> converted = new ArrayList<ConvertInfo>();
 						for(RootElement elem : curRoot.getNodes()){
@@ -158,11 +250,16 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 							}
 						}
 						
+						//replace new ids to old
+						for(ConvertInfo data : converted){
+							factoryBackdoor.updateId(data.node, idPreffix+data.oldNode.getUuid());
+						}
+						
 						SwingUtilities.invokeAndWait(new Runnable() {
 							
 							@Override
 							public void run() {
-								textArea.setText(textModel.getText());
+								updateTextArea();
 								addToTree(converted);
 							}
 						});
@@ -194,12 +291,18 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 			
 			@Override
 			protected void done() {
-				textArea.setText(textModel.getText());
+				updateTextArea();
+				Rectangle rect = new Rectangle(0, textArea.getHeight() - 3, 1, 1);
+				textArea.scrollRectToVisible(rect);
 				ui.okButton.setEnabled(true);
 				ui.cancelButton.setEnabled(false);
 			}
 		}; 
 		worker.execute();
+	}
+	
+	private void updateTextArea(){
+		textArea.setText(textModel.getText());
 	}
 	
 	private void addToTree(List<ConvertInfo> list){
@@ -347,6 +450,31 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 			return null;
 		}
 		
+	}
+	
+	private void createSnapshotDir(String dirName, boolean open, List<TreeSnapshot> oldSnapshots) throws Exception {
+		if(oldSnapshots == null){
+			oldSnapshots = new ArrayList<TreeSnapshot>();
+		}
+		ArrayList<Snapshot> converted = new ArrayList<Snapshot>();
+		for(TreeSnapshot old : oldSnapshots){
+			converted.add(oldSnapshotConverter.convert(importRoot, old));
+		}
+		
+		List<SnapshotDir> curDirs = dirConverter.loadFrom(importRoot);
+		SnapshotDir newDir = new SnapshotDir();
+		newDir.setId(UuidGenerator.simpleUuid());
+		newDir.setName(dirName);
+		newDir.setOpen(open);
+		curDirs.add(newDir);
+		SetProperty dirUpdate = dirConverter.createUpdate(curDirs, new SnapshotDirCreated(newDir, curDirs.size()-1));
+		updater.update(importRoot, dirUpdate);
+		
+		for(Snapshot snap : converted){
+			newDir.add(snap);
+			SetProperty update = dirConverter.createUpdate(curDirs, new SnapshotCreated(newDir, snap));
+			updater.update(importRoot, update);
+		}
 	}
 
 }

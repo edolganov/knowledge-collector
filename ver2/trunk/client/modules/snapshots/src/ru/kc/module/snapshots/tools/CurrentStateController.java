@@ -14,14 +14,11 @@ import ru.kc.platform.common.event.AppClosing;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.SetProperty;
 
-import com.google.gson.Gson;
-
 @Mapping(SnapshotsPanel.class)
 public class CurrentStateController extends Controller<SnapshotsPanel> {
 
+	private SnapshotConverter converter = new SnapshotConverter();
 	
-	private static final String CUR_SNAPSHOT_KEY = "cur-snapshot";
-
 	@Override
 	protected void init() {}
 	
@@ -40,13 +37,7 @@ public class CurrentStateController extends Controller<SnapshotsPanel> {
 	}
 	
 	private Snapshot loadSnapshot(Node owner) {
-		String data = owner.getProperty(CUR_SNAPSHOT_KEY);
-		if(data == null){
-			return null;
-		}
-		
-		Snapshot out = new Gson().fromJson(data, Snapshot.class);
-		return out;
+		return converter.loadFrom(owner);
 	}
 	
 	
@@ -84,8 +75,8 @@ public class CurrentStateController extends Controller<SnapshotsPanel> {
 
 	private void saveSnapshot(Node owner, Snapshot snapshot) {
 		try {
-			String data = new Gson().toJson(snapshot);
-			updater.update(owner, new SetProperty(CUR_SNAPSHOT_KEY, data));
+			SetProperty update = converter.createUpdate(snapshot);
+			updater.update(owner, update);
 		} catch (Exception e) {
 			log.error("", e);
 		}

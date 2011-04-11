@@ -6,7 +6,7 @@ import ru.kc.common.command.Command;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotDirCreated;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.UuidGenerator;
 
@@ -29,7 +29,7 @@ public class CreateSnapshotDir extends Command<Void> {
 		
 		owner = invoke(new GetOwner());
 		
-		SnapshotConverter snapshotConverter = new SnapshotConverter();
+		SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 		List<SnapshotDir> list = snapshotConverter.loadFrom(owner);
 		
 		SnapshotDir newDir = new SnapshotDir();

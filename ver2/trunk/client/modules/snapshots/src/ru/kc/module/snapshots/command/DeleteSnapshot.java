@@ -7,7 +7,7 @@ import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotDeleted;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 
 public class DeleteSnapshot extends Command<Void> {
@@ -30,7 +30,7 @@ public class DeleteSnapshot extends Command<Void> {
 		
 		boolean confirm = dialogs.confirmByDialog(rootUI, "Confirm the operation","Delete "+toDelete.getName()+"?");
 		if(confirm){
-			SnapshotConverter snapshotConverter = new SnapshotConverter();
+			SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 			List<SnapshotDir> list = snapshotConverter.loadFrom(owner);
 			int dirIndex = list.indexOf(parent);
 			SnapshotDir dir = list.get(dirIndex);

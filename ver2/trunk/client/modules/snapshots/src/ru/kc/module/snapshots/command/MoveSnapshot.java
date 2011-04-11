@@ -7,7 +7,7 @@ import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotMovedToOtherDir;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 
 public class MoveSnapshot extends Command<Void>{
@@ -27,7 +27,7 @@ public class MoveSnapshot extends Command<Void>{
 		
 		Node owner = invoke(new GetOwner());
 		
-		SnapshotConverter converter = new SnapshotConverter();
+		SnapshotDirConverter converter = new SnapshotDirConverter();
 		List<SnapshotDir> list = converter.loadFrom(owner);
 		
 		SnapshotDir oldParent = findDir(list, snapshot);

@@ -7,7 +7,7 @@ import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.SnapshotRenamed;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 
 public class RenameSnapshot extends Command<Void> {
@@ -33,7 +33,7 @@ public class RenameSnapshot extends Command<Void> {
 	protected Void invoke() throws Exception {
 		Node owner = invoke(new GetOwner());
 		
-		SnapshotConverter snapshotConverter = new SnapshotConverter();
+		SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 		List<SnapshotDir> list = snapshotConverter.loadFrom(owner);
 		int dirIndex = list.indexOf(parent);
 		SnapshotDir dir = list.get(dirIndex);

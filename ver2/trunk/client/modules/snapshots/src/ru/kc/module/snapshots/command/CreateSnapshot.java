@@ -8,7 +8,7 @@ import ru.kc.module.snapshots.model.Snapshot;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.TreeNode;
 import ru.kc.module.snapshots.model.update.SnapshotCreated;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.UuidGenerator;
 
@@ -35,7 +35,7 @@ public class CreateSnapshot extends Command<Void> {
 		if(root == null)
 			throw new IllegalStateException("TreeNode root is null");
 		
-		SnapshotConverter snapshotConverter = new SnapshotConverter();
+		SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 		List<SnapshotDir> list = snapshotConverter.loadFrom(owner);
 		SnapshotDir parentDir = list.get(dirIndex);
 		

@@ -6,7 +6,7 @@ import ru.kc.common.command.Command;
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.SnapshotDir;
 import ru.kc.module.snapshots.model.update.DirMoved;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.tools.filepersist.update.SetProperty;
 import ru.kc.util.collection.ListUtil;
 
@@ -26,7 +26,7 @@ public class MoveSnapshotDirUp extends Command<Void>{
 		
 		Node owner = invoke(new GetOwner());
 		
-		SnapshotConverter converter = new SnapshotConverter();
+		SnapshotDirConverter converter = new SnapshotDirConverter();
 		List<SnapshotDir> list = converter.loadFrom(owner);
 		int index = list.indexOf(dir);
 		SnapshotDir toMove = list.get(index);

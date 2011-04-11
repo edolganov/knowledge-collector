@@ -24,7 +24,7 @@ import ru.kc.module.snapshots.model.update.SnapshotRenamed;
 import ru.kc.module.snapshots.model.update.AbstractSnapshotsUpdate;
 import ru.kc.module.snapshots.model.update.SnapshotUpdated;
 import ru.kc.module.snapshots.tools.CellRender;
-import ru.kc.module.snapshots.tools.SnapshotConverter;
+import ru.kc.module.snapshots.tools.SnapshotDirConverter;
 import ru.kc.module.snapshots.ui.SnapshotsPanel;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
@@ -35,7 +35,7 @@ import ru.kc.util.swing.tree.TreeFacade;
 public class SnapshotsController extends Controller<SnapshotsPanel>{
 	
 	private TreeFacade treeFacade;
-	private SnapshotConverter snapshotConverter = new SnapshotConverter();
+	private SnapshotDirConverter snapshotConverter = new SnapshotDirConverter();
 	
 	@Override
 	protected void init() {
