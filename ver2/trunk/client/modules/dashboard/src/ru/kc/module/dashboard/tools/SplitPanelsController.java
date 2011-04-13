@@ -33,7 +33,7 @@ public class SplitPanelsController extends Controller<Dashboard>{
 		leftSplitPane.setDividerLocation(180);
 
 		rightSplitPane = ui.jSplitPane2;
-		rightSplitPane.setDividerLocation(600);
+		rightSplitPane.setDividerLocation(620);
 		rightSplitPane.setContinuousLayout(true);
 		rightSplitPane.setResizeWeight(1d);
 		
