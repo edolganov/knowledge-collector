@@ -22,10 +22,7 @@ public class PersistStateController extends Controller<Dashboard>{
 	
 	@Override
 	public void init() {
-		
 		leftSplitPane = ui.jSplitPane1;
-		//leftSplitPane.setDividerLocation(180);
-
 		rightSplitPane = ui.jSplitPane2;
 	}
 	
@@ -52,18 +49,20 @@ public class PersistStateController extends Controller<Dashboard>{
 	}
 	
 	private void loadState(Profile profile) {
+		rightSplitPane.setDividerLocation(rightSplitPane.getWidth()-300);
 		try {
 			int location = Integer.parseInt(profile.get(RIGHT_DIVIDER_LOCATION));
 			rightSplitPane.setDividerLocation(location);
 		}catch (Exception e) {
-			//nothing
+			rightSplitPane.setDividerLocation(rightSplitPane.getWidth()-300);
 		}
 		
+		leftSplitPane.setDividerLocation(180);
 		try {
 			int location = Integer.parseInt(profile.get(LEFT_DIVIDER_LOCATION));
 			leftSplitPane.setDividerLocation(location);
 		}catch (Exception e) {
-			//nothing
+			leftSplitPane.setDividerLocation(180);
 		}
 		
 	}

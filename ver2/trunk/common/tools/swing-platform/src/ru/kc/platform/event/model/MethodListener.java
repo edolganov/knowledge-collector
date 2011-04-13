@@ -98,7 +98,7 @@ public class MethodListener {
 	public void process(Event event) throws Throwable {
 		Object sender = event.getSender();
 		Object ob = listenerObjectRef.get();
-		if(ob == null) throw new IllegalStateException(this+" is incalid for process event");
+		if(ob == null) throw new IllegalStateException(this+" is invalid for process event");
 		method.setAccessible(true);
 		
 		try {

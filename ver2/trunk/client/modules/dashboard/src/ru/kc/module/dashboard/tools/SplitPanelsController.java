@@ -30,10 +30,8 @@ public class SplitPanelsController extends Controller<Dashboard>{
 		
 		leftSplitPane = ui.jSplitPane1;
 		leftSplitPane.setContinuousLayout(true);
-		leftSplitPane.setDividerLocation(180);
 
 		rightSplitPane = ui.jSplitPane2;
-		rightSplitPane.setDividerLocation(620);
 		rightSplitPane.setContinuousLayout(true);
 		rightSplitPane.setResizeWeight(1d);
 		
@@ -68,17 +66,25 @@ public class SplitPanelsController extends Controller<Dashboard>{
 	}
 	
 	private void showHide(JSplitPane pane, boolean left){
+		int cur = pane.getDividerLocation();
+		int last = pane.getLastDividerLocation();
 		if(left){
-			if(pane.getDividerLocation() != pane.getMinimumDividerLocation()) {
+			if(cur != pane.getMinimumDividerLocation()) {
 				pane.setDividerLocation(pane.getMinimumDividerLocation());
 			} else {
-				pane.setDividerLocation(pane.getLastDividerLocation());
+				pane.setDividerLocation(last);
 			}
 		} else {
-			if(pane.getDividerLocation() != pane.getMaximumDividerLocation()) {
-				pane.setDividerLocation(pane.getMaximumDividerLocation());
+			int max = pane.getMaximumDividerLocation();
+			if(cur != max) {
+				pane.setDividerLocation(max);
 			} else {
-				pane.setDividerLocation(pane.getLastDividerLocation());
+				if(last == max){
+					last = max - 300;
+				} else if(last < 0){
+					last = pane.getWidth() - 300;
+				}
+				pane.setDividerLocation(last);
 			}
 		}
 
