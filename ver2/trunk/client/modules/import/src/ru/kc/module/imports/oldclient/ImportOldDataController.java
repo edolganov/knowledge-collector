@@ -115,12 +115,17 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 	public void setImportData(Node importRoot, File dataDir){
 		this.importRoot = importRoot;
 		this.dataDir = dataDir;
+		createdNodes.put(importRoot.getId(), importRoot);
 	}
 	
 	@Override
 	protected void onNodeUpdated(Node old, Node updatedNode, Collection<UpdateRequest> updates) {
+		String id = old.getId();
 		if(importRoot.equals(old)){
 			importRoot = updatedNode;
+		}
+		if(createdNodes.containsKey(id)){
+			createdNodes.put(id, updatedNode);
 		}
 	}
 	
@@ -219,7 +224,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 							RootElement oldNode = convertedInfo.oldNode;
 							File nodeDir = getExistsNodeDir(dataFile, oldNode);
 							if(nodeDir == null) continue;
-							Node parentNode = createdNodes.remove(convertedInfo.node.getId());
+							Node parentNode = createdNodes.get(convertedInfo.node.getId());
 							queue.addLast(new Info(nodeDir, parentNode));
 						}
 					}
@@ -318,6 +323,7 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 				
 				oldNewIds.clear();
 				newOldIds.clear();
+				createdNodes.clear();
 			}
 		}; 
 		worker.execute();
@@ -338,7 +344,9 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 						textToSave.put(child.getId(), info.textForTextNode);
 					}
 				}
-				persistTree.add(info.parent, child);
+				String parentId = info.parent.getId();
+				Node parentNode = createdNodes.get(parentId);
+				persistTree.add(parentNode, child);
 			}
 		}catch (Exception e) {
 			log.error("", e);
@@ -370,18 +378,19 @@ public class ImportOldDataController extends Controller<ImportOldDataDialog> {
 			}
 		}
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					
-					updater.update(child, updates);
-				}catch (Exception e) {
-					log.error("", e);
+		if(updates.size() > 0){
+			SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						updater.update(child, updates);
+					}catch (Exception e) {
+						log.error("", e);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	
