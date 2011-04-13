@@ -30,6 +30,7 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		
+		addArgsToSystemProps(args);
 		boolean useNimbusLaf = hasParam(args,"nimbus-laf");
 		
 		Laf.trySetSystemLookAndFeel();
@@ -64,11 +65,35 @@ public class Main {
 
 
 
+	private static void addArgsToSystemProps(String[] args) {
+		if(args != null){
+			for(String arg : args){
+				int eqIndex = arg.indexOf('=');
+				if(eqIndex < 0){
+					System.setProperty("kc-app-"+arg, "");
+				} else {
+					try {
+						String key = arg.substring(0, eqIndex);
+						String value = arg.substring(eqIndex+1);
+						System.setProperty("kc-app-"+key, value);
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
+		
+	}
+
+
+
 	private static boolean hasParam(String[] args, String value) {
 		if(args == null) return false;
 		for(String arg : args){
 			if(arg.equals(value)) return true;
 		}
+		
 		return false;
 	}
 

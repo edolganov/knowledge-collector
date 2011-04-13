@@ -39,7 +39,10 @@ public class TabsController extends Controller<MainForm> {
 		
 		tabsWrapper = new TabbedWrapper(tabs);
 		tabsWrapper.addTab(createTab("dashboard"), "dashboard", false);
-		tabsWrapper.addTab(createTab("dashboard"), "test concurrent modification");
+		if(System.getProperty("kc-app-develop") != null){
+			tabsWrapper.addTab(createTab("dashboard"), "test concurrent modification");
+		}
+
 		
 		tabsWrapper.addListener(new TabsListener() {
 			

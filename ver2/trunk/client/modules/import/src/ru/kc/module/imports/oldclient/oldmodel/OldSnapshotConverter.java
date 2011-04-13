@@ -2,6 +2,10 @@ package ru.kc.module.imports.oldclient.oldmodel;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import ru.kc.model.Node;
 import ru.kc.module.snapshots.model.Snapshot;
@@ -11,16 +15,17 @@ import ru.kc.util.UuidGenerator;
 
 public class OldSnapshotConverter {
 	
+	private static Log log = LogFactory.getLog(OldSnapshotConverter.class);
+	
 	private static char SEPARATOR = ';';
 	private static char BACK_CHAR = 'r';
-	
-	private String idPreffix = "";
-	
+	private Map<String, String> oldNewIds;
 	
 	
-	public OldSnapshotConverter(String idPreffix) {
+	
+	public OldSnapshotConverter(Map<String, String> oldNewIds) {
 		super();
-		this.idPreffix = idPreffix;
+		this.oldNewIds = oldNewIds;
 	}
 
 
@@ -76,9 +81,15 @@ public class OldSnapshotConverter {
 	
 
 	private TreeNode createChild(String curOp, TreeNode parent) {
-		String id = idPreffix+curOp;
+		String oldId = curOp;
+		String newId = oldNewIds.get(oldId);
+		if(newId == null){
+			log.error("can't find new id in map by old id: "+oldId);
+			newId = oldId;
+		}
+		
 		TreeNode child = new TreeNode();
-		child.setId(id);
+		child.setId(newId);
 		parent.getChildren().add(child);
 		return child;
 	}
