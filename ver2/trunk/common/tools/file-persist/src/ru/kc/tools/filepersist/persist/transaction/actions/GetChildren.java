@@ -10,7 +10,7 @@ import ru.kc.util.collection.Pair;
 
 public class GetChildren extends AtomicAction<List<NodeBean>>{
 	
-	NodeBean parent;
+	public final NodeBean parent;
 	ArrayList<Container> loadContainers;
 	
 	
@@ -34,11 +34,7 @@ public class GetChildren extends AtomicAction<List<NodeBean>>{
 				
 			String childId = data.getSecond();
 			NodeBean node = container.find(childId);
-			if(node != null){
-				out.add(node);
-			} else {
-				log.error("can'f find child by id "+childId+" in "+container);
-			}
+			out.add(node);
 		}
 		
 		return out;

@@ -14,6 +14,7 @@ import ru.kc.tools.filepersist.model.impl.TextBean;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
+import ru.kc.tools.filepersist.persist.transaction.InterceptorsManager;
 import ru.kc.util.file.FileUtil;
 
 import junit.framework.Assert;
@@ -30,8 +31,10 @@ public class ContainersModelTest extends Assert {
 		Context c = new Context(init, null, null, null, null, null);
 		
 		ContainerStore store = new ContainerStore();
-		context = new FSContext(null, store, c, null);
+		InterceptorsManager interceptorsManager = new InterceptorsManager();
+		context = new FSContext(null, store, c, null, interceptorsManager);
 		store.init(context);
+		interceptorsManager.init("ru.kc.tools.filepersist");
 	}
 	
 	@After

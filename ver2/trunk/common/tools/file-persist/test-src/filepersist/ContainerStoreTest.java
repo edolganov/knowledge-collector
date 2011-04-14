@@ -15,6 +15,7 @@ import ru.kc.tools.filepersist.impl.InitParams;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.persist.ContainerStore;
 import ru.kc.tools.filepersist.persist.FSContext;
+import ru.kc.tools.filepersist.persist.transaction.InterceptorsManager;
 import ru.kc.util.file.FileUtil;
 
 public class ContainerStoreTest extends Assert  {
@@ -37,7 +38,7 @@ public class ContainerStoreTest extends Assert  {
 	}
 	
 	@Test
-	public void saveAndRollback() throws IOException{
+	public void saveAndRollback() throws Exception{
 		Container container = new Container();
 		container.init(new File(dir,"test.xml"), context.c);
 		assertEquals(0,container.getRevision());
@@ -84,14 +85,16 @@ public class ContainerStoreTest extends Assert  {
 	}
 
 	
-	public FSContext testContext(){
+	public FSContext testContext() throws Exception{
 		InitParams params = new InitParams(dir, 10, 10, 10);
 		InitContextExt init = new InitContextExt(params, dir, dir);
 		Context c = new Context(init, null, null, null, null, null);
 		
 		ContainerStore store = new ContainerStore();
-		FSContext fsContext = new FSContext(null, store, c, null);
+		InterceptorsManager interceptorsManager = new InterceptorsManager();
+		FSContext fsContext = new FSContext(null, store, c, null, interceptorsManager);
 		store.init(fsContext);
+		interceptorsManager.init("ru.kc.tools.filepersist");
 		return fsContext;
 	}
 	

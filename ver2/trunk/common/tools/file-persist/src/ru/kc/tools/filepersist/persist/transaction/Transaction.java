@@ -15,12 +15,14 @@ public abstract class Transaction<T> {
 	private ArrayList<AtomicAction<?>> done = new ArrayList<AtomicAction<?>>();
 	private ActionListeners actionListeners;
 	private UserTransaction userTransaction;
+	private InterceptorsManager interceptorsManager;
 
 	public Transaction(FSContext c) {
 		super();
 		this.c = c;
 		actionListeners = c.actionListeners;
 		userTransaction = UserTransaction.getExistOrCreateAndBegin();
+		interceptorsManager = c.interceptorsManager;
 	}
 	
 	protected abstract T body() throws Throwable;
@@ -42,6 +44,7 @@ public abstract class Transaction<T> {
 	public <O> O invoke(AtomicAction<O> action) throws Throwable {
 		action.init(this, c);
 		O out = action.invoke();
+		interceptorsManager.process(action, out);
 		done.add(action);
 		actionListeners.fireInvoke(action);
 		return (O) out;

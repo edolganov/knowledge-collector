@@ -12,6 +12,7 @@ import ru.kc.tools.filepersist.impl.Context;
 import ru.kc.tools.filepersist.model.impl.Container;
 import ru.kc.tools.filepersist.model.impl.NodeBean;
 import ru.kc.tools.filepersist.persist.model.ContainersModel;
+import ru.kc.tools.filepersist.persist.transaction.InterceptorsManager;
 import ru.kc.tools.filepersist.persist.transaction.Transaction;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddChild;
 import ru.kc.tools.filepersist.persist.transaction.actions.AddNodeToContainer;
@@ -32,19 +33,22 @@ public class FileSystemImpl {
 	
 	private FSContext c;
 	
-	public void init(Context context) throws IOException{
+	public void init(Context context) throws Exception{
 		ContainerStore containerStore = new ContainerStore();
 		ContainersModel containerModel = new ContainersModel();
 		Blobs blobs = new Blobs();
+		InterceptorsManager interceptorsManager = new InterceptorsManager();
 		
 		c = new FSContext(
 				containerModel, 
 				containerStore,
 				context,
-				blobs);
+				blobs,
+				interceptorsManager);
 		containerStore.init(c);
 		containerModel.init(c);
 		blobs.init(c);
+		interceptorsManager.init("ru.kc.tools.filepersist");
 		
 		initFolders();
 		initRootContainer();
