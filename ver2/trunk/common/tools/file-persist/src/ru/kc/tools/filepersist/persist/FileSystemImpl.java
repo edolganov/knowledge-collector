@@ -183,11 +183,13 @@ public class FileSystemImpl {
 				while(toDeleteQueue.size() > 0){
 					NodeBean toDelete = toDeleteQueue.removeFirst();
 					NodeBean parent = invoke(new GetParent(toDelete));
-					Container container = toDelete.getContainer();
+					Container childContainer = toDelete.getContainer();
+					Container parentContainer = parent.getContainer();
 					
 					invoke(new RemoveChild(parent, toDelete));
 					invoke(new RemoveNodeFromContainer(toDelete));
-					containersToSave.add(container);
+					containersToSave.add(childContainer);
+					containersToSave.add(parentContainer);
 				}
 				
 				//сохраняем контейнеры

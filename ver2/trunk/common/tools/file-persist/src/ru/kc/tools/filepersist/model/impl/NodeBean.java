@@ -48,9 +48,10 @@ public abstract class NodeBean implements Node, Cloneable {
 	}
 	
 	public void removeChild(NodeBean node) {
-		if(childrenIds == null) return;
 		String childId = generateNodeIdWithContainerPath(node);
-		childrenIds.remove(childId);
+		boolean deleted = childrenIds.remove(childId);
+		if(!deleted) throw new IllegalArgumentException("can't find child "+node+" in parent "+this);
+		
 	}
 	
 	public int moveChildUp(NodeBean node) {

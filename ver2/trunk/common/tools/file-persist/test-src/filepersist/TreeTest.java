@@ -160,7 +160,7 @@ public class TreeTest extends Assert{
 	}
 	
 	@Test 
-	public void removeNodeRecursive() throws Exception{
+	public void remove_node_recursive_from_root() throws Exception{
 		PersistServiceImpl ps = createService(2,2,2);
 		Tree tree = ps.tree();
 		Factory factory = ps.factory();
@@ -184,7 +184,45 @@ public class TreeTest extends Assert{
 		Tree newTree = newPs.tree();
 		
 		Node newRoot = newTree.getRoot();
+		assertEquals(0, ((NodeBean)newRoot).getChildrenIds().size());
 		List<Node> children = newRoot.getChildren();
+		assertEquals(0, children.size());
+		
+	}
+	
+	@Test 
+	public void remove_sub_node_recursive_from_node() throws Exception{
+		PersistServiceImpl ps = createService(2,2,2);
+		Tree tree = ps.tree();
+		Factory factory = ps.factory();
+		
+		Node root = tree.getRoot();
+		Dir node = factory.createDir("node", null);
+		Dir child = factory.createDir("child", null);
+		Dir subChild1 = factory.createDir("sub-1", null);
+		Dir subChild2 = factory.createDir("sub-2", null);
+		Dir subSubChild1 = factory.createDir("sub-sub-1", null);
+		Dir subSubChild2 = factory.createDir("sub-sub-2", null);
+		
+		
+		tree.add(root, node);
+		tree.add(node, child);
+		tree.add(child, subChild1);
+		tree.add(child, subChild2);
+		tree.add(subChild2, subSubChild1);
+		tree.add(subChild2, subSubChild2);
+		tree.deleteRecursive(child);
+		
+		PersistServiceImpl newPs = createService(2,2,2);
+		Tree newTree = newPs.tree();
+		
+		Node newRoot = newTree.getRoot();
+		assertEquals(1, newRoot.getChildren().size());
+		
+		Node newNode = newRoot.getChildren().get(0);
+		//check for no children
+		assertEquals(0, ((NodeBean)newNode).getChildrenIds().size());
+		List<Node> children = newNode.getChildren();
 		assertEquals(0, children.size());
 		
 	}
