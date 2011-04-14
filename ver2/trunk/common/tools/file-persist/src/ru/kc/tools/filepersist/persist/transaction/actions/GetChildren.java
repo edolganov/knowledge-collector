@@ -34,7 +34,11 @@ public class GetChildren extends AtomicAction<List<NodeBean>>{
 				
 			String childId = data.getSecond();
 			NodeBean node = container.find(childId);
-			out.add(node);
+			if(node != null){
+				out.add(node);
+			} else {
+				log.error("can'f find child by id "+childId+" in "+container);
+			}
 		}
 		
 		return out;
