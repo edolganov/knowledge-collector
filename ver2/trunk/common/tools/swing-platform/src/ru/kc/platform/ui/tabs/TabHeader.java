@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 
+@SuppressWarnings("serial")
 public class TabHeader extends JPanel {
 	
     private static class CloseButton extends JButton {

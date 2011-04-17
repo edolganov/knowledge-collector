@@ -2,16 +2,16 @@ package ru.kc.main.tab;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.util.List;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import ru.kc.common.controller.Controller;
+import ru.kc.main.tab.event.NextPrevButtonsEnableRequest;
 import ru.kc.main.tab.tools.MainMenu;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
@@ -21,6 +21,7 @@ import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.util.collection.Pair;
 import ru.kc.util.swing.button.DropDownButton;
 import ru.kc.util.swing.icon.IconUtil;
 
@@ -72,26 +73,30 @@ public class TabController extends Controller<TabPanel>{
 	}
 	
 	private void addPrevNextButtons() {
-		JButton prev = new JButton(IconUtil.get("/ru/kc/main/tab/img/prev.png"));
+		final JButton prev = new JButton(IconUtil.get("/ru/kc/main/tab/img/prev.png"));
+		final JButton next = new JButton(IconUtil.get("/ru/kc/main/tab/img/next.png"));
+		
+		
+		
 		prev.setToolTipText("Open previous tab  (Alt+LEFT)");
 		prev.addHierarchyListener(new HierarchyListener() {
 			
 			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
-				
+				Pair<Boolean, Boolean> result = invokeSafe(new NextPrevButtonsEnableRequest()).result;
+				if(result != null){
+					prev.setEnabled(result.getFirst());
+					next.setEnabled(result.getSecond());
+				} else {
+					prev.setEnabled(false);
+					next.setEnabled(false);
+				}
 			}
 		});
 		toolbar.add(prev);
 		
-		JButton next = new JButton(IconUtil.get("/ru/kc/main/tab/img/next.png"));
+
 		next.setToolTipText("Open next tab  (Alt+RIGHT)");
-		next.addHierarchyListener(new HierarchyListener() {
-			
-			@Override
-			public void hierarchyChanged(HierarchyEvent e) {
-				
-			}
-		});
 		toolbar.add(next);
 		
 	}

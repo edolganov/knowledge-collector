@@ -12,6 +12,7 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.event.OpenNodeRequest;
+import ru.kc.main.tab.event.NextPrevButtonsEnableRequest;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.annotations.Mapping;
@@ -22,7 +23,7 @@ import ru.kc.platform.ui.tabbedform.TabbedPanel;
 import ru.kc.platform.ui.tabs.TabbedWrapper;
 import ru.kc.platform.ui.tabs.TabbedWrapper.TabsListener;
 import ru.kc.tools.filepersist.update.UpdateRequest;
-import ru.kc.util.Check;
+import ru.kc.util.collection.Pair;
 
 @Mapping(MainForm.class)
 public class TabsController extends Controller<MainForm> {
@@ -38,6 +39,7 @@ public class TabsController extends Controller<MainForm> {
 		tabs.remove(root.testTab2);
 		
 		tabsWrapper = new TabbedWrapper(tabs);
+		tabsWrapper.setMaxLabelLenght(30);
 		tabsWrapper.addTab(createTab("dashboard"), "dashboard", false);
 //		if(System.getProperty("kc-app-develop") != null){
 //			tabsWrapper.addTab(createTab("dashboard"), "test concurrent modification");
@@ -80,7 +82,7 @@ public class TabsController extends Controller<MainForm> {
 		for (TabModule tab : list) {
 			Component component = tab.getComponent();
 			setNode(component, updatedNode);
-			tabsWrapper.rename(tab, convertToShort(updatedNode.getName()));
+			tabsWrapper.rename(tab, updatedNode.getName());
 		}
 	}
 	
@@ -142,7 +144,7 @@ public class TabsController extends Controller<MainForm> {
 	private TabModule addTab(Node node) {
 		if(node instanceof Text){
 			TabModule tab = createTab("text-editor");
-			tabsWrapper.addTab(tab, convertToShort(node.getName()), true);
+			tabsWrapper.addTab(tab, node.getName(), true);
 			Component component = tab.getComponent();
 			addNodeContainerListener(tab, component);
 			setNode(component,node);
@@ -150,16 +152,6 @@ public class TabsController extends Controller<MainForm> {
 			return tab;
 		}
 		else throw new IllegalArgumentException("unknow type for open tab: "+node);
-	}
-
-	private String convertToShort(String string) {
-		if(Check.isEmpty(string)) return string;
-		
-		if(string.length() > 20){
-			string = string.substring(0, 17);
-			string = string + "...";
-		}
-		return string;
 	}
 	
 
@@ -205,7 +197,10 @@ public class TabsController extends Controller<MainForm> {
 	
 	
 
-	
+	@EventListener
+	public void getNextPrevButtonsEnabled(NextPrevButtonsEnableRequest request){
+		request.setResponse(new Pair<Boolean, Boolean>(false, false));
+	}
 
 
 }

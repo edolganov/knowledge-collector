@@ -10,6 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.JTabbedPane;
 
+import ru.kc.util.Check;
+
 public class TabbedWrapper {
 	
 	public static interface TabsListener {
@@ -23,19 +25,30 @@ public class TabbedWrapper {
 	private JTabbedPane tabs;
 	private ArrayList<TabHeader> headers = new ArrayList<TabHeader>();
 	private CopyOnWriteArrayList<TabsListener> listeners = new CopyOnWriteArrayList<TabbedWrapper.TabsListener>();
+	private int maxLabelLenght = -1;
 
 	public TabbedWrapper(JTabbedPane tabs) {
 		super();
 		this.tabs = tabs;
 	}
-
 	
+	public int getMaxLabelLenght() {
+		return maxLabelLenght;
+	}
+
+	public void setMaxLabelLenght(int maxLabelLenght) {
+		this.maxLabelLenght = maxLabelLenght;
+	}
+
+
+
+
 	public void addTab(Component comp, String text){
 		addTab(tabs.getTabCount(), comp, text);
 	}
 	
 	public void addTab(Component comp, String text, boolean canClose){
-		addTab(tabs.getTabCount(), comp, text,canClose);
+		addTab(tabs.getTabCount(), comp, text, canClose);
 	}
 	
 	public void addTab(int index, Component comp, String text){
@@ -43,10 +56,14 @@ public class TabbedWrapper {
 	}
 	
 	public void addTab(int index, final Component comp, String text, boolean canClose){
-		final TabHeader header = new TabHeader(text,canClose);
+		final TabHeader header = new TabHeader(convertToShort(text), canClose);
 		tabs.add(comp,index);
 		
 		tabs.setTabComponentAt(index, header);
+		if(isLongerThanMaxLenght(text)){
+			tabs.setToolTipTextAt(index, text);
+		}
+
 		headers.add(index, header);
 		
 		
@@ -99,7 +116,14 @@ public class TabbedWrapper {
 	public void rename(Component comp, String text){
 		int index = getIndex(comp);
 		if(index == -1) return;
-		headers.get(index).setText(text);
+		TabHeader tabHeader = headers.get(index);
+		tabHeader.setText(convertToShort(text));
+		if(isLongerThanMaxLenght(text)){
+			tabs.setToolTipTextAt(index, text);
+		} else {
+			tabs.setToolTipTextAt(index, null);
+		}
+
 	}
 	
 	public void close(Component comp) {
@@ -138,6 +162,20 @@ public class TabbedWrapper {
 
 	private int getIndex(Component comp) {
 		return tabs.indexOfComponent(comp);
+	}
+	
+	private boolean isLongerThanMaxLenght(String string){
+		if(maxLabelLenght < 1) return false;
+		if(Check.isEmpty(string)) return false;
+		return string.length() > maxLabelLenght;
+	}
+	
+	private String convertToShort(String string) {
+		if(isLongerThanMaxLenght(string)){
+			string = string.substring(0, maxLabelLenght);
+			string = string + "...";
+		}
+		return string;
 	}
 
 
