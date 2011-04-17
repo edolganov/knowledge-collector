@@ -2,8 +2,13 @@ package ru.kc.main.tab;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import ru.kc.common.controller.Controller;
@@ -47,14 +52,16 @@ public class TabController extends Controller<TabPanel>{
 	private void refreshToolbar() {
 		toolbar.removeAll();
 		
-		addSystemButtons();
+		addMainButton();
 		addSeparator();
 		addExternalActionComponents();
+		addSeparator();
+		addPrevNextButtons();
 		
 
 	}
-	
-	private void addSystemButtons() {
+
+	private void addMainButton() {
 		MainMenu mainMenu = new MainMenu(appContext, context, this);
 		
 		DropDownButton dropDownButton = new DropDownButton();
@@ -62,6 +69,31 @@ public class TabController extends Controller<TabPanel>{
 		dropDownButton.setMenu(mainMenu);
 		dropDownButton.setToolTipText("Main menu");
 		toolbar.add(dropDownButton);
+	}
+	
+	private void addPrevNextButtons() {
+		JButton prev = new JButton(IconUtil.get("/ru/kc/main/tab/img/prev.png"));
+		prev.setToolTipText("Open previous tab  (Alt+LEFT)");
+		prev.addHierarchyListener(new HierarchyListener() {
+			
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				
+			}
+		});
+		toolbar.add(prev);
+		
+		JButton next = new JButton(IconUtil.get("/ru/kc/main/tab/img/next.png"));
+		next.setToolTipText("Open next tab  (Alt+RIGHT)");
+		next.addHierarchyListener(new HierarchyListener() {
+			
+			@Override
+			public void hierarchyChanged(HierarchyEvent e) {
+				
+			}
+		});
+		toolbar.add(next);
+		
 	}
 
 	private void addSeparator() {
