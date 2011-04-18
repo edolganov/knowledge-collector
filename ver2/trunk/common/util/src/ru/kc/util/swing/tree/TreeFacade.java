@@ -204,7 +204,9 @@ public class TreeFacade {
 	}
 	
 	public void setSelection(DefaultMutableTreeNode node){
-		tree.setSelectionPath(new TreePath(node.getPath()));
+		TreePath path = new TreePath(node.getPath());
+		tree.setSelectionPath(path);
+		tree.scrollPathToVisible(path);
 	}
 	
 
