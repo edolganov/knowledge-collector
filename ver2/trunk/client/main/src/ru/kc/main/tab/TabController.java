@@ -6,7 +6,6 @@ import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.util.List;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
@@ -17,9 +16,11 @@ import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
 import ru.kc.platform.action.ButtonAction;
 import ru.kc.platform.action.ComboBoxAction;
+import ru.kc.platform.action.ToggleButtonAction;
 import ru.kc.platform.action.facade.AbstractActionFacade;
 import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
+import ru.kc.platform.action.facade.ToggleButtonFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.util.collection.Pair;
 import ru.kc.util.swing.button.DropDownButton;
@@ -117,6 +118,11 @@ public class TabController extends Controller<TabPanel>{
 				ComboBoxAction comboAction = new ComboBoxAction();
 				((ComboBoxFacadeMediator) facade).addRealFacade(comboAction);
 				action = comboAction;
+			}
+			else if(facade instanceof ToggleButtonFacadeMediator){
+				ToggleButtonAction buttonAction = new ToggleButtonAction();
+				((ToggleButtonFacadeMediator) facade).addRealFacade(buttonAction);
+				action = buttonAction;
 			}
 			
 			if(action != null){

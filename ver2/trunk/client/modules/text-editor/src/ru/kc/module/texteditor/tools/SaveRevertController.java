@@ -14,7 +14,7 @@ import ru.kc.common.node.edit.event.RevertNodeRequest;
 import ru.kc.common.node.edit.event.UpdateNodeRequest;
 import ru.kc.model.Text;
 import ru.kc.module.texteditor.ui.TextEditor;
-import ru.kc.platform.action.facade.ButtonFacade;
+import ru.kc.platform.action.facade.AbstractButtonFacade;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateText;
@@ -25,8 +25,8 @@ import ru.kc.util.swing.icon.IconUtil;
 public class SaveRevertController extends Controller<TextEditor> implements NodeContainer<Text>{
 	
 	private Text node;
-	private ButtonFacade save;
-	private ButtonFacade revert;
+	private AbstractButtonFacade save;
+	private AbstractButtonFacade revert;
 
 	@SuppressWarnings({ "serial" })
 	@Override
@@ -45,7 +45,7 @@ public class SaveRevertController extends Controller<TextEditor> implements Node
 		revert.setOrder(0);
 		
 		save = actionService.addButtonAction();
-		save.setToolTipText("Save");
+		save.setToolTipText("Save  (Ctrl+S)");
 		save.setIcon(IconUtil.get("/ru/kc/common/img/save.png"));
 		save.addListener(new ActionListener() {
 			

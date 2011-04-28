@@ -4,6 +4,8 @@ public interface ActionService {
 	
 	ButtonFacade addButtonAction();
 	
+	ToggleButtonFacade addToggleButtonAction();
+	
 	ComboBoxFacade addComboBoxAction();
 
 }

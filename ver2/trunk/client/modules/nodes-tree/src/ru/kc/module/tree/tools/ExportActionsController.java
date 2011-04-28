@@ -17,7 +17,7 @@ import ru.kc.common.node.command.MoveDown;
 import ru.kc.common.node.command.MoveUp;
 import ru.kc.model.Node;
 import ru.kc.module.tree.ui.Tree;
-import ru.kc.platform.action.facade.ButtonFacade;
+import ru.kc.platform.action.facade.AbstractButtonFacade;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.common.event.AppInited;
 import ru.kc.platform.event.annotation.EventListener;
@@ -33,14 +33,14 @@ public class ExportActionsController extends Controller<Tree> {
 	
 	TreeFacade treeFacade;
 	//basics
-	ButtonFacade createDir;
-	ButtonFacade createLink;
-	ButtonFacade createText;
-	ButtonFacade createFileLink;
+	AbstractButtonFacade createDir;
+	AbstractButtonFacade createLink;
+	AbstractButtonFacade createText;
+	AbstractButtonFacade createFileLink;
 	//special
-	ButtonFacade moveUp;
-	ButtonFacade moveDown;
-	ButtonFacade delete;
+	AbstractButtonFacade moveUp;
+	AbstractButtonFacade moveDown;
+	AbstractButtonFacade delete;
 	
 	@Override
 	protected void init() {

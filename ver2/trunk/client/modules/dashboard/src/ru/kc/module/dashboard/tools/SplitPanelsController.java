@@ -8,7 +8,7 @@ import javax.swing.JSplitPane;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.dashboard.event.OpenHideRightPanel;
 import ru.kc.module.dashboard.ui.Dashboard;
-import ru.kc.platform.action.facade.ButtonFacade;
+import ru.kc.platform.action.facade.AbstractButtonFacade;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.swing.icon.IconUtil;
@@ -18,8 +18,8 @@ public class SplitPanelsController extends Controller<Dashboard>{
 	
 	private static final String COMMON_GROUP = "3-common";
 	
-	ButtonFacade showHideLeft;
-	ButtonFacade showHideRight;
+	AbstractButtonFacade showHideLeft;
+	AbstractButtonFacade showHideRight;
 	
 	JSplitPane leftSplitPane;
 	JSplitPane rightSplitPane;
