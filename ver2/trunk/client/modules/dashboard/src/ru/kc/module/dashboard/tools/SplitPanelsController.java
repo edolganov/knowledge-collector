@@ -49,7 +49,7 @@ public class SplitPanelsController extends Controller<Dashboard>{
 		
 		showHideRight = actionService.addButtonAction();
 		showHideRight.setIcon(IconUtil.get("/ru/kc/common/img/right_panel.png"));
-		showHideRight.setToolTipText("Show/hide right panel");
+		showHideRight.setToolTipText("Show/hide right panel  (Ctrl+H)");
 		showHideRight.setGroup(COMMON_GROUP);
 		showHideRight.addListener(new ActionListener() {
 			

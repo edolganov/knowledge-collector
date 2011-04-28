@@ -19,6 +19,7 @@ import ru.kc.module.properties.ui.TextProps;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateText;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 @Mapping(TextProps.class)
 public class TextPropsController extends AbstractNodePropsController<Text, TextProps> {
@@ -77,9 +78,7 @@ public class TextPropsController extends AbstractNodePropsController<Text, TextP
 	@Override
 	protected void extendedFillData(NodeEditions editions) {
 		String text = editions.get(UpdateText.class);
-		
-		ui.text.setText(text == null? node.safeGetText() : text);
-		ui.text.setCaretPosition(0);
+		TextComponentUtil.setTextWithSaveCaretPosition(ui.text, text == null? node.safeGetText() : text);
 		if(text != null)
 			setButtonsEnabled(true);
 	}

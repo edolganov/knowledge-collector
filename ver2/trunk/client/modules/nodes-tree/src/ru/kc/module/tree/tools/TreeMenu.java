@@ -29,6 +29,7 @@ import ru.kc.model.FileLink;
 import ru.kc.model.Link;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
+import ru.kc.module.tree.command.RenameCellRequestCommand;
 import ru.kc.platform.app.AppContext;
 import ru.kc.platform.command.CommandService;
 import ru.kc.platform.domain.DomainMember;
@@ -46,7 +47,7 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem save = new JMenuItem("Save  (Ctrl+S)", IconUtil.get("/ru/kc/common/img/save.png"));
 	JMenuItem revert = new JMenuItem("Revert", IconUtil.get("/ru/kc/common/img/revert.png"));
 	
-	JMenuItem rename = new JMenuItem("Rename", IconUtil.get("/ru/kc/common/img/rename.png"));
+	JMenuItem rename = new JMenuItem("Rename  (Ctrl+R)", IconUtil.get("/ru/kc/common/img/rename.png"));
 
 	JMenu addMenu = new JMenu("Add");
 	JMenuItem dir = new JMenuItem("Dir", NodeIcon.getIcon(Dir.class));
@@ -62,7 +63,7 @@ public class TreeMenu extends JPopupMenu {
 	JMenuItem fileLinkToParent = new JMenuItem("File link",
 			NodeIcon.getIcon(FileLink.class));
 
-	JMenuItem showHideInfo = new JMenuItem("Show/hide right panel", IconUtil.get("/ru/kc/common/img/right_panel.png"));
+	JMenuItem showHideInfo = new JMenuItem("Show/hide right panel  (Ctrl+H)", IconUtil.get("/ru/kc/common/img/right_panel.png"));
 
 
 	TreeFacade treeFacade;
@@ -79,20 +80,7 @@ public class TreeMenu extends JPopupMenu {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SwingUtilities.invokeLater(new Runnable() {
-
-					@Override
-					public void run() {
-						JTree tree = treeFacade.tree;
-						TreeCellEditor treeCellEditor = tree.getCellEditor();
-						if (treeCellEditor instanceof CellEditor) {
-							CellEditor cellEditor = (CellEditor) treeCellEditor;
-							cellEditor.setEnabledRequest();
-							TreePath selectionPath = tree.getSelectionPath();
-							tree.startEditingAtPath(selectionPath);
-						}
-					}
-				});
+				commandService.invokeSafe(new RenameCellRequestCommand(treeFacade.tree));
 			}
 		});
 		

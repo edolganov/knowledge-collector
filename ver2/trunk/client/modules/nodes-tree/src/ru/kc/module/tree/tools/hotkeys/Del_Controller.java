@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import java.awt.event.KeyEvent;
 
@@ -13,7 +13,7 @@ import ru.kc.util.swing.keyboard.DeleteKey;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class DeleteNodeController extends Controller<Tree>{
+public class Del_Controller extends Controller<Tree>{
 
 	TreeFacade treeFacade;
 	

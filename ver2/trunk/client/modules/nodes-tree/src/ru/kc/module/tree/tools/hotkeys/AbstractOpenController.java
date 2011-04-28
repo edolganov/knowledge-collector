@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;

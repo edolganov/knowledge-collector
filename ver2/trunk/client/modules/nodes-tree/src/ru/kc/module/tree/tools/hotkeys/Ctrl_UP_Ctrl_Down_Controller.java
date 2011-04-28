@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import java.awt.event.ActionEvent;
 
@@ -15,7 +15,7 @@ import ru.kc.util.swing.component.ComponentUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class MoveUpAndDownController extends Controller<Tree> {
+public class Ctrl_UP_Ctrl_Down_Controller extends Controller<Tree> {
 	
 	
 	TreeFacade treeFacade;

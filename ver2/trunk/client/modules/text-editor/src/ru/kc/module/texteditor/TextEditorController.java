@@ -21,6 +21,7 @@ import ru.kc.platform.annotations.Mapping;
 import ru.kc.platform.event.Event;
 import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.tools.filepersist.update.UpdateText;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 @Mapping(TextEditor.class)
 public class TextEditorController extends Controller<TextEditor> implements NodeContainer<Text>{
@@ -85,9 +86,8 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 		NodeEditions editions = nodeEditionsAggregator.getEditions(node);
 		String text = editions.get(UpdateText.class);
 		boolean modified = text != null;
-		editor.setText(modified? text : node.safeGetText());
-		editor.setCaretPosition(0);
-		
+		TextComponentUtil.setTextWithSaveCaretPosition(editor, modified? text : node.safeGetText());
+
 		if(modified){
 			for(NodeContainerListener l : listeners) l.onModified(node);
 		} else {

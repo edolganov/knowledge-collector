@@ -33,6 +33,7 @@ import ru.kc.tools.filepersist.update.UpdateName;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.Check;
 import ru.kc.util.swing.component.ComponentUtil;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 public abstract class AbstractNodePropsController<N extends Node, T> extends Controller<T> implements PropsUpdater {
 
@@ -166,11 +167,8 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		String name = editions.get(UpdateName.class);
 		String description = editions.get(UpdateDescription.class);
 		
-		this.name.setText(name == null? node.getName() : name);
-		this.name.setCaretPosition(0);
-		
-		this.description.setText(description == null? node.getDescription() : description);
-		this.description.setCaretPosition(0);
+		TextComponentUtil.setTextWithSaveCaretPosition(this.name, name == null? node.getName() : name);
+		TextComponentUtil.setTextWithSaveCaretPosition(this.description, description == null? node.getDescription() : description);
 		desctiptionDecorator.fillBackground();
 		
 		boolean changedData = name != null || description != null;
@@ -198,6 +196,7 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		setButtonsEnabled(true);
 		String description = this.description.getText();
 		fireEvent(new DescriptionChanged(node, description));
+		desctiptionDecorator.fillBackground();
 	}
 	
 	protected void setButtonsEnabled(boolean value){
@@ -225,8 +224,6 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		name.requestFocus();
 		
 		extendedRevert(editions);
-		
-		fillData();
 	}
 	
 	protected void extendedRevert(NodeEditions editions){ /* Override if need */ }
@@ -247,10 +244,6 @@ public abstract class AbstractNodePropsController<N extends Node, T> extends Con
 		updates.addAll(getExtendedUpdates());
 		
 		invokeSafe(new UpdateNode(node, updates));
-		name.requestFocus();
-		
-		fillData();
-		
 	}
 	
 	protected Collection<UpdateRequest> getExtendedUpdates(){ 

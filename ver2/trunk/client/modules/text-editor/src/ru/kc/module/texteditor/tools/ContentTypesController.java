@@ -17,6 +17,7 @@ import ru.kc.platform.action.facade.ComboBoxFacade;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 @Dependence(TextEditorController.class)
 @Mapping(TextEditor.class)
@@ -117,7 +118,7 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 		editor.setContentType(type);
 
         try {
-        	editor.read(new StringReader(oldText), type);
+        	TextComponentUtil.readTextWithSaveCaretPosition(editor, oldText, type);
         	getController(TextEditorController.class).reloadEditorListeners();
         } catch (Exception ex) {
         	log.error(ex);

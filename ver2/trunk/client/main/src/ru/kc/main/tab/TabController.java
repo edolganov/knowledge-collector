@@ -54,12 +54,9 @@ public class TabController extends Controller<TabPanel>{
 		toolbar.removeAll();
 		
 		addMainButton();
+		addPrevNextButtons();
 		addSeparator();
 		addExternalActionComponents();
-		addSeparator();
-		addPrevNextButtons();
-		
-
 	}
 
 	private void addMainButton() {

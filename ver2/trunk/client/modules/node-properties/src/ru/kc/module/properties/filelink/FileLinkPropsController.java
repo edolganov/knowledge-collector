@@ -22,6 +22,7 @@ import ru.kc.tools.filepersist.update.UpdatePath;
 import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.util.Check;
 import ru.kc.util.swing.os.OSUtil;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 @Mapping(FileLinkProps.class)
 public class FileLinkPropsController extends AbstractNodePropsController<FileLink, FileLinkProps> {
@@ -96,9 +97,7 @@ public class FileLinkPropsController extends AbstractNodePropsController<FileLin
 	@Override
 	protected void extendedFillData(NodeEditions editions) {
 		String path = editions.get(UpdatePath.class);
-		
-		ui.path.setText(path == null? node.getPath() : path);
-		ui.path.setCaretPosition(0);
+		TextComponentUtil.setTextWithSaveCaretPosition(ui.path, path == null? node.getPath() : path);
 		if(path != null)
 			setButtonsEnabled(true);
 	}

@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import java.awt.event.ActionEvent;
 
@@ -13,7 +13,7 @@ import ru.kc.util.swing.component.ComponentUtil;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class CtrlSActionController extends Controller<Tree> {
+public class Ctrl_S_Controller extends Controller<Tree> {
 	
 	@SuppressWarnings("serial")
 	@Override

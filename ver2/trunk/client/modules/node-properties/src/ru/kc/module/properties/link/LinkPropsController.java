@@ -20,6 +20,7 @@ import ru.kc.tools.filepersist.update.UpdateRequest;
 import ru.kc.tools.filepersist.update.UpdateUrl;
 import ru.kc.util.Check;
 import ru.kc.util.swing.os.OSUtil;
+import ru.kc.util.swing.text.TextComponentUtil;
 
 @Mapping(LinkProps.class)
 public class LinkPropsController extends AbstractNodePropsController<Link, LinkProps> {
@@ -80,9 +81,7 @@ public class LinkPropsController extends AbstractNodePropsController<Link, LinkP
 	@Override
 	protected void extendedFillData(NodeEditions editions) {
 		String url = editions.get(UpdateUrl.class);
-		
-		ui.url.setText(url == null? node.getUrl() : url);
-		ui.url.setCaretPosition(0);
+		TextComponentUtil.setTextWithSaveCaretPosition(ui.url, url == null? node.getUrl() : url);
 		if(url != null)
 			setButtonsEnabled(true);
 	}

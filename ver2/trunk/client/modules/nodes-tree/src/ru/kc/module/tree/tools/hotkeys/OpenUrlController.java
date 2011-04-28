@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import ru.kc.model.Link;
 import ru.kc.module.tree.ui.Tree;

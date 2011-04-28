@@ -1,4 +1,4 @@
-package ru.kc.module.tree.tools;
+package ru.kc.module.tree.tools.hotkeys;
 
 import ru.kc.common.node.event.OpenNodeRequest;
 import ru.kc.model.Text;
