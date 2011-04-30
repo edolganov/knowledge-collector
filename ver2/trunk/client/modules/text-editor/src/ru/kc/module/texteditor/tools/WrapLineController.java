@@ -31,12 +31,19 @@ public class WrapLineController extends Controller<TextEditor> implements NodeCo
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("action! selected: "+wrap.isSelected());
+				wrap(wrap.isSelected());
 			}
 		});
 		wrap.setOrder(3);
 		
 
+	}
+
+
+	protected void wrap(boolean selected) {
+//		ui.editor.set
+////		text.setLineWrap(false);
+////		text.setWrapStyleWord(false);
 	}
 
 

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- usingas/StatementSyntax.mxml -->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="doSomething()">
+    <mx:Script><![CDATA[
+            public var s:Boolean;
+            public function doSomething():void {
+                // The following statements must be inside a function. 
+                s = label1.visible; 
+                label1.text = "label1.visible = " + String(s);
+            }
+    ]]></mx:Script>
+    
+    <mx:Label id="label1"/>
+    
+</mx:Application>
