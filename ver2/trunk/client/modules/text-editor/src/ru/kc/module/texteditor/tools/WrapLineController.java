@@ -41,9 +41,7 @@ public class WrapLineController extends Controller<TextEditor> implements NodeCo
 
 
 	protected void wrap(boolean selected) {
-//		ui.editor.set
-////		text.setLineWrap(false);
-////		text.setWrapStyleWord(false);
+		ui.editor.setLineWrap(selected);
 	}
 
 

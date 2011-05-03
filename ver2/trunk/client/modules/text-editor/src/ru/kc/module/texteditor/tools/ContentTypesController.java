@@ -5,6 +5,9 @@ import java.util.LinkedHashMap;
 
 import javax.swing.JEditorPane;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
@@ -53,10 +56,9 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 
 	private void initContentTypes() {
 		contentTypes = new LinkedHashMap<String,String>();
-		contentTypes.put("plain text","text/plain");
-		contentTypes.put("java","text/java");
-		contentTypes.put("xml","text/xml");
-		//or DefaultSyntaxKit.getContentTypes();
+		contentTypes.put("plain text", SyntaxConstants.SYNTAX_STYLE_NONE);
+		contentTypes.put("java", SyntaxConstants.SYNTAX_STYLE_JAVA);
+		contentTypes.put("xml", SyntaxConstants.SYNTAX_STYLE_XML);
 	}
 
 
@@ -111,17 +113,8 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	
 	
 	private void changeContentType(String type) {
-
-        JEditorPane editor = ui.editor;
-		String oldText = editor.getText();
-		editor.setContentType(type);
-
-        try {
-        	TextComponentUtil.readTextWithSaveCaretPosition(editor, oldText, type);
-        	getController(TextEditorController.class).reloadEditorListeners();
-        } catch (Exception ex) {
-        	log.error(ex);
-        }
+		RSyntaxTextArea editor = ui.editor;
+		editor.setSyntaxEditingStyle(type);
 	}
 
 

@@ -2,9 +2,10 @@ package ru.kc.module.texteditor;
 
 import java.util.ArrayList;
 
-import javax.swing.JEditorPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
@@ -27,7 +28,7 @@ import ru.kc.util.swing.text.TextComponentUtil;
 public class TextEditorController extends Controller<TextEditor> implements NodeContainer<Text>{
 	
 	private Text node;
-	private JEditorPane editor;
+	private RSyntaxTextArea editor;
 	private boolean enabledUpdateMode = true;
 	private NodeEditionsAggregator nodeEditionsAggregator;
 	private ArrayList<NodeContainerListener> listeners = new ArrayList<NodeContainerListener>();
@@ -36,7 +37,6 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		editor = ui.editor;
-		//undoManHack = new CompoundUndoManHack(pane);
 		reloadEditorListeners();
 	}
 	
@@ -54,9 +54,7 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 			}
 			
 			@Override
-			public void changedUpdate(DocumentEvent e) {
-				textChanged();
-			}
+			public void changedUpdate(DocumentEvent e) {}
 		});
 	}
 	
