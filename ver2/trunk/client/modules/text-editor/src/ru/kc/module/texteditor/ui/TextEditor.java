@@ -28,21 +28,7 @@ public class TextEditor extends JPanel {
 //		textArea.addHyperlinkListener(this);
 //		textArea.requestFocusInWindow();
 //		textArea.setTextAntiAliasHint("VALUE_TEXT_ANTIALIAS_ON");
-//		setFont(textArea, new Font("Arial", Font.PLAIN, 16));
 		return textArea;
 	}
-	
-
-	   public static void setFont(RSyntaxTextArea textArea, Font font) {
-         SyntaxScheme ss = textArea.getSyntaxScheme();
-         ss = (SyntaxScheme)ss.clone();
-         for (int i=0; i<ss.styles.length; i++) {
-            if (ss.styles[i]!=null) {
-               ss.styles[i].font = font;
-		    }
-		 }
-		 textArea.setSyntaxScheme(ss);
-		 textArea.setFont(font);
-	   }
 
 }

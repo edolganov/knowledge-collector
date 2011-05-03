@@ -3,7 +3,6 @@ package ru.kc.module.texteditor.tools;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import javax.swing.JEditorPane;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -19,7 +18,6 @@ import ru.kc.platform.action.facade.ComboBoxFacade;
 import ru.kc.platform.annotations.Dependence;
 import ru.kc.platform.annotations.Mapping;
 import ru.kc.tools.filepersist.update.SetProperty;
-import ru.kc.util.swing.text.TextComponentUtil;
 
 @Dependence(TextEditorController.class)
 @Mapping(TextEditor.class)
@@ -29,7 +27,7 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	private Text node;
 	private ComboBoxFacade comboBox;
 	private LinkedHashMap<String,String> contentTypes;
-	private String skipSave;
+	private String oldValue;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -75,9 +73,8 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 
 	private void refreshContentType() {
 		String key = node.getProperty(TEXT_CONTENT_TYPE);
-		if(key == null)
-			key = "plain text";
-		skipSave = key;
+		if(key == null) key = "plain text";
+		oldValue = key;
 		selectContentTypeByKey(key);
 	}
 	
@@ -93,14 +90,13 @@ public class ContentTypesController extends Controller<TextEditor> implements No
 	}
 	
 	private void saveContentType(String key) {
-		if(!key.equals(skipSave)){
+		if(!key.equals(oldValue)){
 			if(contentTypes.containsKey(key)){
+				log.info("save content type: "+key);
 				invokeSafe(new UpdateNode(node, new SetProperty(TEXT_CONTENT_TYPE, key)));
 			}
-		} else {
-			log.info("skip saving content type: "+key);
 		}
-		skipSave = null;
+		oldValue = null;
 	}
 	
 
