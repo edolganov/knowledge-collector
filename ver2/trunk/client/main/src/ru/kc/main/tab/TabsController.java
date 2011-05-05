@@ -7,7 +7,10 @@ import java.util.List;
 
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
@@ -46,6 +49,13 @@ public class TabsController extends Controller<MainForm> {
 //		}
 
 		
+		tabs.addChangeListener(new ChangeListener() {
+			
+		    public void stateChanged(ChangeEvent evt) {
+		        setFocusRequest();
+		    }
+		});
+		
 		tabsWrapper.addListener(new TabsListener() {
 			
 			@Override
@@ -60,6 +70,24 @@ public class TabsController extends Controller<MainForm> {
 			}
 		});
 		
+	}
+	
+	@Override
+	protected void afterAllInited() {
+		setFocusRequest();
+	}
+	
+	private void setFocusRequest(){
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				Component tab = tabs.getSelectedComponent();
+				if(tab instanceof FocusProvider){
+					((FocusProvider)tab).setFocusRequest();
+				}
+			}
+		});		
 	}
 	
 	@EventListener

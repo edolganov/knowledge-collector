@@ -1,5 +1,6 @@
 package ru.kc.module.texteditor;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
 import ru.kc.model.Text;
@@ -10,7 +11,7 @@ import ru.kc.platform.module.Module;
 
 @SuppressWarnings("serial")
 @GlobalMapping("text-editor")
-public class TextEditorModule extends Module<TextEditor> implements NodeContainer<Text>{
+public class TextEditorModule extends Module<TextEditor> implements NodeContainer<Text>, FocusProvider {
 
 	@Override
 	protected TextEditor createUI() {
@@ -35,6 +36,11 @@ public class TextEditorModule extends Module<TextEditor> implements NodeContaine
 	@Override
 	public void addListener(NodeContainerListener listener) {
 		getController(TextEditorController.class).addListener(listener);
+	}
+
+	@Override
+	public void setFocusRequest() {
+		getController(TextEditorController.class).setFocusRequest();
 	}
 
 }

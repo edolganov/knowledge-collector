@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
 import ru.kc.main.tab.event.NextPrevButtonsEnableRequest;
 import ru.kc.main.tab.tools.MainMenu;
@@ -27,7 +28,7 @@ import ru.kc.util.swing.button.DropDownButton;
 import ru.kc.util.swing.icon.IconUtil;
 
 @Mapping(TabPanel.class)
-public class TabController extends Controller<TabPanel>{
+public class TabController extends Controller<TabPanel> implements FocusProvider {
 
 	JToolBar toolbar;
 	Component component;
@@ -142,6 +143,13 @@ public class TabController extends Controller<TabPanel>{
 			if( ! beforeGroup.equals(nextGroup)){
 				addSeparator();
 			}
+		}
+	}
+
+	@Override
+	public void setFocusRequest() {
+		if(component instanceof FocusProvider){
+			((FocusProvider) component).setFocusRequest();
 		}
 	}
 

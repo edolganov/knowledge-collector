@@ -1,5 +1,6 @@
 package ru.kc.module.texteditor;
 
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.event.DocumentEvent;
@@ -7,6 +8,7 @@ import javax.swing.event.DocumentListener;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
@@ -25,7 +27,7 @@ import ru.kc.tools.filepersist.update.UpdateText;
 import ru.kc.util.swing.text.TextComponentUtil;
 
 @Mapping(TextEditor.class)
-public class TextEditorController extends Controller<TextEditor> implements NodeContainer<Text>{
+public class TextEditorController extends Controller<TextEditor> implements NodeContainer<Text>, FocusProvider {
 	
 	private Text node;
 	private RSyntaxTextArea editor;
@@ -37,6 +39,8 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		editor = ui.editor;
+		editor.setFont(new Font("Arial", Font.PLAIN, 12));
+		editor.setFocusCycleRoot(true);
 		reloadEditorListeners();
 	}
 	
@@ -126,6 +130,11 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	@Override
 	public void addListener(NodeContainerListener listener) {
 		listeners.add(listener);
+	}
+
+	@Override
+	public void setFocusRequest() {
+		editor.requestFocus();
 	}
 
 

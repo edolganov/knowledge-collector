@@ -2,12 +2,13 @@ package ru.kc.main.tab;
 
 import java.awt.Component;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.domain.annotation.Domain;
 import ru.kc.platform.module.Module;
 
 @Domain
-public class TabModule extends Module<TabPanel>{
+public class TabModule extends Module<TabPanel> implements FocusProvider {
 
 	@Override
 	protected TabPanel createUI() {
@@ -20,6 +21,11 @@ public class TabModule extends Module<TabPanel>{
 	
 	public Component getComponent(){
 		return getController(TabController.class).getComponent();
+	}
+
+	@Override
+	public void setFocusRequest() {
+		getController(TabController.class).setFocusRequest();
 	}
 
 }

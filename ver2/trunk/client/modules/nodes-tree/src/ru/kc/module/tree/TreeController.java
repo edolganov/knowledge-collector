@@ -10,6 +10,7 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
 import ru.kc.common.node.command.UpdateNode;
 import ru.kc.common.node.edit.event.NodeChanged;
@@ -29,7 +30,7 @@ import ru.kc.util.swing.tree.MenuController;
 import ru.kc.util.swing.tree.TreeFacade;
 
 @Mapping(Tree.class)
-public class TreeController extends Controller<Tree>{
+public class TreeController extends Controller<Tree> implements FocusProvider {
 	
 	private final String treeNodeKey = "tree-node-key-"+hashCode();
 	
@@ -247,6 +248,11 @@ public class TreeController extends Controller<Tree>{
 	
 	private DefaultMutableTreeNode removeFromStorage(Node node){
 		return runtimeStorage.remove(node, treeNodeKey);
+	}
+
+	@Override
+	public void setFocusRequest() {
+		tree.requestFocus();
 	}
 	
 	

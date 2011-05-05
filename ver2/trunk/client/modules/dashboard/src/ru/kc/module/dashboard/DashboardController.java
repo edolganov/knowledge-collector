@@ -6,13 +6,16 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
 import ru.kc.module.dashboard.ui.Dashboard;
 import ru.kc.platform.annotations.Mapping;
 
 @Mapping(Dashboard.class)
-public class DashboardController extends Controller<Dashboard>{
+public class DashboardController extends Controller<Dashboard> implements FocusProvider {
 
+	Component tree;
+	
 	@Override
 	public void init() {
 		
@@ -24,7 +27,7 @@ public class DashboardController extends Controller<Dashboard>{
 		
 		JPanel centerPanel = ui.centerPanel;
 		centerPanel.setLayout(new BorderLayout());
-		Component tree = instanceByMapping("nodes-tree");
+		tree = instanceByMapping("nodes-tree");
 		centerPanel.add(tree,BorderLayout.CENTER);
 		
 		ui.leftPanel.setMinimumSize(new Dimension(0, 0));
@@ -44,6 +47,13 @@ public class DashboardController extends Controller<Dashboard>{
 	
 	private void setDividersSize() {
 		ui.jSplitPane2.setDividerLocation(500);
+	}
+
+	@Override
+	public void setFocusRequest() {
+		if(tree instanceof FocusProvider){
+			((FocusProvider) tree).setFocusRequest();
+		}
 	}
 
 }
