@@ -15,7 +15,10 @@ import ru.kc.common.controller.Controller;
 import ru.kc.common.node.NodeContainer;
 import ru.kc.common.node.NodeContainerListener;
 import ru.kc.common.node.event.OpenNodeRequest;
-import ru.kc.main.tab.event.NextPrevButtonsEnableRequest;
+import ru.kc.main.tab.event.NextTabRequest;
+import ru.kc.main.tab.event.PrevNextButtonsEnableRequest;
+import ru.kc.main.tab.event.PrevTabRequest;
+import ru.kc.main.tab.tools.PrevNextTabModel;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.annotations.Mapping;
@@ -33,6 +36,7 @@ public class TabsController extends Controller<MainForm> {
 	
 	JTabbedPane tabs;
 	TabbedWrapper tabsWrapper;
+	PrevNextTabModel prevNextTabModel = new PrevNextTabModel(); 
 
 	@Override
 	public void init() {
@@ -52,7 +56,7 @@ public class TabsController extends Controller<MainForm> {
 		tabs.addChangeListener(new ChangeListener() {
 			
 		    public void stateChanged(ChangeEvent evt) {
-		        setFocusRequest();
+		    	onTabSelected();
 		    }
 		});
 		
@@ -66,12 +70,35 @@ public class TabsController extends Controller<MainForm> {
 			@Override
 			public boolean canClose(Component comp, int index, String text) {
 				//boolean confirm = dialogs.confirmByDialog(rootUI, "Закрыть?");
+				Component tab = tabs.getSelectedComponent();
+				Component nextToView = prevNextTabModel.removeAndGetNextToView(tab);
+				if(nextToView != null){
+					focusRequest(nextToView);
+				}
 				return true;
 			}
 		});
 		
+		prevNextTabModel.setListener(new PrevNextTabModel.Listener(){
+			
+			public void onPrevSelected(Component tab){
+				focusRequest(tab);
+			}
+			
+			public void onNextSelected(Component tab){
+				focusRequest(tab);
+			}
+			
+		});
+		
 	}
 	
+	protected void onTabSelected() {
+		Component tab = tabs.getSelectedComponent();
+		prevNextTabModel.setCurrent(tab);
+		setFocusRequest();
+	}
+
 	@Override
 	protected void afterAllInited() {
 		setFocusRequest();
@@ -226,8 +253,18 @@ public class TabsController extends Controller<MainForm> {
 	
 
 	@EventListener
-	public void getNextPrevButtonsEnabled(NextPrevButtonsEnableRequest request){
-		request.setResponse(new Pair<Boolean, Boolean>(false, false));
+	public void getPrevNextButtonsEnabled(PrevNextButtonsEnableRequest request){
+		Pair<Boolean, Boolean> out = new Pair<Boolean, Boolean>(prevNextTabModel.canPrevTab(), prevNextTabModel.canNextTab());
+		request.setResponse(out);
+	}
+	
+	@EventListener
+	public void prevTabRequest(PrevTabRequest request){
+		prevNextTabModel.prevTabRequest();
+	}
+	
+	public void nextTabRequest(NextTabRequest request){
+		prevNextTabModel.nextTabRequest();
 	}
 
 

@@ -2,6 +2,8 @@ package ru.kc.main.tab;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
 import java.util.List;
@@ -11,7 +13,9 @@ import javax.swing.JToolBar;
 
 import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
-import ru.kc.main.tab.event.NextPrevButtonsEnableRequest;
+import ru.kc.main.tab.event.NextTabRequest;
+import ru.kc.main.tab.event.PrevNextButtonsEnableRequest;
+import ru.kc.main.tab.event.PrevTabRequest;
 import ru.kc.main.tab.tools.MainMenu;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
@@ -78,11 +82,13 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 		
 		
 		prev.setToolTipText("Open previous tab  (Alt+LEFT)");
+		next.setToolTipText("Open next tab  (Alt+RIGHT)");
+		
 		prev.addHierarchyListener(new HierarchyListener() {
 			
 			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
-				Pair<Boolean, Boolean> result = invokeSafe(new NextPrevButtonsEnableRequest()).result;
+				Pair<Boolean, Boolean> result = invokeSafe(new PrevNextButtonsEnableRequest()).result;
 				if(result != null){
 					prev.setEnabled(result.getFirst());
 					next.setEnabled(result.getSecond());
@@ -92,10 +98,23 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 				}
 			}
 		});
-		toolbar.add(prev);
 		
-
-		next.setToolTipText("Open next tab  (Alt+RIGHT)");
+		prev.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				invokeSafe(new PrevTabRequest());
+			}
+		});
+		next.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				invokeSafe(new NextTabRequest());
+			}
+		});
+		
+		toolbar.add(prev);
 		toolbar.add(next);
 		
 	}
