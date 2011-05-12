@@ -68,7 +68,10 @@ public class PrevNextTabModel {
 				return cur;
 			} else {
 				if(prevHead > 0){
-					return stack.get(prevHead-1);
+					return stack.get(prevHead - 1);
+				} 
+				else if(prevHead < stack.size()-1){
+					return stack.get(prevHead + 1);
 				}
 			}
 		}
@@ -76,7 +79,11 @@ public class PrevNextTabModel {
 	}
 	
 	public void clearStack(Component tab){
-		
+		ArrayList<Component> newStack = new ArrayList<Component>();
+		for(int i=0; i < stack.size(); ++i){
+			Component comp = stack.get(i);
+//			if(comp.)
+		}
 	}
 
 
