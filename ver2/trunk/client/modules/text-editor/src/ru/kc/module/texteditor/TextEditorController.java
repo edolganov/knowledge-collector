@@ -39,7 +39,8 @@ public class TextEditorController extends Controller<TextEditor> implements Node
 	protected void init() {
 		nodeEditionsAggregator = context.nodeEditionsAggregator;
 		editor = ui.editor;
-		editor.setFont(new Font("Arial", Font.PLAIN, 12));
+		//editor.setFont(new Font("Arial", Font.PLAIN, 12));
+		editor.setFont(RSyntaxTextArea.getDefaultFont());
 		editor.setFocusCycleRoot(true);
 		reloadEditorListeners();
 	}
