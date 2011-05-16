@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 import ru.kc.common.FocusProvider;
 import ru.kc.common.controller.Controller;
@@ -36,6 +37,8 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 
 	JToolBar toolbar;
 	Component component;
+	JButton prev;
+	JButton next;
 	
 	
 	@Override
@@ -76,8 +79,10 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 	}
 	
 	private void addPrevNextButtons() {
-		final JButton prev = new JButton(IconUtil.get("/ru/kc/main/tab/img/prev.png"));
-		final JButton next = new JButton(IconUtil.get("/ru/kc/main/tab/img/next.png"));
+		prev = new JButton(IconUtil.get("/ru/kc/main/tab/img/prev.png"));
+		next = new JButton(IconUtil.get("/ru/kc/main/tab/img/next.png"));
+		prev.setEnabled(false);
+		next.setEnabled(false);
 		
 		
 		
@@ -88,14 +93,14 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 			
 			@Override
 			public void hierarchyChanged(HierarchyEvent e) {
-				Pair<Boolean, Boolean> result = invokeSafe(new PrevNextButtonsEnableRequest()).result;
-				if(result != null){
-					prev.setEnabled(result.getFirst());
-					next.setEnabled(result.getSecond());
-				} else {
-					prev.setEnabled(false);
-					next.setEnabled(false);
-				}
+				SwingUtilities.invokeLater(new Runnable() {
+					
+					@Override
+					public void run() {
+
+					}
+				});
+
 			}
 		});
 		
@@ -167,9 +172,20 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 
 	@Override
 	public void setFocusRequest() {
+		Pair<Boolean, Boolean> result = invokeSafe(new PrevNextButtonsEnableRequest()).result;
+		if(result != null){
+			prev.setEnabled(result.getFirst());
+			next.setEnabled(result.getSecond());
+		} else {
+			prev.setEnabled(false);
+			next.setEnabled(false);
+		}
+		
 		if(component instanceof FocusProvider){
 			((FocusProvider) component).setFocusRequest();
 		}
+		
+
 	}
 
 

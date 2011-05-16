@@ -15,7 +15,7 @@ public class Log4JConfig {
 	
 	
 	public static void defaultConfig(String patternLayuot){
-	    defaultConfig(patternLayuot,Level.INFO);
+	    defaultConfig(patternLayuot,Level.DEBUG);
 	}
 	
 	public static void defaultConfig(String patternLayuot,Level level){
@@ -29,7 +29,7 @@ public class Log4JConfig {
 
 	
 	public static void defaultConfig(String patternLayuot, String fileName) throws IOException{
-	    defaultConfig(patternLayuot, fileName, Level.INFO);
+	    defaultConfig(patternLayuot, fileName, Level.DEBUG);
 	}
 	
 	public static void defaultConfig(String patternLayuot, String fileName, Level level) throws IOException{

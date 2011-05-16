@@ -36,7 +36,9 @@ public class TabsController extends Controller<MainForm> {
 	
 	JTabbedPane tabs;
 	TabbedWrapper tabsWrapper;
-	PrevNextTabModel prevNextTabModel = new PrevNextTabModel(); 
+	PrevNextTabModel prevNextTabModel = new PrevNextTabModel();
+	boolean skipAddedToStack = false;
+	
 
 	@Override
 	public void init() {
@@ -73,7 +75,7 @@ public class TabsController extends Controller<MainForm> {
 				Component tab = tabs.getSelectedComponent();
 				Component nextToView = prevNextTabModel.removeAndGetNextToView(tab);
 				if(nextToView != null){
-					focusRequest(nextToView);
+					setSelectedComponent(nextToView);
 				}
 				return true;
 			}
@@ -82,20 +84,26 @@ public class TabsController extends Controller<MainForm> {
 		prevNextTabModel.setListener(new PrevNextTabModel.Listener(){
 			
 			public void onPrevSelected(Component tab){
-				focusRequest(tab);
+				skipAddedToStack = true;
+				setSelectedComponent(tab);
 			}
 			
 			public void onNextSelected(Component tab){
-				focusRequest(tab);
+				skipAddedToStack = true;
+				setSelectedComponent(tab);
 			}
 			
 		});
+		onTabSelected();
 		
 	}
 	
 	protected void onTabSelected() {
 		Component tab = tabs.getSelectedComponent();
-		prevNextTabModel.setCurrent(tab);
+		if(!skipAddedToStack){
+			prevNextTabModel.setCurrent(tab);
+		}
+		skipAddedToStack = false;
 		setFocusRequest();
 	}
 
@@ -122,10 +130,10 @@ public class TabsController extends Controller<MainForm> {
 		Node node = event.node;
 		TabModule existTab = findFirstExistNodeTab(node);
 		if(existTab != null){
-			focusRequest(existTab);
+			setSelectedComponent(existTab);
 		} else {
 			Component createdTab = addTab(node);
-			focusRequest(createdTab);
+			setSelectedComponent(createdTab);
 		}
 	}
 
@@ -169,7 +177,7 @@ public class TabsController extends Controller<MainForm> {
 		tabsWrapper.close(tab);
 	}
 
-	private void focusRequest(Component tab) {
+	private void setSelectedComponent(Component tab) {
 		tabs.setSelectedComponent(tab);
 	}
 	
@@ -263,6 +271,7 @@ public class TabsController extends Controller<MainForm> {
 		prevNextTabModel.prevTabRequest();
 	}
 	
+	@EventListener
 	public void nextTabRequest(NextTabRequest request){
 		prevNextTabModel.nextTabRequest();
 	}

@@ -19,11 +19,25 @@ public class PrevNextTabModel {
 		
 	}
 	
+	private static class StackElem {
+		Component component;
+		public StackElem(Component component) {
+			super();
+			this.component = component;
+		}
+		@Override
+		public String toString() {
+			return "Tab"+"@"+component.hashCode();
+		}
+		
+		
+	}
+	
 	Listener listener;
 	
 	//model
-	ArrayList<Component> stack = new ArrayList<Component>();
-	int prevHead = -1;
+	ArrayList<StackElem> stack = new ArrayList<StackElem>();
+	StackElem curStackHead = null;
 
 	
 	public void setListener(Listener listener) {
@@ -37,14 +51,22 @@ public class PrevNextTabModel {
 
 	private void addToStack(Component tab) {
 		checkForInsert(tab);
-		ArrayList<Component> newStack = new ArrayList<Component>();
-		for(int i=0; i < prevHead+1; ++i){
-			newStack.add(stack.get(i));
+		
+		ArrayList<StackElem> oldStack = stack;
+		StackElem oldCur = curStackHead;
+		ArrayList<StackElem> newStack = new ArrayList<StackElem>();
+		for(StackElem elem : oldStack){
+			if( ! elem.equals(oldCur)){
+				newStack.add(elem);
+			} else {
+				newStack.add(oldCur);
+				break;
+			}
 		}
-		newStack.add(tab);
+		newStack.add(new StackElem(tab));
 		
 		stack = newStack;
-		prevHead = stack.size()-1;
+		curStackHead = stack.get(stack.size()-1);
 		
 	}
 
@@ -55,59 +77,86 @@ public class PrevNextTabModel {
 	}
 
 	public Component removeAndGetNextToView(Component tab) {
-		Component nextToView = findNextAfterClearStack(tab);
+		checkForRemove();
 		clearStack(tab);
 		printPrevStack();
-		return nextToView;
+		return curStackHead != null? curStackHead.component : null;
 	}
 	
-	public Component findNextAfterClearStack(Component toDelete){
-		if(prevHead > -1){
-			Component cur = stack.get(prevHead);
-			if( ! cur.equals(toDelete)){
-				return cur;
-			} else {
-				if(prevHead > 0){
-					return stack.get(prevHead - 1);
-				} 
-				else if(prevHead < stack.size()-1){
-					return stack.get(prevHead + 1);
-				}
+	private void checkForRemove() {
+		if(stack.size() == 0 || curStackHead == null){
+			throw new IllegalArgumentException("stack is empty");
+		}
+	}
+	
+	public void clearStack(Component toDelete){
+		ArrayList<StackElem> oldStack = stack;
+		StackElem oldCur = curStackHead;
+		ArrayList<StackElem> newStack = new ArrayList<StackElem>();
+		for(StackElem elem : oldStack){
+			if( ! elem.component.equals(toDelete)){
+				newStack.add(elem);
 			}
 		}
-		return null;
-	}
-	
-	public void clearStack(Component tab){
-		ArrayList<Component> newStack = new ArrayList<Component>();
-		for(int i=0; i < stack.size(); ++i){
-			Component comp = stack.get(i);
-//			if(comp.)
+		
+		StackElem newCur = null;
+		Component cur = oldCur.component;
+		if( ! cur.equals(toDelete)){
+			newCur = oldCur;
+		} else {
+			int curPrevIndex = oldStack.indexOf(oldCur);
+			if(curPrevIndex > 0){
+				newCur =  oldStack.get(curPrevIndex - 1);
+			} 
+			else if(curPrevIndex < stack.size()-1){
+				newCur =  oldStack.get(curPrevIndex + 1);
+			}
 		}
+		
+		stack = newStack;
+		curStackHead = newCur;
 	}
 
 
 
 	public void prevTabRequest() {
-		log.info("prevTabRequest()");
+		log.debug("prevTabRequest. cur="+curStackHead);
+		if(canPrevTab()){
+			int index = stack.indexOf(curStackHead);
+			StackElem prev = stack.get(index - 1);
+			listener.onPrevSelected(prev.component);
+			curStackHead = prev;
+		}
 	}
 
 	public void nextTabRequest() {
-		log.info("nextTabRequest()");
+		log.debug("nextTabRequest. cur="+curStackHead);
+		if(canNextTab()){
+			int index = stack.indexOf(curStackHead);
+			StackElem next = stack.get(index + 1);
+			listener.onNextSelected(next.component);
+			curStackHead = next;
+		}
 	}
 
 	public boolean canPrevTab() {
-		// TODO Auto-generated method stub
+		if(stack.size() > 1){
+			int index = stack.indexOf(curStackHead);
+			return index > 0;
+		}
 		return false;
 	}
 	
 	public boolean canNextTab() {
-		// TODO Auto-generated method stub
+		if(stack.size() > 1){
+			int index = stack.indexOf(curStackHead);
+			return index < stack.size()-1;
+		}
 		return false;
 	}
 	
 	private void printPrevStack() {
-		log.debug("prev stack: "+stack);
+		log.debug("stack: "+stack);
 	}
 
 }
