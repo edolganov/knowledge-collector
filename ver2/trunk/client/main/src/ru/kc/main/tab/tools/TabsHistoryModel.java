@@ -7,9 +7,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class PrevNextTabModel {
+public class TabsHistoryModel {
 	
-	private static final Log log = LogFactory.getLog(PrevNextTabModel.class);
+	private static final Log log = LogFactory.getLog(TabsHistoryModel.class);
 	
 	public static interface Listener {
 		
@@ -27,13 +27,14 @@ public class PrevNextTabModel {
 		}
 		@Override
 		public String toString() {
-			return "Tab"+"@"+component.hashCode();
+			return component.toString()+"@"+component.hashCode();
 		}
 		
 		
 	}
 	
 	Listener listener;
+	boolean debugMode = true;
 	
 	//model
 	ArrayList<StackElem> stack = new ArrayList<StackElem>();
@@ -44,13 +45,8 @@ public class PrevNextTabModel {
 		this.listener = listener; 
 	}
 
-	public void setCurrent(Component tab) {
-		addToStack(tab);
-		printPrevStack();
-	}
-
-	private void addToStack(Component tab) {
-		checkForInsert(tab);
+	public void addToStack(Component tab) {
+		if(isAlreadyLast(tab)) return;
 		
 		ArrayList<StackElem> oldStack = stack;
 		StackElem oldCur = curStackHead;
@@ -67,18 +63,20 @@ public class PrevNextTabModel {
 		
 		stack = newStack;
 		curStackHead = stack.get(stack.size()-1);
+		printPrevStack();
 		
 	}
 
-	private void checkForInsert(Component tab) {
-		if(stack.size() > 0 && stack.get(stack.size()-1).equals(tab)){
-			throw new IllegalArgumentException("element already last in stack: "+tab);
+	private boolean isAlreadyLast(Component toInsert) {
+		if(stack.size() > 0 && stack.get(stack.size()-1).component.equals(toInsert)){
+			return true;
 		}
+		return false;
 	}
 
 	public Component removeAndGetNextToView(Component tab) {
 		checkForRemove();
-		clearStack(tab);
+		removeFromStack(tab);
 		printPrevStack();
 		return curStackHead != null? curStackHead.component : null;
 	}
@@ -89,13 +87,18 @@ public class PrevNextTabModel {
 		}
 	}
 	
-	public void clearStack(Component toDelete){
+	private void removeFromStack(Component toDelete){
 		ArrayList<StackElem> oldStack = stack;
 		StackElem oldCur = curStackHead;
 		ArrayList<StackElem> newStack = new ArrayList<StackElem>();
-		for(StackElem elem : oldStack){
+		StackElem prevElem = new StackElem(null); //stub
+		for(int i= stack.size()-1; i > -1; i--){
+			StackElem elem = stack.get(i);
 			if( ! elem.component.equals(toDelete)){
-				newStack.add(elem);
+				if(! elem.component.equals(prevElem.component)){
+					newStack.add(0, elem);
+					prevElem = elem;					
+				}
 			}
 		}
 		
@@ -120,22 +123,22 @@ public class PrevNextTabModel {
 
 
 	public void prevTabRequest() {
-		log.debug("prevTabRequest. cur="+curStackHead);
 		if(canPrevTab()){
 			int index = stack.indexOf(curStackHead);
 			StackElem prev = stack.get(index - 1);
 			listener.onPrevSelected(prev.component);
 			curStackHead = prev;
+			printPrevStack();
 		}
 	}
 
 	public void nextTabRequest() {
-		log.debug("nextTabRequest. cur="+curStackHead);
 		if(canNextTab()){
 			int index = stack.indexOf(curStackHead);
 			StackElem next = stack.get(index + 1);
 			listener.onNextSelected(next.component);
 			curStackHead = next;
+			printPrevStack();
 		}
 	}
 
@@ -156,7 +159,30 @@ public class PrevNextTabModel {
 	}
 	
 	private void printPrevStack() {
-		log.debug("stack: "+stack);
+		if(! debugMode) return;
+		
+		String toPrint = null;
+		if(stack.size() == 0){
+			toPrint = "[]";
+		} else {
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for (int i = 0; i < stack.size()-1; i++) {
+				StackElem elem = stack.get(i);
+				sb.append(wrapElem(elem)).append(", ");
+			}
+			sb.append(wrapElem(stack.get(stack.size()-1))).append("]");
+			toPrint = sb.toString();
+		}
+		log.debug("stack: "+toPrint);
+	}
+	
+	private String wrapElem(StackElem elem){
+		if(elem.equals(curStackHead)){
+			return ">> "+elem+" <<";
+		} else {
+			return elem.toString();
+		}
 	}
 
 }

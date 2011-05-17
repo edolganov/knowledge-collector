@@ -43,4 +43,9 @@ public class TextEditorModule extends Module<TextEditor> implements NodeContaine
 		getController(TextEditorController.class).setFocusRequest();
 	}
 
+	@Override
+	public String toString() {
+		return "TextEditor["+getNode().getName()+"]";
+	}
+
 }

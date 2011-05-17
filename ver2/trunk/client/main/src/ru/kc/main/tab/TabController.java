@@ -17,6 +17,7 @@ import ru.kc.common.controller.Controller;
 import ru.kc.main.tab.event.NextTabRequest;
 import ru.kc.main.tab.event.PrevNextButtonsEnableRequest;
 import ru.kc.main.tab.event.PrevTabRequest;
+import ru.kc.main.tab.event.ReloadPrevNextButtons;
 import ru.kc.main.tab.tools.MainMenu;
 import ru.kc.main.tab.ui.TabPanel;
 import ru.kc.platform.action.AbstractAction;
@@ -28,6 +29,7 @@ import ru.kc.platform.action.facade.ButtonFacadeMediator;
 import ru.kc.platform.action.facade.ComboBoxFacadeMediator;
 import ru.kc.platform.action.facade.ToggleButtonFacadeMediator;
 import ru.kc.platform.annotations.Mapping;
+import ru.kc.platform.event.annotation.EventListener;
 import ru.kc.util.collection.Pair;
 import ru.kc.util.swing.button.DropDownButton;
 import ru.kc.util.swing.icon.IconUtil;
@@ -172,6 +174,13 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 
 	@Override
 	public void setFocusRequest() {
+		if(component instanceof FocusProvider){
+			((FocusProvider) component).setFocusRequest();
+		}
+	}
+	
+	@EventListener
+	public void reloadButtons(ReloadPrevNextButtons event){
 		Pair<Boolean, Boolean> result = invokeSafe(new PrevNextButtonsEnableRequest()).result;
 		if(result != null){
 			prev.setEnabled(result.getFirst());
@@ -179,13 +188,7 @@ public class TabController extends Controller<TabPanel> implements FocusProvider
 		} else {
 			prev.setEnabled(false);
 			next.setEnabled(false);
-		}
-		
-		if(component instanceof FocusProvider){
-			((FocusProvider) component).setFocusRequest();
-		}
-		
-
+		}		
 	}
 
 

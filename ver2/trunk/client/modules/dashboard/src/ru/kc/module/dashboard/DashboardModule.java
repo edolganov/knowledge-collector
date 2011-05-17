@@ -17,5 +17,10 @@ public class DashboardModule extends Module<Dashboard> implements FocusProvider{
 	public void setFocusRequest() {
 		getController(DashboardController.class).setFocusRequest();
 	}
+	
+	@Override
+	public String toString() {
+		return "Dashboard";
+	}
 
 }

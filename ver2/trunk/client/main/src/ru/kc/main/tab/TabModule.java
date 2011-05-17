@@ -28,4 +28,10 @@ public class TabModule extends Module<TabPanel> implements FocusProvider {
 		getController(TabController.class).setFocusRequest();
 	}
 
+	@Override
+	public String toString() {
+		Component component = getComponent();
+		return component == null? "[empty tab]" : component.toString();
+	}
+
 }

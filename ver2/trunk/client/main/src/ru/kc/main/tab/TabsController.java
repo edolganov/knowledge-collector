@@ -18,7 +18,8 @@ import ru.kc.common.node.event.OpenNodeRequest;
 import ru.kc.main.tab.event.NextTabRequest;
 import ru.kc.main.tab.event.PrevNextButtonsEnableRequest;
 import ru.kc.main.tab.event.PrevTabRequest;
-import ru.kc.main.tab.tools.PrevNextTabModel;
+import ru.kc.main.tab.event.ReloadPrevNextButtons;
+import ru.kc.main.tab.tools.TabsHistoryModel;
 import ru.kc.model.Node;
 import ru.kc.model.Text;
 import ru.kc.platform.annotations.Mapping;
@@ -36,7 +37,7 @@ public class TabsController extends Controller<MainForm> {
 	
 	JTabbedPane tabs;
 	TabbedWrapper tabsWrapper;
-	PrevNextTabModel prevNextTabModel = new PrevNextTabModel();
+	TabsHistoryModel prevNextTabModel = new TabsHistoryModel();
 	boolean skipAddedToStack = false;
 	
 
@@ -72,8 +73,9 @@ public class TabsController extends Controller<MainForm> {
 			@Override
 			public boolean canClose(Component comp, int index, String text) {
 				//boolean confirm = dialogs.confirmByDialog(rootUI, "Закрыть?");
-				Component tab = tabs.getSelectedComponent();
-				Component nextToView = prevNextTabModel.removeAndGetNextToView(tab);
+				Component nextToView = prevNextTabModel.removeAndGetNextToView(comp);
+				fireEvent(new ReloadPrevNextButtons());
+				
 				if(nextToView != null){
 					setSelectedComponent(nextToView);
 				}
@@ -81,7 +83,7 @@ public class TabsController extends Controller<MainForm> {
 			}
 		});
 		
-		prevNextTabModel.setListener(new PrevNextTabModel.Listener(){
+		prevNextTabModel.setListener(new TabsHistoryModel.Listener(){
 			
 			public void onPrevSelected(Component tab){
 				skipAddedToStack = true;
@@ -101,10 +103,11 @@ public class TabsController extends Controller<MainForm> {
 	protected void onTabSelected() {
 		Component tab = tabs.getSelectedComponent();
 		if(!skipAddedToStack){
-			prevNextTabModel.setCurrent(tab);
+			prevNextTabModel.addToStack(tab);
 		}
 		skipAddedToStack = false;
 		setFocusRequest();
+		fireEvent(new ReloadPrevNextButtons());
 	}
 
 	@Override
