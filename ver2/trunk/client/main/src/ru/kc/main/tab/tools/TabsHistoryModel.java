@@ -34,7 +34,7 @@ public class TabsHistoryModel {
 	}
 	
 	Listener listener;
-	boolean debugMode = true;
+	boolean debugMode = false;
 	
 	//model
 	ArrayList<StackElem> stack = new ArrayList<StackElem>();
@@ -46,7 +46,9 @@ public class TabsHistoryModel {
 	}
 
 	public void addToStack(Component tab) {
-		if(isAlreadyLast(tab)) return;
+		if(isAlreadyLast(tab)) {
+			return;
+		}
 		
 		ArrayList<StackElem> oldStack = stack;
 		StackElem oldCur = curStackHead;
@@ -63,13 +65,16 @@ public class TabsHistoryModel {
 		
 		stack = newStack;
 		curStackHead = stack.get(stack.size()-1);
-		printPrevStack();
+		printStack();
 		
 	}
 
 	private boolean isAlreadyLast(Component toInsert) {
-		if(stack.size() > 0 && stack.get(stack.size()-1).component.equals(toInsert)){
-			return true;
+		if(stack.size() > 0){
+			StackElem last = stack.get(stack.size()-1);
+			if(last.equals(curStackHead) && last.component.equals(toInsert)){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -77,7 +82,7 @@ public class TabsHistoryModel {
 	public Component removeAndGetNextToView(Component tab) {
 		checkForRemove();
 		removeFromStack(tab);
-		printPrevStack();
+		printStack();
 		return curStackHead != null? curStackHead.component : null;
 	}
 	
@@ -126,9 +131,10 @@ public class TabsHistoryModel {
 		if(canPrevTab()){
 			int index = stack.indexOf(curStackHead);
 			StackElem prev = stack.get(index - 1);
-			listener.onPrevSelected(prev.component);
 			curStackHead = prev;
-			printPrevStack();
+			
+			listener.onPrevSelected(prev.component);
+			printStack();
 		}
 	}
 
@@ -136,9 +142,10 @@ public class TabsHistoryModel {
 		if(canNextTab()){
 			int index = stack.indexOf(curStackHead);
 			StackElem next = stack.get(index + 1);
-			listener.onNextSelected(next.component);
 			curStackHead = next;
-			printPrevStack();
+			
+			listener.onNextSelected(next.component);
+			printStack();
 		}
 	}
 
@@ -158,7 +165,7 @@ public class TabsHistoryModel {
 		return false;
 	}
 	
-	private void printPrevStack() {
+	private void printStack() {
 		if(! debugMode) return;
 		
 		String toPrint = null;
