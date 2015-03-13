@@ -1,5 +1,6 @@
 # Knowledge Collector
 Stand alone java application for local storage of personal knowledges
+
 Requires [Java JRE](http://java.sun.com/javase/downloads/index.jsp) installed.
 
 
